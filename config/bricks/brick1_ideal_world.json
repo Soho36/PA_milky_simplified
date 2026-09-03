@@ -1,8 +1,8 @@
 {
   "schema_version": "pa_milky_simplified.runtime.v1",
-  "brick": 2,
-  "brick_name": "monthly_100_withdrawals",
-  "description": "Brick 2. Brick 1 plus a fixed $100 per account per month taken out. First prop-firm rule of the study: the safety-net gate at $26,600. No request count, no consistency rule, no profit split, no delay.",
+  "brick": 1,
+  "brick_name": "ideal_world",
+  "description": "Brick 1. Strategy trading rules and the Legacy 25K trailing drawdown only. No withdrawals, no evaluation phase, no slippage, no contract caps.",
   "data": {
     "sweeps_root": "1_sweeps",
     "strategy": "RR",
@@ -33,8 +33,7 @@
     "replace_on_death": false
   },
   "not_modelled": [
-    "payout request counts, caps and the 90/10 profit split",
-    "payout consistency rules, denials and processing delays",
+    "payout eligibility, caps, splits and consistency",
     "slippage and partial fills",
     "contract caps and scaling plans",
     "daily loss limits",
@@ -43,10 +42,10 @@
     "aggregation of floating P&L across concurrently open positions"
   ],
   "withdrawals": {
-    "policy": "fixed_monthly",
-    "amount_usd": 100.0,
-    "eligibility_balance_usd": 26600.0,
-    "safety_net_balance_usd": 26500.0,
-    "shortfall": "accrue_backlog"
+    "policy": "none",
+    "amount_usd": 0.0,
+    "eligibility_balance_usd": 0.0,
+    "safety_net_balance_usd": null,
+    "shortfall": "skip"
   }
 }

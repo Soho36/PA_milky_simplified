@@ -4,16 +4,11 @@ from __future__ import annotations
 
 import unittest
 
-from pa_milky.config import load_config
-from pa_milky.loader import load_trades
 from pa_milky.report import summarize
 from pa_milky.simulator import run_book
 
-CONFIG = load_config()
-TRADES = load_trades(
-    CONFIG.sweeps_root, strategy=CONFIG.strategy, risk_reward=CONFIG.risk_reward
-)
-RESULT = run_book(TRADES, CONFIG)
+from .support import BRICK1 as CONFIG, RESULT1 as RESULT, TRADES
+
 SUMMARY = summarize(RESULT)
 
 
@@ -63,7 +58,12 @@ class TestRunIntegrity(unittest.TestCase):
         for account in RESULT.alive:
             self.assertAlmostEqual(
                 account.equity_profit_usd,
-                round(account.gross_pnl_usd - account.commission_usd, 2),
+                round(
+                    account.gross_pnl_usd
+                    - account.commission_usd
+                    - account.withdrawn_usd,
+                    2,
+                ),
                 places=2,
             )
             self.assertAlmostEqual(

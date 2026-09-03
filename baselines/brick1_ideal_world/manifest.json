@@ -1,0 +1,313 @@
+{
+  "schema_version": "pa_milky_simplified.baseline.v1",
+  "baseline": "brick1_ideal_world",
+  "brick": 1,
+  "brick_name": "ideal_world",
+  "sealed_utc": "2026-09-03T22:01:14+00:00",
+  "git_revision": "4123c5a90b64a5873ba8cc68b4bd00fd8d643bb7",
+  "config": {
+    "schema_version": "pa_milky_simplified.runtime.v1",
+    "brick": 1,
+    "brick_name": "ideal_world",
+    "data": {
+      "sweeps_root": "1_sweeps",
+      "strategy": "RR",
+      "risk_reward": "1.00",
+      "expected_windows": 23,
+      "expected_trades": 12658
+    },
+    "execution": {
+      "contracts_per_copy": 1,
+      "commission_usd_per_mnq_round_turn": 1.05,
+      "slippage_ticks": 0,
+      "concurrency": "unlimited",
+      "path_order": "mae_first",
+      "commission_applies_to_excursions": false
+    },
+    "account": {
+      "starting_balance_usd": 25000.0,
+      "trailing_drawdown_usd": 1500.0,
+      "frozen_floor_profit_usd": 100.0,
+      "threshold_touch_fails": true,
+      "purchase_fee_usd": 200.0
+    },
+    "book": {
+      "cadence": "one_new_pa_per_calendar_month",
+      "activation_moment": "first_instant_of_calendar_month",
+      "max_accounts": null,
+      "replace_on_death": false
+    },
+    "withdrawals": {
+      "policy": "none",
+      "amount_usd": 0.0,
+      "eligibility_balance_usd": 0.0,
+      "safety_net_balance_usd": null,
+      "shortfall": "skip"
+    }
+  },
+  "inputs": {
+    "files": {
+      "RR/1-2": {
+        "sha256": "41633d9fc0c8d1c6b3af629c1f40ae364892d576e290e9ef591f83bfe9271b5f",
+        "bytes": 64298
+      },
+      "RR/10-11": {
+        "sha256": "806df46a9d4a6140441805d266f2b91131ee469af7c4a2d7c42c721bbc97ff12",
+        "bytes": 83844
+      },
+      "RR/11-12": {
+        "sha256": "ca048710779a3862840f2c5d43492bf2c6fb31487ee46845150dd3ef24d2002e",
+        "bytes": 65032
+      },
+      "RR/12-13": {
+        "sha256": "f485ce347458732e9c391de3b268147864c2e10b4b6b7fb51d6587c40867cef4",
+        "bytes": 73176
+      },
+      "RR/13-14": {
+        "sha256": "22efb7b02000f7aafffcfb05e5ba6b4a86b7489dbc57c815107fdf3b1abded12",
+        "bytes": 81384
+      },
+      "RR/14-15": {
+        "sha256": "dc2fff2b3a9c4b814c4785f98e26c9da5a4e2d6ee3e073c61e45181dd10cfb0a",
+        "bytes": 76580
+      },
+      "RR/15-16": {
+        "sha256": "584ef37a815ad06d73127117ecad3c24016fe46e766a3af14d17b6e7678a3e4a",
+        "bytes": 96842
+      },
+      "RR/16-17": {
+        "sha256": "4af26c2753bb3bbae98d0d81584611c97db72f5b08d6af1afdd9914db8a1cc13",
+        "bytes": 123726
+      },
+      "RR/17-18": {
+        "sha256": "59a063ac8650dfdf2f3698f62cbb12cba5301c7bbf92db1ca0c5bb896b368b49",
+        "bytes": 54078
+      },
+      "RR/18-19": {
+        "sha256": "d8ef1874840cce38d08de2c7a01eb0cf5a992556ca60136a02e82433eb068aaf",
+        "bytes": 66514
+      },
+      "RR/19-20": {
+        "sha256": "fab4ddecad65cdb5f4a63a9b10bb4a37e3cdca7e1c3ffc9637bcb30debf2ac93",
+        "bytes": 68488
+      },
+      "RR/2-3": {
+        "sha256": "393a7930a0d2eec4038850daf34d01a619e0328001f0df5c88c1e15d3ee76a49",
+        "bytes": 78312
+      },
+      "RR/20-21": {
+        "sha256": "12afe56ccac6e78d766534f65b81cc981824582d462546bfc0818830efbf6b46",
+        "bytes": 74634
+      },
+      "RR/21-22": {
+        "sha256": "96227ec738fd119ed92fcb9c683bfae1674740fddebdfa8b08794302fd33d274",
+        "bytes": 75728
+      },
+      "RR/22-23": {
+        "sha256": "193fd4af0b9a56ddb6e47c266c3345e3c2e23559fdf54aa20f2167a3ca3cce83",
+        "bytes": 79702
+      },
+      "RR/23-24": {
+        "sha256": "732eacc917979ec3f85187df3dbc831cc4f67994035d9987b0e549c27b432553",
+        "bytes": 15850
+      },
+      "RR/3-4": {
+        "sha256": "f248f2d8f72c5fc1c28b3eaef918c6f08e19269122df853dcd414339ecc46aa0",
+        "bytes": 78856
+      },
+      "RR/4-5": {
+        "sha256": "4c74cf1ca20737b3b22022e0e0a5b13fb0daa37a58dd610dffa3b4f8a854ad74",
+        "bytes": 73942
+      },
+      "RR/5-6": {
+        "sha256": "6fb6ba95f3015305087d325e2e22a4e947a3ce291628155eb5f82fa0a8a79631",
+        "bytes": 59778
+      },
+      "RR/6-7": {
+        "sha256": "c5b88fbbc6b004f8019fe025db21dbda32eb28263072d855e17a9d8a0a618b08",
+        "bytes": 75850
+      },
+      "RR/7-8": {
+        "sha256": "d5e97c976371b8c89f9d762e76970663e32270e02d05badfa3c7fd001bd0e152",
+        "bytes": 82594
+      },
+      "RR/8-9": {
+        "sha256": "f138bb453cd2be8e303d621b63f303b11c1ff76dd50974c6eb97db0b3de26eab",
+        "bytes": 84698
+      },
+      "RR/9-10": {
+        "sha256": "22239e14a762a209a8dfb3744ec90d57fae2421f867a989dcfd9d40652324cf8",
+        "bytes": 79296
+      },
+      "RR_stats/1-2": {
+        "sha256": "8e01aa42db675d8feb12b820b35d3dd33806d3c6761a49318b661392c80d2993",
+        "bytes": 534
+      },
+      "RR_stats/10-11": {
+        "sha256": "6c0be088c9eb1b3a456f850dd4e942028e518af0af36304eddd38adee16801b8",
+        "bytes": 530
+      },
+      "RR_stats/11-12": {
+        "sha256": "170f45bdf78ff7318d1582f04cdb5de8e6351b558072d54888eb1d3320a4eb02",
+        "bytes": 532
+      },
+      "RR_stats/12-13": {
+        "sha256": "859e453be64ce084bfa05bc0bb0eef9dc39131a9c2cc8ba3d1301b12d06bd446",
+        "bytes": 538
+      },
+      "RR_stats/13-14": {
+        "sha256": "113e05afc6a5b2ea2c62ba02a7dba3105cfa8224a7faeebd6f5fab66c87144ee",
+        "bytes": 526
+      },
+      "RR_stats/14-15": {
+        "sha256": "a3640134b50bcf1de44200b7576f7fd8f5141b3ed9e63809effd262f094228d5",
+        "bytes": 530
+      },
+      "RR_stats/15-16": {
+        "sha256": "74215e67ca8dce4f5e0352389d3e2aaaf63a12390760d97f72226386f4fb090f",
+        "bytes": 540
+      },
+      "RR_stats/16-17": {
+        "sha256": "6d25a81cec21679f9745e4da26ad5b8ec7e83806da9fc88403319ee4660916ec",
+        "bytes": 542
+      },
+      "RR_stats/17-18": {
+        "sha256": "59c2f124006a50521d6fee1aefcbd3971db8d50a4ee9f3e632ecd2a3a4ab6380",
+        "bytes": 532
+      },
+      "RR_stats/18-19": {
+        "sha256": "dc68aefdab6390385f181f7979febf742e592012640c1b027e2505aa10ffa2cc",
+        "bytes": 530
+      },
+      "RR_stats/19-20": {
+        "sha256": "fba381474e8b68da5959bdffb3030489040844470bd77896b2d749867c6aa2d2",
+        "bytes": 530
+      },
+      "RR_stats/2-3": {
+        "sha256": "2258ca13c3450b9e070b3d0b731ec0c0016c843526531712ca74e3e22f072912",
+        "bytes": 522
+      },
+      "RR_stats/20-21": {
+        "sha256": "67538b23c601aea2e3b07c1af0c68bc40aee4f5cb9dfab25ecbb5b269af60dc3",
+        "bytes": 532
+      },
+      "RR_stats/21-22": {
+        "sha256": "5f46561ea4c81e4b04d8a78e809f0c12924c737a598fe09485227aefbd5e9dcd",
+        "bytes": 534
+      },
+      "RR_stats/22-23": {
+        "sha256": "4d0dc1e10a7d6228a387810c3f4100d6005dc6aeb34ea1ecb3edca578723536c",
+        "bytes": 532
+      },
+      "RR_stats/23-24": {
+        "sha256": "eb82880563b6d4e4eece4a63ab76954bb2e9f40385583f941c8b829db0a10065",
+        "bytes": 522
+      },
+      "RR_stats/3-4": {
+        "sha256": "96c5cebc42ccac519bf367daf716b8a708c560dd25c18dadd2e650ea9c7b1ab7",
+        "bytes": 526
+      },
+      "RR_stats/4-5": {
+        "sha256": "14d02993ec9929c308115c0cef11b1a3315fe7f7d31199a4cdc37408ac6ab5ed",
+        "bytes": 526
+      },
+      "RR_stats/5-6": {
+        "sha256": "14da92cbc51c5f51fa75f05f0d896825cb072a817496fd4b507c68c19d2f3893",
+        "bytes": 518
+      },
+      "RR_stats/6-7": {
+        "sha256": "cd68ebba92516a6edefd7f6dad8765fb7db5f97cb938821098e570a7a56220d6",
+        "bytes": 542
+      },
+      "RR_stats/7-8": {
+        "sha256": "ae09227a6bc6fc2b75325f770f2599f0e8888bac6d8cf5fd6dc26e5624267932",
+        "bytes": 518
+      },
+      "RR_stats/8-9": {
+        "sha256": "a822ef4284466dd8ea4c3245a375f42eb18b44f127153c54b28690cd82b384ee",
+        "bytes": 526
+      },
+      "RR_stats/9-10": {
+        "sha256": "0bc3e50966f2d869b92227c93ba392cee117d52418a2f0660e80eb21ee5cdbea",
+        "bytes": 524
+      }
+    },
+    "combined_sha256": "1ab293ed1e4ed016ee963861b5a6a2d11be9e04df1a273cc00c2cd41ad8880a2",
+    "count": 46,
+    "bytes": 1725388
+  },
+  "engine": {
+    "files": {
+      "__init__.py": {
+        "sha256": "708d97868064b3f2b9b1579a5aa7c65d8406931f1e655d27e40781e64ad163ea",
+        "bytes": 222
+      },
+      "__main__.py": {
+        "sha256": "e34737246c4338a78411d7cac39a3a03c13fae12bd7c5bfc01896677e9e0b5c2",
+        "bytes": 119
+      },
+      "account.py": {
+        "sha256": "5912a96a7ce5cfca8ff3acc7663c37276d7c3163e2c7b14213d072192cc97989",
+        "bytes": 4403
+      },
+      "cli.py": {
+        "sha256": "2be6baf989176df1dd9c8153d1545b3f740051f3980d90265bcd226952b06c2d",
+        "bytes": 4186
+      },
+      "config.py": {
+        "sha256": "8f1dd9a0923ca38a5048c8c36ccac5c1c44edeb951eebe2d4bfc5accd1fc9b78",
+        "bytes": 7094
+      },
+      "loader.py": {
+        "sha256": "57b2a3b2ccd9b11ef9240f74eb176311dc92933a5efe72290f7fbc56de5fccb8",
+        "bytes": 6242
+      },
+      "provenance.py": {
+        "sha256": "b24bebd1b8252a8cf8e510713739880fab91c08542894deee53d2ebb14972825",
+        "bytes": 8254
+      },
+      "report.py": {
+        "sha256": "63c5e19dfe208180e0b6782ced260f9b4de50aeab097a094c60ab0354b8ccfd1",
+        "bytes": 9298
+      },
+      "simulator.py": {
+        "sha256": "2141861b5256efb07b91c2fffaf2b2c674795bed59d1389ec50f87650dc64df7",
+        "bytes": 3178
+      }
+    },
+    "combined_sha256": "6b481f83689706599e38bd8ac1a733c54021462a0bf875c28b0ef1d8453a429e",
+    "count": 9,
+    "bytes": 42996
+  },
+  "outputs": {
+    "files": {
+      "accounts.csv": {
+        "sha256": "73aecd7da01a51447a7c156d452bcd767075982b63827affbe8b8e826ef2c3aa",
+        "bytes": 12848
+      },
+      "report.txt": {
+        "sha256": "97c26927161e390263a308e690baa3776eb28e97e8aa622d1e51c6bf7483a004",
+        "bytes": 7810
+      },
+      "summary.json": {
+        "sha256": "54b2c44787f19fbb584f195fcb7162b4dac196582653bb68d667ec18e49aae2d",
+        "bytes": 1746
+      }
+    },
+    "combined_sha256": "1f41ad250d3cf33f78af68c317f007cd5194d49d1566e363b863b039fb543d07",
+    "count": 3,
+    "bytes": 22404
+  },
+  "headline": {
+    "trades_loaded": 12658,
+    "copies_filled": 150403,
+    "accounts_opened": 79,
+    "accounts_alive_at_end": 22,
+    "accounts_dead": 57,
+    "spent_on_accounts_usd": 15800.0,
+    "withdrawn_usd": 0.0,
+    "owner_cash_position_usd": -15800.0,
+    "total_balance_usd": 1038099.1,
+    "total_paper_profit_usd": 488099.1
+  }
+}

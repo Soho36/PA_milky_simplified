@@ -1,10 +1,10 @@
-# Assumptions — brick 1
+# Assumptions
 
 Values live in `config/runtime.json`; this file explains why they are what they
 are and which way each one bends the answer. Code is stronger evidence than
 this file.
 
-## Decided by the user for this brick
+## Brick 1 — decided by the user
 
 - **Tape: `RR` at RR = 1.00.** 12,658 trades. This is the exact tape the parent
   study pinned, so brick 1 can be differenced against it. `GG` (21,563 trades at
@@ -22,7 +22,7 @@ this file.
   MAE and MFE stay gross, matching the parent. *Bias: mildly conservative* —
   a real intratrade low includes the commission already paid.
 
-## Chosen here, and defensible
+## Brick 1 — chosen here, and defensible
 
 - **One PA per calendar month, activated at the month's first instant.** 79
   months in the tape gives 79 accounts and $15,800 of fees. An account never
@@ -55,14 +55,58 @@ trade settles, not against realized equity plus every other position open at the
 same time. With unlimited concurrency this understates the true intratrade
 drawdown whenever several losing positions are open together.
 
-*Bias: favours survival.* The alive count in brick 1 is therefore an upper
-bound. Closing this gap needs either an event-driven floating-equity walk or
+*Bias: favours survival.* The alive count in every brick is therefore an
+upper bound. Closing this gap needs either an event-driven floating-equity walk or
 intrabar paths the completed-trade export does not carry, and it is a candidate
 brick of its own.
 
-## Not modelled at all in brick 1
+## Brick 2 — taking cash out
 
-Payout eligibility, caps, splits and consistency; slippage and partial fills;
+Decided by the user: **$100 per account per month**, with a backlog, and the
+first prop-firm rule of the study as the gate.
+
+- **The gate is $26,600**, stated by the user as starting balance plus the
+  $1,500 safety net plus the $100 being requested. It is tested on the balance
+  at the decision, exactly as the parent study's section 8 gate was.
+- **The safety net caps the amount, not just the request.** A withdrawal may
+  not cut the balance below $26,500. This is an *interpretation*: the user
+  named the gate, not the cap, and the alternative reading — once the gate
+  opens, take the whole backlog regardless — would let an account pay a large
+  backlog out of protected money. The coherent reading was chosen and the
+  alternative is one config field away (`safety_net_balance_usd: null`). It
+  binds rarely: only when a backlog is larger than the cushion above $26,500.
+- **Entitlement accrues from the account's second month**, whether or not the
+  account can pay. An account owes the owner $100 a month from the day after it
+  opens; unpayable months stay owed and are paid later in whole $100 blocks.
+  *Bias: aggressive extraction.* An account that spends three years below the
+  gate and then crosses it hands over three years of backlog at once, subject
+  to the net.
+- **Whole months only.** An account that could pay $250 of a $500 backlog pays
+  $200, so the pocket stays a clean multiple of $100.
+- **A withdrawal never lowers the trailing floor.** The floor follows the peak
+  and only ever rises. Taking cash out therefore spends cushion permanently,
+  which is the entire economic mechanism of this brick.
+- **Under these numbers a withdrawal cannot itself kill an account.** The gate
+  implies a peak of at least +$1,600, so the floor is already frozen at
+  $25,100, and the net stops the balance $1,400 clear of it. Withdrawals kill
+  *indirectly*, by leaving less room for the next drawdown — which is what
+  happened to the 2020-04 and 2024-12 accounts.
+- **Cash is atomic and instant.** Request, approval, balance removal and
+  receipt are one event at the month boundary. No delay, no denial, no split.
+
+## Ordering within a month boundary
+
+One canonical order, declared rather than discovered: trades exiting at or
+before the boundary settle first, then withdrawals are decided, then that
+month's new account opens. The owner is therefore never paid out of money that
+had not yet been realized, and a brand-new account cannot pay in its opening
+month.
+
+## Not modelled
+
+Payout request counts, the $1,500-per-request cap, the 90/10 split above
+$25,000 cumulative, consistency rules, denials and processing delays; slippage
+and partial fills;
 contract caps and scaling plans; daily loss limits; the Evaluation phase and its
 $35/$125 fees; pending-order and broker fill lifecycle; prop-firm rule change or
 failure; any capital constraint on buying the next account.
@@ -70,10 +114,9 @@ failure; any capital constraint on buying the next account.
 ## Reading the headline numbers
 
 - **Combined balance** and **profit above start** are *paper* equity inside
-  funded accounts. No payout rule exists yet, so none of it has been withdrawn
-  and none of it is the owner's cash.
-- **Owner cash position** is the only real cash line in brick 1, and it is
-  negative by construction: fees out, nothing in. It turns into a real answer
-  only when a payout brick lands.
+  funded accounts. Only what a withdrawal moved is the owner's money.
+- **In our pocket** is the only real cash line: withdrawals received minus
+  account fees paid. In brick 1 it is negative by construction. In brick 2 it
+  is the headline result.
 - Accounts overlap in time and share one tape. They are not independent samples,
   so no confidence interval across them is valid.

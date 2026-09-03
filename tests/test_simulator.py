@@ -6,11 +6,10 @@ import dataclasses
 from datetime import datetime
 import unittest
 
-from pa_milky.config import load_config
 from pa_milky.loader import Trade
 from pa_milky.simulator import months_in_span, run_book
 
-CONFIG = load_config()
+from .support import BRICK1
 
 
 def trade(entry: datetime, exit_at: datetime, pnl: float, *, mae=0.0, mfe=0.0, row=1) -> Trade:
@@ -50,7 +49,9 @@ class TestMonthsInSpan(unittest.TestCase):
 
 class TestBook(unittest.TestCase):
     def setUp(self):
-        self.config = dataclasses.replace(CONFIG, commission_usd_per_mnq_round_turn=0.0)
+        # Book construction only: no commission, and brick 1's empty
+        # withdrawal policy, so nothing leaves an account here.
+        self.config = dataclasses.replace(BRICK1, commission_usd_per_mnq_round_turn=0.0)
 
     def test_one_account_per_month_activated_at_month_start(self):
         trades = [
