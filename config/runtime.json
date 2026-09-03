@@ -1,0 +1,49 @@
+{
+  "schema_version": "pa_milky_simplified.runtime.v1",
+  "brick": 1,
+  "brick_name": "ideal_world_pa_book",
+  "description": "Ideal-world PA book. Strategy trading rules and the Legacy 25K trailing drawdown only. No evaluation phase, no payouts, no slippage, no contract caps.",
+
+  "data": {
+    "sweeps_root": "1_sweeps",
+    "strategy": "RR",
+    "risk_reward": "1.00",
+    "expected_windows": 23,
+    "expected_trades": 12658
+  },
+
+  "execution": {
+    "contracts_per_copy": 1,
+    "commission_usd_per_mnq_round_turn": 1.05,
+    "slippage_ticks": 0,
+    "concurrency": "unlimited",
+    "path_order": "mae_first",
+    "commission_applies_to_excursions": false
+  },
+
+  "account": {
+    "product": "Apex Legacy 25K PA",
+    "starting_balance_usd": 25000.0,
+    "trailing_drawdown_usd": 1500.0,
+    "frozen_floor_profit_usd": 100.0,
+    "threshold_touch_fails": true,
+    "purchase_fee_usd": 200.0
+  },
+
+  "book": {
+    "cadence": "one_new_pa_per_calendar_month",
+    "activation_moment": "first_instant_of_calendar_month",
+    "max_accounts": null,
+    "replace_on_death": false
+  },
+
+  "not_modelled": [
+    "payout eligibility, caps, splits and consistency",
+    "slippage and partial fills",
+    "contract caps and scaling plans",
+    "daily loss limits",
+    "the Evaluation phase and its fees",
+    "pending-order and broker fill lifecycle",
+    "aggregation of floating P&L across concurrently open positions"
+  ]
+}
