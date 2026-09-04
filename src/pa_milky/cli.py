@@ -4,9 +4,11 @@ from __future__ import annotations
 
 import argparse
 import dataclasses
+import json
 from datetime import datetime
 from pathlib import Path
 
+from .ablation import ablation_payload, render_ablation, run_ablation
 from .config import DEFAULT_CONFIG_PATH, PROJECT_ROOT, load_config
 from .loader import load_trades
 from .provenance import list_baselines, seal, verify
@@ -33,7 +35,14 @@ def build_parser() -> argparse.ArgumentParser:
     parser.add_argument(
         "--withdraw",
         type=float,
-        help="override the monthly per-account withdrawal amount (0 disables it)",
+        help="override the monthly per-account request amount (0 disables it)",
+    )
+    parser.add_argument(
+        "--rule-off",
+        action="append",
+        default=[],
+        metavar="KEY",
+        help="switch one firm rule off; repeatable",
     )
     parser.add_argument(
         "--out",
@@ -42,6 +51,12 @@ def build_parser() -> argparse.ArgumentParser:
         "(default: results/<timestamp>_<strategy>_rr<rr>)",
     )
     parser.add_argument("--no-write", action="store_true", help="print only, write nothing")
+    parser.add_argument(
+        "--ablate",
+        action="store_true",
+        help="also re-run the tape once per active firm rule with that rule off, "
+        "and report what each one is worth",
+    )
     parser.add_argument(
         "--seal",
         metavar="NAME",
@@ -69,12 +84,17 @@ def _apply_overrides(config, args):
     if args.path_order:
         overrides["path_order"] = args.path_order
     if args.withdraw is not None:
-        rules = config.withdrawals
-        overrides["withdrawals"] = dataclasses.replace(
-            rules,
-            policy="fixed_monthly" if args.withdraw > 0 else "none",
+        overrides["policy"] = dataclasses.replace(
+            config.policy,
+            cadence="calendar_month" if args.withdraw > 0 else "never",
             amount_usd=args.withdraw,
+            amount_rule="fixed",
         )
+    if args.rule_off:
+        rulebook = config.rulebook
+        for key in args.rule_off:
+            rulebook = rulebook.without(key)
+        overrides["rulebook"] = rulebook
     return dataclasses.replace(config, **overrides) if overrides else config
 
 
@@ -105,6 +125,13 @@ def main(argv: list[str] | None = None) -> int:
     result = run_book(trades, config)
     print(render_text(result))
 
+    ablation = None
+    if args.ablate:
+        baseline, arms = run_ablation(trades, config)
+        ablation = ablation_payload(baseline, arms)
+        print()
+        print(render_ablation(baseline, arms))
+
     if args.no_write and args.seal:
         raise SystemExit("--seal needs written outputs; drop --no-write")
 
@@ -114,6 +141,10 @@ def main(argv: list[str] | None = None) -> int:
             stamp = datetime.now().strftime("%Y%m%d_%H%M%S")
             out = PROJECT_ROOT / "results" / f"{stamp}_{config.strategy}_rr{config.risk_reward}"
         written = write_outputs(result, out)
+        if ablation is not None:
+            path = Path(out) / "ablation.json"
+            path.write_text(json.dumps(ablation, indent=2), encoding="utf-8")
+            written["ablation"] = path
         print()
         for label, path in written.items():
             print(f"  wrote {label}: {path}")

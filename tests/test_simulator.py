@@ -6,26 +6,9 @@ import dataclasses
 from datetime import datetime
 import unittest
 
-from pa_milky.loader import Trade
 from pa_milky.simulator import months_in_span, run_book
 
-from .support import BRICK1
-
-
-def trade(entry: datetime, exit_at: datetime, pnl: float, *, mae=0.0, mfe=0.0, row=1) -> Trade:
-    return Trade(
-        trade_key=f"t{row}:{entry:%Y%m%d%H%M%S}",
-        window_id="10-11",
-        window_order=10,
-        source_row=row,
-        ticket=row,
-        entry_at=entry,
-        exit_at=exit_at,
-        mae_usd=mae,
-        mfe_usd=mfe,
-        gross_pnl_usd=pnl,
-        candle_range=0.0,
-    )
+from .support import BRICK1, make_trade as trade
 
 
 class TestMonthsInSpan(unittest.TestCase):

@@ -1,10 +1,11 @@
 # Assumptions
 
-Values live in `config/runtime.json`; this file explains why they are what they
-are and which way each one bends the answer. Code is stronger evidence than
-this file.
+Values live under `config/` — `products/` is stone, `firm/` is switchable,
+`policies/` is ours, `scenarios/` binds them. This file explains why they are
+what they are and which way each one bends the answer. Code is stronger
+evidence than this file.
 
-## Brick 1 — decided by the user
+## The tape and execution — decided by the user
 
 - **Tape: `RR` at RR = 1.00.** 12,658 trades. This is the exact tape the parent
   study pinned, so brick 1 can be differenced against it. `GG` (21,563 trades at
@@ -22,7 +23,7 @@ this file.
   MAE and MFE stay gross, matching the parent. *Bias: mildly conservative* —
   a real intratrade low includes the commission already paid.
 
-## Brick 1 — chosen here, and defensible
+## The book — chosen here, and defensible
 
 - **One PA per calendar month, activated at the month's first instant.** 79
   months in the tape gives 79 accounts and $15,800 of fees. An account never
@@ -42,10 +43,6 @@ this file.
 - **A positive MAE is clamped to zero.** 555 of the 12,658 trades never traded
   underwater. Their MAE is the worst point reached, still in profit; it must not
   be read as an equity gain that lifts the trailing floor early.
-- **Naive local timestamps.** The source labels are used as exported, with no
-  timezone attached. Brick 1 has no daily-boundary rule, so nothing depends on
-  it. A brick that adds daily loss limits or payout days must fix the clock
-  first — the parent used Europe/Tallinn with historical DST.
 
 ## The one known modelling gap
 
@@ -60,39 +57,64 @@ upper bound. Closing this gap needs either an event-driven floating-equity walk 
 intrabar paths the completed-trade export does not carry, and it is a candidate
 brick of its own.
 
-## Brick 2 — taking cash out
+## The firm rulebook
 
-Decided by the user: **$100 per account per month**, with a backlog, and the
-first prop-firm rule of the study as the gate.
+Every Apex payout rule is implemented and switchable. Where the supplied text
+is ambiguous the reading is a named option, not a silent choice.
 
-- **The gate is $26,600**, stated by the user as starting balance plus the
-  $1,500 safety net plus the $100 being requested. It is tested on the balance
-  at the decision, exactly as the parent study's section 8 gate was.
-- **The safety net caps the amount, not just the request.** A withdrawal may
-  not cut the balance below $26,500. This is an *interpretation*: the user
-  named the gate, not the cap, and the alternative reading — once the gate
-  opens, take the whole backlog regardless — would let an account pay a large
-  backlog out of protected money. The coherent reading was chosen and the
-  alternative is one config field away (`safety_net_balance_usd: null`). It
-  binds rarely: only when a backlog is larger than the cushion above $26,500.
+- **The safety net caps the amount, not just the request.** For the first three
+  payouts the balance may not fall below $26,100 — the $26,600 net less one
+  $500 minimum. That is the firm's own worked example, scaled from 50K to 25K:
+  a $1,200 request needs $26,600 + $700 of balance and leaves $26,100.
+- **Rules that "end at the sixth payout" apply to requests 1 through 5.** That
+  covers `consistency` and `maximum_payout`. The document says "until the sixth
+  payout"; this is the reading that matches "First Five Payouts" in the same
+  table. `applies_through_payout` makes it a parameter.
+- **The profit split has two contradictory readings in one document.** The
+  "Payout Split Percentage" section says 100% of the first $25,000 cumulative
+  per account then 90%; the "100% Payout Eligibility" section says 90% until
+  five payouts are complete then 100%. The first is the default and matches the
+  parent; the second is `mode: after_n_payouts`. On this tape neither bites —
+  no account was ever paid $25,000 cumulatively.
+- **Consistency counters reset at each approved payout**, per "Once a payout is
+  approved, any single day after the approval can not be more than 30%".
+- **`denial_on_shortfall` is inert without a processing delay.** With
+  same-instant approval there is no window in which a balance can fall. The two
+  rules are a pair and only mean anything together.
+- **The trailing threshold is not in the rulebook.** It caps every payout at one
+  cent above the frozen floor, always, because it is the account specification.
+  Switching every firm rule off does not let a payout kill an account outright —
+  it lets a payout leave it one cent from death, which on this tape is nearly
+  the same thing.
+
+## Our policy, which is not a rule
+
+- **$500 per account per calendar month**, accruing as a backlog when unpayable,
+  paid in whole $500 blocks. $500 rather than $100 because the firm will not
+  process anything smaller — once the minimum is real, the ask is the minimum.
 - **Entitlement accrues from the account's second month**, whether or not the
-  account can pay. An account owes the owner $100 a month from the day after it
-  opens; unpayable months stay owed and are paid later in whole $100 blocks.
-  *Bias: aggressive extraction.* An account that spends three years below the
-  gate and then crosses it hands over three years of backlog at once, subject
-  to the net.
-- **Whole months only.** An account that could pay $250 of a $500 backlog pays
-  $200, so the pocket stays a clean multiple of $100.
-- **A withdrawal never lowers the trailing floor.** The floor follows the peak
-  and only ever rises. Taking cash out therefore spends cushion permanently,
-  which is the entire economic mechanism of this brick.
-- **Under these numbers a withdrawal cannot itself kill an account.** The gate
-  implies a peak of at least +$1,600, so the floor is already frozen at
-  $25,100, and the net stops the balance $1,400 clear of it. Withdrawals kill
-  *indirectly*, by leaving less room for the next drawdown — which is what
-  happened to the 2020-04 and 2024-12 accounts.
-- **Cash is atomic and instant.** Request, approval, balance removal and
-  receipt are one event at the month boundary. No delay, no denial, no split.
+  account can pay. *Bias: aggressive extraction.* An account that spends three
+  years below the gate and then crosses it hands over the backlog at once,
+  subject to the caps.
+- **A payout never lowers the trailing floor.** The floor follows the peak and
+  only rises, so taking cash out spends cushion permanently. That is the entire
+  economic mechanism.
+
+## The clock
+
+Source labels are read as Europe/Tallinn wall-clock, the parent's convention.
+Because they are *already* in that zone, a trading day is the label's own
+calendar date — attaching the zone cannot move it. What the zone buys is
+validation, and the tape passes: zero DST-nonexistent and zero ambiguous labels
+across all 25,316 timestamps.
+
+The modelled session is 01:00-23:59 local, and following the parent it
+*describes* rather than filters: the 2 entries and 11 exits outside it are
+authoritative completed fills and are kept, as are the 97 trades whose exit date
+differs from their entry date. PA profit is credited on the **exit** date.
+
+Windows Python ships no IANA database, so `clock.py` carries a minimal
+Europe/Tallinn and prefers `zoneinfo` whenever a real database is installed.
 
 ## Ordering within a month boundary
 
@@ -104,12 +126,14 @@ month.
 
 ## Not modelled
 
-Payout request counts, the $1,500-per-request cap, the 90/10 split above
-$25,000 cumulative, consistency rules, denials and processing delays; slippage
-and partial fills;
-contract caps and scaling plans; daily loss limits; the Evaluation phase and its
-$35/$125 fees; pending-order and broker fill lifecycle; prop-firm rule change or
-failure; any capital constraint on buying the next account.
+Slippage and partial fills; contract caps and scaling plans; daily loss limits;
+the Evaluation phase and its $35/$125 fees; pending-order and broker fill
+lifecycle; prop-firm rule change or failure; any capital constraint on buying
+the next account; transfer to a Live Prop account, which the supplied text names
+as an alternative end to the consistency rule.
+
+Every *payout* rule is now modelled. What remains unmodelled is execution-side
+and lifecycle, not payout mechanics.
 
 ## Reading the headline numbers
 

@@ -1,14 +1,20 @@
-"""Legacy 25K Performance Account drawdown state.
+"""Legacy 25K Performance Account state.
 
 Equity is tracked as profit relative to the USD 25,000 starting balance, so the
 trailing threshold is a single number that starts at -1,500 and rises with the
 peak until it freezes at +100 (a nominal USD 25,100).
+
+The account also keeps the bookkeeping the firm's payout rules need: realized
+profit per trading day since the last approved payout, how many payouts have
+been approved, and how much has cumulatively been paid out.
 """
 
 from __future__ import annotations
 
 from dataclasses import dataclass, field
-from datetime import datetime
+from datetime import date, datetime
+
+from .clock import trading_day
 
 
 def money(value: float) -> float:
@@ -26,6 +32,7 @@ class Account:
     trailing_drawdown_usd: float
     frozen_floor_profit_usd: float
     threshold_touch_fails: bool
+    starting_balance_usd: float = 25_000.0
 
     equity_profit_usd: float = 0.0
     peak_profit_usd: float = 0.0
@@ -35,6 +42,7 @@ class Account:
     death_trade_key: str | None = None
     death_reason: str | None = None
     death_equity_usd: float | None = None
+
     trades_taken: int = 0
     wins: int = 0
     losses: int = 0
@@ -43,29 +51,63 @@ class Account:
     max_equity_profit_usd: float = 0.0
     min_equity_profit_usd: float = 0.0
 
-    # Withdrawal state. Entitlement accrues monthly whether or not the account
-    # can pay; outstanding is what it still owes the owner.
+    # Realized net profit per trading day, cleared at each approved payout.
+    # The firm's day-count, profitable-day and consistency rules all read it.
+    day_pnl_usd: dict[date, float] = field(default_factory=dict)
+
+    # Withdrawal entitlement: what our own policy says the account owes us.
     entitlement_accrued_usd: float = 0.0
     entitlement_outstanding_usd: float = 0.0
-    withdrawn_usd: float = 0.0
-    withdrawal_count: int = 0
     months_accrued: int = 0
+
+    # Payout state: what the firm has actually approved.
+    payout_count: int = 0
+    gross_paid_usd: float = 0.0
+    received_usd: float = 0.0
+    withdrawal_count: int = 0
     first_withdrawal_at: datetime | None = None
     last_withdrawal_at: datetime | None = None
+    last_payout_at: datetime | None = None
+    requests_blocked: int = 0
 
     def __post_init__(self) -> None:
         self.floor_profit_usd = money(-self.trailing_drawdown_usd)
 
+    # ------------------------------------------------------------------ views
+
     @property
     def balance_usd(self) -> float:
-        return money(25_000.0 + self.equity_profit_usd)
+        return money(self.starting_balance_usd + self.equity_profit_usd)
 
     @property
     def headroom_usd(self) -> float:
         return money(self.equity_profit_usd - self.floor_profit_usd)
 
+    @property
+    def withdrawn_usd(self) -> float:
+        """Gross taken out of the account, before the firm's split."""
+
+        return self.gross_paid_usd
+
+    @property
+    def trading_days_since_payout(self) -> int:
+        return len(self.day_pnl_usd)
+
+    def profitable_days_since_payout(self, threshold_usd: float) -> int:
+        return sum(1 for value in self.day_pnl_usd.values() if value >= threshold_usd)
+
+    @property
+    def best_day_since_payout_usd(self) -> float:
+        """The largest single-day profit since the last approved payout."""
+
+        return money(max(self.day_pnl_usd.values(), default=0.0))
+
+    # ------------------------------------------------------------------ trades
+
     def _breached(self, value: float) -> bool:
-        return value <= self.floor_profit_usd if self.threshold_touch_fails else value < self.floor_profit_usd
+        if self.threshold_touch_fails:
+            return value <= self.floor_profit_usd
+        return value < self.floor_profit_usd
 
     def _lift_peak(self, value: float) -> None:
         if value > self.peak_profit_usd:
@@ -76,6 +118,13 @@ class Account:
                 self.frozen_floor_profit_usd,
             )
         )
+
+    def _die(self, at: datetime, reason: str, equity: float, trade_key: str | None) -> None:
+        self.alive = False
+        self.died_at = at
+        self.death_reason = reason
+        self.death_equity_usd = equity
+        self.death_trade_key = trade_key
 
     def apply(self, trade, *, commission_usd: float, path_order: str) -> bool:
         """Settle one copy of ``trade``. Returns True if the account survives.
@@ -97,12 +146,8 @@ class Account:
         if adverse < self.min_equity_profit_usd:
             self.min_equity_profit_usd = adverse
         if self._breached(adverse):
-            self.alive = False
-            self.died_at = trade.exit_at
-            self.death_trade_key = trade.trade_key
-            self.death_reason = "intratrade_excursion"
-            self.death_equity_usd = adverse
             self.trades_taken += 1
+            self._die(trade.exit_at, "intratrade_excursion", adverse, trade.trade_key)
             return False
 
         if path_order == "mae_first":
@@ -121,18 +166,22 @@ class Account:
         if self.equity_profit_usd < self.min_equity_profit_usd:
             self.min_equity_profit_usd = self.equity_profit_usd
 
+        # PA profit and loss is credited on the exit date, per the study clock.
+        day = trading_day(trade.exit_at)
+        self.day_pnl_usd[day] = money(self.day_pnl_usd.get(day, 0.0) + net_pnl)
+
         self._lift_peak(self.equity_profit_usd)
         if self._breached(self.equity_profit_usd):
-            self.alive = False
-            self.died_at = trade.exit_at
-            self.death_trade_key = trade.trade_key
-            self.death_reason = "closed_below_threshold"
-            self.death_equity_usd = self.equity_profit_usd
+            self._die(
+                trade.exit_at, "closed_below_threshold", self.equity_profit_usd, trade.trade_key
+            )
             return False
         return True
 
+    # ------------------------------------------------------------- entitlement
+
     def accrue(self, amount_usd: float, *, keep_backlog: bool = True) -> None:
-        """Credit one month of entitlement to this account."""
+        """Credit one period of entitlement -- what our policy wants out."""
 
         if not self.alive:
             raise ValueError(f"account {self.account_id} is dead")
@@ -143,39 +192,44 @@ class Account:
                 self.entitlement_outstanding_usd + amount_usd
             )
         else:
-            # No backlog: the month is offered once and expires unpaid.
+            # No backlog: the period is offered once and expires unpaid.
             self.entitlement_outstanding_usd = money(amount_usd)
 
-    def withdraw(self, amount_usd: float, at: datetime) -> bool:
-        """Move cash out. Returns True if the account survives the withdrawal.
+    # ----------------------------------------------------------------- payouts
 
-        The peak is untouched, so the trailing floor does not follow the balance
-        down. A withdrawal spends cushion, which is the whole economic point.
+    def pay_out(self, gross_usd: float, received_usd: float, at: datetime) -> bool:
+        """Approve a payout. Returns True if the account survives it.
+
+        ``gross_usd`` leaves the account; ``received_usd`` is what reaches our
+        pocket after the firm's split. The peak is untouched, so the trailing
+        floor does not follow the balance down: a payout spends cushion, which
+        is the whole economic point.
         """
 
         if not self.alive:
             raise ValueError(f"account {self.account_id} is dead")
-        if amount_usd <= 0:
-            raise ValueError("withdrawal must be positive")
-        if amount_usd > self.entitlement_outstanding_usd + 1e-9:
-            raise ValueError("withdrawal exceeds the outstanding entitlement")
+        if gross_usd <= 0:
+            raise ValueError("a payout must be positive")
 
-        self.equity_profit_usd = money(self.equity_profit_usd - amount_usd)
+        self.equity_profit_usd = money(self.equity_profit_usd - gross_usd)
         self.entitlement_outstanding_usd = money(
-            self.entitlement_outstanding_usd - amount_usd
+            max(0.0, self.entitlement_outstanding_usd - gross_usd)
         )
-        self.withdrawn_usd = money(self.withdrawn_usd + amount_usd)
+        self.gross_paid_usd = money(self.gross_paid_usd + gross_usd)
+        self.received_usd = money(self.received_usd + received_usd)
+        self.payout_count += 1
         self.withdrawal_count += 1
+        self.last_payout_at = at
         self.last_withdrawal_at = at
         if self.first_withdrawal_at is None:
             self.first_withdrawal_at = at
         if self.equity_profit_usd < self.min_equity_profit_usd:
             self.min_equity_profit_usd = self.equity_profit_usd
 
+        # The firm's day counters run from the last approved payout.
+        self.day_pnl_usd.clear()
+
         if self._breached(self.equity_profit_usd):
-            self.alive = False
-            self.died_at = at
-            self.death_reason = "withdrawal_below_threshold"
-            self.death_equity_usd = self.equity_profit_usd
+            self._die(at, "payout_below_threshold", self.equity_profit_usd, None)
             return False
         return True

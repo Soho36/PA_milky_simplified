@@ -1,0 +1,12 @@
+{
+  "minimum_balance": { "enabled": false, "balance_usd": 26600.0 },
+  "trading_days": { "enabled": false, "required_days": 8 },
+  "profitable_days": { "enabled": false, "required_days": 5, "profit_threshold_usd": 50.0 },
+  "consistency": { "enabled": false, "max_day_fraction": 0.3, "applies_through_payout": 5 },
+  "safety_net": { "enabled": false, "net_balance_usd": 26600.0, "encroachment_allowance_usd": 500.0, "applies_through_payout": 3 },
+  "maximum_payout": { "enabled": false, "amount_usd": 1500.0, "applies_through_payout": 5 },
+  "minimum_payout": { "enabled": false, "amount_usd": 500.0 },
+  "profit_split": { "enabled": false, "mode": "cumulative_threshold", "full_rate_threshold_usd": 25000.0, "reduced_rate": 0.9, "full_rate_from_payout": 6 },
+  "processing_delay": { "enabled": false, "days": 0 },
+  "denial_on_shortfall": { "enabled": false }
+}

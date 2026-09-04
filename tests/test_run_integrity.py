@@ -7,7 +7,7 @@ import unittest
 from pa_milky.report import summarize
 from pa_milky.simulator import run_book
 
-from .support import BRICK1 as CONFIG, RESULT1 as RESULT, TRADES
+from .support import BRICK1 as CONFIG, RESULT1 as RESULT, TRADES  # noqa: F401
 
 SUMMARY = summarize(RESULT)
 

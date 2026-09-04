@@ -1,0 +1,31 @@
+{
+  "schema_version": "pa_milky_simplified.scenario.v1",
+  "scenario": "ideal_world",
+  "brick": 1,
+  "brick_name": "ideal_world",
+  "description": "Every firm rule off and nothing withdrawn. The strategy's own trading rules and the Legacy 25K trailing drawdown, and nothing else. This is the standard the rulebook is measured against.",
+  "data": {
+    "sweeps_root": "1_sweeps",
+    "strategy": "RR",
+    "risk_reward": "1.00",
+    "expected_windows": 23,
+    "expected_trades": 12658
+  },
+  "execution": {
+    "contracts_per_copy": 1,
+    "commission_usd_per_mnq_round_turn": 1.05,
+    "slippage_ticks": 0,
+    "concurrency": "unlimited",
+    "path_order": "mae_first",
+    "commission_applies_to_excursions": false
+  },
+  "product": "products/legacy_25k.json",
+  "book": {
+    "cadence": "one_new_pa_per_calendar_month",
+    "activation_moment": "first_instant_of_calendar_month",
+    "max_accounts": null,
+    "replace_on_death": false
+  },
+  "firm_rules": "firm/no_rules.json",
+  "policy": "policies/hold.json"
+}

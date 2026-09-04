@@ -14,7 +14,7 @@ import unittest
 from pa_milky.config import config_from_payload, to_payload
 from pa_milky.provenance import BASELINE_ROOT, list_baselines, verify
 
-from .support import BRICK1, BRICK2
+from .support import BRICK1, BRICK2, IDEAL, RESULT1, TRADES
 
 
 class TestConfigRoundTrip(unittest.TestCase):
@@ -26,10 +26,55 @@ class TestConfigRoundTrip(unittest.TestCase):
             with self.subTest(brick=config.brick):
                 self.assertEqual(config_from_payload(to_payload(config)), config)
 
-    def test_a_payload_without_withdrawals_means_brick_one(self):
-        payload = to_payload(BRICK2)
-        del payload["withdrawals"]
-        self.assertFalse(config_from_payload(payload).withdrawals.enabled)
+    def test_a_legacy_payload_without_withdrawals_means_hold(self):
+        # Brick 1 was sealed before withdrawals existed. Its flat payload has
+        # no withdrawals block at all, and that has to keep meaning "hold".
+        legacy = json.loads(
+            (BASELINE_ROOT / "brick1_ideal_world" / "manifest.json").read_text(
+                encoding="utf-8"
+            )
+        )["config"]
+        self.assertEqual(legacy["withdrawals"]["policy"], "none")
+        self.assertFalse(config_from_payload(legacy).policy.enabled)
+        # And a payload predating the block entirely still means hold.
+        del legacy["withdrawals"]
+        self.assertFalse(config_from_payload(legacy).policy.enabled)
+
+    def test_a_legacy_payload_maps_onto_the_rulebook(self):
+        # Brick 2's two v1 gates become minimum_balance and a safety net whose
+        # encroachment allowance is the distance between them.
+        legacy = json.loads(
+            (BASELINE_ROOT / "brick2_monthly_100" / "manifest.json").read_text(
+                encoding="utf-8"
+            )
+        )["config"]
+        config = config_from_payload(legacy)
+        self.assertEqual(config.rulebook.active_keys, ("minimum_balance", "safety_net"))
+        gate = config.rulebook.get("minimum_balance")
+        net = config.rulebook.get("safety_net")
+        self.assertEqual(gate.params["balance_usd"], 26_600.0)
+        self.assertEqual(net.params["encroachment_allowance_usd"], 100.0)
+        self.assertEqual(config.policy.amount_usd, 100.0)
+
+
+class TestTheTwoConfigPathsAgree(unittest.TestCase):
+    """The scenario schema must reproduce the brick it replaced, exactly."""
+
+    def test_the_ideal_scenario_equals_sealed_brick_one(self):
+        from pa_milky.simulator import run_book
+
+        rerun = run_book(TRADES, IDEAL)
+        self.assertEqual(len(rerun.alive), len(RESULT1.alive))
+        self.assertEqual(rerun.copies_filled, RESULT1.copies_filled)
+        self.assertEqual(rerun.total_withdrawn_usd, RESULT1.total_withdrawn_usd)
+        self.assertEqual(
+            [a.equity_profit_usd for a in rerun.accounts],
+            [a.equity_profit_usd for a in RESULT1.accounts],
+        )
+
+    def test_the_ideal_scenario_switches_everything_off(self):
+        self.assertEqual(IDEAL.rulebook.active_keys, ())
+        self.assertFalse(IDEAL.policy.enabled)
 
 
 class TestSealedBaselines(unittest.TestCase):
@@ -72,7 +117,7 @@ class TestSealedBaselines(unittest.TestCase):
             )
         )
         config = config_from_payload(manifest["config"])
-        self.assertFalse(config.withdrawals.enabled)
+        self.assertFalse(config.policy.enabled)
         self.assertEqual(config.strategy, "RR")
         self.assertEqual(config.risk_reward, "1.00")
         self.assertEqual(config.commission_usd_per_mnq_round_turn, 1.05)

@@ -2,6 +2,7 @@
 
 from __future__ import annotations
 
+import collections
 import csv
 from datetime import datetime, timezone
 import json
@@ -25,22 +26,45 @@ def _stats(values: list[float]) -> dict[str, float | None]:
     }
 
 
+def _policy_label(policy) -> str:
+    if not policy.enabled:
+        return "none"
+    return "fixed_monthly" if policy.amount_rule == "fixed" else f"monthly_{policy.amount_rule}"
+
+
+def _gate_balance(rulebook) -> float:
+    rule = rulebook.get("minimum_balance")
+    return float(rule.params["balance_usd"]) if rule.enabled else 0.0
+
+
+def _net_floor_balance(rulebook) -> float | None:
+    rule = rulebook.get("safety_net")
+    if not rule.enabled:
+        return None
+    return money(
+        float(rule.params["net_balance_usd"])
+        - float(rule.params["encroachment_allowance_usd"])
+    )
+
+
 def summarize(result: BookResult) -> dict:
     config = result.config
-    rules = config.withdrawals
+    policy, rulebook = config.policy, config.rulebook
     alive, dead = result.alive, result.dead
     alive_profit = [a.equity_profit_usd for a in alive]
     lifetimes = [(a.died_at - a.activated_at).days for a in dead if a.died_at is not None]
     cost = result.total_purchase_cost_usd
     paper_profit = money(sum(alive_profit))
     withdrawn = result.total_withdrawn_usd
-    payers = [a for a in result.accounts if a.withdrawal_count > 0]
+    received = result.total_received_usd
+    payers = [a for a in result.accounts if a.payout_count > 0]
 
     summary = {
         "schema_version": "pa_milky_simplified.result.v1",
         "generated_utc": datetime.now(timezone.utc).isoformat(timespec="seconds"),
         "brick": config.brick,
         "brick_name": config.brick_name,
+        "scenario": config.scenario,
         "run": {
             "strategy": config.strategy,
             "risk_reward": config.risk_reward,
@@ -70,7 +94,7 @@ def summarize(result: BookResult) -> dict:
         "cash": {
             "spent_on_accounts_usd": cost,
             "withdrawn_usd": withdrawn,
-            "owner_cash_position_usd": money(withdrawn - cost),
+            "owner_cash_position_usd": money(received - cost),
         },
         "alive_equity": {
             "profit_above_start": _stats(alive_profit),
@@ -84,22 +108,34 @@ def summarize(result: BookResult) -> dict:
             "trades_before_death": _stats([float(a.trades_taken) for a in dead]),
         },
         "trades_per_account": _stats([float(a.trades_taken) for a in result.accounts]),
+        "firm_rules": {
+            "active": list(rulebook.active_keys),
+            "rulebook": rulebook.to_payload(),
+        },
     }
 
-    if rules.enabled:
-        events = result.withdrawals
+    # Cash lost to the firm's split, and the split-free gross, kept separate so
+    # the two are never confused for one another.
+    summary["cash"]["received_usd"] = received
+    summary["cash"]["lost_to_split_usd"] = money(withdrawn - received)
+
+    if policy.enabled:
         summary["withdrawals"] = {
-            "policy": rules.policy,
-            "amount_usd": rules.amount_usd,
-            "eligibility_balance_usd": rules.eligibility_balance_usd,
-            "safety_net_balance_usd": rules.safety_net_balance_usd,
-            "shortfall": rules.shortfall,
-            "events": len(events),
-            "first_withdrawal": events[0].at.isoformat(sep=" ") if events else None,
-            "last_withdrawal": events[-1].at.isoformat(sep=" ") if events else None,
+            "policy": _policy_label(policy),
+            "amount_usd": policy.amount_usd,
+            "eligibility_balance_usd": _gate_balance(rulebook),
+            "safety_net_balance_usd": _net_floor_balance(rulebook),
+            "shortfall": policy.shortfall,
+            "events": len(result.payouts),
+            "first_withdrawal": (
+                result.payouts[0].at.isoformat(sep=" ") if result.payouts else None
+            ),
+            "last_withdrawal": (
+                result.payouts[-1].at.isoformat(sep=" ") if result.payouts else None
+            ),
             "accounts_that_ever_paid": len(payers),
             "accounts_that_never_paid": len(result.accounts) - len(payers),
-            "per_paying_account_usd": _stats([a.withdrawn_usd for a in payers]),
+            "per_paying_account_usd": _stats([a.gross_paid_usd for a in payers]),
             "entitlement_accrued_usd": money(
                 sum(a.entitlement_accrued_usd for a in result.accounts)
             ),
@@ -109,6 +145,20 @@ def summarize(result: BookResult) -> dict:
             "outstanding_lost_to_deaths_usd": money(
                 sum(a.entitlement_outstanding_usd for a in dead)
             ),
+        }
+        blocked_first = collections.Counter(e.blocked_by for e in result.denials)
+        blocked_any: collections.Counter = collections.Counter()
+        for event in result.denials:
+            blocked_any.update(set(event.blockers))
+        binding = collections.Counter(
+            e.binding_cap for e in result.payouts if e.binding_cap
+        )
+        summary["denials"] = {
+            "requests_denied": len(result.denials),
+            "requests_approved": len(result.payouts),
+            "blocked_by_first": dict(blocked_first.most_common()),
+            "blocked_by_any": dict(blocked_any.most_common()),
+            "binding_cap_on_approved": dict(binding.most_common()),
         }
     return summary
 
@@ -136,8 +186,10 @@ def account_rows(result: BookResult) -> list[dict]:
                 "losses": account.losses,
                 "gross_pnl_usd": account.gross_pnl_usd,
                 "commission_usd": account.commission_usd,
-                "withdrawn_usd": account.withdrawn_usd,
-                "withdrawal_count": account.withdrawal_count,
+                "payout_count": account.payout_count,
+                "requests_blocked": account.requests_blocked,
+                "withdrawn_usd": account.gross_paid_usd,
+                "received_usd": account.received_usd,
                 "months_accrued": account.months_accrued,
                 "entitlement_accrued_usd": account.entitlement_accrued_usd,
                 "entitlement_outstanding_usd": account.entitlement_outstanding_usd,
@@ -158,18 +210,39 @@ def account_rows(result: BookResult) -> list[dict]:
     return rows
 
 
-def withdrawal_rows(result: BookResult) -> list[dict]:
+def payout_rows(result: BookResult) -> list[dict]:
     return [
         {
-            "at": event.at.isoformat(sep=" "),
-            "account_id": event.account_id,
-            "cohort_month": event.cohort_month,
-            "amount_usd": event.amount_usd,
-            "balance_before_usd": event.balance_before_usd,
-            "balance_after_usd": event.balance_after_usd,
-            "outstanding_after_usd": event.outstanding_after_usd,
+            "at": e.at.isoformat(sep=" "),
+            "account_id": e.account_id,
+            "cohort_month": e.cohort_month,
+            "payout_number": e.payout_number,
+            "requested_usd": e.requested_usd,
+            "allowed_usd": e.allowed_usd,
+            "gross_usd": e.gross_usd,
+            "received_usd": e.received_usd,
+            "balance_before_usd": e.balance_before_usd,
+            "balance_after_usd": e.balance_after_usd,
+            "outstanding_after_usd": e.outstanding_after_usd,
+            "binding_cap": e.binding_cap or "",
         }
-        for event in result.withdrawals
+        for e in result.payouts
+    ]
+
+
+def denial_rows(result: BookResult) -> list[dict]:
+    return [
+        {
+            "at": e.at.isoformat(sep=" "),
+            "account_id": e.account_id,
+            "cohort_month": e.cohort_month,
+            "requested_usd": e.requested_usd,
+            "allowed_usd": e.allowed_usd,
+            "balance_usd": e.balance_usd,
+            "blocked_by": e.blocked_by,
+            "blockers": "|".join(e.blockers),
+        }
+        for e in result.denials
     ]
 
 
@@ -183,14 +256,16 @@ def render_text(result: BookResult) -> str:
     alive_equity = s["alive_equity"]
     alive_stats = alive_equity["profit_above_start"]
     dead_life = s["dead_accounts"]["lifetime_days"]
-    dead_trades = s["dead_accounts"]["trades_before_death"]
     withdrawals = s.get("withdrawals")
+    denials = s.get("denials")
+    rulebook = result.config.rulebook
 
     lines: list[str] = []
     add = lines.append
 
+    title = s["scenario"].replace("_", " ").upper()
     add("=" * 78)
-    add(f"  BRICK {s['brick']} - {s['brick_name'].replace('_', ' ').upper()}")
+    add(f"  {title}")
     add("=" * 78)
     add(
         f"  strategy {run['strategy']} @ RR {run['risk_reward']}"
@@ -203,13 +278,19 @@ def render_text(result: BookResult) -> str:
         f"  |  {tape['trades_loaded']:,} trades -> {tape['copies_filled']:,} copies filled"
     )
     if withdrawals:
-        net = withdrawals["safety_net_balance_usd"]
         add(
-            f"  withdrawals ${withdrawals['amount_usd']:,.0f}/month per account"
-            f"  |  gate ${withdrawals['eligibility_balance_usd']:,.0f}"
-            f"  |  safety net {'none' if net is None else f'${net:,.0f}'}"
-            f"  |  {withdrawals['shortfall']}"
+            f"  policy: ${withdrawals['amount_usd']:,.0f}/month per account"
+            f"  ({withdrawals['policy']}, {withdrawals['shortfall']})"
         )
+    add("")
+
+    add("  FIRM RULES")
+    for key, spec in sorted(rulebook.to_payload().items()):
+        mark = "ON " if spec["enabled"] else "off"
+        params = ", ".join(
+            f"{k}={v}" for k, v in spec.items() if k != "enabled" and v is not None
+        )
+        add(f"    [{mark}] {key:<20} {params}")
     add("")
 
     add("  THE BOOK")
@@ -222,39 +303,43 @@ def render_text(result: BookResult) -> str:
     add("")
 
     add("  CASH IN OUR POCKET")
-    add(
-        f"    withdrawn from accounts .............. ${cash['withdrawn_usd']:,.2f}"
-        + (f"  ({withdrawals['events']:,} withdrawals)" if withdrawals else "")
-    )
-    add(
-        f"    spent buying accounts ................ ${-cash['spent_on_accounts_usd']:,.2f}"
-        f"  ({book['accounts_opened']} x ${run['purchase_fee_usd']:,.0f})"
-    )
+    add(f"    gross out of the accounts ............ ${cash['withdrawn_usd']:,.2f}"
+        + (f"  ({withdrawals['events']:,} payouts)" if withdrawals else ""))
+    add(f"    lost to the firm's split ............. ${-cash['lost_to_split_usd'] or 0.0:,.2f}")
+    add(f"    spent buying accounts ................ ${-cash['spent_on_accounts_usd']:,.2f}"
+        f"  ({book['accounts_opened']} x ${run['purchase_fee_usd']:,.0f})")
     add(f"    ---------------------------------------{'-' * 14}")
     add(f"    IN OUR POCKET ........................ ${cash['owner_cash_position_usd']:,.2f}")
     add("")
 
+    if denials:
+        add("  WHICH RULE STOPPED US")
+        add(f"    requests approved .................... {denials['requests_approved']:,}")
+        add(f"    requests denied ...................... {denials['requests_denied']:,}")
+        if denials["blocked_by_any"]:
+            add("    denied by rule (a request may trip several):")
+            for key, count in denials["blocked_by_any"].items():
+                first = denials["blocked_by_first"].get(key, 0)
+                add(f"      {key:<22} {count:>6,}   (first blocker {first:,})")
+        if denials["binding_cap_on_approved"]:
+            add("    on approved payouts, the amount was capped by:")
+            for key, count in denials["binding_cap_on_approved"].items():
+                add(f"      {key:<22} {count:>6,}")
+        add("")
+
     if withdrawals:
         per = withdrawals["per_paying_account_usd"]
-        add("  WITHDRAWAL DETAIL")
-        add(
-            f"    accounts that ever paid .............. {withdrawals['accounts_that_ever_paid']}"
+        add("  PAYOUT DETAIL")
+        add(f"    accounts that ever paid .............. {withdrawals['accounts_that_ever_paid']}"
             f" of {book['accounts_opened']}"
-            f"   (never paid: {withdrawals['accounts_that_never_paid']})"
-        )
+            f"   (never paid: {withdrawals['accounts_that_never_paid']})")
         add(f"    first / last ......................... {withdrawals['first_withdrawal']}"
             f"  ->  {withdrawals['last_withdrawal']}")
         add(f"    per paying account: mean {_fmt(per['mean'])}  median {_fmt(per['median'])}")
         add(f"                        min  {_fmt(per['min'])}  max    {_fmt(per['max'])}")
-        add(f"    entitlement accrued .................. "
-            f"${withdrawals['entitlement_accrued_usd']:,.2f}")
-        add(f"    still owed by live accounts .......... "
-            f"${withdrawals['outstanding_on_live_accounts_usd']:,.2f}")
-        add(f"    written off when accounts died ....... "
-            f"${withdrawals['outstanding_lost_to_deaths_usd']:,.2f}")
         add("")
 
-    add("  EQUITY IN SURVIVING ACCOUNTS")
+    add("  EQUITY LEFT IN SURVIVING ACCOUNTS")
     add(f"    combined balance ..................... ${alive_equity['total_balance_usd']:,.2f}")
     add(f"    combined profit above start .......... ${alive_equity['total_paper_profit_usd']:,.2f}")
     add(f"    per account: mean {_fmt(alive_stats['mean'])}  median {_fmt(alive_stats['median'])}")
@@ -262,30 +347,27 @@ def render_text(result: BookResult) -> str:
     add("")
 
     add("  BLOWN ACCOUNTS")
-    add(
-        f"    lifetime days: median {_fmt(dead_life['median'])}"
-        f"  min {_fmt(dead_life['min'])}  max {_fmt(dead_life['max'])}"
-    )
-    add(
-        f"    trades taken:  median {_fmt(dead_trades['median'])}"
-        f"  min {_fmt(dead_trades['min'])}  max {_fmt(dead_trades['max'])}"
-    )
+    add(f"    lifetime days: median {_fmt(dead_life['median'])}"
+        f"  min {_fmt(dead_life['min'])}  max {_fmt(dead_life['max'])}")
+    causes = collections.Counter(a.death_reason for a in result.dead)
+    for reason, count in causes.most_common():
+        add(f"    {reason:<26} {count:>4}")
     add("")
 
     add("  PER-ACCOUNT LEDGER")
     add("    cohort     trades  status  died          lifetime"
-        "     withdrawn      balance      headroom")
+        "      payouts    received      balance")
     add("    " + "-" * 87)
     for account in result.accounts:
         status = "ALIVE" if account.alive else "dead "
         died = account.died_at.strftime("%Y-%m-%d") if account.died_at else "-"
         life = f"{(account.died_at - account.activated_at).days}d" if account.died_at else "-"
         balance = f"{account.balance_usd:,.2f}" if account.alive else "-"
-        headroom = f"{account.headroom_usd:,.2f}" if account.alive else "-"
-        drawn = f"{account.withdrawn_usd:,.2f}" if account.withdrawn_usd else "-"
+        got = f"{account.received_usd:,.2f}" if account.received_usd else "-"
+        count = f"{account.payout_count}" if account.payout_count else "-"
         add(
             f"    {account.cohort_month}  {account.trades_taken:6,}  {status}  "
-            f"{died:<12}  {life:>8}  {drawn:>12}  {balance:>12}  {headroom:>12}"
+            f"{died:<12}  {life:>8}  {count:>12}  {got:>10}  {balance:>12}"
         )
     add("=" * 78)
     return "\n".join(lines)
@@ -300,22 +382,19 @@ def write_outputs(result: BookResult, out_dir: str | Path) -> dict[str, Path]:
     summary_path.write_text(json.dumps(summarize(result), indent=2), encoding="utf-8")
     written["summary"] = summary_path
 
-    accounts_path = directory / "accounts.csv"
-    rows = account_rows(result)
-    with accounts_path.open("w", encoding="utf-8", newline="") as handle:
-        writer = csv.DictWriter(handle, fieldnames=list(rows[0]))
-        writer.writeheader()
-        writer.writerows(rows)
-    written["accounts"] = accounts_path
-
-    events = withdrawal_rows(result)
-    if events:
-        events_path = directory / "withdrawals.csv"
-        with events_path.open("w", encoding="utf-8", newline="") as handle:
-            writer = csv.DictWriter(handle, fieldnames=list(events[0]))
+    def _csv(name: str, rows: list[dict]) -> None:
+        if not rows:
+            return
+        path = directory / name
+        with path.open("w", encoding="utf-8", newline="") as handle:
+            writer = csv.DictWriter(handle, fieldnames=list(rows[0]))
             writer.writeheader()
-            writer.writerows(events)
-        written["withdrawals"] = events_path
+            writer.writerows(rows)
+        written[name.removesuffix(".csv")] = path
+
+    _csv("accounts.csv", account_rows(result))
+    _csv("withdrawals.csv", payout_rows(result))
+    _csv("denials.csv", denial_rows(result))
 
     report_path = directory / "report.txt"
     report_path.write_text(render_text(result), encoding="utf-8")

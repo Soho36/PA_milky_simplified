@@ -31,7 +31,7 @@ BASELINE_ROOT = PROJECT_ROOT / "baselines"
 ENGINE_DIR = Path(__file__).resolve().parent
 OUTPUT_NAMES = ("summary.json", "accounts.csv", "report.txt")
 # Written only by bricks that produce them; sealed when present.
-OPTIONAL_OUTPUT_NAMES = ("withdrawals.csv",)
+OPTIONAL_OUTPUT_NAMES = ("withdrawals.csv", "denials.csv", "ablation.json")
 
 
 def sha256_file(path: Path) -> str:
@@ -122,6 +122,10 @@ def headline(summary: dict) -> dict:
         "total_balance_usd": summary["alive_equity"]["total_balance_usd"],
         "total_paper_profit_usd": summary["alive_equity"]["total_paper_profit_usd"],
     }
+    denials = summary.get("denials")
+    if denials:
+        pinned["requests_approved"] = denials["requests_approved"]
+        pinned["requests_denied"] = denials["requests_denied"]
     withdrawals = summary.get("withdrawals")
     if withdrawals:
         pinned["withdrawal_events"] = withdrawals["events"]

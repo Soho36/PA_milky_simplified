@@ -1,9 +1,9 @@
 """The book: one new PA per calendar month, every PA trades everything.
 
 The run is a single causal walk. Trades settle at their exit time; at each
-calendar month boundary the book pauses to pay the owner and then opens that
-month's new account. A trade exiting exactly on a boundary settles before the
-withdrawal decision, so the owner is never paid out of money that had not yet
+calendar month boundary the book pauses to ask the firm for money and then
+opens that month's new account. A trade exiting exactly on a boundary settles
+before the request, so a payout is never asked out of money that had not yet
 been realized.
 """
 
@@ -15,7 +15,7 @@ from datetime import datetime
 from .account import Account, money
 from .config import RunConfig
 from .loader import Trade
-from .withdrawals import WithdrawalEvent, run_monthly_decision
+from .payouts import DenialEvent, PayoutEvent, PendingPayout, run_monthly_decision, settle_pending
 
 
 def month_key(moment: datetime) -> str:
@@ -38,7 +38,8 @@ def months_in_span(first: datetime, last: datetime) -> list[tuple[int, int]]:
 @dataclass(frozen=True, slots=True)
 class BookResult:
     accounts: list[Account]
-    withdrawals: list[WithdrawalEvent]
+    payouts: list[PayoutEvent]
+    denials: list[DenialEvent]
     trades_loaded: int
     copies_filled: int
     tape_first_entry: datetime
@@ -59,13 +60,19 @@ class BookResult:
 
     @property
     def total_withdrawn_usd(self) -> float:
-        return money(sum(a.withdrawn_usd for a in self.accounts))
+        """Gross out of the accounts, before the firm's split."""
+
+        return money(sum(a.gross_paid_usd for a in self.accounts))
+
+    @property
+    def total_received_usd(self) -> float:
+        """What actually reached us, after the split."""
+
+        return money(sum(a.received_usd for a in self.accounts))
 
     @property
     def pocket_usd(self) -> float:
-        """Cash actually taken home: withdrawals in, account fees out."""
-
-        return money(self.total_withdrawn_usd - self.total_purchase_cost_usd)
+        return money(self.total_received_usd - self.total_purchase_cost_usd)
 
 
 def _settle_through(
@@ -96,30 +103,39 @@ def _settle_through(
 
 
 def run_book(trades: list[Trade], config: RunConfig) -> BookResult:
-    """Walk the tape, opening one account a month and paying the owner monthly."""
+    """Walk the tape, opening one account a month and asking the firm monthly."""
 
     if not trades:
         raise ValueError("no trades to simulate")
 
     first_entry = min(t.entry_at for t in trades)
     last_exit = max(t.exit_at for t in trades)
-    rules = config.withdrawals
     commission = config.commission_per_copy_usd
+    asks = config.policy.enabled
 
     accounts: list[Account] = []
-    events: list[WithdrawalEvent] = []
+    payouts: list[PayoutEvent] = []
+    denials: list[DenialEvent] = []
+    pending: list[PendingPayout] = []
     index = 0
     copies = 0
 
     for opened, (year, month) in enumerate(months_in_span(first_entry, last_exit), start=1):
         boundary = datetime(year, month, 1)
         index, settled = _settle_through(
-            trades, index, boundary, accounts, commission=commission, path_order=config.path_order
+            trades, index, boundary, accounts,
+            commission=commission, path_order=config.path_order,
         )
         copies += settled
 
-        if rules.enabled:
-            events.extend(run_monthly_decision(accounts, boundary, rules))
+        if asks:
+            if pending:
+                paid, denied = settle_pending(pending, boundary, config)
+                payouts.extend(paid)
+                denials.extend(denied)
+            paid, denied = run_monthly_decision(accounts, boundary, config, pending)
+            payouts.extend(paid)
+            denials.extend(denied)
 
         if config.max_accounts is None or opened <= config.max_accounts:
             accounts.append(
@@ -131,17 +147,27 @@ def run_book(trades: list[Trade], config: RunConfig) -> BookResult:
                     trailing_drawdown_usd=config.trailing_drawdown_usd,
                     frozen_floor_profit_usd=config.frozen_floor_profit_usd,
                     threshold_touch_fails=config.threshold_touch_fails,
+                    starting_balance_usd=config.starting_balance_usd,
                 )
             )
 
     index, settled = _settle_through(
-        trades, index, None, accounts, commission=commission, path_order=config.path_order
+        trades, index, None, accounts,
+        commission=commission, path_order=config.path_order,
     )
     copies += settled
+    if pending:
+        paid, denied = settle_pending(pending, last_exit, config)
+        payouts.extend(paid)
+        denials.extend(denied)
+
+    payouts.sort(key=lambda event: (event.at, event.account_id))
+    denials.sort(key=lambda event: (event.at, event.account_id))
 
     return BookResult(
         accounts=accounts,
-        withdrawals=events,
+        payouts=payouts,
+        denials=denials,
         trades_loaded=len(trades),
         copies_filled=copies,
         tape_first_entry=first_entry,
