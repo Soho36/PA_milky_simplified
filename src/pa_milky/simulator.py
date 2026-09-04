@@ -1,10 +1,16 @@
 """The book: one new PA per calendar month, every PA trades everything.
 
-The run is a single causal walk. Trades settle at their exit time; at each
-calendar month boundary the book pauses to ask the firm for money and then
-opens that month's new account. A trade exiting exactly on a boundary settles
-before the request, so a payout is never asked out of money that had not yet
-been realized.
+The run is a single causal walk. Trades settle at their exit time, payouts
+land when the firm's processing delay runs out, and at each calendar month
+boundary the book asks the firm for money and then opens that month's new
+account.
+
+Nothing may see the future. Trades and due payouts are interleaved in true time
+order rather than batched to the next boundary, so a payout landing on the 11th
+is settled against the balance as it stood on the 11th, not as it stands after
+the rest of the month has been traded. A trade exiting exactly when a payout is
+due settles first, matching the rule that an exit at T precedes other events
+at T.
 """
 
 from __future__ import annotations
@@ -40,6 +46,7 @@ class BookResult:
     accounts: list[Account]
     payouts: list[PayoutEvent]
     denials: list[DenialEvent]
+    requests_unpaid_at_horizon: int
     trades_loaded: int
     copies_filled: int
     tape_first_entry: datetime
@@ -75,31 +82,61 @@ class BookResult:
         return money(self.total_received_usd - self.total_purchase_cost_usd)
 
 
-def _settle_through(
+def _apply_trade(trade: Trade, accounts: list[Account], *, commission: float, path_order: str) -> int:
+    copies = 0
+    for account in accounts:
+        if account.activated_at > trade.entry_at:
+            break  # accounts are activation-ordered; the rest are younger
+        if not account.alive:
+            continue
+        account.apply(trade, commission_usd=commission, path_order=path_order)
+        copies += 1
+    return copies
+
+
+def _advance(
     trades: list[Trade],
     index: int,
-    boundary: datetime | None,
+    horizon: datetime | None,
     accounts: list[Account],
+    pending: list[PendingPayout],
+    config: RunConfig,
     *,
     commission: float,
-    path_order: str,
-) -> tuple[int, int]:
-    """Settle every trade exiting at or before ``boundary``. Returns (index, copies)."""
+) -> tuple[int, int, list[PayoutEvent], list[DenialEvent]]:
+    """Run the clock forward to ``horizon``, in true event order.
+
+    Returns the new trade index, copies filled, and any payouts or denials that
+    fell due along the way.
+    """
 
     copies = 0
-    while index < len(trades):
-        trade = trades[index]
-        if boundary is not None and trade.exit_at > boundary:
-            break
-        for account in accounts:
-            if account.activated_at > trade.entry_at:
-                break  # accounts are activation-ordered; the rest are younger
-            if not account.alive:
-                continue
-            account.apply(trade, commission_usd=commission, path_order=path_order)
-            copies += 1
-        index += 1
-    return index, copies
+    payouts: list[PayoutEvent] = []
+    denials: list[DenialEvent] = []
+
+    while True:
+        trade_at = trades[index].exit_at if index < len(trades) else None
+        due_at = pending[0].due_at if pending else None
+        if horizon is not None:
+            if trade_at is not None and trade_at > horizon:
+                trade_at = None
+            if due_at is not None and due_at > horizon:
+                due_at = None
+
+        if trade_at is not None and (due_at is None or trade_at <= due_at):
+            copies += _apply_trade(
+                trades[index], accounts, commission=commission, path_order=config.path_order
+            )
+            index += 1
+            continue
+        if due_at is not None:
+            paid, denied = settle_pending(pending, due_at, config)
+            payouts.extend(paid)
+            denials.extend(denied)
+            continue
+        break
+
+    return index, copies, payouts, denials
 
 
 def run_book(trades: list[Trade], config: RunConfig) -> BookResult:
@@ -122,20 +159,18 @@ def run_book(trades: list[Trade], config: RunConfig) -> BookResult:
 
     for opened, (year, month) in enumerate(months_in_span(first_entry, last_exit), start=1):
         boundary = datetime(year, month, 1)
-        index, settled = _settle_through(
-            trades, index, boundary, accounts,
-            commission=commission, path_order=config.path_order,
+        index, settled, paid, denied = _advance(
+            trades, index, boundary, accounts, pending, config, commission=commission
         )
         copies += settled
+        payouts.extend(paid)
+        denials.extend(denied)
 
         if asks:
-            if pending:
-                paid, denied = settle_pending(pending, boundary, config)
-                payouts.extend(paid)
-                denials.extend(denied)
             paid, denied = run_monthly_decision(accounts, boundary, config, pending)
             payouts.extend(paid)
             denials.extend(denied)
+            pending.sort(key=lambda item: item.due_at)
 
         if config.max_accounts is None or opened <= config.max_accounts:
             accounts.append(
@@ -151,15 +186,17 @@ def run_book(trades: list[Trade], config: RunConfig) -> BookResult:
                 )
             )
 
-    index, settled = _settle_through(
-        trades, index, None, accounts,
-        commission=commission, path_order=config.path_order,
+    # The horizon is the last exit, not "no limit": a request whose delay runs
+    # past the end of the tape must not be settled out of thin air.
+    index, settled, paid, denied = _advance(
+        trades, index, last_exit, accounts, pending, config, commission=commission
     )
     copies += settled
-    if pending:
-        paid, denied = settle_pending(pending, last_exit, config)
-        payouts.extend(paid)
-        denials.extend(denied)
+    payouts.extend(paid)
+    denials.extend(denied)
+    # Anything still due after the last trade never lands: the tape has run out
+    # and there is no evidence about what the account did afterwards.
+    unpaid_at_horizon = len(pending)
 
     payouts.sort(key=lambda event: (event.at, event.account_id))
     denials.sort(key=lambda event: (event.at, event.account_id))
@@ -168,6 +205,7 @@ def run_book(trades: list[Trade], config: RunConfig) -> BookResult:
         accounts=accounts,
         payouts=payouts,
         denials=denials,
+        requests_unpaid_at_horizon=unpaid_at_horizon,
         trades_loaded=len(trades),
         copies_filled=copies,
         tape_first_entry=first_entry,

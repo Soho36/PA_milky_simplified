@@ -13,9 +13,12 @@ from pa_milky.simulator import run_book
 
 from .support import (
     BRICK2,
+    CUSHION_FULL,
     FULL,
     IDEAL,
     NO_RULES_500,
+    RESULT_CUSHION_FULL,
+    RESULT_CUSHION_NO_RULES,
     RESULT1,
     RESULT2,
     RESULT_FULL,
@@ -210,3 +213,120 @@ class TestProcessingDelay(unittest.TestCase):
 
 if __name__ == "__main__":
     unittest.main()
+
+
+class TestDelayedPayoutsAreCausal(unittest.TestCase):
+    """A payout landing on the 11th must not see the rest of the month.
+
+    Regression: pending payouts used to be settled in a batch at the next
+    monthly boundary and then stamped with their earlier due date, so a request
+    due 11 February was decided against the balance as it stood on 1 March.
+    """
+
+    @staticmethod
+    def _config(delay_days: int):
+        from pa_milky.firm import Rulebook
+
+        payload = {
+            **NO_RULES_500.rulebook.to_payload(),
+            "minimum_balance": {"enabled": True, "balance_usd": 26_600.0},
+            "denial_on_shortfall": {"enabled": True},
+            "processing_delay": {"enabled": delay_days > 0, "days": delay_days},
+        }
+        return dataclasses.replace(
+            NO_RULES_500,
+            rulebook=Rulebook.from_payload(payload),
+            commission_usd_per_mnq_round_turn=0.0,
+        )
+
+    @staticmethod
+    def _tape(loss_exit_day: int):
+        from .support import make_trade
+
+        return sorted(
+            [
+                make_trade(
+                    datetime(2020, 1, 2, 9), datetime(2020, 1, 3, 9), 5_000.0, row=1
+                ),
+                make_trade(
+                    datetime(2020, 2, 1, 9),
+                    datetime(2020, 2, loss_exit_day, 9),
+                    -4_000.0,
+                    row=2,
+                ),
+                # A flat tail so the tape's horizon outlives the due date;
+                # otherwise the request expires unsettled and proves nothing.
+                make_trade(
+                    datetime(2020, 2, 27, 9), datetime(2020, 2, 28, 9), 0.0, row=3
+                ),
+            ],
+            key=lambda t: t.exit_at,
+        )
+
+    def test_a_loss_after_the_due_date_cannot_deny_the_payout(self):
+        # Request 1 Feb, due 11 Feb, balance $30,000. The loss lands 20 Feb.
+        result = run_book(self._tape(loss_exit_day=20), self._config(10))
+        self.assertEqual(len(result.payouts), 1)
+        event = result.payouts[0]
+        self.assertEqual(event.at, datetime(2020, 2, 11))
+        self.assertEqual(event.balance_before_usd, 30_000.0)
+        self.assertEqual(result.denials, [])
+
+    def test_a_loss_before_the_due_date_does_deny_it(self):
+        # Same request, but the loss lands 5 Feb and drops the balance under
+        # the gate before the firm approves.
+        result = run_book(self._tape(loss_exit_day=5), self._config(10))
+        self.assertEqual(result.payouts, [])
+        self.assertEqual(len(result.denials), 1)
+        self.assertEqual(result.denials[0].blocked_by, "denial_on_shortfall")
+
+    def test_without_a_delay_the_two_tapes_agree(self):
+        # With same-instant approval there is no window to fall in, so where
+        # the loss lands cannot matter to the payout.
+        late = run_book(self._tape(loss_exit_day=20), self._config(0))
+        early = run_book(self._tape(loss_exit_day=5), self._config(0))
+        self.assertEqual(len(late.payouts), len(early.payouts), 1)
+        self.assertEqual(late.payouts[0].gross_usd, early.payouts[0].gross_usd)
+
+    def test_a_request_still_pending_at_the_horizon_is_never_paid(self):
+        # Requested 1 March with a 400-day delay: the tape ends first, and
+        # there is no evidence about what happened after it.
+        result = run_book(self._tape(loss_exit_day=20), self._config(400))
+        self.assertEqual(result.payouts, [])
+        self.assertEqual(result.requests_unpaid_at_horizon, 1)
+
+
+class TestPolicyAdaptationChangesTheAblation(unittest.TestCase):
+    """An ablation delta belongs to an arm, not to a rule.
+
+    The safety net measures at -$12,500 against a policy with no cushion of its
+    own -- which reads as "the firm's rule protects us". Give our own policy a
+    $26,100 floor and that entire effect disappears: the rule was standing in
+    for a cushion we should have had anyway.
+    """
+
+    def test_our_own_cushion_beats_the_unruled_book(self):
+        self.assertGreater(
+            RESULT_CUSHION_NO_RULES.total_received_usd, RESULT_NO_RULES.total_received_usd
+        )
+
+    def test_and_beats_the_full_rulebook_too(self):
+        # With a cushion of our own the rulebook is a net cost again, which is
+        # the sign the naive comparison reported backwards.
+        self.assertGreater(
+            RESULT_CUSHION_NO_RULES.total_received_usd, RESULT_FULL.total_received_usd
+        )
+
+    def test_the_safety_net_is_worth_nothing_once_we_hold_our_own_floor(self):
+        without = dataclasses.replace(
+            CUSHION_FULL, rulebook=CUSHION_FULL.rulebook.without("safety_net")
+        )
+        self.assertEqual(
+            run_book(TRADES, without).pocket_usd, RESULT_CUSHION_FULL.pocket_usd
+        )
+
+    def test_the_firms_rules_already_bind_tighter_than_our_cushion(self):
+        # A $500 ask through a $26,600 gate already leaves $26,100, so adding
+        # our own $26,100 floor on top of the full rulebook changes nothing.
+        self.assertEqual(RESULT_CUSHION_FULL.pocket_usd, RESULT_FULL.pocket_usd)
+        self.assertEqual(len(RESULT_CUSHION_FULL.alive), len(RESULT_FULL.alive))

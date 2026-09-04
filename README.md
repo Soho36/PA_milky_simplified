@@ -24,27 +24,39 @@ Full rulebook, $500 requested per account per month, 79 accounts over the
   all rules on                      102,700            -      7      195     116
   minus consistency                 106,700       +4,000      6      215      94
   minus profitable_days             103,200         +500      7      201     110
-  minus denial_on_shortfall         102,700           +0      7      195     116
-  minus maximum_payout              102,700           +0      7      195     116
-  minus minimum_balance             102,700           +0      7      196     115
-  minus minimum_payout              102,700           +0      7      195     116
-  minus profit_split                102,700           +0      7      195     116
-  minus trading_days                102,700           +0      7      195     116
   minus safety_net                   90,200      -12,500      6      162     112
+  (six other rules)                 102,700           +0      7      195     116
 ```
 
-Three findings, none of which the brick ladder would have produced:
+**Read a delta as what that rule did to *this* arm, not as its price.** The
+other rules stay on and the policy stays fixed, so interactions are not
+additive and a policy that adapted would answer differently. The safety net is
+the case in point.
 
-1. **The 30% consistency rule is the only expensive rule** — $4,000. Everything
-   else is worth $500 or nothing under this policy.
-2. **The safety net is worth +$12,500 *to us*.** Removing it does not free
-   money, it destroys it: without the net a $500 request is capped only by the
-   trailing threshold, so the book pays itself down to $25,105 — a nickel above
-   liquidation — and the accounts do not survive to pay again. The firm's rule
-   refuses exactly that trade.
-3. **Six of ten rules cost nothing here**, because a $500 monthly ask never
-   reaches the $1,500 cap, never accumulates $25,000 for the split to bite,
-   and never needs more than 8 trading days to accrue.
+### The safety net is not worth $12,500 — having any cushion is
+
+The −$12,500 above says removing the net *destroys* money, which reads as "the
+firm protects us". It does not survive the obvious control. Give our own policy
+a floor of its own — never take an account below $26,100, the same level the
+net enforces — and re-run:
+
+| arm | pocket | alive |
+|---|---|---|
+| no rules, no cushion | $95,700 | 5 |
+| full rulebook, no cushion | $102,700 | 7 |
+| **no rules, our own cushion** | **$107,200** | 6 |
+| full rulebook, our own cushion | $102,700 | 7 |
+
+The best arm is **no firm rules plus a cushion we chose**. Re-ablated against
+that policy, `safety_net` measures **exactly $0** — the entire effect was our
+policy having no cushion, not the rule having value. And with a cushion in
+hand the rulebook is a net **cost of $4,500**, which is the sign the naive
+comparison reported backwards.
+
+What survives both framings: **consistency is the only expensive rule** at
+$4,000, and six of ten cost nothing here because a $500 monthly ask never
+reaches the $1,500 cap, never accumulates $25,000 for the split, and never
+needs more than 8 trading days.
 
 ## The four layers
 
@@ -61,13 +73,16 @@ payload at seal time, so provenance is unaffected by the layering.
 
 ### The firm rulebook
 
-| key | rule | params (25K) | costs |
+Deltas below are for the `$500/month, no cushion` arm only — see the caveat
+above before quoting any of them as a rule's price.
+
+| key | rule | params (25K) | delta, that arm |
 |---|---|---|---|
 | `minimum_balance` | $26,600 at the request, flat | 26600 | $0 |
 | `trading_days` | ≥8 trading days since the last request | 8 | $0 |
 | `profitable_days` | ≥5 of those with profit ≥ $50 | 5, 50 | $500 |
 | `consistency` | no day > 30% of profit balance, through payout 5 | 0.30, 5 | **$4,000** |
-| `safety_net` | payouts 1-3 may encroach by one $500 minimum | 500, 3 | **−$12,500** |
+| `safety_net` | payouts 1-3 may encroach by one $500 minimum | 500, 3 | −$12,500, but **$0** with a cushion |
 | `minimum_payout` | $500, any account size | 500 | $0 |
 | `maximum_payout` | $1,500 through payout 5, none after | 1500, 5 | $0 |
 | `profit_split` | 100% of first $25,000 cumulative, then 90% | 25000, 0.9 | $0 |
@@ -80,9 +95,11 @@ rulebook — it is the account specification, always on, never switchable.
 ### Our policy
 
 `cadence` (never / calendar month), `amount_rule` (fixed / maximum / minimum),
-`amount_usd`, `shortfall` (skip / accrue backlog / partial), and whether to
-round down to whole asks. Brick 1's "hold everything and imagine one withdrawal
-at the end" is not a special case in the engine — it is `cadence: never`.
+`amount_usd`, `shortfall` (skip / accrue backlog / partial), whether to round
+down to whole asks, and `min_retained_balance_usd` — a cushion *we* choose to
+leave in an account, independent of anything the firm requires. Brick 1's "hold
+everything and imagine one withdrawal at the end" is not a special case in the
+engine — it is `cadence: never`.
 
 ## Scenarios
 
@@ -92,6 +109,8 @@ at the end" is not a special case in the engine — it is `cadence: never`.
 | `no_rules_monthly_500` | none | $500/month | $95,700 | 5 |
 | `full_rulebook_monthly_500` | all | $500/month | **$102,700** | 7 |
 | `full_rulebook_monthly_maximum` | all | max allowed | — | — |
+| `no_rules_monthly_500_cushion` | none | $500/month + our $26,100 floor | **$107,200** | 6 |
+| `full_rulebook_monthly_500_cushion` | all | $500/month + our $26,100 floor | $102,700 | 7 |
 
 ## Sealed baselines
 
@@ -134,6 +153,7 @@ ask, `--seal NAME` writes a baseline.
 - `src/pa_milky/simulator.py` — the book, walked as one causal stream.
 - `src/pa_milky/ablation.py` — one arm per rule.
 - `src/pa_milky/provenance.py` — sealing and verification.
-- `tests/` — 108 tests, including every firm rule against the sentence it came
-  from and both sealed baselines reproducing.
+- `tests/` — 117 tests, including every firm rule against the sentence it came
+  from, the excursion-ordering property over a grid of states, delayed payouts
+  proved causal, and all three sealed baselines reproducing.
 - `ASSUMPTIONS.md` — every assumption and which way it bends the result.

@@ -110,23 +110,72 @@ class TestTrailingFloor(unittest.TestCase):
 
 
 class TestPathOrder(unittest.TestCase):
-    def test_mae_first_is_the_conservative_reading(self):
-        # Equity 0, floor -1500. The trade dips 1500 and rallies 3000.
-        # Conservatively the dip lands first and the account is gone.
-        pa = account()
-        survived = pa.apply(trade(-1_500.0, 3_000.0, 500.0), commission_usd=0.0, path_order="mae_first")
-        self.assertFalse(survived)
+    """Which excursion lands first, and which way that actually cuts.
 
-    def test_mfe_first_lifts_the_floor_before_the_dip(self):
-        # Same trade, optimistic ordering: the rally lifts the floor to +100
-        # first, so the dip to -1500 is still a death -- but a later, smaller
-        # dip would not be. Use a survivable dip to show the divergence.
+    The intuition that "adverse first" is the pessimistic reading is wrong for
+    a *trailing* threshold. Reaching the favourable extreme first ratchets the
+    floor upward before the adverse move is tested, so MFE-first is the harsher
+    pole. An earlier version of ASSUMPTIONS.md had this backwards.
+    """
+
+    @staticmethod
+    def _primed(peak: float) -> Account:
         pa = account()
-        survived = pa.apply(trade(-1_400.0, 3_000.0, 500.0), commission_usd=0.0, path_order="mfe_first")
-        self.assertFalse(survived)  # floor rose to +100, so -1400 breaches it
+        if peak:
+            pa.apply(trade(0.0, 0.0, peak), commission_usd=0.0, path_order="mae_first")
+        return pa
+
+    def test_mfe_first_is_the_harsher_pole(self):
+        # A dip of 1,400 with a 3,000 rally. Adverse-first tests the dip against
+        # the original -1,500 floor and survives; favourable-first lifts the
+        # floor to +100 first, and the same dip is fatal.
         pa = account()
-        survived = pa.apply(trade(-1_400.0, 3_000.0, 500.0), commission_usd=0.0, path_order="mae_first")
-        self.assertTrue(survived)  # floor still -1500 when the dip is tested
+        self.assertTrue(
+            pa.apply(trade(-1_400.0, 3_000.0, 500.0), commission_usd=0.0, path_order="mae_first")
+        )
+        pa = account()
+        self.assertFalse(
+            pa.apply(trade(-1_400.0, 3_000.0, 500.0), commission_usd=0.0, path_order="mfe_first")
+        )
+
+    def test_mfe_first_kills_a_superset(self):
+        # The floor only ever ratchets up, so anything adverse-first kills,
+        # favourable-first kills too. The converse is what the test above shows.
+        for peak in (0.0, 800.0, 1_600.0, 3_000.0):
+            for mae in range(0, -2_001, -125):
+                for mfe in range(0, 4_001, 250):
+                    conservative = self._primed(peak).apply(
+                        trade(float(mae), float(mfe), 0.0),
+                        commission_usd=0.0, path_order="mae_first",
+                    )
+                    harsh = self._primed(peak).apply(
+                        trade(float(mae), float(mfe), 0.0),
+                        commission_usd=0.0, path_order="mfe_first",
+                    )
+                    if not conservative:
+                        self.assertFalse(harsh, (peak, mae, mfe))
+
+    def test_the_orderings_agree_unless_one_trade_spans_the_drawdown(self):
+        # For the floor to rise past the adverse point inside a single trade,
+        # that trade's own range must cover the whole $1,500 drawdown.
+        for peak in (0.0, 800.0, 1_600.0, 3_000.0):
+            for mae in range(0, -2_001, -125):
+                for mfe in range(0, 4_001, 250):
+                    if mfe - min(mae, 0) >= 1_500:
+                        continue
+                    a = self._primed(peak)
+                    b = self._primed(peak)
+                    one = a.apply(
+                        trade(float(mae), float(mfe), 25.0),
+                        commission_usd=0.0, path_order="mae_first",
+                    )
+                    two = b.apply(
+                        trade(float(mae), float(mfe), 25.0),
+                        commission_usd=0.0, path_order="mfe_first",
+                    )
+                    self.assertEqual(one, two, (peak, mae, mfe))
+                    self.assertEqual(a.equity_profit_usd, b.equity_profit_usd)
+                    self.assertEqual(a.floor_profit_usd, b.floor_profit_usd)
 
 
 class TestCommission(unittest.TestCase):

@@ -17,6 +17,12 @@ BRICK2 = load_config(CONFIG_ROOT / "bricks" / "brick2_monthly_100.json")
 IDEAL = load_config(CONFIG_ROOT / "scenarios" / "ideal_world.json")
 FULL = load_config(CONFIG_ROOT / "scenarios" / "full_rulebook_monthly_500.json")
 NO_RULES_500 = load_config(CONFIG_ROOT / "scenarios" / "no_rules_monthly_500.json")
+CUSHION_FULL = load_config(
+    CONFIG_ROOT / "scenarios" / "full_rulebook_monthly_500_cushion.json"
+)
+CUSHION_NO_RULES = load_config(
+    CONFIG_ROOT / "scenarios" / "no_rules_monthly_500_cushion.json"
+)
 
 TRADES = load_trades(
     BRICK1.sweeps_root, strategy=BRICK1.strategy, risk_reward=BRICK1.risk_reward
@@ -26,6 +32,8 @@ RESULT1 = run_book(TRADES, BRICK1)
 RESULT2 = run_book(TRADES, BRICK2)
 RESULT_FULL = run_book(TRADES, FULL)
 RESULT_NO_RULES = run_book(TRADES, NO_RULES_500)
+RESULT_CUSHION_FULL = run_book(TRADES, CUSHION_FULL)
+RESULT_CUSHION_NO_RULES = run_book(TRADES, CUSHION_NO_RULES)
 
 
 def make_trade(

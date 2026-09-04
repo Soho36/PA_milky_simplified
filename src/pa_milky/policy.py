@@ -25,6 +25,9 @@ class WithdrawalPolicy:
     amount_rule: str = "fixed"
     shortfall: str = "skip"
     quantize_to_amount: bool = True
+    # A cushion *we* choose to leave in the account, independent of anything
+    # the firm requires. None means we will take whatever the rules allow.
+    min_retained_balance_usd: float | None = None
 
     def __post_init__(self) -> None:
         if self.cadence not in CADENCES:
@@ -45,13 +48,23 @@ class WithdrawalPolicy:
         return self.shortfall != "skip"
 
     def requested_usd(self, account, *, firm_minimum_usd: float) -> float:
-        """What we ask the firm for at this decision."""
+        """What we ask the firm for at this decision.
+
+        Our own cushion is applied to the *request*, not to the firm's answer:
+        we simply do not ask for more than we are willing to take out.
+        """
 
         if self.amount_rule == "maximum":
-            return UNBOUNDED_REQUEST_USD
-        if self.amount_rule == "minimum":
-            return firm_minimum_usd
-        return account.entitlement_outstanding_usd
+            want = UNBOUNDED_REQUEST_USD
+        elif self.amount_rule == "minimum":
+            want = firm_minimum_usd
+        else:
+            want = account.entitlement_outstanding_usd
+
+        if self.min_retained_balance_usd is not None:
+            spare = round(account.balance_usd - self.min_retained_balance_usd, 2)
+            want = min(want, max(0.0, spare))
+        return want
 
     def quantizer(self):
         """Round an allowed amount down to whole units of our monthly ask.
@@ -79,6 +92,7 @@ class WithdrawalPolicy:
             "amount_rule": self.amount_rule,
             "shortfall": self.shortfall,
             "quantize_to_amount": self.quantize_to_amount,
+            "min_retained_balance_usd": self.min_retained_balance_usd,
         }
 
     @classmethod
@@ -90,4 +104,9 @@ class WithdrawalPolicy:
             amount_rule=payload.get("amount_rule", "fixed"),
             shortfall=payload.get("shortfall", "skip"),
             quantize_to_amount=bool(payload.get("quantize_to_amount", True)),
+            min_retained_balance_usd=(
+                None
+                if payload.get("min_retained_balance_usd") is None
+                else float(payload["min_retained_balance_usd"])
+            ),
         )

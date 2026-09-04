@@ -14,11 +14,23 @@ evidence than this file.
   windows, including trades that overlap in time. There is no one-position slot
   and no contract cap. *Bias: favours the book.* Real Legacy 25K contract limits
   would cut exposure at exactly the moments several windows agree.
-- **MAE first.** When a trade touches both extremes, the adverse excursion is
-  assumed to land first, so the drawdown is tested against the floor before the
-  peak has a chance to lift it. Deterministic and never flatters survival.
-  *Bias: conservative.* The parent resolved the same ambiguity with a seeded
-  coin; `--path-order mfe_first` is the optimistic pole.
+- **MAE first — and the label was backwards here until 2026-09-04.** With a
+  *trailing* threshold the intuition inverts. Reaching the favourable extreme
+  first ratchets the floor up before the adverse move is tested, so MFE-first
+  is the harsher pole and MAE-first is the one that flatters survival. The
+  floor only ever rises, so every account MAE-first kills, MFE-first kills too;
+  the converse is false, and `tests/test_account.py` pins both directions over
+  a grid of states. *Bias: favours survival.*
+
+  The orderings can only differ when a single trade's own range (MFE minus
+  clamped MAE) covers the whole $1,500 drawdown, since the floor has to climb
+  past the adverse point inside that one trade. Two of the 12,658 trades
+  qualify and neither lands on an account in the narrow state where it bites:
+  both orderings give 22 survivors on `ideal_world` and an identical $102,700
+  on the full rulebook. **The choice is inert on this tape**, but it would not
+  stay inert at a larger contract size, a smaller drawdown, or a wider tape,
+  and `--path-order mfe_first` is then the pole to re-test. The parent resolved
+  the same ambiguity with a seeded coin.
 - **$1.05 round-turn commission per MNQ**, charged only in the closing figure.
   MAE and MFE stay gross, matching the parent. *Bias: mildly conservative* —
   a real intratrade low includes the commission already paid.
@@ -52,10 +64,25 @@ trade settles, not against realized equity plus every other position open at the
 same time. With unlimited concurrency this understates the true intratrade
 drawdown whenever several losing positions are open together.
 
-*Bias: favours survival.* The alive count in every brick is therefore an
-upper bound. Closing this gap needs either an event-driven floating-equity walk or
-intrabar paths the completed-trade export does not carry, and it is a candidate
-brick of its own.
+**The direction is not established, and an earlier version of this file wrongly
+called the alive count an upper bound.** Two mechanisms pull opposite ways:
+
+- Concurrent *losers* deepen the true floating drawdown beyond anything the
+  per-trade test sees, which would kill accounts the model keeps alive.
+- Concurrent *winners* hold the true floating equity above the level the model
+  tests each MAE against, which would save accounts the model kills — and at
+  the same time lift the true intratrade peak, ratcheting the floor higher and
+  making every *later* drawdown deadlier.
+
+The third effect is the awkward one: aggregation changes the floor's history,
+not just one test, so the error compounds along a path rather than pointing one
+way. Survival here is best described as **uncertain under the approximation**,
+not bounded.
+
+The gap is not small. Peak simultaneous exposure on this tape is **5 open
+positions**, and **2,887 of 12,658 trades (22.8%)** overlap at least one other.
+Closing it needs either an event-driven floating-equity walk or intrabar paths
+the completed-trade export does not carry.
 
 ## The firm rulebook
 
