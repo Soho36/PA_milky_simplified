@@ -156,6 +156,10 @@ def summarize(result: BookResult) -> dict:
         summary["denials"] = {
             "requests_denied": len(result.denials),
             "requests_approved": len(result.payouts),
+            "requests_withheld_by_policy": sum(
+                a.requests_withheld for a in result.accounts
+            ),
+            "requests_unpaid_at_horizon": result.requests_unpaid_at_horizon,
             "blocked_by_first": dict(blocked_first.most_common()),
             "blocked_by_any": dict(blocked_any.most_common()),
             "binding_cap_on_approved": dict(binding.most_common()),
@@ -188,6 +192,7 @@ def account_rows(result: BookResult) -> list[dict]:
                 "commission_usd": account.commission_usd,
                 "payout_count": account.payout_count,
                 "requests_blocked": account.requests_blocked,
+                "requests_withheld": account.requests_withheld,
                 "withdrawn_usd": account.gross_paid_usd,
                 "received_usd": account.received_usd,
                 "months_accrued": account.months_accrued,
@@ -316,6 +321,11 @@ def render_text(result: BookResult) -> str:
         add("  WHICH RULE STOPPED US")
         add(f"    requests approved .................... {denials['requests_approved']:,}")
         add(f"    requests denied ...................... {denials['requests_denied']:,}")
+        if denials["requests_withheld_by_policy"]:
+            add(
+                "    withheld by our own cushion .......... "
+                f"{denials['requests_withheld_by_policy']:,}  (we never asked)"
+            )
         if denials["blocked_by_any"]:
             add("    denied by rule (a request may trip several):")
             for key, count in denials["blocked_by_any"].items():

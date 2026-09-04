@@ -124,7 +124,9 @@ def run_monthly_decision(
             build_context(account, boundary, requested, config), quantize
         )
         if not decision.approved:
-            if decision.blocked_by != "no_request":
+            if decision.blocked_by == "no_request":
+                account.requests_withheld += 1
+            else:
                 denials.append(_record_denial(account, decision, boundary))
             continue
         if delay_days > 0:

@@ -69,6 +69,9 @@ class Account:
     last_withdrawal_at: datetime | None = None
     last_payout_at: datetime | None = None
     requests_blocked: int = 0
+    # Months we chose not to ask at all, because our own cushion left
+    # nothing spare. Not a firm denial: the firm was never asked.
+    requests_withheld: int = 0
 
     def __post_init__(self) -> None:
         self.floor_profit_usd = money(-self.trailing_drawdown_usd)

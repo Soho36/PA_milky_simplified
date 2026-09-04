@@ -325,6 +325,23 @@ class TestPolicyAdaptationChangesTheAblation(unittest.TestCase):
             run_book(TRADES, without).pocket_usd, RESULT_CUSHION_FULL.pocket_usd
         )
 
+    def test_a_withheld_month_is_counted_not_lost(self):
+        # When our own cushion leaves nothing spare we never ask, so the firm
+        # denies nothing. That month still has to appear somewhere, or the
+        # ledger silently stops reconciling under a cushion.
+        import dataclasses as dc
+
+        high = dc.replace(
+            FULL, policy=dc.replace(FULL.policy, min_retained_balance_usd=30_000.0)
+        )
+        result = run_book(TRADES, high)
+        months = sum(a.months_accrued for a in result.accounts)
+        withheld = sum(a.requests_withheld for a in result.accounts)
+        self.assertGreater(withheld, 0)
+        self.assertEqual(
+            months, len(result.payouts) + len(result.denials) + withheld
+        )
+
     def test_the_firms_rules_already_bind_tighter_than_our_cushion(self):
         # A $500 ask through a $26,600 gate already leaves $26,100, so adding
         # our own $26,100 floor on top of the full rulebook changes nothing.
