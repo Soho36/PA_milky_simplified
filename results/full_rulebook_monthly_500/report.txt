@@ -139,3 +139,47 @@
     2026-06      37  dead   2026-06-05          4d             -           -             -
     2026-07      64  ALIVE  -                    -             -           -     26,016.80
 ==============================================================================
+
+============================================================================================
+  FIXED-POLICY ABLATION - each rule off, our behaviour unchanged
+============================================================================================
+  d.pocket  cash gained by removing the rule
+  d.value   cash + remaining paper profit, not realizable wealth or causal loss
+  fates     accounts whose death outcome moved
+
+  arm                            pocket   d.pocket    d.value  alive  fates  payouts  denied  withheld
+  ------------------------------------------------------------------------------------------
+  all rules on                  102,700          -          -      7      -      195     116         0
+  minus consistency             106,700     +4,000     +1,234      6      7      215      94         0
+  minus profitable_days         103,200       +500       +500      7      1      201     110         0
+  minus denial_on_shortfall     102,700         +0         +0      7      0      195     116         0
+  minus maximum_payout          102,700         +0         +0      7      0      195     116         0
+  minus minimum_balance         102,700         +0         +0      7      0      196     115         0
+  minus minimum_payout          102,700         +0         +0      7      0      195     116         0
+  minus profit_split            102,700         +0         +0      7      0      195     116         0
+  minus trading_days            102,700         +0         +0      7      0      195     116         0
+  minus safety_net               90,200    -12,500    -19,245      6      4      162     112         0
+
+  CASH BRIDGE: contributions to arm minus baseline pocket (USD)
+  trading / split / retained / failed positive / failed negative / fees
+  minus consistency: +1,639.40 / +0.00 / +2,765.55 / -404.95 / +0.00 / +0.00; residual -0.00
+    matched receipts: $9,500.00 earlier, $0.00 later; unmatched baseline/arm $0.00/$4,000.00
+  minus profitable_days: +545.15 / +0.00 / +0.00 / -45.15 / +0.00 / +0.00; residual 0.00
+    matched receipts: $2,500.00 earlier, $0.00 later; unmatched baseline/arm $0.00/$500.00
+  minus denial_on_shortfall: +0.00 / +0.00 / +0.00 / +0.00 / +0.00 / +0.00; residual 0.00
+    matched receipts: $0.00 earlier, $0.00 later; unmatched baseline/arm $0.00/$0.00
+  minus maximum_payout: +0.00 / +0.00 / +0.00 / +0.00 / +0.00 / +0.00; residual 0.00
+    matched receipts: $1,500.00 earlier, $0.00 later; unmatched baseline/arm $0.00/$0.00
+  minus minimum_balance: +0.00 / +0.00 / +0.00 / +0.00 / +0.00 / +0.00; residual 0.00
+    matched receipts: $500.00 earlier, $0.00 later; unmatched baseline/arm $0.00/$0.00
+  minus minimum_payout: +0.00 / +0.00 / +0.00 / +0.00 / +0.00 / +0.00; residual 0.00
+    matched receipts: $0.00 earlier, $0.00 later; unmatched baseline/arm $0.00/$0.00
+  minus profit_split: +0.00 / +0.00 / +0.00 / +0.00 / +0.00 / +0.00; residual 0.00
+    matched receipts: $0.00 earlier, $0.00 later; unmatched baseline/arm $0.00/$0.00
+  minus trading_days: +0.00 / +0.00 / +0.00 / +0.00 / +0.00 / +0.00; residual 0.00
+    matched receipts: $0.00 earlier, $0.00 later; unmatched baseline/arm $0.00/$0.00
+  minus safety_net: -18,987.70 / +0.00 / +6,745.30 / -257.60 / +0.00 / +0.00; residual 0.00
+    matched receipts: $5,500.00 earlier, $500.00 later; unmatched baseline/arm $14,500.00/$2,000.00
+  Failure buckets are booked residuals, not broker liquidation valuations.
+  FIFO receipt timing is descriptive, not attribution of denied requests.
+============================================================================================

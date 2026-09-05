@@ -79,13 +79,11 @@ class TestValueDecomposition(unittest.TestCase):
         self.assertGreater(lost_value, lost_pocket)
         self.assertGreater(arm.fates_changed_against(self.baseline), 0)
 
-    def test_a_fate_count_of_zero_forces_the_value_delta_to_zero(self):
-        # If nothing lived or died differently, nothing was created or lost;
-        # any pocket change is pure access. This is the invariant that makes
-        # the decomposition readable.
-        for arm in self.arms:
-            if arm.fates_changed_against(self.baseline) == 0:
-                self.assertEqual(arm.value_usd, self.baseline.value_usd, arm.label)
+    def test_every_arm_reconciles_owner_cash(self):
+        for arm in [self.baseline, *self.arms]:
+            self.assertEqual(arm.economics.residual_usd, 0)
+            self.assertEqual(arm.economics.bridge_against(
+                self.baseline.economics)["residual_usd"], 0)
 
     def test_the_payload_carries_both_deltas_and_the_fate_count(self):
         payload = ablation_payload(self.baseline, self.arms)

@@ -1,37 +1,8 @@
-"""What each firm rule costs, measured two ways.
+"""Fixed and cushion-adapted rule effects.
 
-A rule can be measured against a *fixed* policy or against an *adapted* one,
-and the two answer different questions:
-
-- **Fixed-policy effect.** Remove the rule, change nothing else. This explains
-  the arm you are actually running: why this policy earns what it earns.
-- **Adapted-policy effect.** Search the same policy choices with and without
-  the rule and compare the two best outcomes. This is how much the restriction
-  narrows what is achievable, which is the question a trader is really asking.
-
-They can disagree completely. The safety net has a large fixed-policy effect
-against a policy with no cushion of its own, and none at all once the policy is
-allowed to adapt.
-
-The adapted number is a **lower bound on a rule's cost, and only as good as the
-search**. Removing a constraint cannot really narrow what is achievable, so a
-negative delta is always a search failure rather than a finding: either the
-grid is too coarse to follow the optimum as it moves, or the policy space
-cannot imitate what the rule was doing. Both happen here. Treat a negative
-delta as "refine the grid", not as "the rule helped us".
-
-A pocket delta on its own also conflates three different things, so every arm
-reports the value decomposition too:
-
-- **pocket** -- cash actually taken.
-- **stranded** -- equity still standing in live accounts at the horizon.
-- **value = pocket + stranded** -- everything the book was worth.
-
-If a rule moves pocket but leaves value unchanged, it blocked *access*: the
-money is still in the account. If it moves value, it changed which accounts
-survived, and that money was never earned at all. Denial counts cannot tell
-these apart, and neither can withheld counts -- fewer denials often just means
-our own policy stopped asking.
+Grid-optimum differences are search-dependent estimates, not bounds. Accounting
+bridges reconcile owner cash; receipt matching describes timing without claiming
+that retained equity is delayed cash or that all value changes are survival effects.
 """
 
 from __future__ import annotations
@@ -42,6 +13,7 @@ from dataclasses import dataclass
 from .config import RunConfig
 from .loader import Trade
 from .simulator import run_book
+from .economics import Economics, receipt_timing
 
 
 @dataclass(frozen=True, slots=True)
@@ -56,14 +28,19 @@ class Arm:
     denials: int
     withheld: int
     fates: tuple[tuple[int, str], ...]
+    economics: Economics
+    receipts: tuple
 
     @classmethod
     def measure(
         cls, label: str, rule: str | None, trades: list[Trade], config: RunConfig
     ) -> "Arm":
         result = run_book(trades, config)
-        stranded = result.equity_at_horizon_usd
+        economics = Economics.measure(result)
+        stranded = economics.retained_profit_usd
         return cls(
+            economics=economics,
+            receipts=tuple(result.payouts),
             label=label,
             rule=rule,
             pocket_usd=result.pocket_usd,
@@ -105,8 +82,7 @@ def render_ablation(baseline: Arm, arms: list[Arm]) -> str:
     add("  FIXED-POLICY ABLATION - each rule off, our behaviour unchanged")
     add("=" * 92)
     add("  d.pocket  cash gained by removing the rule")
-    add("  d.value   pocket + equity still standing; a change here means accounts")
-    add("            lived or died differently, so the money was never earned")
+    add("  d.value   cash + remaining paper profit, not realizable wealth or causal loss")
     add("  fates     accounts whose death outcome moved")
     add("")
     add(
@@ -127,6 +103,19 @@ def render_ablation(baseline: Arm, arms: list[Arm]) -> str:
             f"{arm.alive:>7}{arm.fates_changed_against(baseline):>7}"
             f"{arm.payouts:>9}{arm.denials:>8}{arm.withheld:>10}"
         )
+    add("")
+    add("  CASH BRIDGE: contributions to arm minus baseline pocket (USD)")
+    add("  trading / split / retained / failed positive / failed negative / fees")
+    for arm in arms:
+        bridge = arm.economics.bridge_against(baseline.economics)
+        values = " / ".join(f"{v:+,.2f}" for v in bridge["contributions_usd"].values())
+        add(f"  {arm.label}: {values}; residual {bridge['residual_usd']:.2f}")
+        timing = receipt_timing(baseline.receipts, arm.receipts)
+        add(f"    matched receipts: ${timing['arm_earlier_usd']:,.2f} earlier, "
+            f"${timing['arm_later_usd']:,.2f} later; unmatched baseline/arm "
+            f"${timing['unmatched_baseline_usd']:,.2f}/${timing['unmatched_arm_usd']:,.2f}")
+    add("  Failure buckets are booked residuals, not broker liquidation valuations.")
+    add("  FIFO receipt timing is descriptive, not attribution of denied requests.")
     add("=" * 92)
     return "\n".join(lines)
 
@@ -231,6 +220,7 @@ def render_adapted(payload: dict) -> str:
 def ablation_payload(baseline: Arm, arms: list[Arm]) -> dict:
     def row(arm: Arm) -> dict:
         return {
+            "accounting": arm.economics.to_payload(),
             "label": arm.label,
             "rule": arm.rule,
             "pocket_usd": arm.pocket_usd,
@@ -243,6 +233,13 @@ def ablation_payload(baseline: Arm, arms: list[Arm]) -> dict:
         }
 
     return {
+        "economics_schema": "pa_milky.economic_effects.v1",
+        "interpretation": {
+            "cash_bridge": "Signed accounting contributions, not causal attribution.",
+            "failed_ledger": "Last booked balance; excludes unbooked killing excursion.",
+            "retained": "Signed live profit after terminal payouts; not guaranteed cash.",
+            "timing": "Per-account FIFO owner receipts; unmatched amounts are unresolved.",
+        },
         "baseline": row(baseline),
         "arms": [
             {
@@ -250,6 +247,8 @@ def ablation_payload(baseline: Arm, arms: list[Arm]) -> dict:
                 "delta_pocket_usd": round(arm.pocket_usd - baseline.pocket_usd, 2),
                 "delta_value_usd": round(arm.value_usd - baseline.value_usd, 2),
                 "fates_changed": arm.fates_changed_against(baseline),
+                "cash_bridge": arm.economics.bridge_against(baseline.economics),
+                "receipt_timing": receipt_timing(baseline.receipts, arm.receipts),
             }
             for arm in arms
         ],

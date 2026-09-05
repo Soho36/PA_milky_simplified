@@ -1,6 +1,6 @@
 {
   "schema_version": "pa_milky_simplified.result.v1",
-  "generated_utc": "2026-09-04T22:03:46+00:00",
+  "generated_utc": "2026-09-05T22:52:17+00:00",
   "brick": null,
   "brick_name": "full_rulebook_monthly_500",
   "scenario": "full_rulebook_monthly_500",
@@ -17,6 +17,9 @@
   },
   "tape": {
     "trades_loaded": 12658,
+    "expected_trades": 12658,
+    "size_verified": true,
+    "strategy": "RR",
     "first_entry": "2020-01-02 07:50:40",
     "last_exit": "2026-07-13 21:30:40",
     "copies_filled": 56246
@@ -163,6 +166,8 @@
   "denials": {
     "requests_denied": 116,
     "requests_approved": 195,
+    "requests_withheld_by_policy": 0,
+    "requests_unpaid_at_horizon": 0,
     "blocked_by_first": {
       "minimum_balance": 84,
       "consistency": 26,

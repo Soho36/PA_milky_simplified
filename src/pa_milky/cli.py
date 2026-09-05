@@ -145,18 +145,21 @@ def main(argv: list[str] | None = None) -> int:
     print(render_text(result))
 
     ablation = None
+    analysis_sections: list[str] = []
     if args.ablate or args.ablate_adapted:
         ablation = {}
     if args.ablate:
         baseline, arms = run_ablation(trades, config)
         ablation["fixed_policy"] = ablation_payload(baseline, arms)
         print()
-        print(render_ablation(baseline, arms))
+        analysis_sections.append(render_ablation(baseline, arms))
+        print(analysis_sections[-1])
     if args.ablate_adapted:
         adapted = run_adapted_ablation(trades, config)
         ablation["adapted_policy"] = adapted
         print()
-        print(render_adapted(adapted))
+        analysis_sections.append(render_adapted(adapted))
+        print(analysis_sections[-1])
 
     if args.no_write and args.seal:
         raise SystemExit("--seal needs written outputs; drop --no-write")
@@ -171,6 +174,9 @@ def main(argv: list[str] | None = None) -> int:
             path = Path(out) / "ablation.json"
             path.write_text(json.dumps(ablation, indent=2), encoding="utf-8")
             written["ablation"] = path
+            report_path = Path(out) / "report.txt"
+            with report_path.open("a", encoding="utf-8") as handle:
+                handle.write("\n\n" + "\n\n".join(analysis_sections) + "\n")
         print()
         for label, path in written.items():
             print(f"  wrote {label}: {path}")

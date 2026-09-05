@@ -67,21 +67,10 @@ $500 a month, no cushion, pocket $102,700:
   (six other rules)             102,700         +0         +0      7      0
 ```
 
-`d.value` is pocket **plus equity still standing at the horizon**, and it is
-what separates three things a denial count cannot:
-
-- **Blocked access.** `consistency` gains $4,000 of pocket but only $1,234 of
-  value — two thirds of what it withheld was still sitting in the accounts.
-- **Destroyed value.** Removing `safety_net` loses $19,245 of value against
-  $12,500 of pocket: four accounts died differently and that money was never
-  earned at all.
-- **Nothing.** Six rules move no pocket, no value and **no fates**. A zero fate
-  count forces a zero value delta — that is a tested invariant, and it is what
-  makes the table readable.
-
-Withheld requests are counted separately from denials for the same reason:
-under a cushion, *fewer denials* usually just means our own policy stopped
-asking.
+`d.value` is cash plus **remaining paper profit after any terminal payout**.
+It is not withdrawable wealth and cannot identify delayed cash by itself.
+Every fixed-policy arm now includes an exact cash bridge and per-account receipt
+timing. See [ECONOMIC_EFFECTS.md](ECONOMIC_EFFECTS.md) for definitions and limits.
 
 ### Adapted policy — how much the rules narrow what is achievable
 
@@ -105,13 +94,9 @@ Set against that: choosing the cushion at all is worth **$255,300**
 every rule the firm imposes. The fixed-policy table was largely measuring our
 own policy's inadequacy.
 
-**Caveat on the adapted number.** It is a lower bound on a rule's cost and only
-as good as the search. Removing a constraint cannot really narrow what is
-achievable, so a *negative* delta is always a search failure — the grid was too
-coarse to follow the optimum as it moved, or the policy space cannot imitate
-what the rule did. On a deliberately coarse 3-level grid `consistency` and
-`maximum_payout` both measure −$500; adding the one level they actually prefer
-turns both non-negative. There are tests for exactly this.
+**Caveat on the adapted number.** This is a difference between grid optima,
+not a lower or upper bound. Either side may miss a better policy. A restricted
+policy family may also be unable to reproduce the behaviour of a removed rule.
 
 ### The cushion is headroom, not a balance
 

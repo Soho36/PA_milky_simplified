@@ -1,103 +1,475 @@
 {
-  "baseline": {
-    "label": "all rules on",
-    "rule": null,
-    "pocket_usd": 102700.0,
-    "gross_usd": 118500.0,
-    "alive": 7,
-    "payouts": 195,
-    "denials": 116
-  },
-  "arms": [
-    {
-      "label": "minus consistency",
-      "rule": "consistency",
-      "pocket_usd": 106700.0,
-      "gross_usd": 122500.0,
-      "alive": 6,
-      "payouts": 215,
-      "denials": 94,
-      "delta_pocket_usd": 4000.0
+  "fixed_policy": {
+    "economics_schema": "pa_milky.economic_effects.v1",
+    "interpretation": {
+      "cash_bridge": "Signed accounting contributions, not causal attribution.",
+      "failed_ledger": "Last booked balance; excludes unbooked killing excursion.",
+      "retained": "Signed live profit after terminal payouts; not guaranteed cash.",
+      "timing": "Per-account FIFO owner receipts; unmatched amounts are unresolved."
     },
-    {
-      "label": "minus profitable_days",
-      "rule": "profitable_days",
-      "pocket_usd": 103200.0,
-      "gross_usd": 119000.0,
-      "alive": 7,
-      "payouts": 201,
-      "denials": 110,
-      "delta_pocket_usd": 500.0
-    },
-    {
-      "label": "minus denial_on_shortfall",
-      "rule": "denial_on_shortfall",
+    "baseline": {
+      "accounting": {
+        "booked_net_trading_usd": 131462.8,
+        "firm_split_usd": 0.0,
+        "retained_profit_usd": 35924.6,
+        "failed_positive_ledger_usd": 6093.75,
+        "failed_negative_ledger_usd": 29055.55,
+        "purchase_fees_usd": 15800.0,
+        "pocket_usd": 102700.0,
+        "residual_usd": 0.0
+      },
+      "label": "all rules on",
+      "rule": null,
       "pocket_usd": 102700.0,
-      "gross_usd": 118500.0,
+      "stranded_usd": 35924.6,
+      "value_usd": 138624.6,
       "alive": 7,
       "payouts": 195,
       "denials": 116,
-      "delta_pocket_usd": 0.0
+      "withheld": 0
     },
-    {
-      "label": "minus maximum_payout",
-      "rule": "maximum_payout",
-      "pocket_usd": 102700.0,
-      "gross_usd": 118500.0,
-      "alive": 7,
-      "payouts": 195,
-      "denials": 116,
-      "delta_pocket_usd": 0.0
-    },
-    {
-      "label": "minus minimum_balance",
-      "rule": "minimum_balance",
-      "pocket_usd": 102700.0,
-      "gross_usd": 118500.0,
-      "alive": 7,
-      "payouts": 196,
-      "denials": 115,
-      "delta_pocket_usd": 0.0
-    },
-    {
-      "label": "minus minimum_payout",
-      "rule": "minimum_payout",
-      "pocket_usd": 102700.0,
-      "gross_usd": 118500.0,
-      "alive": 7,
-      "payouts": 195,
-      "denials": 116,
-      "delta_pocket_usd": 0.0
-    },
-    {
-      "label": "minus profit_split",
-      "rule": "profit_split",
-      "pocket_usd": 102700.0,
-      "gross_usd": 118500.0,
-      "alive": 7,
-      "payouts": 195,
-      "denials": 116,
-      "delta_pocket_usd": 0.0
-    },
-    {
-      "label": "minus trading_days",
-      "rule": "trading_days",
-      "pocket_usd": 102700.0,
-      "gross_usd": 118500.0,
-      "alive": 7,
-      "payouts": 195,
-      "denials": 116,
-      "delta_pocket_usd": 0.0
-    },
-    {
-      "label": "minus safety_net",
-      "rule": "safety_net",
-      "pocket_usd": 90200.0,
-      "gross_usd": 106000.0,
-      "alive": 6,
-      "payouts": 162,
-      "denials": 112,
-      "delta_pocket_usd": -12500.0
-    }
-  ]
+    "arms": [
+      {
+        "accounting": {
+          "booked_net_trading_usd": 133102.2,
+          "firm_split_usd": 0.0,
+          "retained_profit_usd": 33159.05,
+          "failed_positive_ledger_usd": 6498.7,
+          "failed_negative_ledger_usd": 29055.55,
+          "purchase_fees_usd": 15800.0,
+          "pocket_usd": 106700.0,
+          "residual_usd": 0.0
+        },
+        "label": "minus consistency",
+        "rule": "consistency",
+        "pocket_usd": 106700.0,
+        "stranded_usd": 33159.05,
+        "value_usd": 139859.05,
+        "alive": 6,
+        "payouts": 215,
+        "denials": 94,
+        "withheld": 0,
+        "delta_pocket_usd": 4000.0,
+        "delta_value_usd": 1234.45,
+        "fates_changed": 7,
+        "cash_bridge": {
+          "contributions_usd": {
+            "booked_net_trading_usd": 1639.4,
+            "firm_split_usd": 0.0,
+            "retained_profit_usd": 2765.55,
+            "failed_positive_ledger_usd": -404.95,
+            "failed_negative_ledger_usd": 0.0,
+            "purchase_fees_usd": 0.0
+          },
+          "delta_pocket_usd": 4000.0,
+          "residual_usd": -0.0
+        },
+        "receipt_timing": {
+          "method": "per_account_cumulative_receipts_fifo",
+          "matched_usd": 118500.0,
+          "arm_later_usd": 0.0,
+          "arm_earlier_usd": 9500.0,
+          "same_time_usd": 109000.0,
+          "signed_dollar_days": -424500.0,
+          "later_dollar_days": 0.0,
+          "earlier_dollar_days": 424500.0,
+          "mean_signed_days": -3.5823,
+          "unmatched_baseline_usd": 0.0,
+          "unmatched_arm_usd": 4000.0
+        }
+      },
+      {
+        "accounting": {
+          "booked_net_trading_usd": 132007.95,
+          "firm_split_usd": 0.0,
+          "retained_profit_usd": 35924.6,
+          "failed_positive_ledger_usd": 6138.9,
+          "failed_negative_ledger_usd": 29055.55,
+          "purchase_fees_usd": 15800.0,
+          "pocket_usd": 103200.0,
+          "residual_usd": 0.0
+        },
+        "label": "minus profitable_days",
+        "rule": "profitable_days",
+        "pocket_usd": 103200.0,
+        "stranded_usd": 35924.6,
+        "value_usd": 139124.6,
+        "alive": 7,
+        "payouts": 201,
+        "denials": 110,
+        "withheld": 0,
+        "delta_pocket_usd": 500.0,
+        "delta_value_usd": 500.0,
+        "fates_changed": 1,
+        "cash_bridge": {
+          "contributions_usd": {
+            "booked_net_trading_usd": 545.15,
+            "firm_split_usd": 0.0,
+            "retained_profit_usd": 0.0,
+            "failed_positive_ledger_usd": -45.15,
+            "failed_negative_ledger_usd": 0.0,
+            "purchase_fees_usd": 0.0
+          },
+          "delta_pocket_usd": 500.0,
+          "residual_usd": 0.0
+        },
+        "receipt_timing": {
+          "method": "per_account_cumulative_receipts_fifo",
+          "matched_usd": 118500.0,
+          "arm_later_usd": 0.0,
+          "arm_earlier_usd": 2500.0,
+          "same_time_usd": 116000.0,
+          "signed_dollar_days": -75000.0,
+          "later_dollar_days": 0.0,
+          "earlier_dollar_days": 75000.0,
+          "mean_signed_days": -0.6329,
+          "unmatched_baseline_usd": 0.0,
+          "unmatched_arm_usd": 500.0
+        }
+      },
+      {
+        "accounting": {
+          "booked_net_trading_usd": 131462.8,
+          "firm_split_usd": 0.0,
+          "retained_profit_usd": 35924.6,
+          "failed_positive_ledger_usd": 6093.75,
+          "failed_negative_ledger_usd": 29055.55,
+          "purchase_fees_usd": 15800.0,
+          "pocket_usd": 102700.0,
+          "residual_usd": 0.0
+        },
+        "label": "minus denial_on_shortfall",
+        "rule": "denial_on_shortfall",
+        "pocket_usd": 102700.0,
+        "stranded_usd": 35924.6,
+        "value_usd": 138624.6,
+        "alive": 7,
+        "payouts": 195,
+        "denials": 116,
+        "withheld": 0,
+        "delta_pocket_usd": 0.0,
+        "delta_value_usd": 0.0,
+        "fates_changed": 0,
+        "cash_bridge": {
+          "contributions_usd": {
+            "booked_net_trading_usd": 0.0,
+            "firm_split_usd": 0.0,
+            "retained_profit_usd": 0.0,
+            "failed_positive_ledger_usd": 0.0,
+            "failed_negative_ledger_usd": 0.0,
+            "purchase_fees_usd": 0.0
+          },
+          "delta_pocket_usd": 0.0,
+          "residual_usd": 0.0
+        },
+        "receipt_timing": {
+          "method": "per_account_cumulative_receipts_fifo",
+          "matched_usd": 118500.0,
+          "arm_later_usd": 0.0,
+          "arm_earlier_usd": 0.0,
+          "same_time_usd": 118500.0,
+          "signed_dollar_days": 0.0,
+          "later_dollar_days": 0.0,
+          "earlier_dollar_days": 0.0,
+          "mean_signed_days": 0.0,
+          "unmatched_baseline_usd": 0.0,
+          "unmatched_arm_usd": 0.0
+        }
+      },
+      {
+        "accounting": {
+          "booked_net_trading_usd": 131462.8,
+          "firm_split_usd": 0.0,
+          "retained_profit_usd": 35924.6,
+          "failed_positive_ledger_usd": 6093.75,
+          "failed_negative_ledger_usd": 29055.55,
+          "purchase_fees_usd": 15800.0,
+          "pocket_usd": 102700.0,
+          "residual_usd": 0.0
+        },
+        "label": "minus maximum_payout",
+        "rule": "maximum_payout",
+        "pocket_usd": 102700.0,
+        "stranded_usd": 35924.6,
+        "value_usd": 138624.6,
+        "alive": 7,
+        "payouts": 195,
+        "denials": 116,
+        "withheld": 0,
+        "delta_pocket_usd": 0.0,
+        "delta_value_usd": 0.0,
+        "fates_changed": 0,
+        "cash_bridge": {
+          "contributions_usd": {
+            "booked_net_trading_usd": 0.0,
+            "firm_split_usd": 0.0,
+            "retained_profit_usd": 0.0,
+            "failed_positive_ledger_usd": 0.0,
+            "failed_negative_ledger_usd": 0.0,
+            "purchase_fees_usd": 0.0
+          },
+          "delta_pocket_usd": 0.0,
+          "residual_usd": 0.0
+        },
+        "receipt_timing": {
+          "method": "per_account_cumulative_receipts_fifo",
+          "matched_usd": 118500.0,
+          "arm_later_usd": 0.0,
+          "arm_earlier_usd": 1500.0,
+          "same_time_usd": 117000.0,
+          "signed_dollar_days": -42000.0,
+          "later_dollar_days": 0.0,
+          "earlier_dollar_days": 42000.0,
+          "mean_signed_days": -0.3544,
+          "unmatched_baseline_usd": 0.0,
+          "unmatched_arm_usd": 0.0
+        }
+      },
+      {
+        "accounting": {
+          "booked_net_trading_usd": 131462.8,
+          "firm_split_usd": 0.0,
+          "retained_profit_usd": 35924.6,
+          "failed_positive_ledger_usd": 6093.75,
+          "failed_negative_ledger_usd": 29055.55,
+          "purchase_fees_usd": 15800.0,
+          "pocket_usd": 102700.0,
+          "residual_usd": 0.0
+        },
+        "label": "minus minimum_balance",
+        "rule": "minimum_balance",
+        "pocket_usd": 102700.0,
+        "stranded_usd": 35924.6,
+        "value_usd": 138624.6,
+        "alive": 7,
+        "payouts": 196,
+        "denials": 115,
+        "withheld": 0,
+        "delta_pocket_usd": 0.0,
+        "delta_value_usd": 0.0,
+        "fates_changed": 0,
+        "cash_bridge": {
+          "contributions_usd": {
+            "booked_net_trading_usd": 0.0,
+            "firm_split_usd": 0.0,
+            "retained_profit_usd": 0.0,
+            "failed_positive_ledger_usd": 0.0,
+            "failed_negative_ledger_usd": 0.0,
+            "purchase_fees_usd": 0.0
+          },
+          "delta_pocket_usd": 0.0,
+          "residual_usd": 0.0
+        },
+        "receipt_timing": {
+          "method": "per_account_cumulative_receipts_fifo",
+          "matched_usd": 118500.0,
+          "arm_later_usd": 0.0,
+          "arm_earlier_usd": 500.0,
+          "same_time_usd": 118000.0,
+          "signed_dollar_days": -15500.0,
+          "later_dollar_days": 0.0,
+          "earlier_dollar_days": 15500.0,
+          "mean_signed_days": -0.1308,
+          "unmatched_baseline_usd": 0.0,
+          "unmatched_arm_usd": 0.0
+        }
+      },
+      {
+        "accounting": {
+          "booked_net_trading_usd": 131462.8,
+          "firm_split_usd": 0.0,
+          "retained_profit_usd": 35924.6,
+          "failed_positive_ledger_usd": 6093.75,
+          "failed_negative_ledger_usd": 29055.55,
+          "purchase_fees_usd": 15800.0,
+          "pocket_usd": 102700.0,
+          "residual_usd": 0.0
+        },
+        "label": "minus minimum_payout",
+        "rule": "minimum_payout",
+        "pocket_usd": 102700.0,
+        "stranded_usd": 35924.6,
+        "value_usd": 138624.6,
+        "alive": 7,
+        "payouts": 195,
+        "denials": 116,
+        "withheld": 0,
+        "delta_pocket_usd": 0.0,
+        "delta_value_usd": 0.0,
+        "fates_changed": 0,
+        "cash_bridge": {
+          "contributions_usd": {
+            "booked_net_trading_usd": 0.0,
+            "firm_split_usd": 0.0,
+            "retained_profit_usd": 0.0,
+            "failed_positive_ledger_usd": 0.0,
+            "failed_negative_ledger_usd": 0.0,
+            "purchase_fees_usd": 0.0
+          },
+          "delta_pocket_usd": 0.0,
+          "residual_usd": 0.0
+        },
+        "receipt_timing": {
+          "method": "per_account_cumulative_receipts_fifo",
+          "matched_usd": 118500.0,
+          "arm_later_usd": 0.0,
+          "arm_earlier_usd": 0.0,
+          "same_time_usd": 118500.0,
+          "signed_dollar_days": 0.0,
+          "later_dollar_days": 0.0,
+          "earlier_dollar_days": 0.0,
+          "mean_signed_days": 0.0,
+          "unmatched_baseline_usd": 0.0,
+          "unmatched_arm_usd": 0.0
+        }
+      },
+      {
+        "accounting": {
+          "booked_net_trading_usd": 131462.8,
+          "firm_split_usd": 0.0,
+          "retained_profit_usd": 35924.6,
+          "failed_positive_ledger_usd": 6093.75,
+          "failed_negative_ledger_usd": 29055.55,
+          "purchase_fees_usd": 15800.0,
+          "pocket_usd": 102700.0,
+          "residual_usd": 0.0
+        },
+        "label": "minus profit_split",
+        "rule": "profit_split",
+        "pocket_usd": 102700.0,
+        "stranded_usd": 35924.6,
+        "value_usd": 138624.6,
+        "alive": 7,
+        "payouts": 195,
+        "denials": 116,
+        "withheld": 0,
+        "delta_pocket_usd": 0.0,
+        "delta_value_usd": 0.0,
+        "fates_changed": 0,
+        "cash_bridge": {
+          "contributions_usd": {
+            "booked_net_trading_usd": 0.0,
+            "firm_split_usd": 0.0,
+            "retained_profit_usd": 0.0,
+            "failed_positive_ledger_usd": 0.0,
+            "failed_negative_ledger_usd": 0.0,
+            "purchase_fees_usd": 0.0
+          },
+          "delta_pocket_usd": 0.0,
+          "residual_usd": 0.0
+        },
+        "receipt_timing": {
+          "method": "per_account_cumulative_receipts_fifo",
+          "matched_usd": 118500.0,
+          "arm_later_usd": 0.0,
+          "arm_earlier_usd": 0.0,
+          "same_time_usd": 118500.0,
+          "signed_dollar_days": 0.0,
+          "later_dollar_days": 0.0,
+          "earlier_dollar_days": 0.0,
+          "mean_signed_days": 0.0,
+          "unmatched_baseline_usd": 0.0,
+          "unmatched_arm_usd": 0.0
+        }
+      },
+      {
+        "accounting": {
+          "booked_net_trading_usd": 131462.8,
+          "firm_split_usd": 0.0,
+          "retained_profit_usd": 35924.6,
+          "failed_positive_ledger_usd": 6093.75,
+          "failed_negative_ledger_usd": 29055.55,
+          "purchase_fees_usd": 15800.0,
+          "pocket_usd": 102700.0,
+          "residual_usd": 0.0
+        },
+        "label": "minus trading_days",
+        "rule": "trading_days",
+        "pocket_usd": 102700.0,
+        "stranded_usd": 35924.6,
+        "value_usd": 138624.6,
+        "alive": 7,
+        "payouts": 195,
+        "denials": 116,
+        "withheld": 0,
+        "delta_pocket_usd": 0.0,
+        "delta_value_usd": 0.0,
+        "fates_changed": 0,
+        "cash_bridge": {
+          "contributions_usd": {
+            "booked_net_trading_usd": 0.0,
+            "firm_split_usd": 0.0,
+            "retained_profit_usd": 0.0,
+            "failed_positive_ledger_usd": 0.0,
+            "failed_negative_ledger_usd": 0.0,
+            "purchase_fees_usd": 0.0
+          },
+          "delta_pocket_usd": 0.0,
+          "residual_usd": 0.0
+        },
+        "receipt_timing": {
+          "method": "per_account_cumulative_receipts_fifo",
+          "matched_usd": 118500.0,
+          "arm_later_usd": 0.0,
+          "arm_earlier_usd": 0.0,
+          "same_time_usd": 118500.0,
+          "signed_dollar_days": 0.0,
+          "later_dollar_days": 0.0,
+          "earlier_dollar_days": 0.0,
+          "mean_signed_days": 0.0,
+          "unmatched_baseline_usd": 0.0,
+          "unmatched_arm_usd": 0.0
+        }
+      },
+      {
+        "accounting": {
+          "booked_net_trading_usd": 112475.1,
+          "firm_split_usd": 0.0,
+          "retained_profit_usd": 29179.3,
+          "failed_positive_ledger_usd": 6351.35,
+          "failed_negative_ledger_usd": 29055.55,
+          "purchase_fees_usd": 15800.0,
+          "pocket_usd": 90200.0,
+          "residual_usd": 0.0
+        },
+        "label": "minus safety_net",
+        "rule": "safety_net",
+        "pocket_usd": 90200.0,
+        "stranded_usd": 29179.3,
+        "value_usd": 119379.3,
+        "alive": 6,
+        "payouts": 162,
+        "denials": 112,
+        "withheld": 0,
+        "delta_pocket_usd": -12500.0,
+        "delta_value_usd": -19245.3,
+        "fates_changed": 4,
+        "cash_bridge": {
+          "contributions_usd": {
+            "booked_net_trading_usd": -18987.7,
+            "firm_split_usd": 0.0,
+            "retained_profit_usd": 6745.3,
+            "failed_positive_ledger_usd": -257.6,
+            "failed_negative_ledger_usd": 0.0,
+            "purchase_fees_usd": 0.0
+          },
+          "delta_pocket_usd": -12500.0,
+          "residual_usd": 0.0
+        },
+        "receipt_timing": {
+          "method": "per_account_cumulative_receipts_fifo",
+          "matched_usd": 104000.0,
+          "arm_later_usd": 500.0,
+          "arm_earlier_usd": 5500.0,
+          "same_time_usd": 98000.0,
+          "signed_dollar_days": -180000.0,
+          "later_dollar_days": 15500.0,
+          "earlier_dollar_days": 195500.0,
+          "mean_signed_days": -1.7308,
+          "unmatched_baseline_usd": 14500.0,
+          "unmatched_arm_usd": 2000.0
+        }
+      }
+    ]
+  }
 }
