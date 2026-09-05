@@ -21,7 +21,14 @@ from datetime import datetime
 from .account import Account, money
 from .config import RunConfig
 from .loader import Trade
-from .payouts import DenialEvent, PayoutEvent, PendingPayout, run_monthly_decision, settle_pending
+from .payouts import (
+    DenialEvent,
+    PayoutEvent,
+    PendingPayout,
+    run_monthly_decision,
+    run_terminal_withdrawal,
+    settle_pending,
+)
 
 
 def month_key(moment: datetime) -> str:
@@ -47,6 +54,9 @@ class BookResult:
     payouts: list[PayoutEvent]
     denials: list[DenialEvent]
     requests_unpaid_at_horizon: int
+    terminal_payouts: list[PayoutEvent]
+    alive_at_horizon: int
+    equity_at_horizon_usd: float
     trades_loaded: int
     copies_filled: int
     tape_first_entry: datetime
@@ -198,6 +208,14 @@ def run_book(trades: list[Trade], config: RunConfig) -> BookResult:
     # and there is no evidence about what the account did afterwards.
     unpaid_at_horizon = len(pending)
 
+    # Score the book as it stood before any closing withdrawal: an account
+    # emptied at the horizon was alive, and its equity was real.
+    alive_at_horizon = sum(1 for a in accounts if a.alive)
+    equity_at_horizon = money(sum(a.equity_profit_usd for a in accounts if a.alive))
+    terminal_paid, terminal_denied = run_terminal_withdrawal(accounts, last_exit, config)
+    payouts.extend(terminal_paid)
+    denials.extend(terminal_denied)
+
     payouts.sort(key=lambda event: (event.at, event.account_id))
     denials.sort(key=lambda event: (event.at, event.account_id))
 
@@ -206,6 +224,9 @@ def run_book(trades: list[Trade], config: RunConfig) -> BookResult:
         payouts=payouts,
         denials=denials,
         requests_unpaid_at_horizon=unpaid_at_horizon,
+        terminal_payouts=terminal_paid,
+        alive_at_horizon=alive_at_horizon,
+        equity_at_horizon_usd=equity_at_horizon,
         trades_loaded=len(trades),
         copies_filled=copies,
         tape_first_entry=first_entry,

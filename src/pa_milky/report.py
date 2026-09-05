@@ -119,7 +119,26 @@ def summarize(result: BookResult) -> dict:
     summary["cash"]["received_usd"] = received
     summary["cash"]["lost_to_split_usd"] = money(withdrawn - received)
 
-    if policy.enabled:
+    if policy.liquidates:
+        terminal_gross = money(sum(e.gross_usd for e in result.terminal_payouts))
+        terminal_received = money(sum(e.received_usd for e in result.terminal_payouts))
+        summary["terminal"] = {
+            "mode": policy.terminal_withdrawal,
+            "at": result.tape_last_exit.isoformat(sep=" "),
+            "accounts_alive_at_horizon": result.alive_at_horizon,
+            "equity_at_horizon_usd": result.equity_at_horizon_usd,
+            "accounts_paid": len(result.terminal_payouts),
+            "gross_usd": terminal_gross,
+            "received_usd": terminal_received,
+            "extracted_fraction_of_equity": (
+                round(terminal_gross / result.equity_at_horizon_usd, 4)
+                if result.equity_at_horizon_usd
+                else 0.0
+            ),
+            "stranded_usd": money(result.equity_at_horizon_usd - terminal_gross),
+        }
+
+    if policy.enabled or policy.liquidates:
         summary["withdrawals"] = {
             "policy": _policy_label(policy),
             "amount_usd": policy.amount_usd,
@@ -335,6 +354,19 @@ def render_text(result: BookResult) -> str:
             add("    on approved payouts, the amount was capped by:")
             for key, count in denials["binding_cap_on_approved"].items():
                 add(f"      {key:<22} {count:>6,}")
+        add("")
+
+    terminal = s.get("terminal")
+    if terminal:
+        add("  CLOSING THE BOOK")
+        add(f"    mode ................................. {terminal['mode']}")
+        add(f"    accounts alive at the horizon ........ {terminal['accounts_alive_at_horizon']}")
+        add(f"    equity standing in them .............. "
+            f"${terminal['equity_at_horizon_usd']:,.2f}")
+        add(f"    accounts that could take anything .... {terminal['accounts_paid']}")
+        add(f"    extracted ............................ ${terminal['gross_usd']:,.2f}"
+            f"   ({terminal['extracted_fraction_of_equity'] * 100:.1f}% of it)")
+        add(f"    stranded in the accounts ............. ${terminal['stranded_usd']:,.2f}")
         add("")
 
     if withdrawals:

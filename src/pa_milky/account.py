@@ -200,13 +200,19 @@ class Account:
 
     # ----------------------------------------------------------------- payouts
 
-    def pay_out(self, gross_usd: float, received_usd: float, at: datetime) -> bool:
+    def pay_out(
+        self, gross_usd: float, received_usd: float, at: datetime, *, terminal: bool = False
+    ) -> bool:
         """Approve a payout. Returns True if the account survives it.
 
         ``gross_usd`` leaves the account; ``received_usd`` is what reaches our
         pocket after the firm's split. The peak is untouched, so the trailing
         floor does not follow the balance down: a payout spends cushion, which
         is the whole economic point.
+
+        A ``terminal`` payout is the closing of the book at the end of the
+        tape. It does not test the threshold, because there is no next trade to
+        survive: an account emptied at the horizon is finished, not blown.
         """
 
         if not self.alive:
@@ -232,6 +238,8 @@ class Account:
         # The firm's day counters run from the last approved payout.
         self.day_pnl_usd.clear()
 
+        if terminal:
+            return True
         if self._breached(self.equity_profit_usd):
             self._die(at, "payout_below_threshold", self.equity_profit_usd, None)
             return False

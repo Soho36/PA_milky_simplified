@@ -1,0 +1,31 @@
+{
+  "schema_version": "pa_milky_simplified.scenario.v1",
+  "scenario": "monthly_500_cushion_liquidated",
+  "brick": null,
+  "brick_name": "monthly_500_cushion_liquidated",
+  "description": "Every firm rule on, $500 a month per account, a $30,000 cushion of our own, and one closing request through the rulebook. The best realizable arm found: monthly payouts expire the safety net and the maximum, so the closing request can take almost everything -- which a held book can never do.",
+  "data": {
+    "sweeps_root": "1_sweeps",
+    "strategy": "RR",
+    "risk_reward": "1.00",
+    "expected_windows": 23,
+    "expected_trades": 12658
+  },
+  "execution": {
+    "contracts_per_copy": 1,
+    "commission_usd_per_mnq_round_turn": 1.05,
+    "slippage_ticks": 0,
+    "concurrency": "unlimited",
+    "path_order": "mae_first",
+    "commission_applies_to_excursions": false
+  },
+  "product": "products/legacy_25k.json",
+  "book": {
+    "cadence": "one_new_pa_per_calendar_month",
+    "activation_moment": "first_instant_of_calendar_month",
+    "max_accounts": null,
+    "replace_on_death": false
+  },
+  "firm_rules": "firm/apex_payout_rules.json",
+  "policy": "policies/monthly_500_cushion_liquidated.json"
+}

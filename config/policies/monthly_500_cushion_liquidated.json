@@ -1,0 +1,11 @@
+{
+  "name": "monthly_500_cushion_liquidated",
+  "cadence": "calendar_month",
+  "amount_usd": 500.0,
+  "amount_rule": "fixed",
+  "shortfall": "accrue_backlog",
+  "quantize_to_amount": true,
+  "min_retained_balance_usd": 30000.0,
+  "terminal_withdrawal": "firm_permitted",
+  "note": "The best realizable arm found so far. $30,000 is a round point in the middle of the 29,500-31,500 cushion plateau, not the knife-edge sweep maximum: the surface has $100k cliffs and the exact peak does not transfer between tapes."
+}

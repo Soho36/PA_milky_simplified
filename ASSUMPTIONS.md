@@ -127,6 +127,27 @@ is ambiguous the reading is a named option, not a silent choice.
   only rises, so taking cash out spends cushion permanently. That is the entire
   economic mechanism.
 
+## Closing the book
+
+A live account at the end of the tape holds equity that has to be scored
+somehow, and the choice is not neutral.
+
+- **`liquidate_profit`** converts every dollar above the starting balance to
+  cash with no gate, cap or split. This is a **counterfactual about value, not
+  a claim about access** — it is the right upper bound and the wrong forecast.
+  The $25,000 starting balance is never ours and is never withdrawn.
+- **`firm_permitted`** makes **one** request through the rulebook. One, because
+  the eight-trading-day gate counts trading days since the last request: a book
+  that has stopped trading can never become eligible again. Modelling repeated
+  closing requests would require assuming post-horizon trading the tape has no
+  evidence for.
+- A terminal withdrawal **does not test the threshold**. An account emptied at
+  the horizon is closed, not blown, and the alive count is scored as it stood
+  before the closing request.
+
+*Bias:* `liquidate_profit` flatters a held book enormously — it reports
+$472,299 where the rules permit $14,200.
+
 ## The clock
 
 Source labels are read as Europe/Tallinn wall-clock, the parent's convention.

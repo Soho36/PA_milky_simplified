@@ -14,6 +14,41 @@ independently switchable, so each rule's own price is an **ablation** away: run
 everything on, then everything-minus-one, and read the deltas. The ladder is
 still reproducible — it is just a series of scenarios.
 
+## The headline: holding is a trap
+
+"Hold everything, then withdraw at the end" was the study's original ideal. It
+only means anything once the closing withdrawal is explicit, and there are two
+honest readings of it:
+
+| arm | pocket | what it means |
+|---|---|---|
+| hold → idealized liquidation | **$472,299** | what the equity was *worth* |
+| hold → one firm-permitted request | **$14,200** | what could actually be taken |
+
+The held book ends with $488,099 of equity in 22 live accounts and can extract
+**6.2% of it**. Twenty accounts get $1,500 each and stop; two get nothing.
+That is the worst arm in the entire study — worse than taking $500 a month.
+
+**Why:** the safety net expires after payout three and the $1,500 maximum after
+payout five. A held book's closing request is payout number *one*, so both
+bind. There is no second request either: the eight-trading-day gate counts
+trading days *since the last request*, and a book that has stopped trading
+never earns another.
+
+So a payout history is not just income — it is the thing that makes the account
+liquidatable at all:
+
+| arm | pocket | closing request takes |
+|---|---|---|
+| hold → firm-permitted | $14,200 | 6.2% of equity |
+| monthly $500, no cushion → firm-permitted | $134,342 | 88.1% |
+| monthly $500 + $30k cushion → firm-permitted | **$436,444** | 94.0% |
+| monthly $500 + $30k cushion → idealized | $446,063 | 100% |
+
+The best realizable arm reaches **$436,444** — within 8% of the $472,299
+idealized upper bound, and 31× the held book. Once the history exists, the
+rules barely bind at liquidation.
+
 ## What the ablation says
 
 Full rulebook, $500 requested per account per month, 79 accounts over the
@@ -96,16 +131,20 @@ rulebook — it is the account specification, always on, never switchable.
 
 `cadence` (never / calendar month), `amount_rule` (fixed / maximum / minimum),
 `amount_usd`, `shortfall` (skip / accrue backlog / partial), whether to round
-down to whole asks, and `min_retained_balance_usd` — a cushion *we* choose to
-leave in an account, independent of anything the firm requires. Brick 1's "hold
-everything and imagine one withdrawal at the end" is not a special case in the
-engine — it is `cadence: never`.
+down to whole asks, `min_retained_balance_usd` — a cushion *we* choose to leave
+in an account, independent of anything the firm requires — and
+`terminal_withdrawal` (`none` / `liquidate_profit` / `firm_permitted`), what to
+do with a live account when the tape runs out. Brick 1 is `cadence: never` with
+no closing withdrawal; the two hold benchmarks are the same with one.
 
 ## Scenarios
 
 | scenario | rules | policy | pocket | alive |
 |---|---|---|---|---|
-| `ideal_world` | none | hold | −$15,800 | 22 |
+| `ideal_world` | none | hold, no closing | −$15,800 | 22 |
+| `hold_then_liquidate` | none | hold → idealized | $472,299 | 22 |
+| `hold_then_firm_permitted` | all | hold → one request | $14,200 | 22 |
+| `monthly_500_cushion_liquidated` | all | $500/mo + $30k cushion → request | **$436,444** | 17 |
 | `no_rules_monthly_500` | none | $500/month | $95,700 | 5 |
 | `full_rulebook_monthly_500` | all | $500/month | **$102,700** | 7 |
 | `full_rulebook_monthly_maximum` | all | max allowed | — | — |
@@ -153,7 +192,9 @@ ask, `--seal NAME` writes a baseline.
 - `src/pa_milky/simulator.py` — the book, walked as one causal stream.
 - `src/pa_milky/ablation.py` — one arm per rule.
 - `src/pa_milky/provenance.py` — sealing and verification.
-- `tests/` — 117 tests, including every firm rule against the sentence it came
+- `scripts/sweep_cushion.py` — sweep our retained cushion on either policy or tape.
+- `tests/` — 132 tests, including every firm rule against the sentence it came
   from, the excursion-ordering property over a grid of states, delayed payouts
-  proved causal, and all three sealed baselines reproducing.
+  proved causal, both closing benchmarks, and all five sealed baselines
+  reproducing.
 - `ASSUMPTIONS.md` — every assumption and which way it bends the result.

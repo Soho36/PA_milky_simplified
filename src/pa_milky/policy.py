@@ -12,6 +12,12 @@ CADENCES = ("never", "calendar_month")
 AMOUNT_RULES = ("fixed", "maximum", "minimum")
 SHORTFALL_RULES = ("skip", "accrue_backlog", "partial")
 
+# What we do with a live account when the tape runs out.
+#   none             leave the equity where it is and score nothing for it
+#   liquidate_profit idealized: every dollar of profit becomes cash, no rules
+#   firm_permitted   one final request, put through the firm's rulebook
+TERMINAL_MODES = ("none", "liquidate_profit", "firm_permitted")
+
 # Stands in for "ask for everything the rules permit". Larger than any balance
 # this study can reach, so the firm's caps are always what bind.
 UNBOUNDED_REQUEST_USD = 1_000_000_000.0
@@ -28,6 +34,7 @@ class WithdrawalPolicy:
     # A cushion *we* choose to leave in the account, independent of anything
     # the firm requires. None means we will take whatever the rules allow.
     min_retained_balance_usd: float | None = None
+    terminal_withdrawal: str = "none"
 
     def __post_init__(self) -> None:
         if self.cadence not in CADENCES:
@@ -36,12 +43,18 @@ class WithdrawalPolicy:
             raise ValueError(f"Unknown amount rule: {self.amount_rule!r}")
         if self.shortfall not in SHORTFALL_RULES:
             raise ValueError(f"Unknown shortfall rule: {self.shortfall!r}")
+        if self.terminal_withdrawal not in TERMINAL_MODES:
+            raise ValueError(f"Unknown terminal mode: {self.terminal_withdrawal!r}")
         if self.enabled and self.amount_rule == "fixed" and self.amount_usd <= 0:
             raise ValueError("A fixed-amount policy needs a positive amount")
 
     @property
     def enabled(self) -> bool:
         return self.cadence != "never"
+
+    @property
+    def liquidates(self) -> bool:
+        return self.terminal_withdrawal != "none"
 
     @property
     def keeps_backlog(self) -> bool:
@@ -93,6 +106,7 @@ class WithdrawalPolicy:
             "shortfall": self.shortfall,
             "quantize_to_amount": self.quantize_to_amount,
             "min_retained_balance_usd": self.min_retained_balance_usd,
+            "terminal_withdrawal": self.terminal_withdrawal,
         }
 
     @classmethod
@@ -109,4 +123,5 @@ class WithdrawalPolicy:
                 if payload.get("min_retained_balance_usd") is None
                 else float(payload["min_retained_balance_usd"])
             ),
+            terminal_withdrawal=payload.get("terminal_withdrawal", "none"),
         )

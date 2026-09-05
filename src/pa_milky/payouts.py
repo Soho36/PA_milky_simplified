@@ -10,8 +10,9 @@ from __future__ import annotations
 from dataclasses import dataclass
 from datetime import datetime, timedelta
 
-from .account import Account
+from .account import Account, money
 from .firm import Decision, RequestContext
+from .policy import UNBOUNDED_REQUEST_USD
 
 
 @dataclass(frozen=True, slots=True)
@@ -63,9 +64,11 @@ def build_context(account: Account, at: datetime, requested_usd: float, config) 
     )
 
 
-def _record_payout(account: Account, decision: Decision, at: datetime) -> PayoutEvent:
+def _record_payout(
+    account: Account, decision: Decision, at: datetime, *, terminal: bool = False
+) -> PayoutEvent:
     before = account.balance_usd
-    account.pay_out(decision.gross_usd, decision.received_usd, at)
+    account.pay_out(decision.gross_usd, decision.received_usd, at, terminal=terminal)
     return PayoutEvent(
         at=at,
         account_id=account.account_id,
@@ -185,4 +188,62 @@ def settle_pending(
         payouts.append(_record_payout(account, item.decision, item.due_at))
 
     pending[:] = still_waiting
+    return payouts, denials
+
+
+def run_terminal_withdrawal(
+    accounts: list[Account], at: datetime, config
+) -> tuple[list[PayoutEvent], list[DenialEvent]]:
+    """Close the book when the tape runs out.
+
+    Two readings, and they are not close to each other.
+
+    ``liquidate_profit`` is the idealized benchmark: every dollar of profit
+    above the starting balance becomes cash, with no gate, no cap and no split.
+    It is a counterfactual about what the equity was *worth*, not a claim that
+    it could have been taken.
+
+    ``firm_permitted`` is what the rules actually allow. It is **one** request,
+    because the eight-trading-day gate is measured in trading days since the
+    last request and the tape has stopped producing them: an account that stops
+    trading can never become eligible again.
+    """
+
+    mode = config.policy.terminal_withdrawal
+    if mode == "none":
+        return [], []
+
+    payouts: list[PayoutEvent] = []
+    denials: list[DenialEvent] = []
+
+    for account in accounts:
+        if not account.alive:
+            continue
+
+        if mode == "liquidate_profit":
+            gross = money(account.balance_usd - config.starting_balance_usd)
+            if gross <= 0:
+                continue
+            decision = Decision(
+                approved=True,
+                requested_usd=gross,
+                allowed_usd=gross,
+                gross_usd=gross,
+                received_usd=gross,
+                blocked_by=None,
+                blockers=(),
+                binding_cap=None,
+                caps={},
+            )
+            payouts.append(_record_payout(account, decision, at, terminal=True))
+            continue
+
+        decision = config.rulebook.decide(
+            build_context(account, at, UNBOUNDED_REQUEST_USD, config), None
+        )
+        if decision.approved:
+            payouts.append(_record_payout(account, decision, at, terminal=True))
+        elif decision.blocked_by != "no_request":
+            denials.append(_record_denial(account, decision, at))
+
     return payouts, denials
