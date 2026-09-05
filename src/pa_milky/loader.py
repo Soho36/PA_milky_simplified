@@ -161,3 +161,32 @@ def load_trades(
     # exit time; the remaining keys only make ties deterministic.
     trades.sort(key=lambda t: (t.exit_at, t.entry_at, t.window_order, t.source_row, t.ticket))
     return trades
+
+
+def load_tape(config) -> list[Trade]:
+    """Load the tape a config names, and check it is the tape it claims.
+
+    ``expected_trades`` and ``expected_windows`` are recorded in every sealed
+    manifest, so they have to mean something. A run that overrides the strategy
+    or the risk/reward sets them to None rather than carrying a count that
+    belongs to a different tape.
+    """
+
+    trades = load_trades(
+        config.sweeps_root, strategy=config.strategy, risk_reward=config.risk_reward
+    )
+    if config.expected_windows is not None:
+        windows = {trade.window_id for trade in trades}
+        if len(windows) != config.expected_windows:
+            raise ValueError(
+                f"{config.strategy} @ {config.risk_reward}: config declares "
+                f"{config.expected_windows} windows, tape has {len(windows)}"
+            )
+    if config.expected_trades is not None and len(trades) != config.expected_trades:
+        raise ValueError(
+            f"{config.strategy} @ {config.risk_reward}: config declares "
+            f"{config.expected_trades} trades, tape has {len(trades)}. If the tape "
+            "was overridden on purpose, clear the declared size instead of "
+            "carrying one that belongs to another strategy."
+        )
+    return trades

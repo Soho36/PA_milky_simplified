@@ -78,6 +78,9 @@ def summarize(result: BookResult) -> dict:
         },
         "tape": {
             "trades_loaded": result.trades_loaded,
+            "expected_trades": config.expected_trades,
+            "size_verified": config.expected_trades is not None,
+            "strategy": config.strategy,
             "first_entry": result.tape_first_entry.isoformat(sep=" "),
             "last_exit": result.tape_last_exit.isoformat(sep=" "),
             "copies_filled": result.copies_filled,

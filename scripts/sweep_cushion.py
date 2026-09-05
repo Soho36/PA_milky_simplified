@@ -13,6 +13,7 @@ from __future__ import annotations
 
 import argparse
 import dataclasses
+from datetime import datetime, timezone
 import json
 from pathlib import Path
 import sys
@@ -20,7 +21,7 @@ import sys
 sys.path.insert(0, str(Path(__file__).resolve().parents[1] / "src"))
 
 from pa_milky.config import CONFIG_ROOT, load_config  # noqa: E402
-from pa_milky.loader import load_trades  # noqa: E402
+from pa_milky.loader import load_tape  # noqa: E402
 from pa_milky.simulator import run_book  # noqa: E402
 
 SCENARIOS = {
@@ -29,13 +30,18 @@ SCENARIOS = {
 }
 
 
-def sweep(policy: str, levels: list[float | None], strategy: str | None = None) -> list[dict]:
+def sweep(
+    policy: str, levels: list[float | None], strategy: str | None = None
+) -> tuple[dict, list[dict]]:
     config = load_config(CONFIG_ROOT / "scenarios" / SCENARIOS[policy])
     if strategy:
-        config = dataclasses.replace(config, strategy=strategy)
-    trades = load_trades(
-        config.sweeps_root, strategy=config.strategy, risk_reward=config.risk_reward
-    )
+        # A different tape invalidates the scenario's declared size; drop it
+        # rather than checking against a count from another strategy.
+        config = dataclasses.replace(
+            config, strategy=strategy, expected_trades=None, expected_windows=None
+        )
+        print(f"  note: tape overridden to {strategy}, run is not size-verified")
+    trades = load_tape(config)
     rows = []
     for level in levels:
         arm = dataclasses.replace(
@@ -61,15 +67,32 @@ def sweep(policy: str, levels: list[float | None], strategy: str | None = None) 
                 ),
             }
         )
-    return rows
+    # Provenance travels with the numbers. A sweep file that only says
+    # "monthly_500" cannot be told from one run on another tape once its
+    # filename changes.
+    provenance = {
+        "scenario": config.scenario,
+        "policy": policy,
+        "strategy": config.strategy,
+        "risk_reward": config.risk_reward,
+        "trades_loaded": len(trades),
+        "size_verified": config.expected_trades is not None,
+        "floor_balance_usd": config.trailing_floor_balance_usd,
+        "generated_utc": datetime.now(timezone.utc).isoformat(timespec="seconds"),
+    }
+    return provenance, rows
 
 
-def render(policy: str, rows: list[dict]) -> str:
+def render(provenance: dict, rows: list[dict]) -> str:
     best = max(rows, key=lambda row: row["pocket_usd"])
+    verified = "size-verified" if provenance["size_verified"] else "NOT size-verified"
     lines = [
         "=" * 72,
-        f"  CUSHION SWEEP - full rulebook on, policy {policy}",
-        "  headroom is the cushion measured above the frozen floor at $25,100",
+        f"  CUSHION SWEEP - full rulebook on, policy {provenance['policy']}",
+        f"  tape {provenance['strategy']} @ RR {provenance['risk_reward']}, "
+        f"{provenance['trades_loaded']:,} trades ({verified})",
+        f"  headroom is the cushion above the frozen floor at "
+        f"${provenance['floor_balance_usd']:,.0f}",
         "=" * 72,
         f"  {'cushion':>10}{'headroom':>10}{'pocket':>12}{'gross':>12}{'alive':>7}"
         f"{'payouts':>9}{'left in accts':>15}",
@@ -106,13 +129,12 @@ def main() -> int:
     else:
         levels = [None] + [25_000.0 + 500.0 * i for i in range(1, 21)]
 
-    rows = sweep(args.policy, levels, args.strategy)
-    label = f"{args.policy} on {args.strategy or 'RR'}"
-    print(render(label, rows))
+    provenance, rows = sweep(args.policy, levels, args.strategy)
+    print(render(provenance, rows))
     if args.out:
         args.out.parent.mkdir(parents=True, exist_ok=True)
         args.out.write_text(
-            json.dumps({"policy": args.policy, "rows": rows}, indent=2), encoding="utf-8"
+            json.dumps({**provenance, "rows": rows}, indent=2), encoding="utf-8"
         )
         print(f"\n  wrote {args.out}")
     return 0

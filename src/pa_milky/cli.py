@@ -16,7 +16,7 @@ from .ablation import (
     run_adapted_ablation,
 )
 from .config import DEFAULT_CONFIG_PATH, PROJECT_ROOT, load_config
-from .loader import load_trades
+from .loader import load_tape
 from .provenance import list_baselines, seal, verify
 from .report import render_text, summarize, write_outputs
 from .simulator import run_book
@@ -91,6 +91,15 @@ def _apply_overrides(config, args):
         overrides["strategy"] = args.strategy
     if args.rr:
         overrides["risk_reward"] = args.rr
+    if args.strategy or args.rr:
+        # The declared tape size belongs to the scenario's own strategy. Carry
+        # it onto a different tape and it becomes a false claim in the manifest.
+        overrides["expected_trades"] = None
+        overrides["expected_windows"] = None
+        print(
+            "  note: tape overridden, so the scenario's declared size no longer "
+            "applies and this run is not size-verified"
+        )
     if args.commission is not None:
         overrides["commission_usd_per_mnq_round_turn"] = args.commission
     if args.path_order:
@@ -131,9 +140,7 @@ def main(argv: list[str] | None = None) -> int:
         return _verify([args.verify_baseline])
 
     config = _apply_overrides(load_config(args.config), args)
-    trades = load_trades(
-        config.sweeps_root, strategy=config.strategy, risk_reward=config.risk_reward
-    )
+    trades = load_tape(config)
     result = run_book(trades, config)
     print(render_text(result))
 

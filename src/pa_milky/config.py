@@ -47,8 +47,11 @@ class RunConfig:
     sweeps_root: Path
     strategy: str
     risk_reward: str
-    expected_windows: int
-    expected_trades: int
+    # None means "no declared size to check against" -- set when a run
+    # overrides the tape, because the declared count then describes a
+    # different strategy and must not be presented as verified.
+    expected_windows: int | None
+    expected_trades: int | None
     # execution
     contracts_per_copy: int
     commission_usd_per_mnq_round_turn: float
@@ -85,6 +88,10 @@ class RunConfig:
 
 
 # ----------------------------------------------------------------- resolution
+
+
+def _optional_int(value) -> int | None:
+    return None if value is None else int(value)
 
 
 def _resolve(value, *, what: str) -> dict:
@@ -145,8 +152,8 @@ def _from_scenario(payload: dict) -> RunConfig:
         sweeps_root=_sweeps_root(data["sweeps_root"]),
         strategy=data["strategy"],
         risk_reward=data["risk_reward"],
-        expected_windows=int(data["expected_windows"]),
-        expected_trades=int(data["expected_trades"]),
+        expected_windows=_optional_int(data.get("expected_windows")),
+        expected_trades=_optional_int(data.get("expected_trades")),
         contracts_per_copy=int(execution["contracts_per_copy"]),
         commission_usd_per_mnq_round_turn=float(
             execution["commission_usd_per_mnq_round_turn"]
@@ -224,8 +231,8 @@ def _from_legacy(payload: dict) -> RunConfig:
         sweeps_root=_sweeps_root(data["sweeps_root"]),
         strategy=data["strategy"],
         risk_reward=data["risk_reward"],
-        expected_windows=int(data["expected_windows"]),
-        expected_trades=int(data["expected_trades"]),
+        expected_windows=_optional_int(data.get("expected_windows")),
+        expected_trades=_optional_int(data.get("expected_trades")),
         contracts_per_copy=int(execution["contracts_per_copy"]),
         commission_usd_per_mnq_round_turn=float(
             execution["commission_usd_per_mnq_round_turn"]

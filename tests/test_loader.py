@@ -2,11 +2,12 @@
 
 from __future__ import annotations
 
+import dataclasses
 from datetime import datetime
 import unittest
 
 from pa_milky.config import load_config
-from pa_milky.loader import WINDOWS, load_trades
+from pa_milky.loader import WINDOWS, load_tape, load_trades
 
 CONFIG = load_config()
 TRADES = load_trades(
@@ -55,6 +56,33 @@ class TestTape(unittest.TestCase):
     def test_a_missing_strategy_is_an_error(self):
         with self.assertRaises(FileNotFoundError):
             load_trades(CONFIG.sweeps_root, strategy="NOPE", risk_reward="1.00")
+
+
+class TestDeclaredTapeSizeIsEnforced(unittest.TestCase):
+    """The declared size is recorded in every sealed manifest, so it has to bite.
+
+    Regression: `--strategy GG` used to load 21,563 trades against a config
+    still declaring 12,658 and nothing objected, so a sweep on another tape
+    could be sealed carrying a count belonging to a different strategy.
+    """
+
+    def test_the_configured_tape_passes(self):
+        self.assertEqual(len(load_tape(CONFIG)), CONFIG.expected_trades)
+
+    def test_a_mismatched_count_is_refused(self):
+        with self.assertRaises(ValueError) as caught:
+            load_tape(dataclasses.replace(CONFIG, expected_trades=12_657))
+        self.assertIn("12,657", str(caught.exception).replace("12657", "12,657"))
+
+    def test_switching_tape_without_clearing_the_count_is_refused(self):
+        with self.assertRaises(ValueError):
+            load_tape(dataclasses.replace(CONFIG, strategy="GG"))
+
+    def test_clearing_the_count_allows_an_unverified_tape(self):
+        unverified = dataclasses.replace(
+            CONFIG, strategy="GG", expected_trades=None, expected_windows=None
+        )
+        self.assertEqual(len(load_tape(unverified)), 21_563)
 
 
 if __name__ == "__main__":
