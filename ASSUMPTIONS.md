@@ -114,6 +114,49 @@ is ambiguous the reading is a named option, not a silent choice.
   it lets a payout leave it one cent from death, which on this tape is nearly
   the same thing.
 
+## Measuring a rule, and what a delta does not say
+
+Two measurements, because they answer different questions. **Fixed-policy**:
+remove the rule and change nothing else — this explains the arm being run.
+**Adapted-policy**: re-optimise our cushion with and without the rule and
+compare the two bests — this is how much the rule narrows what is achievable.
+On this tape they disagree by two orders of magnitude, and the adapted number
+is the one that describes the firm rather than our own policy.
+
+A pocket delta alone conflates three things, so every arm also reports
+**stranded** equity and **value = pocket + stranded**:
+
+- value unchanged, pocket moved -> the rule blocked *access*; the money is
+  still in the account;
+- value moved -> accounts lived or died differently and the money was never
+  earned;
+- a **fate count** of zero forces a zero value delta, which is a tested
+  invariant rather than an observation.
+
+Denial counts cannot make this distinction, and neither can the withheld
+counter on its own: under a cushion, fewer denials usually just means our own
+policy stopped asking. `requests_withheld_by_policy` exists so the two are
+never summed together.
+
+The adapted number is a **lower bound and only as good as the search**. A
+negative delta is always a search failure, never a finding: removing a
+constraint cannot narrow what is achievable, so either the grid was too coarse
+to follow the optimum as it moved, or the policy space cannot imitate the rule.
+Both occur here on a deliberately coarse grid.
+
+## The cushion is headroom, not a balance
+
+`min_retained_balance_usd` is stated as a balance because that is what the
+firm's own rules are stated in, but the quantity that matters is its distance
+above the **frozen floor at $25,100** — the drawdown the account can absorb
+before it liquidates. The winning $30,100 is $5,000 of headroom. Quoting it as
+"$5,100 above the starting balance" would be arithmetically true and
+economically meaningless: the start is not where the account dies.
+
+The optimum does not transfer. GG peaks at $8,400 of headroom against RR's
+$5,000, and both surfaces have $100k cliffs driven by single-account survival
+flips. Treat the band, not the point.
+
 ## Our policy, which is not a rule
 
 - **$500 per account per calendar month**, accruing as a backlog when unpayable,

@@ -1,0 +1,220 @@
+{
+  "fixed_policy": {
+    "baseline": {
+      "label": "all rules on",
+      "rule": null,
+      "pocket_usd": 102700.0,
+      "stranded_usd": 35924.6,
+      "value_usd": 138624.6,
+      "alive": 7,
+      "payouts": 195,
+      "denials": 116,
+      "withheld": 0
+    },
+    "arms": [
+      {
+        "label": "minus consistency",
+        "rule": "consistency",
+        "pocket_usd": 106700.0,
+        "stranded_usd": 33159.05,
+        "value_usd": 139859.05,
+        "alive": 6,
+        "payouts": 215,
+        "denials": 94,
+        "withheld": 0,
+        "delta_pocket_usd": 4000.0,
+        "delta_value_usd": 1234.45,
+        "fates_changed": 7
+      },
+      {
+        "label": "minus profitable_days",
+        "rule": "profitable_days",
+        "pocket_usd": 103200.0,
+        "stranded_usd": 35924.6,
+        "value_usd": 139124.6,
+        "alive": 7,
+        "payouts": 201,
+        "denials": 110,
+        "withheld": 0,
+        "delta_pocket_usd": 500.0,
+        "delta_value_usd": 500.0,
+        "fates_changed": 1
+      },
+      {
+        "label": "minus denial_on_shortfall",
+        "rule": "denial_on_shortfall",
+        "pocket_usd": 102700.0,
+        "stranded_usd": 35924.6,
+        "value_usd": 138624.6,
+        "alive": 7,
+        "payouts": 195,
+        "denials": 116,
+        "withheld": 0,
+        "delta_pocket_usd": 0.0,
+        "delta_value_usd": 0.0,
+        "fates_changed": 0
+      },
+      {
+        "label": "minus maximum_payout",
+        "rule": "maximum_payout",
+        "pocket_usd": 102700.0,
+        "stranded_usd": 35924.6,
+        "value_usd": 138624.6,
+        "alive": 7,
+        "payouts": 195,
+        "denials": 116,
+        "withheld": 0,
+        "delta_pocket_usd": 0.0,
+        "delta_value_usd": 0.0,
+        "fates_changed": 0
+      },
+      {
+        "label": "minus minimum_balance",
+        "rule": "minimum_balance",
+        "pocket_usd": 102700.0,
+        "stranded_usd": 35924.6,
+        "value_usd": 138624.6,
+        "alive": 7,
+        "payouts": 196,
+        "denials": 115,
+        "withheld": 0,
+        "delta_pocket_usd": 0.0,
+        "delta_value_usd": 0.0,
+        "fates_changed": 0
+      },
+      {
+        "label": "minus minimum_payout",
+        "rule": "minimum_payout",
+        "pocket_usd": 102700.0,
+        "stranded_usd": 35924.6,
+        "value_usd": 138624.6,
+        "alive": 7,
+        "payouts": 195,
+        "denials": 116,
+        "withheld": 0,
+        "delta_pocket_usd": 0.0,
+        "delta_value_usd": 0.0,
+        "fates_changed": 0
+      },
+      {
+        "label": "minus profit_split",
+        "rule": "profit_split",
+        "pocket_usd": 102700.0,
+        "stranded_usd": 35924.6,
+        "value_usd": 138624.6,
+        "alive": 7,
+        "payouts": 195,
+        "denials": 116,
+        "withheld": 0,
+        "delta_pocket_usd": 0.0,
+        "delta_value_usd": 0.0,
+        "fates_changed": 0
+      },
+      {
+        "label": "minus trading_days",
+        "rule": "trading_days",
+        "pocket_usd": 102700.0,
+        "stranded_usd": 35924.6,
+        "value_usd": 138624.6,
+        "alive": 7,
+        "payouts": 195,
+        "denials": 116,
+        "withheld": 0,
+        "delta_pocket_usd": 0.0,
+        "delta_value_usd": 0.0,
+        "fates_changed": 0
+      },
+      {
+        "label": "minus safety_net",
+        "rule": "safety_net",
+        "pocket_usd": 90200.0,
+        "stranded_usd": 29179.3,
+        "value_usd": 119379.3,
+        "alive": 6,
+        "payouts": 162,
+        "denials": 112,
+        "withheld": 0,
+        "delta_pocket_usd": -12500.0,
+        "delta_value_usd": -19245.3,
+        "fates_changed": 4
+      }
+    ]
+  },
+  "adapted_policy": {
+    "search": {
+      "lever": "min_retained_balance_usd",
+      "levels": 22,
+      "floor_balance_usd": 25100.0
+    },
+    "baseline": {
+      "best_pocket_usd": 358000.0,
+      "best_cushion_usd": 30100.0,
+      "best_headroom_usd": 5000.0
+    },
+    "arms": [
+      {
+        "rule": "profit_split",
+        "best_pocket_usd": 360200.0,
+        "best_cushion_usd": 30100.0,
+        "best_headroom_usd": 5000.0,
+        "delta_vs_best_usd": 2200.0
+      },
+      {
+        "rule": "consistency",
+        "best_pocket_usd": 358050.0,
+        "best_cushion_usd": 29600.0,
+        "best_headroom_usd": 4500.0,
+        "delta_vs_best_usd": 50.0
+      },
+      {
+        "rule": "maximum_payout",
+        "best_pocket_usd": 358050.0,
+        "best_cushion_usd": 29600.0,
+        "best_headroom_usd": 4500.0,
+        "delta_vs_best_usd": 50.0
+      },
+      {
+        "rule": "denial_on_shortfall",
+        "best_pocket_usd": 358000.0,
+        "best_cushion_usd": 30100.0,
+        "best_headroom_usd": 5000.0,
+        "delta_vs_best_usd": 0.0
+      },
+      {
+        "rule": "minimum_balance",
+        "best_pocket_usd": 358000.0,
+        "best_cushion_usd": 30100.0,
+        "best_headroom_usd": 5000.0,
+        "delta_vs_best_usd": 0.0
+      },
+      {
+        "rule": "minimum_payout",
+        "best_pocket_usd": 358000.0,
+        "best_cushion_usd": 30100.0,
+        "best_headroom_usd": 5000.0,
+        "delta_vs_best_usd": 0.0
+      },
+      {
+        "rule": "profitable_days",
+        "best_pocket_usd": 358000.0,
+        "best_cushion_usd": 30100.0,
+        "best_headroom_usd": 5000.0,
+        "delta_vs_best_usd": 0.0
+      },
+      {
+        "rule": "safety_net",
+        "best_pocket_usd": 358000.0,
+        "best_cushion_usd": 30100.0,
+        "best_headroom_usd": 5000.0,
+        "delta_vs_best_usd": 0.0
+      },
+      {
+        "rule": "trading_days",
+        "best_pocket_usd": 358000.0,
+        "best_cushion_usd": 30100.0,
+        "best_headroom_usd": 5000.0,
+        "delta_vs_best_usd": 0.0
+      }
+    ]
+  }
+}

@@ -46,6 +46,11 @@ def sweep(policy: str, levels: list[float | None], strategy: str | None = None) 
         rows.append(
             {
                 "cushion_usd": level,
+                "headroom_usd": (
+                    None
+                    if level is None
+                    else round(level - config.trailing_floor_balance_usd, 2)
+                ),
                 "pocket_usd": result.pocket_usd,
                 "gross_usd": result.total_withdrawn_usd,
                 "alive": len(result.alive),
@@ -64,16 +69,18 @@ def render(policy: str, rows: list[dict]) -> str:
     lines = [
         "=" * 72,
         f"  CUSHION SWEEP - full rulebook on, policy {policy}",
+        "  headroom is the cushion measured above the frozen floor at $25,100",
         "=" * 72,
-        f"  {'cushion':>10}{'pocket':>12}{'gross':>12}{'alive':>7}"
+        f"  {'cushion':>10}{'headroom':>10}{'pocket':>12}{'gross':>12}{'alive':>7}"
         f"{'payouts':>9}{'left in accts':>15}",
-        "  " + "-" * 65,
+        "  " + "-" * 75,
     ]
     for row in rows:
         label = "none" if row["cushion_usd"] is None else f"{row['cushion_usd']:,.0f}"
+        head = "-" if row["headroom_usd"] is None else f"{row['headroom_usd']:,.0f}"
         mark = "  <-- best" if row is best else ""
         lines.append(
-            f"  {label:>10}{row['pocket_usd']:>12,.0f}{row['gross_usd']:>12,.0f}"
+            f"  {label:>10}{head:>10}{row['pocket_usd']:>12,.0f}{row['gross_usd']:>12,.0f}"
             f"{row['alive']:>7}{row['payouts']:>9}{row['equity_left_usd']:>15,.0f}{mark}"
         )
     lines.append("=" * 72)

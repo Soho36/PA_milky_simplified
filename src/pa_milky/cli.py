@@ -8,7 +8,13 @@ import json
 from datetime import datetime
 from pathlib import Path
 
-from .ablation import ablation_payload, render_ablation, run_ablation
+from .ablation import (
+    ablation_payload,
+    render_ablation,
+    render_adapted,
+    run_ablation,
+    run_adapted_ablation,
+)
 from .config import DEFAULT_CONFIG_PATH, PROJECT_ROOT, load_config
 from .loader import load_trades
 from .provenance import list_baselines, seal, verify
@@ -55,7 +61,13 @@ def build_parser() -> argparse.ArgumentParser:
         "--ablate",
         action="store_true",
         help="also re-run the tape once per active firm rule with that rule off, "
-        "and report what each one is worth",
+        "holding our behaviour fixed",
+    )
+    parser.add_argument(
+        "--ablate-adapted",
+        action="store_true",
+        help="also re-optimise the cushion with and without each rule, and compare "
+        "the best achievable outcomes",
     )
     parser.add_argument(
         "--seal",
@@ -126,11 +138,18 @@ def main(argv: list[str] | None = None) -> int:
     print(render_text(result))
 
     ablation = None
+    if args.ablate or args.ablate_adapted:
+        ablation = {}
     if args.ablate:
         baseline, arms = run_ablation(trades, config)
-        ablation = ablation_payload(baseline, arms)
+        ablation["fixed_policy"] = ablation_payload(baseline, arms)
         print()
         print(render_ablation(baseline, arms))
+    if args.ablate_adapted:
+        adapted = run_adapted_ablation(trades, config)
+        ablation["adapted_policy"] = adapted
+        print()
+        print(render_adapted(adapted))
 
     if args.no_write and args.seal:
         raise SystemExit("--seal needs written outputs; drop --no-write")

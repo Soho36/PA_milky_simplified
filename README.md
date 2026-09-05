@@ -49,49 +49,77 @@ The best realizable arm reaches **$436,444** — within 8% of the $472,299
 idealized upper bound, and 31× the held book. Once the history exists, the
 rules barely bind at liquidation.
 
-## What the ablation says
+## What the rulebook costs, measured two ways
 
-Full rulebook, $500 requested per account per month, 79 accounts over the
-2020-2026 tape:
+A rule can be measured against a **fixed** policy or an **adapted** one, and
+they answer different questions. Both are reported.
+
+### Fixed policy — why *this* arm earns what it earns
+
+$500 a month, no cushion, pocket $102,700:
 
 ```
-  arm                                pocket        delta  alive  payouts  denied
-  all rules on                      102,700            -      7      195     116
-  minus consistency                 106,700       +4,000      6      215      94
-  minus profitable_days             103,200         +500      7      201     110
-  minus safety_net                   90,200      -12,500      6      162     112
-  (six other rules)                 102,700           +0      7      195     116
+  arm                            pocket   d.pocket    d.value  alive  fates
+  all rules on                  102,700          -          -      7      -
+  minus consistency             106,700     +4,000     +1,234      6      7
+  minus profitable_days         103,200       +500       +500      7      1
+  minus safety_net               90,200    -12,500    -19,245      6      4
+  (six other rules)             102,700         +0         +0      7      0
 ```
 
-**Read a delta as what that rule did to *this* arm, not as its price.** The
-other rules stay on and the policy stays fixed, so interactions are not
-additive and a policy that adapted would answer differently. The safety net is
-the case in point.
+`d.value` is pocket **plus equity still standing at the horizon**, and it is
+what separates three things a denial count cannot:
 
-### The safety net is not worth $12,500 — having any cushion is
+- **Blocked access.** `consistency` gains $4,000 of pocket but only $1,234 of
+  value — two thirds of what it withheld was still sitting in the accounts.
+- **Destroyed value.** Removing `safety_net` loses $19,245 of value against
+  $12,500 of pocket: four accounts died differently and that money was never
+  earned at all.
+- **Nothing.** Six rules move no pocket, no value and **no fates**. A zero fate
+  count forces a zero value delta — that is a tested invariant, and it is what
+  makes the table readable.
 
-The −$12,500 above says removing the net *destroys* money, which reads as "the
-firm protects us". It does not survive the obvious control. Give our own policy
-a floor of its own — never take an account below $26,100, the same level the
-net enforces — and re-run:
+Withheld requests are counted separately from denials for the same reason:
+under a cushion, *fewer denials* usually just means our own policy stopped
+asking.
 
-| arm | pocket | alive |
-|---|---|---|
-| no rules, no cushion | $95,700 | 5 |
-| full rulebook, no cushion | $102,700 | 7 |
-| **no rules, our own cushion** | **$107,200** | 6 |
-| full rulebook, our own cushion | $102,700 | 7 |
+### Adapted policy — how much the rules narrow what is achievable
 
-The best arm is **no firm rules plus a cushion we chose**. Re-ablated against
-that policy, `safety_net` measures **exactly $0** — the entire effect was our
-policy having no cushion, not the rule having value. And with a cushion in
-hand the rulebook is a net **cost of $4,500**, which is the sign the naive
-comparison reported backwards.
+Re-optimising the cushion over 21 levels for every arm:
 
-What survives both framings: **consistency is the only expensive rule** at
-$4,000, and six of ten cost nothing here because a $500 monthly ask never
-reaches the $1,500 cap, never accumulates $25,000 for the split, and never
-needs more than 8 trading days.
+```
+  arm                          best pocket        delta   best headroom
+  all rules on                     358,000            -           5,000
+  minus profit_split               360,200       +2,200           5,000
+  minus consistency                358,050          +50           4,500
+  minus maximum_payout             358,050          +50           4,500
+  (six other rules)                358,000           +0           5,000
+```
+
+**The entire firm rulebook costs $2,200.** `consistency`, which looks like a
+$4,000 rule against a fixed policy, costs $50 once the policy may adapt.
+`safety_net`, which looked worth −$12,500, costs nothing.
+
+Set against that: choosing the cushion at all is worth **$255,300**
+($102,700 → $358,000). The lever we control matters roughly 116× more than
+every rule the firm imposes. The fixed-policy table was largely measuring our
+own policy's inadequacy.
+
+**Caveat on the adapted number.** It is a lower bound on a rule's cost and only
+as good as the search. Removing a constraint cannot really narrow what is
+achievable, so a *negative* delta is always a search failure — the grid was too
+coarse to follow the optimum as it moved, or the policy space cannot imitate
+what the rule did. On a deliberately coarse 3-level grid `consistency` and
+`maximum_payout` both measure −$500; adding the one level they actually prefer
+turns both non-negative. There are tests for exactly this.
+
+### The cushion is headroom, not a balance
+
+The frozen floor sits at **$25,100** — the $25,000 start plus the $100 the
+trailing drawdown stops at. So the winning $30,100 retained balance is
+**$5,000 of headroom above liquidation**, and that is the number that means
+something: it is the drawdown the account can absorb before it dies. On the GG
+tape the peak is $8,400 of headroom, so the level genuinely does not transfer.
 
 ## The four layers
 
@@ -108,21 +136,18 @@ payload at seal time, so provenance is unaffected by the layering.
 
 ### The firm rulebook
 
-Deltas below are for the `$500/month, no cushion` arm only — see the caveat
-above before quoting any of them as a rule's price.
-
-| key | rule | params (25K) | delta, that arm |
-|---|---|---|---|
-| `minimum_balance` | $26,600 at the request, flat | 26600 | $0 |
-| `trading_days` | ≥8 trading days since the last request | 8 | $0 |
-| `profitable_days` | ≥5 of those with profit ≥ $50 | 5, 50 | $500 |
-| `consistency` | no day > 30% of profit balance, through payout 5 | 0.30, 5 | **$4,000** |
-| `safety_net` | payouts 1-3 may encroach by one $500 minimum | 500, 3 | −$12,500, but **$0** with a cushion |
-| `minimum_payout` | $500, any account size | 500 | $0 |
-| `maximum_payout` | $1,500 through payout 5, none after | 1500, 5 | $0 |
-| `profit_split` | 100% of first $25,000 cumulative, then 90% | 25000, 0.9 | $0 |
-| `processing_delay` | days between approval and cash | 0 (off) | — |
-| `denial_on_shortfall` | denied if the balance falls before approval | — | $0 |
+| key | rule | params (25K) | fixed | adapted |
+|---|---|---|---|---|
+| `minimum_balance` | $26,600 at the request, flat | 26600 | $0 | $0 |
+| `trading_days` | ≥8 trading days since the last request | 8 | $0 | $0 |
+| `profitable_days` | ≥5 of those with profit ≥ $50 | 5, 50 | $500 | $0 |
+| `consistency` | no day > 30% of profit balance, through payout 5 | 0.30, 5 | $4,000 | $50 |
+| `safety_net` | payouts 1-3 may encroach by one $500 minimum | 500, 3 | −$12,500 | $0 |
+| `minimum_payout` | $500, any account size | 500 | $0 | $0 |
+| `maximum_payout` | $1,500 through payout 5, none after | 1500, 5 | $0 | $50 |
+| `profit_split` | 100% of first $25,000 cumulative, then 90% | 25000, 0.9 | $0 | **$2,200** |
+| `processing_delay` | days between approval and cash | 0 (off) | — | — |
+| `denial_on_shortfall` | denied if the balance falls before approval | — | $0 | $0 |
 
 The trailing threshold also caps every payout, but it is **not** in the
 rulebook — it is the account specification, always on, never switchable.
@@ -174,7 +199,7 @@ same layers, not run down a second code path.
 ```
 
 ```powershell
-$env:PYTHONPATH = 'src'; .\venv\Scripts\python.exe -m pa_milky --ablate
+$env:PYTHONPATH = 'src'; .\venv\Scripts\python.exe -m pa_milky --ablate --ablate-adapted
 ```
 
 `--config config/scenarios/<name>.json` picks a scenario, `--rule-off KEY`
@@ -190,10 +215,11 @@ ask, `--seal NAME` writes a baseline.
 - `src/pa_milky/policy.py` — what we ask for.
 - `src/pa_milky/payouts.py` — the monthly decision and its denial ledger.
 - `src/pa_milky/simulator.py` — the book, walked as one causal stream.
-- `src/pa_milky/ablation.py` — one arm per rule.
+- `src/pa_milky/ablation.py` — one arm per rule, fixed and adapted, with the
+  pocket/stranded/value decomposition.
 - `src/pa_milky/provenance.py` — sealing and verification.
 - `scripts/sweep_cushion.py` — sweep our retained cushion on either policy or tape.
-- `tests/` — 132 tests, including every firm rule against the sentence it came
+- `tests/` — 145 tests, including every firm rule against the sentence it came
   from, the excursion-ordering property over a grid of states, delayed payouts
   proved causal, both closing benchmarks, and all five sealed baselines
   reproducing.
