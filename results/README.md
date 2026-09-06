@@ -58,3 +58,15 @@ with monthly account purchases and monthly fixed-target entitlement unchanged.
 The 93 candidates cover the $31,600-$32,100 band plus the minimum-policy $30,000
 control. Minimum requests mean $500 per eligible check, not a monthly budget.
 Reproduce: `venv/Scripts/python.exe scripts/study_withdrawal_cadence.py`.
+
+## Account purchase study
+
+[Purchase policies under cash budgets](study__full_rulebook__RR__account_purchases__cash_budgets/REPORT.md):
+monthly purchases, quarterly purchases, failure replacements, and payout
+reinvestment. Four approved funding scenarios ($1,000/$5,000 initially, with
+$0/$200 monthly thereafter) use the same 20-live-account modelled capacity cap.
+Owner contributions are excluded from net cash created; unused principal remains
+in ending owner cash. Each candidate uses one of the three previously studied
+withdrawal policies without re-optimizing its cushion.
+
+Reproduce: `venv/Scripts/python.exe scripts/study_account_purchases.py`.

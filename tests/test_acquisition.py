@@ -1,0 +1,76 @@
+from dataclasses import replace
+from datetime import datetime
+from types import SimpleNamespace as NS
+import unittest
+from pa_milky.acquisition import AcquisitionPolicy,AcquisitionLedger
+from pa_milky.simulator import run_book
+from pa_milky.loader import Trade
+from tests import test_policy_study
+
+
+class TestAcquisition(unittest.TestCase):
+    def test_cash_blocks_purchases_and_contributions_are_monthly(self):
+        ledger=AcquisitionLedger(AcquisitionPolicy('monthly_one',100,50))
+        ledger.fund(datetime(2020,1,1));ledger.fund(datetime(2020,1,1))
+        self.assertEqual(ledger.decide(datetime(2020,1,1),0,0,0,200),0)
+        ledger.fund(datetime(2020,2,1));ledger.fund(datetime(2020,3,1))
+        self.assertEqual(ledger.decide(datetime(2020,3,1),2,0,0,200),1)
+        self.assertEqual(ledger.cash_usd,0)
+        self.assertEqual(ledger.contributed_usd,200)
+        self.assertEqual(ledger.summary()['cash_identity_residual_usd'],0)
+
+    def test_reinvestment_uses_only_allocated_received_cash_and_respects_cap(self):
+        ledger=AcquisitionLedger(AcquisitionPolicy('reinvest',5000,reinvest_fraction=.5,max_live_accounts=2))
+        ledger.fund(datetime(2020,1,1))
+        self.assertEqual(ledger.decide(datetime(2020,1,1),0,0,0,200),1)
+        self.assertEqual(ledger.decide(datetime(2020,1,2),0,1,1,200),0)
+        ledger.receive([NS(at=datetime(2020,2,1),received_usd=1000)])
+        self.assertEqual(ledger.decide(datetime(2020,2,1),1,1,1,200),1)
+        self.assertEqual(ledger.decide(datetime(2020,2,2),1,2,2,200),0)
+        self.assertEqual(ledger.payout_budget_spent_usd,200)
+
+    def test_restart_replaces_empty_seed_without_spending_payout_allocation(self):
+        ledger=AcquisitionLedger(AcquisitionPolicy('reinvest',1000,reinvest_fraction=.5,restart_when_empty=True))
+        ledger.fund(datetime(2020,1,1))
+        self.assertEqual(ledger.decide(datetime(2020,1,1),0,0,0,200),1)
+        self.assertEqual(ledger.decide(datetime(2020,1,2),0,0,1,200),1)
+        self.assertEqual(ledger.payout_budget_spent_usd,0)
+        self.assertEqual(ledger.cash_usd,600)
+        self.assertEqual(ledger.decide(datetime(2020,1,3),0,1,2,200),0)
+
+    def test_monthly_funded_control_matches_original_book(self):
+        f=test_policy_study.TestPolicyStudy();f.setUp()
+        base=run_book(f.trades,f.config)
+        funded=run_book(f.trades,f.config,acquisition=AcquisitionPolicy('monthly_one',5000))
+        self.assertEqual(base.pocket_usd,funded.pocket_usd)
+        self.assertEqual(base.accounts,funded.accounts)
+        self.assertEqual(base.payouts,funded.payouts)
+        self.assertEqual(funded.acquisition.summary()['net_cash_created_usd'],funded.pocket_usd)
+        from pa_milky.report import render_text, summarize
+        self.assertIn('ending owner cash',render_text(funded))
+        self.assertEqual(summarize(funded)['book']['months_in_dataset'],3)
+
+    def test_replacement_cannot_take_trade_entered_before_purchase(self):
+        f=test_policy_study.TestPolicyStudy();f.setUp()
+        make=lambda key,entry,exit,pnl,mae:Trade(key,'1-2',1,1,1,entry,exit,mae,0,pnl,0)
+        trades=[make('death',datetime(2020,1,2,9),datetime(2020,1,2,10),-2000,-2000),
+                make('old_entry',datetime(2020,1,2,11),datetime(2020,1,4,10),100,0),
+                make('new_entry',datetime(2020,1,3,10),datetime(2020,1,5,10),100,0)]
+        r=run_book(trades,f.config,acquisition=AcquisitionPolicy('replace',1000))
+        self.assertEqual(len(r.accounts),2)
+        self.assertEqual(r.accounts[1].activated_at,datetime(2020,1,3))
+        self.assertEqual(r.accounts[1].trades_taken,1)
+        self.assertTrue(all(e['cash_after_usd']>=0 for e in r.acquisition.cash_events))
+
+    def test_no_funding_means_no_accounts_and_no_negative_cash(self):
+        f=test_policy_study.TestPolicyStudy();f.setUp()
+        r=run_book(f.trades,f.config,acquisition=AcquisitionPolicy('replace',0))
+        self.assertEqual(r.accounts,[])
+        self.assertEqual(r.pocket_usd,0)
+
+    def test_quarterly_batch_matches_planned_monthly_rate(self):
+        ledger=AcquisitionLedger(AcquisitionPolicy('quarterly_three',5000))
+        ledger.fund(datetime(2020,1,1))
+        self.assertEqual(ledger.decide(datetime(2020,1,1),0,0,0,200),3)
+        self.assertEqual(ledger.decide(datetime(2020,2,1),1,3,3,200),0)
+        self.assertEqual(ledger.decide(datetime(2020,4,1),3,3,3,200),3)

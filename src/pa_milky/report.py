@@ -189,6 +189,10 @@ def summarize(result: BookResult) -> dict:
             "blocked_by_any": dict(blocked_any.most_common()),
             "binding_cap_on_approved": dict(binding.most_common()),
         }
+    if result.acquisition is not None:
+        summary["acquisition"] = result.acquisition.summary()
+        first, last = result.tape_first_entry, result.tape_last_exit
+        summary["book"]["months_in_dataset"] = (last.year-first.year)*12+last.month-first.month+1
     return summary
 
 
@@ -311,7 +315,8 @@ def render_text(result: BookResult) -> str:
     title = f"{rules_label} | {policy_label}"
     add("=" * 78)
     add(f"  {title}")
-    add(f"  Request cadence: {policy.cadence}; account purchases and target accrual: monthly")
+    purchases = "monthly" if result.acquisition is None else result.acquisition.policy.name
+    add(f"  Request cadence: {policy.cadence}; account purchases: {purchases}; fixed-target accrual: monthly")
     cushion = policy.min_retained_balance_usd
     add("  Retained balance: " + ("none" if cushion is None else f"${cushion:,.0f}"))
     terminal_label = {"none": "no terminal withdrawal", "firm_permitted": "one firm-permitted terminal request",
@@ -348,7 +353,14 @@ def render_text(result: BookResult) -> str:
     add("")
 
     add("  THE BOOK")
-    add(f"    months in dataset / accounts opened .. {book['accounts_opened']}")
+    add(f"    months in dataset .................... {book['months_in_dataset']}")
+    add(f"    accounts opened ...................... {book['accounts_opened']}")
+    if result.acquisition is not None:
+        purchase_cash = result.acquisition.summary()
+        add(f"    owner contributions .................. ${purchase_cash['owner_contributions_usd']:,.2f}")
+        add(f"    ending owner cash (incl. principal) .. ${purchase_cash['ending_owner_cash_usd']:,.2f}")
+        add(f"    net cash created (excl. principal) ... ${purchase_cash['net_cash_created_usd']:,.2f}")
+        add(f"    modelled live-account cap ............ {result.acquisition.policy.max_live_accounts}")
     add(
         f"    alive at end of dataset .............. {book['accounts_alive_at_end']}"
         f"  ({book['survival_rate'] * 100:.1f}%)"

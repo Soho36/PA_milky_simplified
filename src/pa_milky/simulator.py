@@ -19,6 +19,7 @@ from dataclasses import dataclass
 from datetime import datetime, timedelta
 
 from .account import Account, money
+from .acquisition import AcquisitionPolicy, AcquisitionLedger
 from .config import RunConfig
 from .loader import Trade
 from .payouts import (
@@ -62,6 +63,7 @@ class BookResult:
     tape_first_entry: datetime
     tape_last_exit: datetime
     config: RunConfig
+    acquisition: AcquisitionLedger | None = None
 
     @property
     def alive(self) -> list[Account]:
@@ -161,12 +163,14 @@ def decision_boundaries(first: datetime, last: datetime, cadence: str):
     return sorted(dates)
 
 
-def run_book(trades: list[Trade], config: RunConfig) -> BookResult:
+def run_book(trades: list[Trade], config: RunConfig, *, acquisition: AcquisitionPolicy | None = None) -> BookResult:
     """Walk the tape, opening one account a month and asking the firm monthly."""
 
     if not trades:
         raise ValueError("no trades to simulate")
 
+    if acquisition is not None and config.max_accounts is not None:
+        raise ValueError("Budgeted acquisition uses its own live-account cap; max_accounts must be unset")
     first_entry = min(t.entry_at for t in trades)
     last_exit = max(t.exit_at for t in trades)
     commission = config.commission_per_copy_usd
@@ -179,8 +183,9 @@ def run_book(trades: list[Trade], config: RunConfig) -> BookResult:
     index = 0
     copies = 0
 
+    purchasing = AcquisitionLedger(acquisition) if acquisition is not None else None
     opened = 0
-    for boundary in decision_boundaries(first_entry, last_exit, config.policy.cadence):
+    for boundary in decision_boundaries(first_entry, last_exit, "daily" if purchasing else config.policy.cadence):
         year, month = boundary.year, boundary.month
         monthly = boundary.day == 1
         if monthly:
@@ -202,10 +207,18 @@ def run_book(trades: list[Trade], config: RunConfig) -> BookResult:
             denials.extend(denied)
             pending.sort(key=lambda item: item.due_at)
 
-        if monthly and (config.max_accounts is None or opened <= config.max_accounts):
+        if purchasing:
+            purchasing.receive(payouts)
+            if monthly:
+                purchasing.fund(boundary)
+            count = purchasing.decide(boundary, opened-1, sum(a.alive for a in accounts),
+                                      len(accounts), config.purchase_fee_usd)
+        else:
+            count = int(monthly and (config.max_accounts is None or opened <= config.max_accounts))
+        for _ in range(count):
             accounts.append(
                 Account(
-                    account_id=opened,
+                    account_id=len(accounts)+1 if purchasing else opened,
                     cohort_month=f"{year:04d}-{month:02d}",
                     activated_at=boundary,
                     purchase_fee_usd=config.purchase_fee_usd,
@@ -236,6 +249,10 @@ def run_book(trades: list[Trade], config: RunConfig) -> BookResult:
     payouts.extend(terminal_paid)
     denials.extend(terminal_denied)
 
+    if purchasing:
+        purchasing.receive(payouts)
+        if purchasing.summary()["cash_identity_residual_usd"] != 0:
+            raise ValueError("Acquisition cash ledger failed to reconcile")
     payouts.sort(key=lambda event: (event.at, event.account_id))
     denials.sort(key=lambda event: (event.at, event.account_id))
 
@@ -252,4 +269,5 @@ def run_book(trades: list[Trade], config: RunConfig) -> BookResult:
         tape_first_entry=first_entry,
         tape_last_exit=last_exit,
         config=config,
+        acquisition=purchasing,
     )
