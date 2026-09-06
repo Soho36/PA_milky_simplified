@@ -41,9 +41,11 @@ search outputs, not newly optimized policies. Terminal withdrawal is absent.
 The study scores ongoing net cash and cash including one permitted terminal
 request on each candidate's identical trading path. Account purchases remain
 monthly. Every candidate also carries a trading-neutral flag and a ceiling
-capture: the hold benchmark never withdraws, so its path books the most trading
-earnings available, and candidates are scored against emptying that path rather
-than against the smaller path their own withdrawals left them.
+capture, both read against the hold benchmark's path. A withdrawal only lowers a
+balance, so no candidate outlives that path, but it can out-earn it: trades an
+early death avoids can be losing ones, and a capture above 100% would say so.
+Neutrality is decided on a per-account fingerprint of the trades actually taken,
+not on matching earnings totals, which two different paths can share.
 `study.json` includes full provenance and `candidates.csv` contains
 all tested settings. These are in-sample search results, not validated optima.
 

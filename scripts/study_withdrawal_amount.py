@@ -50,20 +50,35 @@ def table(rows):
 
 
 def ceiling_section(rows, benchmark):
-    """State, in its own numbers, the bound the capture column is measured against."""
+    """State, in its own numbers, the reference the capture column is scored against."""
     tested = [r for r in rows if r['stage'] != 'benchmark']
     neutral = [r for r in tested if r['trading_neutral']]
+    richer = [r for r in tested if r['earnings_vs_benchmark_usd'] > 0]
     best = max(tested, key=lambda r: r['combined_pocket_usd'])
     text = "## Extraction ceiling\n\n"
     text += (f"The {benchmark['policy']} benchmark makes no withdrawal during trading, so no account "
-             f"dies from one and its path books the most trading earnings any candidate here can: "
-             f"${benchmark['booked_net_trading_usd']:,.2f}. Emptying that path completely -- nothing "
-             f"left standing in live accounts, no profit split -- would put "
-             f"${benchmark['book_ceiling_usd']:,.2f} in the pocket. Ceiling capture scores combined "
-             f"net cash against that one number, so a candidate is charged for the earnings its own "
-             f"withdrawals destroyed rather than flattered by the smaller path they left it.\n\n")
-    text += (f"Trading-neutral candidates book the benchmark's earnings exactly: their withdrawals "
-             f"cost no trade. {len(neutral)} of {len(tested)} tested settings qualify. Best capture is "
+             f"dies from one and no candidate outlives it. Its path books "
+             f"${benchmark['booked_net_trading_usd']:,.2f} of trading earnings, and emptying that path "
+             f"completely -- nothing left standing in live accounts, no profit split -- would put "
+             f"${benchmark['book_ceiling_usd']:,.2f} in the pocket. Ceiling capture scores combined net "
+             f"cash against that one number, so candidates are read on a fixed yardstick instead of "
+             f"each against the smaller path its own withdrawals left it.\n\n")
+    text += ("Outliving the benchmark is impossible; out-earning it is not. An account that dies early "
+             "sits out whatever the benchmark went on to trade, and that stretch can lose money, so a "
+             "capture above 100% is recorded rather than treated as an error. ")
+    if richer:
+        top = max(richer, key=lambda r: r['earnings_vs_benchmark_usd'])
+        text += (f"{len(richer)} of {len(tested)} tested settings do out-earn it, the largest by "
+                 f"${top['earnings_vs_benchmark_usd']:,.2f} ({top['policy']} at {cushion(top)}), so "
+                 f"the benchmark is a reference path here, not the earnings maximum.\n\n")
+    else:
+        text += (f"None of the {len(tested)} tested settings out-earn it, so on this tape the reference "
+                 f"path is the earnings maximum as well. That is an observed result, not a property of "
+                 f"the rulebook.\n\n")
+    text += (f"Trading-neutral means every account took exactly the trades it took under the benchmark. "
+             f"It is decided on a per-account fingerprint of trade counts, booked results and killing "
+             f"trade, never on the earnings total, which two different paths can share. "
+             f"{len(neutral)} of {len(tested)} tested settings qualify. Best capture is "
              f"{best['ceiling_capture']:.2%} ({best['policy']} at {cushion(best)}), leaving "
              f"${best['unextracted_usd']:,.2f} unextracted -- ${best['firm_split_usd']:,.2f} to the "
              f"firm's split and ${best['profit_after_terminal_usd']:,.2f} still standing in live "
@@ -71,7 +86,7 @@ def ceiling_section(rows, benchmark):
              f"one permitted request per account strands "
              f"${benchmark['profit_after_terminal_usd']:,.2f} of its equity.\n\n")
     text += ("Both columns are properties of this tape and this monthly acquisition cadence. Capture "
-             "is an accounting bound, not a probability of success, and not a comparison against any "
+             "is an accounting ratio, not a probability of success, and not a comparison against any "
              "alternative anyone could actually run.\n")
     return text
 
@@ -91,9 +106,10 @@ def findings(rows):
         if best['trading_neutral']:
             text += f"The {label} leader is trading-neutral: its withdrawals cost no trade. "
         else:
-            text += (f"The {label} leader is not trading-neutral: it forgoes "
-                     f"${best['earnings_forgone_usd']:,.2f} of booked trading earnings against the "
-                     f"benchmark path, and captures {best['ceiling_capture']:.2%} of the ceiling. ")
+            text += (f"The {label} leader is not trading-neutral: its withdrawals changed which "
+                     f"trades were taken, moving booked trading earnings by "
+                     f"${best['earnings_vs_benchmark_usd']:,.2f} against the benchmark path, and it "
+                     f"captures {best['ceiling_capture']:.2%} of the ceiling. ")
     text = text.rstrip(" ") + "\n\n"
     text += f"The closing leader ties at these tested retained balances: {levels}. "
     text += "A tie in closing cash can still hide different cash timing. The first table selects only one representative per family.\n\n"
@@ -159,8 +175,12 @@ def main():
                             'booked_net_trading_usd':benchmark['booked_net_trading_usd'],
                             'book_ceiling_usd':benchmark['book_ceiling_usd'],
                             'ceiling_definition':'pocket identity with zero retained profit and zero '
-                                                 'profit split; the no-withdrawal path bounds survival '
-                                                 'because a withdrawal only ever lowers a balance'},
+                                                 'profit split, taken on the no-withdrawal path. That '
+                                                 'path bounds survival, because a withdrawal only ever '
+                                                 'lowers a balance, but it does not bound earnings: '
+                                                 'trades an early death avoids can be losing ones',
+                            'neutrality_test':'per-account fingerprint of trade count, booked gross and '
+                                              'commission, and killing trade; not equality of totals'},
                'design':{'coarse_retained_balances':levels, 'local_refinement_step':100,
                          'local_refinement_radius':500, 'objectives':['ongoing_pocket_usd','combined_pocket_usd'],
                          'terminal':'one firm-permitted request, voluntary cushion released',

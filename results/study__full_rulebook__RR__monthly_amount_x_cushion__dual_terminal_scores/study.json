@@ -1,6 +1,6 @@
 {
   "schema": "pa_milky.amount_cushion_study.v1",
-  "generated_utc": "2026-09-06T11:44:20.070251+00:00",
+  "generated_utc": "2026-09-06T12:12:24.697217+00:00",
   "config": {
     "schema_version": "pa_milky_simplified.scenario.v1",
     "scenario": "full_rulebook_monthly_500",
@@ -338,8 +338,8 @@
         "bytes": 5074
       },
       "policy_study.py": {
-        "sha256": "69ec77c855572b22c90c9234460bcce10057909c86c0a046666addb825ba2aa3",
-        "bytes": 4638
+        "sha256": "d80da1117fcdbf31a13d4e87249dcd6857117b43722a501b1a3e97dd167a9a3f",
+        "bytes": 5502
       },
       "provenance.py": {
         "sha256": "6a7a137472c4becb9a5740d9d8f8be05b3a246f6b9deaf9e3a25e23d36f9e0de",
@@ -354,17 +354,18 @@
         "bytes": 8304
       }
     },
-    "combined_sha256": "35657c6be5ef71d81c7e25a367fa5637bb51ff4b1b824e60704f9f3983e29b84",
+    "combined_sha256": "72f4dcff4fd1187674ebded050d3f2966219000800adba67b846eddf068f8a8e",
     "count": 16,
-    "bytes": 131528
+    "bytes": 132392
   },
-  "git_revision": "1bcde2683315049b4b31230fd970decde11b37c3",
-  "runner_sha256": "a30feae95c3dcf6302ecda2960f779a36a19b5f1b6c7c6c8bec25eb3666b2bb3",
+  "git_revision": "ce276744fa86b9adbc48c856de63387f389c1206",
+  "runner_sha256": "3d3f75e611f50de6dca30a7417757f214ac10c29ccd0fc5d1142c6285502a427",
   "benchmark": {
     "policy": "hold",
     "booked_net_trading_usd": 462022.2,
     "book_ceiling_usd": 472299.1,
-    "ceiling_definition": "pocket identity with zero retained profit and zero profit split; the no-withdrawal path bounds survival because a withdrawal only ever lowers a balance"
+    "ceiling_definition": "pocket identity with zero retained profit and zero profit split, taken on the no-withdrawal path. That path bounds survival, because a withdrawal only ever lowers a balance, but it does not bound earnings: trades an early death avoids can be losing ones",
+    "neutrality_test": "per-account fingerprint of trade count, booked gross and commission, and killing trade; not equality of totals"
   },
   "design": {
     "coarse_retained_balances": [
@@ -417,6 +418,7 @@
       "firm_split_usd": 0.0,
       "path_ceiling_usd": 55553.65,
       "unextracted_usd": 3782.35,
+      "path_fingerprint": "b8c846013e0fd1a2",
       "economics": {
         "booked_net_trading_usd": 50379.6,
         "firm_split_usd": 0.0,
@@ -445,7 +447,7 @@
       },
       "stage": "coarse",
       "trading_neutral": false,
-      "earnings_forgone_usd": 411642.6,
+      "earnings_vs_benchmark_usd": -411642.6,
       "book_ceiling_usd": 472299.1,
       "ceiling_capture": 0.109615
     },
@@ -465,6 +467,7 @@
       "firm_split_usd": 0.0,
       "path_ceiling_usd": 55553.65,
       "unextracted_usd": 3782.35,
+      "path_fingerprint": "b8c846013e0fd1a2",
       "economics": {
         "booked_net_trading_usd": 50379.6,
         "firm_split_usd": 0.0,
@@ -493,7 +496,7 @@
       },
       "stage": "coarse",
       "trading_neutral": false,
-      "earnings_forgone_usd": 411642.6,
+      "earnings_vs_benchmark_usd": -411642.6,
       "book_ceiling_usd": 472299.1,
       "ceiling_capture": 0.109615
     },
@@ -513,6 +516,7 @@
       "firm_split_usd": 0.0,
       "path_ceiling_usd": 55553.65,
       "unextracted_usd": 3782.35,
+      "path_fingerprint": "b8c846013e0fd1a2",
       "economics": {
         "booked_net_trading_usd": 50379.6,
         "firm_split_usd": 0.0,
@@ -541,7 +545,7 @@
       },
       "stage": "coarse",
       "trading_neutral": false,
-      "earnings_forgone_usd": 411642.6,
+      "earnings_vs_benchmark_usd": -411642.6,
       "book_ceiling_usd": 472299.1,
       "ceiling_capture": 0.109615
     },
@@ -561,6 +565,7 @@
       "firm_split_usd": 0.0,
       "path_ceiling_usd": 55227.7,
       "unextracted_usd": 3782.35,
+      "path_fingerprint": "4269d6cbdc79828c",
       "economics": {
         "booked_net_trading_usd": 50245.9,
         "firm_split_usd": 0.0,
@@ -589,7 +594,7 @@
       },
       "stage": "coarse",
       "trading_neutral": false,
-      "earnings_forgone_usd": 411776.3,
+      "earnings_vs_benchmark_usd": -411776.3,
       "book_ceiling_usd": 472299.1,
       "ceiling_capture": 0.108925
     },
@@ -609,6 +614,7 @@
       "firm_split_usd": 0.0,
       "path_ceiling_usd": 57379.3,
       "unextracted_usd": 3782.35,
+      "path_fingerprint": "c02e98a316a8b82d",
       "economics": {
         "booked_net_trading_usd": 51241.5,
         "firm_split_usd": 0.0,
@@ -637,7 +643,7 @@
       },
       "stage": "coarse",
       "trading_neutral": false,
-      "earnings_forgone_usd": 410780.7,
+      "earnings_vs_benchmark_usd": -410780.7,
       "book_ceiling_usd": 472299.1,
       "ceiling_capture": 0.113481
     },
@@ -657,6 +663,7 @@
       "firm_split_usd": 0.0,
       "path_ceiling_usd": 98272.8,
       "unextracted_usd": 3782.35,
+      "path_fingerprint": "0c22fea16f060f23",
       "economics": {
         "booked_net_trading_usd": 92468.9,
         "firm_split_usd": 0.0,
@@ -685,7 +692,7 @@
       },
       "stage": "coarse",
       "trading_neutral": false,
-      "earnings_forgone_usd": 369553.3,
+      "earnings_vs_benchmark_usd": -369553.3,
       "book_ceiling_usd": 472299.1,
       "ceiling_capture": 0.200065
     },
@@ -705,6 +712,7 @@
       "firm_split_usd": 0.0,
       "path_ceiling_usd": 123662.95,
       "unextracted_usd": 3782.35,
+      "path_fingerprint": "f43303462c9c64f9",
       "economics": {
         "booked_net_trading_usd": 118513.15,
         "firm_split_usd": 0.0,
@@ -733,7 +741,7 @@
       },
       "stage": "coarse",
       "trading_neutral": false,
-      "earnings_forgone_usd": 343509.05,
+      "earnings_vs_benchmark_usd": -343509.05,
       "book_ceiling_usd": 472299.1,
       "ceiling_capture": 0.253823
     },
@@ -753,6 +761,7 @@
       "firm_split_usd": 0.0,
       "path_ceiling_usd": 184003.5,
       "unextracted_usd": 3782.35,
+      "path_fingerprint": "b54f47971254c5ef",
       "economics": {
         "booked_net_trading_usd": 177937.75,
         "firm_split_usd": 0.0,
@@ -781,7 +790,7 @@
       },
       "stage": "coarse",
       "trading_neutral": false,
-      "earnings_forgone_usd": 284084.45,
+      "earnings_vs_benchmark_usd": -284084.45,
       "book_ceiling_usd": 472299.1,
       "ceiling_capture": 0.381583
     },
@@ -801,6 +810,7 @@
       "firm_split_usd": 0.0,
       "path_ceiling_usd": 175381.25,
       "unextracted_usd": 3782.35,
+      "path_fingerprint": "0d83171f47946050",
       "economics": {
         "booked_net_trading_usd": 170064.7,
         "firm_split_usd": 0.0,
@@ -829,7 +839,7 @@
       },
       "stage": "coarse",
       "trading_neutral": false,
-      "earnings_forgone_usd": 291957.5,
+      "earnings_vs_benchmark_usd": -291957.5,
       "book_ceiling_usd": 472299.1,
       "ceiling_capture": 0.363327
     },
@@ -849,6 +859,7 @@
       "firm_split_usd": 103.38,
       "path_ceiling_usd": 223982.15,
       "unextracted_usd": 3885.73,
+      "path_fingerprint": "b77c2d72324ec9a0",
       "economics": {
         "booked_net_trading_usd": 217854.55,
         "firm_split_usd": 103.38,
@@ -877,7 +888,7 @@
       },
       "stage": "coarse",
       "trading_neutral": false,
-      "earnings_forgone_usd": 244167.65,
+      "earnings_vs_benchmark_usd": -244167.65,
       "book_ceiling_usd": 472299.1,
       "ceiling_capture": 0.466011
     },
@@ -897,6 +908,7 @@
       "firm_split_usd": 1490.14,
       "path_ceiling_usd": 326211.8,
       "unextracted_usd": 5272.49,
+      "path_fingerprint": "7d2b565f3949cbb5",
       "economics": {
         "booked_net_trading_usd": 320112.4,
         "firm_split_usd": 1490.14,
@@ -925,7 +937,7 @@
       },
       "stage": "coarse",
       "trading_neutral": false,
-      "earnings_forgone_usd": 141909.8,
+      "earnings_vs_benchmark_usd": -141909.8,
       "book_ceiling_usd": 472299.1,
       "ceiling_capture": 0.679526
     },
@@ -945,6 +957,7 @@
       "firm_split_usd": 1440.14,
       "path_ceiling_usd": 324211.8,
       "unextracted_usd": 5222.49,
+      "path_fingerprint": "9a904812bb30156f",
       "economics": {
         "booked_net_trading_usd": 316407.2,
         "firm_split_usd": 1440.14,
@@ -973,7 +986,7 @@
       },
       "stage": "local_refinement",
       "trading_neutral": false,
-      "earnings_forgone_usd": 145615.0,
+      "earnings_vs_benchmark_usd": -145615.0,
       "book_ceiling_usd": 472299.1,
       "ceiling_capture": 0.675397
     },
@@ -993,6 +1006,7 @@
       "firm_split_usd": 2370.74,
       "path_ceiling_usd": 376570.45,
       "unextracted_usd": 6153.09,
+      "path_fingerprint": "f225e1f3887f9f40",
       "economics": {
         "booked_net_trading_usd": 370668.4,
         "firm_split_usd": 2370.74,
@@ -1021,7 +1035,7 @@
       },
       "stage": "local_refinement",
       "trading_neutral": false,
-      "earnings_forgone_usd": 91353.8,
+      "earnings_vs_benchmark_usd": -91353.8,
       "book_ceiling_usd": 472299.1,
       "ceiling_capture": 0.784286
     },
@@ -1041,6 +1055,7 @@
       "firm_split_usd": 2300.74,
       "path_ceiling_usd": 374570.45,
       "unextracted_usd": 6083.09,
+      "path_fingerprint": "fafebd9444ca9acf",
       "economics": {
         "booked_net_trading_usd": 367344.65,
         "firm_split_usd": 2300.74,
@@ -1069,7 +1084,7 @@
       },
       "stage": "local_refinement",
       "trading_neutral": false,
-      "earnings_forgone_usd": 94677.55,
+      "earnings_vs_benchmark_usd": -94677.55,
       "book_ceiling_usd": 472299.1,
       "ceiling_capture": 0.780199
     },
@@ -1089,6 +1104,7 @@
       "firm_split_usd": 2230.74,
       "path_ceiling_usd": 372570.45,
       "unextracted_usd": 6013.09,
+      "path_fingerprint": "6a46292186978bee",
       "economics": {
         "booked_net_trading_usd": 365369.8,
         "firm_split_usd": 2230.74,
@@ -1117,7 +1133,7 @@
       },
       "stage": "local_refinement",
       "trading_neutral": false,
-      "earnings_forgone_usd": 96652.4,
+      "earnings_vs_benchmark_usd": -96652.4,
       "book_ceiling_usd": 472299.1,
       "ceiling_capture": 0.776113
     },
@@ -1137,6 +1153,7 @@
       "firm_split_usd": 2160.74,
       "path_ceiling_usd": 376204.25,
       "unextracted_usd": 9075.94,
+      "path_fingerprint": "e04b25eed3b88faa",
       "economics": {
         "booked_net_trading_usd": 370701.95,
         "firm_split_usd": 2160.74,
@@ -1165,7 +1182,7 @@
       },
       "stage": "coarse",
       "trading_neutral": false,
-      "earnings_forgone_usd": 91320.25,
+      "earnings_vs_benchmark_usd": -91320.25,
       "book_ceiling_usd": 472299.1,
       "ceiling_capture": 0.777322
     },
@@ -1185,6 +1202,7 @@
       "firm_split_usd": 2097.36,
       "path_ceiling_usd": 374304.25,
       "unextracted_usd": 9012.56,
+      "path_fingerprint": "39ad55b2194b5ba3",
       "economics": {
         "booked_net_trading_usd": 366381.0,
         "firm_split_usd": 2097.36,
@@ -1213,7 +1231,7 @@
       },
       "stage": "local_refinement",
       "trading_neutral": false,
-      "earnings_forgone_usd": 95641.2,
+      "earnings_vs_benchmark_usd": -95641.2,
       "book_ceiling_usd": 472299.1,
       "ceiling_capture": 0.773433
     },
@@ -1233,6 +1251,7 @@
       "firm_split_usd": 2037.35,
       "path_ceiling_usd": 372404.25,
       "unextracted_usd": 8952.55,
+      "path_fingerprint": "39ad55b2194b5ba3",
       "economics": {
         "booked_net_trading_usd": 366381.0,
         "firm_split_usd": 2037.35,
@@ -1261,7 +1280,7 @@
       },
       "stage": "local_refinement",
       "trading_neutral": false,
-      "earnings_forgone_usd": 95641.2,
+      "earnings_vs_benchmark_usd": -95641.2,
       "book_ceiling_usd": 472299.1,
       "ceiling_capture": 0.769537
     },
@@ -1281,6 +1300,7 @@
       "firm_split_usd": 1977.35,
       "path_ceiling_usd": 370504.25,
       "unextracted_usd": 8892.55,
+      "path_fingerprint": "121efc262d30a69a",
       "economics": {
         "booked_net_trading_usd": 362395.55,
         "firm_split_usd": 1977.35,
@@ -1309,7 +1329,7 @@
       },
       "stage": "local_refinement",
       "trading_neutral": false,
-      "earnings_forgone_usd": 99626.65,
+      "earnings_vs_benchmark_usd": -99626.65,
       "book_ceiling_usd": 472299.1,
       "ceiling_capture": 0.765641
     },
@@ -1329,6 +1349,7 @@
       "firm_split_usd": 1917.35,
       "path_ceiling_usd": 368604.25,
       "unextracted_usd": 8832.55,
+      "path_fingerprint": "cbb64fa20347647c",
       "economics": {
         "booked_net_trading_usd": 362074.4,
         "firm_split_usd": 1917.35,
@@ -1357,7 +1378,7 @@
       },
       "stage": "local_refinement",
       "trading_neutral": false,
-      "earnings_forgone_usd": 99947.8,
+      "earnings_vs_benchmark_usd": -99947.8,
       "book_ceiling_usd": 472299.1,
       "ceiling_capture": 0.761745
     },
@@ -1377,6 +1398,7 @@
       "firm_split_usd": 1857.35,
       "path_ceiling_usd": 366704.25,
       "unextracted_usd": 8772.55,
+      "path_fingerprint": "a070003d21201ea4",
       "economics": {
         "booked_net_trading_usd": 359177.6,
         "firm_split_usd": 1857.35,
@@ -1405,7 +1427,7 @@
       },
       "stage": "coarse",
       "trading_neutral": false,
-      "earnings_forgone_usd": 102844.6,
+      "earnings_vs_benchmark_usd": -102844.6,
       "book_ceiling_usd": 472299.1,
       "ceiling_capture": 0.75785
     },
@@ -1425,6 +1447,7 @@
       "firm_split_usd": 6004.79,
       "path_ceiling_usd": 460982.0,
       "unextracted_usd": 15113.06,
+      "path_fingerprint": "86ee9e48cc6d0dfe",
       "economics": {
         "booked_net_trading_usd": 450995.8,
         "firm_split_usd": 6004.79,
@@ -1453,7 +1476,7 @@
       },
       "stage": "coarse",
       "trading_neutral": false,
-      "earnings_forgone_usd": 11026.4,
+      "earnings_vs_benchmark_usd": -11026.4,
       "book_ceiling_usd": 472299.1,
       "ceiling_capture": 0.944039
     },
@@ -1473,6 +1496,7 @@
       "firm_split_usd": 6004.8,
       "path_ceiling_usd": 460782.0,
       "unextracted_usd": 15213.07,
+      "path_fingerprint": "86ee9e48cc6d0dfe",
       "economics": {
         "booked_net_trading_usd": 450995.8,
         "firm_split_usd": 6004.8,
@@ -1501,7 +1525,7 @@
       },
       "stage": "local_refinement",
       "trading_neutral": false,
-      "earnings_forgone_usd": 11026.4,
+      "earnings_vs_benchmark_usd": -11026.4,
       "book_ceiling_usd": 472299.1,
       "ceiling_capture": 0.943404
     },
@@ -1521,6 +1545,7 @@
       "firm_split_usd": 6004.8,
       "path_ceiling_usd": 460582.0,
       "unextracted_usd": 15313.07,
+      "path_fingerprint": "c5f8971bb8501142",
       "economics": {
         "booked_net_trading_usd": 450504.6,
         "firm_split_usd": 6004.8,
@@ -1549,7 +1574,7 @@
       },
       "stage": "local_refinement",
       "trading_neutral": false,
-      "earnings_forgone_usd": 11517.6,
+      "earnings_vs_benchmark_usd": -11517.6,
       "book_ceiling_usd": 472299.1,
       "ceiling_capture": 0.942769
     },
@@ -1569,6 +1594,7 @@
       "firm_split_usd": 6004.8,
       "path_ceiling_usd": 460382.0,
       "unextracted_usd": 15413.07,
+      "path_fingerprint": "37a1f37fb6af0246",
       "economics": {
         "booked_net_trading_usd": 450309.5,
         "firm_split_usd": 6004.8,
@@ -1597,7 +1623,7 @@
       },
       "stage": "local_refinement",
       "trading_neutral": false,
-      "earnings_forgone_usd": 11712.7,
+      "earnings_vs_benchmark_usd": -11712.7,
       "book_ceiling_usd": 472299.1,
       "ceiling_capture": 0.942134
     },
@@ -1617,6 +1643,7 @@
       "firm_split_usd": 6004.8,
       "path_ceiling_usd": 460182.0,
       "unextracted_usd": 15513.07,
+      "path_fingerprint": "4db35aba3f77964b",
       "economics": {
         "booked_net_trading_usd": 450140.7,
         "firm_split_usd": 6004.8,
@@ -1645,7 +1672,7 @@
       },
       "stage": "local_refinement",
       "trading_neutral": false,
-      "earnings_forgone_usd": 11881.5,
+      "earnings_vs_benchmark_usd": -11881.5,
       "book_ceiling_usd": 472299.1,
       "ceiling_capture": 0.941499
     },
@@ -1665,6 +1692,7 @@
       "firm_split_usd": 6004.8,
       "path_ceiling_usd": 472299.1,
       "unextracted_usd": 15813.09,
+      "path_fingerprint": "e5cd2f8935877ac7",
       "economics": {
         "booked_net_trading_usd": 462022.2,
         "firm_split_usd": 6004.8,
@@ -1693,7 +1721,7 @@
       },
       "stage": "coarse",
       "trading_neutral": true,
-      "earnings_forgone_usd": 0.0,
+      "earnings_vs_benchmark_usd": 0.0,
       "book_ceiling_usd": 472299.1,
       "ceiling_capture": 0.966519
     },
@@ -1713,6 +1741,7 @@
       "firm_split_usd": 6004.8,
       "path_ceiling_usd": 472299.1,
       "unextracted_usd": 24164.57,
+      "path_fingerprint": "e5cd2f8935877ac7",
       "economics": {
         "booked_net_trading_usd": 462022.2,
         "firm_split_usd": 6004.8,
@@ -1741,7 +1770,7 @@
       },
       "stage": "local_refinement",
       "trading_neutral": true,
-      "earnings_forgone_usd": 0.0,
+      "earnings_vs_benchmark_usd": 0.0,
       "book_ceiling_usd": 472299.1,
       "ceiling_capture": 0.948836
     },
@@ -1761,6 +1790,7 @@
       "firm_split_usd": 6004.8,
       "path_ceiling_usd": 472299.1,
       "unextracted_usd": 24464.57,
+      "path_fingerprint": "e5cd2f8935877ac7",
       "economics": {
         "booked_net_trading_usd": 462022.2,
         "firm_split_usd": 6004.8,
@@ -1789,7 +1819,7 @@
       },
       "stage": "local_refinement",
       "trading_neutral": true,
-      "earnings_forgone_usd": 0.0,
+      "earnings_vs_benchmark_usd": 0.0,
       "book_ceiling_usd": 472299.1,
       "ceiling_capture": 0.948201
     },
@@ -1809,6 +1839,7 @@
       "firm_split_usd": 6004.8,
       "path_ceiling_usd": 472299.1,
       "unextracted_usd": 24764.57,
+      "path_fingerprint": "e5cd2f8935877ac7",
       "economics": {
         "booked_net_trading_usd": 462022.2,
         "firm_split_usd": 6004.8,
@@ -1837,7 +1868,7 @@
       },
       "stage": "local_refinement",
       "trading_neutral": true,
-      "earnings_forgone_usd": 0.0,
+      "earnings_vs_benchmark_usd": 0.0,
       "book_ceiling_usd": 472299.1,
       "ceiling_capture": 0.947566
     },
@@ -1857,6 +1888,7 @@
       "firm_split_usd": 6004.8,
       "path_ceiling_usd": 472299.1,
       "unextracted_usd": 25064.57,
+      "path_fingerprint": "e5cd2f8935877ac7",
       "economics": {
         "booked_net_trading_usd": 462022.2,
         "firm_split_usd": 6004.8,
@@ -1885,7 +1917,7 @@
       },
       "stage": "local_refinement",
       "trading_neutral": true,
-      "earnings_forgone_usd": 0.0,
+      "earnings_vs_benchmark_usd": 0.0,
       "book_ceiling_usd": 472299.1,
       "ceiling_capture": 0.946931
     },
@@ -1905,6 +1937,7 @@
       "firm_split_usd": 6004.8,
       "path_ceiling_usd": 472299.1,
       "unextracted_usd": 25364.57,
+      "path_fingerprint": "e5cd2f8935877ac7",
       "economics": {
         "booked_net_trading_usd": 462022.2,
         "firm_split_usd": 6004.8,
@@ -1933,7 +1966,7 @@
       },
       "stage": "coarse",
       "trading_neutral": true,
-      "earnings_forgone_usd": 0.0,
+      "earnings_vs_benchmark_usd": 0.0,
       "book_ceiling_usd": 472299.1,
       "ceiling_capture": 0.946296
     },
@@ -1953,6 +1986,7 @@
       "firm_split_usd": 6004.8,
       "path_ceiling_usd": 472299.1,
       "unextracted_usd": 31890.31,
+      "path_fingerprint": "e5cd2f8935877ac7",
       "economics": {
         "booked_net_trading_usd": 462022.2,
         "firm_split_usd": 6004.8,
@@ -1981,7 +2015,7 @@
       },
       "stage": "coarse",
       "trading_neutral": true,
-      "earnings_forgone_usd": 0.0,
+      "earnings_vs_benchmark_usd": 0.0,
       "book_ceiling_usd": 472299.1,
       "ceiling_capture": 0.932479
     },
@@ -2001,6 +2035,7 @@
       "firm_split_usd": 6004.8,
       "path_ceiling_usd": 472299.1,
       "unextracted_usd": 33890.31,
+      "path_fingerprint": "e5cd2f8935877ac7",
       "economics": {
         "booked_net_trading_usd": 462022.2,
         "firm_split_usd": 6004.8,
@@ -2029,7 +2064,7 @@
       },
       "stage": "coarse",
       "trading_neutral": true,
-      "earnings_forgone_usd": 0.0,
+      "earnings_vs_benchmark_usd": 0.0,
       "book_ceiling_usd": 472299.1,
       "ceiling_capture": 0.928244
     },
@@ -2049,6 +2084,7 @@
       "firm_split_usd": 6004.8,
       "path_ceiling_usd": 472299.1,
       "unextracted_usd": 35890.31,
+      "path_fingerprint": "e5cd2f8935877ac7",
       "economics": {
         "booked_net_trading_usd": 462022.2,
         "firm_split_usd": 6004.8,
@@ -2077,7 +2113,7 @@
       },
       "stage": "coarse",
       "trading_neutral": true,
-      "earnings_forgone_usd": 0.0,
+      "earnings_vs_benchmark_usd": 0.0,
       "book_ceiling_usd": 472299.1,
       "ceiling_capture": 0.924009
     },
@@ -2097,6 +2133,7 @@
       "firm_split_usd": 6004.8,
       "path_ceiling_usd": 472299.1,
       "unextracted_usd": 37890.31,
+      "path_fingerprint": "e5cd2f8935877ac7",
       "economics": {
         "booked_net_trading_usd": 462022.2,
         "firm_split_usd": 6004.8,
@@ -2125,7 +2162,7 @@
       },
       "stage": "coarse",
       "trading_neutral": true,
-      "earnings_forgone_usd": 0.0,
+      "earnings_vs_benchmark_usd": 0.0,
       "book_ceiling_usd": 472299.1,
       "ceiling_capture": 0.919775
     },
@@ -2145,6 +2182,7 @@
       "firm_split_usd": 6004.8,
       "path_ceiling_usd": 472299.1,
       "unextracted_usd": 39890.31,
+      "path_fingerprint": "e5cd2f8935877ac7",
       "economics": {
         "booked_net_trading_usd": 462022.2,
         "firm_split_usd": 6004.8,
@@ -2173,7 +2211,7 @@
       },
       "stage": "coarse",
       "trading_neutral": true,
-      "earnings_forgone_usd": 0.0,
+      "earnings_vs_benchmark_usd": 0.0,
       "book_ceiling_usd": 472299.1,
       "ceiling_capture": 0.91554
     },
@@ -2193,6 +2231,7 @@
       "firm_split_usd": 6004.8,
       "path_ceiling_usd": 472299.1,
       "unextracted_usd": 41897.41,
+      "path_fingerprint": "e5cd2f8935877ac7",
       "economics": {
         "booked_net_trading_usd": 462022.2,
         "firm_split_usd": 6004.8,
@@ -2221,7 +2260,7 @@
       },
       "stage": "coarse",
       "trading_neutral": true,
-      "earnings_forgone_usd": 0.0,
+      "earnings_vs_benchmark_usd": 0.0,
       "book_ceiling_usd": 472299.1,
       "ceiling_capture": 0.911291
     },
@@ -2241,6 +2280,7 @@
       "firm_split_usd": 0.0,
       "path_ceiling_usd": 60396.65,
       "unextracted_usd": 3782.35,
+      "path_fingerprint": "e9b5b8ad9d869fce",
       "economics": {
         "booked_net_trading_usd": 54884.35,
         "firm_split_usd": 0.0,
@@ -2269,7 +2309,7 @@
       },
       "stage": "coarse",
       "trading_neutral": false,
-      "earnings_forgone_usd": 407137.85,
+      "earnings_vs_benchmark_usd": -407137.85,
       "book_ceiling_usd": 472299.1,
       "ceiling_capture": 0.11987
     },
@@ -2289,6 +2329,7 @@
       "firm_split_usd": 0.0,
       "path_ceiling_usd": 60396.65,
       "unextracted_usd": 3782.35,
+      "path_fingerprint": "e9b5b8ad9d869fce",
       "economics": {
         "booked_net_trading_usd": 54884.35,
         "firm_split_usd": 0.0,
@@ -2317,7 +2358,7 @@
       },
       "stage": "coarse",
       "trading_neutral": false,
-      "earnings_forgone_usd": 407137.85,
+      "earnings_vs_benchmark_usd": -407137.85,
       "book_ceiling_usd": 472299.1,
       "ceiling_capture": 0.11987
     },
@@ -2337,6 +2378,7 @@
       "firm_split_usd": 0.0,
       "path_ceiling_usd": 61949.8,
       "unextracted_usd": 3782.35,
+      "path_fingerprint": "05390973a109a182",
       "economics": {
         "booked_net_trading_usd": 56508.7,
         "firm_split_usd": 0.0,
@@ -2365,7 +2407,7 @@
       },
       "stage": "coarse",
       "trading_neutral": false,
-      "earnings_forgone_usd": 405513.5,
+      "earnings_vs_benchmark_usd": -405513.5,
       "book_ceiling_usd": 472299.1,
       "ceiling_capture": 0.123158
     },
@@ -2385,6 +2427,7 @@
       "firm_split_usd": 0.0,
       "path_ceiling_usd": 61123.85,
       "unextracted_usd": 3782.35,
+      "path_fingerprint": "09c9e12f44d94dab",
       "economics": {
         "booked_net_trading_usd": 55820.95,
         "firm_split_usd": 0.0,
@@ -2413,7 +2456,7 @@
       },
       "stage": "coarse",
       "trading_neutral": false,
-      "earnings_forgone_usd": 406201.25,
+      "earnings_vs_benchmark_usd": -406201.25,
       "book_ceiling_usd": 472299.1,
       "ceiling_capture": 0.121409
     },
@@ -2433,6 +2476,7 @@
       "firm_split_usd": 0.0,
       "path_ceiling_usd": 57999.95,
       "unextracted_usd": 3782.35,
+      "path_fingerprint": "cc537bc898eeb9c5",
       "economics": {
         "booked_net_trading_usd": 51955.75,
         "firm_split_usd": 0.0,
@@ -2461,7 +2505,7 @@
       },
       "stage": "coarse",
       "trading_neutral": false,
-      "earnings_forgone_usd": 410066.45,
+      "earnings_vs_benchmark_usd": -410066.45,
       "book_ceiling_usd": 472299.1,
       "ceiling_capture": 0.114795
     },
@@ -2481,6 +2525,7 @@
       "firm_split_usd": 0.0,
       "path_ceiling_usd": 99825.85,
       "unextracted_usd": 3782.35,
+      "path_fingerprint": "b6612a9ebcc2cbd2",
       "economics": {
         "booked_net_trading_usd": 93669.35,
         "firm_split_usd": 0.0,
@@ -2509,7 +2554,7 @@
       },
       "stage": "coarse",
       "trading_neutral": false,
-      "earnings_forgone_usd": 368352.85,
+      "earnings_vs_benchmark_usd": -368352.85,
       "book_ceiling_usd": 472299.1,
       "ceiling_capture": 0.203353
     },
@@ -2529,6 +2574,7 @@
       "firm_split_usd": 0.0,
       "path_ceiling_usd": 124058.25,
       "unextracted_usd": 3782.35,
+      "path_fingerprint": "f43303462c9c64f9",
       "economics": {
         "booked_net_trading_usd": 118513.15,
         "firm_split_usd": 0.0,
@@ -2557,7 +2603,7 @@
       },
       "stage": "coarse",
       "trading_neutral": false,
-      "earnings_forgone_usd": 343509.05,
+      "earnings_vs_benchmark_usd": -343509.05,
       "book_ceiling_usd": 472299.1,
       "ceiling_capture": 0.25466
     },
@@ -2577,6 +2623,7 @@
       "firm_split_usd": 0.0,
       "path_ceiling_usd": 185004.8,
       "unextracted_usd": 3782.35,
+      "path_fingerprint": "0829dff002df9a19",
       "economics": {
         "booked_net_trading_usd": 178700.85,
         "firm_split_usd": 0.0,
@@ -2605,7 +2652,7 @@
       },
       "stage": "coarse",
       "trading_neutral": false,
-      "earnings_forgone_usd": 283321.35,
+      "earnings_vs_benchmark_usd": -283321.35,
       "book_ceiling_usd": 472299.1,
       "ceiling_capture": 0.383703
     },
@@ -2625,6 +2672,7 @@
       "firm_split_usd": 0.0,
       "path_ceiling_usd": 175790.75,
       "unextracted_usd": 3782.35,
+      "path_fingerprint": "6c1a5c67fb53e6fc",
       "economics": {
         "booked_net_trading_usd": 170336.25,
         "firm_split_usd": 0.0,
@@ -2653,7 +2701,7 @@
       },
       "stage": "coarse",
       "trading_neutral": false,
-      "earnings_forgone_usd": 291685.95,
+      "earnings_vs_benchmark_usd": -291685.95,
       "book_ceiling_usd": 472299.1,
       "ceiling_capture": 0.364194
     },
@@ -2673,6 +2721,7 @@
       "firm_split_usd": 103.38,
       "path_ceiling_usd": 228914.75,
       "unextracted_usd": 3885.73,
+      "path_fingerprint": "66f427ffaa7fc622",
       "economics": {
         "booked_net_trading_usd": 222515.3,
         "firm_split_usd": 103.38,
@@ -2701,7 +2750,7 @@
       },
       "stage": "coarse",
       "trading_neutral": false,
-      "earnings_forgone_usd": 239506.9,
+      "earnings_vs_benchmark_usd": -239506.9,
       "book_ceiling_usd": 472299.1,
       "ceiling_capture": 0.476454
     },
@@ -2721,6 +2770,7 @@
       "firm_split_usd": 1490.14,
       "path_ceiling_usd": 326211.8,
       "unextracted_usd": 5272.49,
+      "path_fingerprint": "7d2b565f3949cbb5",
       "economics": {
         "booked_net_trading_usd": 320112.4,
         "firm_split_usd": 1490.14,
@@ -2749,7 +2799,7 @@
       },
       "stage": "coarse",
       "trading_neutral": false,
-      "earnings_forgone_usd": 141909.8,
+      "earnings_vs_benchmark_usd": -141909.8,
       "book_ceiling_usd": 472299.1,
       "ceiling_capture": 0.679526
     },
@@ -2769,6 +2819,7 @@
       "firm_split_usd": 1440.14,
       "path_ceiling_usd": 324211.8,
       "unextracted_usd": 5222.49,
+      "path_fingerprint": "9a904812bb30156f",
       "economics": {
         "booked_net_trading_usd": 316407.2,
         "firm_split_usd": 1440.14,
@@ -2797,7 +2848,7 @@
       },
       "stage": "local_refinement",
       "trading_neutral": false,
-      "earnings_forgone_usd": 145615.0,
+      "earnings_vs_benchmark_usd": -145615.0,
       "book_ceiling_usd": 472299.1,
       "ceiling_capture": 0.675397
     },
@@ -2817,6 +2868,7 @@
       "firm_split_usd": 2370.74,
       "path_ceiling_usd": 376570.45,
       "unextracted_usd": 6153.09,
+      "path_fingerprint": "f225e1f3887f9f40",
       "economics": {
         "booked_net_trading_usd": 370668.4,
         "firm_split_usd": 2370.74,
@@ -2845,7 +2897,7 @@
       },
       "stage": "local_refinement",
       "trading_neutral": false,
-      "earnings_forgone_usd": 91353.8,
+      "earnings_vs_benchmark_usd": -91353.8,
       "book_ceiling_usd": 472299.1,
       "ceiling_capture": 0.784286
     },
@@ -2865,6 +2917,7 @@
       "firm_split_usd": 2300.74,
       "path_ceiling_usd": 374570.45,
       "unextracted_usd": 6083.09,
+      "path_fingerprint": "fafebd9444ca9acf",
       "economics": {
         "booked_net_trading_usd": 367344.65,
         "firm_split_usd": 2300.74,
@@ -2893,7 +2946,7 @@
       },
       "stage": "local_refinement",
       "trading_neutral": false,
-      "earnings_forgone_usd": 94677.55,
+      "earnings_vs_benchmark_usd": -94677.55,
       "book_ceiling_usd": 472299.1,
       "ceiling_capture": 0.780199
     },
@@ -2913,6 +2966,7 @@
       "firm_split_usd": 2230.74,
       "path_ceiling_usd": 372570.45,
       "unextracted_usd": 6013.09,
+      "path_fingerprint": "6a46292186978bee",
       "economics": {
         "booked_net_trading_usd": 365369.8,
         "firm_split_usd": 2230.74,
@@ -2941,7 +2995,7 @@
       },
       "stage": "local_refinement",
       "trading_neutral": false,
-      "earnings_forgone_usd": 96652.4,
+      "earnings_vs_benchmark_usd": -96652.4,
       "book_ceiling_usd": 472299.1,
       "ceiling_capture": 0.776113
     },
@@ -2961,6 +3015,7 @@
       "firm_split_usd": 2160.74,
       "path_ceiling_usd": 376204.25,
       "unextracted_usd": 9075.94,
+      "path_fingerprint": "e04b25eed3b88faa",
       "economics": {
         "booked_net_trading_usd": 370701.95,
         "firm_split_usd": 2160.74,
@@ -2989,7 +3044,7 @@
       },
       "stage": "coarse",
       "trading_neutral": false,
-      "earnings_forgone_usd": 91320.25,
+      "earnings_vs_benchmark_usd": -91320.25,
       "book_ceiling_usd": 472299.1,
       "ceiling_capture": 0.777322
     },
@@ -3009,6 +3064,7 @@
       "firm_split_usd": 2097.36,
       "path_ceiling_usd": 374304.25,
       "unextracted_usd": 9012.56,
+      "path_fingerprint": "39ad55b2194b5ba3",
       "economics": {
         "booked_net_trading_usd": 366381.0,
         "firm_split_usd": 2097.36,
@@ -3037,7 +3093,7 @@
       },
       "stage": "local_refinement",
       "trading_neutral": false,
-      "earnings_forgone_usd": 95641.2,
+      "earnings_vs_benchmark_usd": -95641.2,
       "book_ceiling_usd": 472299.1,
       "ceiling_capture": 0.773433
     },
@@ -3057,6 +3113,7 @@
       "firm_split_usd": 2037.35,
       "path_ceiling_usd": 372404.25,
       "unextracted_usd": 8952.55,
+      "path_fingerprint": "39ad55b2194b5ba3",
       "economics": {
         "booked_net_trading_usd": 366381.0,
         "firm_split_usd": 2037.35,
@@ -3085,7 +3142,7 @@
       },
       "stage": "local_refinement",
       "trading_neutral": false,
-      "earnings_forgone_usd": 95641.2,
+      "earnings_vs_benchmark_usd": -95641.2,
       "book_ceiling_usd": 472299.1,
       "ceiling_capture": 0.769537
     },
@@ -3105,6 +3162,7 @@
       "firm_split_usd": 1977.35,
       "path_ceiling_usd": 370504.25,
       "unextracted_usd": 8892.55,
+      "path_fingerprint": "121efc262d30a69a",
       "economics": {
         "booked_net_trading_usd": 362395.55,
         "firm_split_usd": 1977.35,
@@ -3133,7 +3191,7 @@
       },
       "stage": "local_refinement",
       "trading_neutral": false,
-      "earnings_forgone_usd": 99626.65,
+      "earnings_vs_benchmark_usd": -99626.65,
       "book_ceiling_usd": 472299.1,
       "ceiling_capture": 0.765641
     },
@@ -3153,6 +3211,7 @@
       "firm_split_usd": 1917.35,
       "path_ceiling_usd": 368604.25,
       "unextracted_usd": 8832.55,
+      "path_fingerprint": "cbb64fa20347647c",
       "economics": {
         "booked_net_trading_usd": 362074.4,
         "firm_split_usd": 1917.35,
@@ -3181,7 +3240,7 @@
       },
       "stage": "local_refinement",
       "trading_neutral": false,
-      "earnings_forgone_usd": 99947.8,
+      "earnings_vs_benchmark_usd": -99947.8,
       "book_ceiling_usd": 472299.1,
       "ceiling_capture": 0.761745
     },
@@ -3201,6 +3260,7 @@
       "firm_split_usd": 1857.35,
       "path_ceiling_usd": 366704.25,
       "unextracted_usd": 8772.55,
+      "path_fingerprint": "a070003d21201ea4",
       "economics": {
         "booked_net_trading_usd": 359177.6,
         "firm_split_usd": 1857.35,
@@ -3229,7 +3289,7 @@
       },
       "stage": "coarse",
       "trading_neutral": false,
-      "earnings_forgone_usd": 102844.6,
+      "earnings_vs_benchmark_usd": -102844.6,
       "book_ceiling_usd": 472299.1,
       "ceiling_capture": 0.75785
     },
@@ -3249,6 +3309,7 @@
       "firm_split_usd": 6004.79,
       "path_ceiling_usd": 460982.0,
       "unextracted_usd": 15113.06,
+      "path_fingerprint": "86ee9e48cc6d0dfe",
       "economics": {
         "booked_net_trading_usd": 450995.8,
         "firm_split_usd": 6004.79,
@@ -3277,7 +3338,7 @@
       },
       "stage": "coarse",
       "trading_neutral": false,
-      "earnings_forgone_usd": 11026.4,
+      "earnings_vs_benchmark_usd": -11026.4,
       "book_ceiling_usd": 472299.1,
       "ceiling_capture": 0.944039
     },
@@ -3297,6 +3358,7 @@
       "firm_split_usd": 6004.8,
       "path_ceiling_usd": 460782.0,
       "unextracted_usd": 15213.07,
+      "path_fingerprint": "86ee9e48cc6d0dfe",
       "economics": {
         "booked_net_trading_usd": 450995.8,
         "firm_split_usd": 6004.8,
@@ -3325,7 +3387,7 @@
       },
       "stage": "local_refinement",
       "trading_neutral": false,
-      "earnings_forgone_usd": 11026.4,
+      "earnings_vs_benchmark_usd": -11026.4,
       "book_ceiling_usd": 472299.1,
       "ceiling_capture": 0.943404
     },
@@ -3345,6 +3407,7 @@
       "firm_split_usd": 6004.8,
       "path_ceiling_usd": 460582.0,
       "unextracted_usd": 15313.07,
+      "path_fingerprint": "c5f8971bb8501142",
       "economics": {
         "booked_net_trading_usd": 450504.6,
         "firm_split_usd": 6004.8,
@@ -3373,7 +3436,7 @@
       },
       "stage": "local_refinement",
       "trading_neutral": false,
-      "earnings_forgone_usd": 11517.6,
+      "earnings_vs_benchmark_usd": -11517.6,
       "book_ceiling_usd": 472299.1,
       "ceiling_capture": 0.942769
     },
@@ -3393,6 +3456,7 @@
       "firm_split_usd": 6004.8,
       "path_ceiling_usd": 460382.0,
       "unextracted_usd": 15413.07,
+      "path_fingerprint": "37a1f37fb6af0246",
       "economics": {
         "booked_net_trading_usd": 450309.5,
         "firm_split_usd": 6004.8,
@@ -3421,7 +3485,7 @@
       },
       "stage": "local_refinement",
       "trading_neutral": false,
-      "earnings_forgone_usd": 11712.7,
+      "earnings_vs_benchmark_usd": -11712.7,
       "book_ceiling_usd": 472299.1,
       "ceiling_capture": 0.942134
     },
@@ -3441,6 +3505,7 @@
       "firm_split_usd": 6004.8,
       "path_ceiling_usd": 460182.0,
       "unextracted_usd": 15513.07,
+      "path_fingerprint": "4db35aba3f77964b",
       "economics": {
         "booked_net_trading_usd": 450140.7,
         "firm_split_usd": 6004.8,
@@ -3469,7 +3534,7 @@
       },
       "stage": "local_refinement",
       "trading_neutral": false,
-      "earnings_forgone_usd": 11881.5,
+      "earnings_vs_benchmark_usd": -11881.5,
       "book_ceiling_usd": 472299.1,
       "ceiling_capture": 0.941499
     },
@@ -3489,6 +3554,7 @@
       "firm_split_usd": 6004.8,
       "path_ceiling_usd": 472299.1,
       "unextracted_usd": 15813.09,
+      "path_fingerprint": "e5cd2f8935877ac7",
       "economics": {
         "booked_net_trading_usd": 462022.2,
         "firm_split_usd": 6004.8,
@@ -3517,7 +3583,7 @@
       },
       "stage": "coarse",
       "trading_neutral": true,
-      "earnings_forgone_usd": 0.0,
+      "earnings_vs_benchmark_usd": 0.0,
       "book_ceiling_usd": 472299.1,
       "ceiling_capture": 0.966519
     },
@@ -3537,6 +3603,7 @@
       "firm_split_usd": 6004.8,
       "path_ceiling_usd": 472299.1,
       "unextracted_usd": 24164.57,
+      "path_fingerprint": "e5cd2f8935877ac7",
       "economics": {
         "booked_net_trading_usd": 462022.2,
         "firm_split_usd": 6004.8,
@@ -3565,7 +3632,7 @@
       },
       "stage": "local_refinement",
       "trading_neutral": true,
-      "earnings_forgone_usd": 0.0,
+      "earnings_vs_benchmark_usd": 0.0,
       "book_ceiling_usd": 472299.1,
       "ceiling_capture": 0.948836
     },
@@ -3585,6 +3652,7 @@
       "firm_split_usd": 6004.8,
       "path_ceiling_usd": 472299.1,
       "unextracted_usd": 24464.57,
+      "path_fingerprint": "e5cd2f8935877ac7",
       "economics": {
         "booked_net_trading_usd": 462022.2,
         "firm_split_usd": 6004.8,
@@ -3613,7 +3681,7 @@
       },
       "stage": "local_refinement",
       "trading_neutral": true,
-      "earnings_forgone_usd": 0.0,
+      "earnings_vs_benchmark_usd": 0.0,
       "book_ceiling_usd": 472299.1,
       "ceiling_capture": 0.948201
     },
@@ -3633,6 +3701,7 @@
       "firm_split_usd": 6004.8,
       "path_ceiling_usd": 472299.1,
       "unextracted_usd": 24764.57,
+      "path_fingerprint": "e5cd2f8935877ac7",
       "economics": {
         "booked_net_trading_usd": 462022.2,
         "firm_split_usd": 6004.8,
@@ -3661,7 +3730,7 @@
       },
       "stage": "local_refinement",
       "trading_neutral": true,
-      "earnings_forgone_usd": 0.0,
+      "earnings_vs_benchmark_usd": 0.0,
       "book_ceiling_usd": 472299.1,
       "ceiling_capture": 0.947566
     },
@@ -3681,6 +3750,7 @@
       "firm_split_usd": 6004.8,
       "path_ceiling_usd": 472299.1,
       "unextracted_usd": 25064.57,
+      "path_fingerprint": "e5cd2f8935877ac7",
       "economics": {
         "booked_net_trading_usd": 462022.2,
         "firm_split_usd": 6004.8,
@@ -3709,7 +3779,7 @@
       },
       "stage": "local_refinement",
       "trading_neutral": true,
-      "earnings_forgone_usd": 0.0,
+      "earnings_vs_benchmark_usd": 0.0,
       "book_ceiling_usd": 472299.1,
       "ceiling_capture": 0.946931
     },
@@ -3729,6 +3799,7 @@
       "firm_split_usd": 6004.8,
       "path_ceiling_usd": 472299.1,
       "unextracted_usd": 25364.57,
+      "path_fingerprint": "e5cd2f8935877ac7",
       "economics": {
         "booked_net_trading_usd": 462022.2,
         "firm_split_usd": 6004.8,
@@ -3757,7 +3828,7 @@
       },
       "stage": "coarse",
       "trading_neutral": true,
-      "earnings_forgone_usd": 0.0,
+      "earnings_vs_benchmark_usd": 0.0,
       "book_ceiling_usd": 472299.1,
       "ceiling_capture": 0.946296
     },
@@ -3777,6 +3848,7 @@
       "firm_split_usd": 6004.8,
       "path_ceiling_usd": 472299.1,
       "unextracted_usd": 31890.31,
+      "path_fingerprint": "e5cd2f8935877ac7",
       "economics": {
         "booked_net_trading_usd": 462022.2,
         "firm_split_usd": 6004.8,
@@ -3805,7 +3877,7 @@
       },
       "stage": "coarse",
       "trading_neutral": true,
-      "earnings_forgone_usd": 0.0,
+      "earnings_vs_benchmark_usd": 0.0,
       "book_ceiling_usd": 472299.1,
       "ceiling_capture": 0.932479
     },
@@ -3825,6 +3897,7 @@
       "firm_split_usd": 6004.8,
       "path_ceiling_usd": 472299.1,
       "unextracted_usd": 33890.31,
+      "path_fingerprint": "e5cd2f8935877ac7",
       "economics": {
         "booked_net_trading_usd": 462022.2,
         "firm_split_usd": 6004.8,
@@ -3853,7 +3926,7 @@
       },
       "stage": "coarse",
       "trading_neutral": true,
-      "earnings_forgone_usd": 0.0,
+      "earnings_vs_benchmark_usd": 0.0,
       "book_ceiling_usd": 472299.1,
       "ceiling_capture": 0.928244
     },
@@ -3873,6 +3946,7 @@
       "firm_split_usd": 6004.8,
       "path_ceiling_usd": 472299.1,
       "unextracted_usd": 35890.31,
+      "path_fingerprint": "e5cd2f8935877ac7",
       "economics": {
         "booked_net_trading_usd": 462022.2,
         "firm_split_usd": 6004.8,
@@ -3901,7 +3975,7 @@
       },
       "stage": "coarse",
       "trading_neutral": true,
-      "earnings_forgone_usd": 0.0,
+      "earnings_vs_benchmark_usd": 0.0,
       "book_ceiling_usd": 472299.1,
       "ceiling_capture": 0.924009
     },
@@ -3921,6 +3995,7 @@
       "firm_split_usd": 6004.8,
       "path_ceiling_usd": 472299.1,
       "unextracted_usd": 37890.31,
+      "path_fingerprint": "e5cd2f8935877ac7",
       "economics": {
         "booked_net_trading_usd": 462022.2,
         "firm_split_usd": 6004.8,
@@ -3949,7 +4024,7 @@
       },
       "stage": "coarse",
       "trading_neutral": true,
-      "earnings_forgone_usd": 0.0,
+      "earnings_vs_benchmark_usd": 0.0,
       "book_ceiling_usd": 472299.1,
       "ceiling_capture": 0.919775
     },
@@ -3969,6 +4044,7 @@
       "firm_split_usd": 6004.8,
       "path_ceiling_usd": 472299.1,
       "unextracted_usd": 39890.31,
+      "path_fingerprint": "e5cd2f8935877ac7",
       "economics": {
         "booked_net_trading_usd": 462022.2,
         "firm_split_usd": 6004.8,
@@ -3997,7 +4073,7 @@
       },
       "stage": "coarse",
       "trading_neutral": true,
-      "earnings_forgone_usd": 0.0,
+      "earnings_vs_benchmark_usd": 0.0,
       "book_ceiling_usd": 472299.1,
       "ceiling_capture": 0.91554
     },
@@ -4017,6 +4093,7 @@
       "firm_split_usd": 6004.8,
       "path_ceiling_usd": 472299.1,
       "unextracted_usd": 41897.41,
+      "path_fingerprint": "e5cd2f8935877ac7",
       "economics": {
         "booked_net_trading_usd": 462022.2,
         "firm_split_usd": 6004.8,
@@ -4045,7 +4122,7 @@
       },
       "stage": "coarse",
       "trading_neutral": true,
-      "earnings_forgone_usd": 0.0,
+      "earnings_vs_benchmark_usd": 0.0,
       "book_ceiling_usd": 472299.1,
       "ceiling_capture": 0.911291
     },
@@ -4065,6 +4142,7 @@
       "firm_split_usd": 2433.02,
       "path_ceiling_usd": 288960.9,
       "unextracted_usd": 7515.5,
+      "path_fingerprint": "deae19e9988373a2",
       "economics": {
         "booked_net_trading_usd": 280615.65,
         "firm_split_usd": 2433.02,
@@ -4093,7 +4171,7 @@
       },
       "stage": "coarse",
       "trading_neutral": false,
-      "earnings_forgone_usd": 181406.55,
+      "earnings_vs_benchmark_usd": -181406.55,
       "book_ceiling_usd": 472299.1,
       "ceiling_capture": 0.595905
     },
@@ -4113,6 +4191,7 @@
       "firm_split_usd": 2433.02,
       "path_ceiling_usd": 288960.9,
       "unextracted_usd": 7515.5,
+      "path_fingerprint": "deae19e9988373a2",
       "economics": {
         "booked_net_trading_usd": 280615.65,
         "firm_split_usd": 2433.02,
@@ -4141,7 +4220,7 @@
       },
       "stage": "coarse",
       "trading_neutral": false,
-      "earnings_forgone_usd": 181406.55,
+      "earnings_vs_benchmark_usd": -181406.55,
       "book_ceiling_usd": 472299.1,
       "ceiling_capture": 0.595905
     },
@@ -4161,6 +4240,7 @@
       "firm_split_usd": 2433.02,
       "path_ceiling_usd": 288960.9,
       "unextracted_usd": 7515.5,
+      "path_fingerprint": "deae19e9988373a2",
       "economics": {
         "booked_net_trading_usd": 280615.65,
         "firm_split_usd": 2433.02,
@@ -4189,7 +4269,7 @@
       },
       "stage": "coarse",
       "trading_neutral": false,
-      "earnings_forgone_usd": 181406.55,
+      "earnings_vs_benchmark_usd": -181406.55,
       "book_ceiling_usd": 472299.1,
       "ceiling_capture": 0.595905
     },
@@ -4209,6 +4289,7 @@
       "firm_split_usd": 2433.02,
       "path_ceiling_usd": 288960.9,
       "unextracted_usd": 7515.5,
+      "path_fingerprint": "deae19e9988373a2",
       "economics": {
         "booked_net_trading_usd": 280615.65,
         "firm_split_usd": 2433.02,
@@ -4237,7 +4318,7 @@
       },
       "stage": "coarse",
       "trading_neutral": false,
-      "earnings_forgone_usd": 181406.55,
+      "earnings_vs_benchmark_usd": -181406.55,
       "book_ceiling_usd": 472299.1,
       "ceiling_capture": 0.595905
     },
@@ -4257,6 +4338,7 @@
       "firm_split_usd": 2433.02,
       "path_ceiling_usd": 311789.15,
       "unextracted_usd": 7615.51,
+      "path_fingerprint": "a017800563c01598",
       "economics": {
         "booked_net_trading_usd": 302523.45,
         "firm_split_usd": 2433.02,
@@ -4285,7 +4367,7 @@
       },
       "stage": "coarse",
       "trading_neutral": false,
-      "earnings_forgone_usd": 159498.75,
+      "earnings_vs_benchmark_usd": -159498.75,
       "book_ceiling_usd": 472299.1,
       "ceiling_capture": 0.644028
     },
@@ -4305,6 +4387,7 @@
       "firm_split_usd": 2433.02,
       "path_ceiling_usd": 332499.7,
       "unextracted_usd": 7715.52,
+      "path_fingerprint": "7c4ea8ccc3d4d125",
       "economics": {
         "booked_net_trading_usd": 323124.15,
         "firm_split_usd": 2433.02,
@@ -4333,7 +4416,7 @@
       },
       "stage": "coarse",
       "trading_neutral": false,
-      "earnings_forgone_usd": 138898.05,
+      "earnings_vs_benchmark_usd": -138898.05,
       "book_ceiling_usd": 472299.1,
       "ceiling_capture": 0.687666
     },
@@ -4353,6 +4436,7 @@
       "firm_split_usd": 4986.27,
       "path_ceiling_usd": 390276.05,
       "unextracted_usd": 10368.78,
+      "path_fingerprint": "6fb2137ad231dd53",
       "economics": {
         "booked_net_trading_usd": 380605.35,
         "firm_split_usd": 4986.27,
@@ -4381,7 +4465,7 @@
       },
       "stage": "coarse",
       "trading_neutral": false,
-      "earnings_forgone_usd": 81416.85,
+      "earnings_vs_benchmark_usd": -81416.85,
       "book_ceiling_usd": 472299.1,
       "ceiling_capture": 0.804379
     },
@@ -4401,6 +4485,7 @@
       "firm_split_usd": 4986.27,
       "path_ceiling_usd": 435380.9,
       "unextracted_usd": 10568.8,
+      "path_fingerprint": "b6b38e164ca1b8ef",
       "economics": {
         "booked_net_trading_usd": 425540.0,
         "firm_split_usd": 4986.27,
@@ -4429,7 +4514,7 @@
       },
       "stage": "coarse",
       "trading_neutral": false,
-      "earnings_forgone_usd": 36482.2,
+      "earnings_vs_benchmark_usd": -36482.2,
       "book_ceiling_usd": 472299.1,
       "ceiling_capture": 0.899456
     },
@@ -4449,6 +4534,7 @@
       "firm_split_usd": 4986.27,
       "path_ceiling_usd": 435036.65,
       "unextracted_usd": 10568.8,
+      "path_fingerprint": "323613ef7cf28604",
       "economics": {
         "booked_net_trading_usd": 425137.5,
         "firm_split_usd": 4986.27,
@@ -4477,7 +4563,7 @@
       },
       "stage": "coarse",
       "trading_neutral": false,
-      "earnings_forgone_usd": 36884.7,
+      "earnings_vs_benchmark_usd": -36884.7,
       "book_ceiling_usd": 472299.1,
       "ceiling_capture": 0.898727
     },
@@ -4497,6 +4583,7 @@
       "firm_split_usd": 4986.27,
       "path_ceiling_usd": 436817.35,
       "unextracted_usd": 10568.8,
+      "path_fingerprint": "2114e8299e9d70a0",
       "economics": {
         "booked_net_trading_usd": 426782.25,
         "firm_split_usd": 4986.27,
@@ -4525,7 +4612,7 @@
       },
       "stage": "coarse",
       "trading_neutral": false,
-      "earnings_forgone_usd": 35239.95,
+      "earnings_vs_benchmark_usd": -35239.95,
       "book_ceiling_usd": 472299.1,
       "ceiling_capture": 0.902497
     },
@@ -4545,6 +4632,7 @@
       "firm_split_usd": 4986.27,
       "path_ceiling_usd": 436317.35,
       "unextracted_usd": 10568.8,
+      "path_fingerprint": "0d1abba66d66dda8",
       "economics": {
         "booked_net_trading_usd": 426285.75,
         "firm_split_usd": 4986.27,
@@ -4573,7 +4661,7 @@
       },
       "stage": "coarse",
       "trading_neutral": false,
-      "earnings_forgone_usd": 35736.45,
+      "earnings_vs_benchmark_usd": -35736.45,
       "book_ceiling_usd": 472299.1,
       "ceiling_capture": 0.901438
     },
@@ -4593,6 +4681,7 @@
       "firm_split_usd": 4986.27,
       "path_ceiling_usd": 436217.35,
       "unextracted_usd": 10568.8,
+      "path_fingerprint": "83ca14a767792f96",
       "economics": {
         "booked_net_trading_usd": 426245.6,
         "firm_split_usd": 4986.27,
@@ -4621,7 +4710,7 @@
       },
       "stage": "local_refinement",
       "trading_neutral": false,
-      "earnings_forgone_usd": 35776.6,
+      "earnings_vs_benchmark_usd": -35776.6,
       "book_ceiling_usd": 472299.1,
       "ceiling_capture": 0.901227
     },
@@ -4641,6 +4730,7 @@
       "firm_split_usd": 6004.8,
       "path_ceiling_usd": 466666.25,
       "unextracted_usd": 11687.34,
+      "path_fingerprint": "9c4cb8df909ffe22",
       "economics": {
         "booked_net_trading_usd": 456509.0,
         "firm_split_usd": 6004.8,
@@ -4669,7 +4759,7 @@
       },
       "stage": "local_refinement",
       "trading_neutral": false,
-      "earnings_forgone_usd": 5513.2,
+      "earnings_vs_benchmark_usd": -5513.2,
       "book_ceiling_usd": 472299.1,
       "ceiling_capture": 0.963328
     },
@@ -4689,6 +4779,7 @@
       "firm_split_usd": 6004.8,
       "path_ceiling_usd": 466666.25,
       "unextracted_usd": 11687.34,
+      "path_fingerprint": "9c4cb8df909ffe22",
       "economics": {
         "booked_net_trading_usd": 456509.0,
         "firm_split_usd": 6004.8,
@@ -4717,7 +4808,7 @@
       },
       "stage": "local_refinement",
       "trading_neutral": false,
-      "earnings_forgone_usd": 5513.2,
+      "earnings_vs_benchmark_usd": -5513.2,
       "book_ceiling_usd": 472299.1,
       "ceiling_capture": 0.963328
     },
@@ -4737,6 +4828,7 @@
       "firm_split_usd": 6004.8,
       "path_ceiling_usd": 466666.25,
       "unextracted_usd": 11687.34,
+      "path_fingerprint": "9c4cb8df909ffe22",
       "economics": {
         "booked_net_trading_usd": 456509.0,
         "firm_split_usd": 6004.8,
@@ -4765,7 +4857,7 @@
       },
       "stage": "local_refinement",
       "trading_neutral": false,
-      "earnings_forgone_usd": 5513.2,
+      "earnings_vs_benchmark_usd": -5513.2,
       "book_ceiling_usd": 472299.1,
       "ceiling_capture": 0.963328
     },
@@ -4785,6 +4877,7 @@
       "firm_split_usd": 6004.8,
       "path_ceiling_usd": 472299.1,
       "unextracted_usd": 14820.19,
+      "path_fingerprint": "e5cd2f8935877ac7",
       "economics": {
         "booked_net_trading_usd": 462022.2,
         "firm_split_usd": 6004.8,
@@ -4813,7 +4906,7 @@
       },
       "stage": "coarse",
       "trading_neutral": true,
-      "earnings_forgone_usd": 0.0,
+      "earnings_vs_benchmark_usd": 0.0,
       "book_ceiling_usd": 472299.1,
       "ceiling_capture": 0.968621
     },
@@ -4833,6 +4926,7 @@
       "firm_split_usd": 6004.8,
       "path_ceiling_usd": 472299.1,
       "unextracted_usd": 14820.19,
+      "path_fingerprint": "e5cd2f8935877ac7",
       "economics": {
         "booked_net_trading_usd": 462022.2,
         "firm_split_usd": 6004.8,
@@ -4861,7 +4955,7 @@
       },
       "stage": "local_refinement",
       "trading_neutral": true,
-      "earnings_forgone_usd": 0.0,
+      "earnings_vs_benchmark_usd": 0.0,
       "book_ceiling_usd": 472299.1,
       "ceiling_capture": 0.968621
     },
@@ -4881,6 +4975,7 @@
       "firm_split_usd": 6004.8,
       "path_ceiling_usd": 472299.1,
       "unextracted_usd": 14820.19,
+      "path_fingerprint": "e5cd2f8935877ac7",
       "economics": {
         "booked_net_trading_usd": 462022.2,
         "firm_split_usd": 6004.8,
@@ -4909,7 +5004,7 @@
       },
       "stage": "local_refinement",
       "trading_neutral": true,
-      "earnings_forgone_usd": 0.0,
+      "earnings_vs_benchmark_usd": 0.0,
       "book_ceiling_usd": 472299.1,
       "ceiling_capture": 0.968621
     },
@@ -4929,6 +5024,7 @@
       "firm_split_usd": 6004.8,
       "path_ceiling_usd": 472299.1,
       "unextracted_usd": 14820.19,
+      "path_fingerprint": "e5cd2f8935877ac7",
       "economics": {
         "booked_net_trading_usd": 462022.2,
         "firm_split_usd": 6004.8,
@@ -4957,7 +5053,7 @@
       },
       "stage": "local_refinement",
       "trading_neutral": true,
-      "earnings_forgone_usd": 0.0,
+      "earnings_vs_benchmark_usd": 0.0,
       "book_ceiling_usd": 472299.1,
       "ceiling_capture": 0.968621
     },
@@ -4977,6 +5073,7 @@
       "firm_split_usd": 6004.8,
       "path_ceiling_usd": 472299.1,
       "unextracted_usd": 14820.19,
+      "path_fingerprint": "e5cd2f8935877ac7",
       "economics": {
         "booked_net_trading_usd": 462022.2,
         "firm_split_usd": 6004.8,
@@ -5005,7 +5102,7 @@
       },
       "stage": "local_refinement",
       "trading_neutral": true,
-      "earnings_forgone_usd": 0.0,
+      "earnings_vs_benchmark_usd": 0.0,
       "book_ceiling_usd": 472299.1,
       "ceiling_capture": 0.968621
     },
@@ -5025,6 +5122,7 @@
       "firm_split_usd": 6004.8,
       "path_ceiling_usd": 472299.1,
       "unextracted_usd": 14820.19,
+      "path_fingerprint": "e5cd2f8935877ac7",
       "economics": {
         "booked_net_trading_usd": 462022.2,
         "firm_split_usd": 6004.8,
@@ -5053,7 +5151,7 @@
       },
       "stage": "coarse",
       "trading_neutral": true,
-      "earnings_forgone_usd": 0.0,
+      "earnings_vs_benchmark_usd": 0.0,
       "book_ceiling_usd": 472299.1,
       "ceiling_capture": 0.968621
     },
@@ -5073,6 +5171,7 @@
       "firm_split_usd": 6004.8,
       "path_ceiling_usd": 472299.1,
       "unextracted_usd": 14913.09,
+      "path_fingerprint": "e5cd2f8935877ac7",
       "economics": {
         "booked_net_trading_usd": 462022.2,
         "firm_split_usd": 6004.8,
@@ -5101,7 +5200,7 @@
       },
       "stage": "local_refinement",
       "trading_neutral": true,
-      "earnings_forgone_usd": 0.0,
+      "earnings_vs_benchmark_usd": 0.0,
       "book_ceiling_usd": 472299.1,
       "ceiling_capture": 0.968424
     },
@@ -5121,6 +5220,7 @@
       "firm_split_usd": 6004.8,
       "path_ceiling_usd": 472299.1,
       "unextracted_usd": 15013.09,
+      "path_fingerprint": "e5cd2f8935877ac7",
       "economics": {
         "booked_net_trading_usd": 462022.2,
         "firm_split_usd": 6004.8,
@@ -5149,7 +5249,7 @@
       },
       "stage": "local_refinement",
       "trading_neutral": true,
-      "earnings_forgone_usd": 0.0,
+      "earnings_vs_benchmark_usd": 0.0,
       "book_ceiling_usd": 472299.1,
       "ceiling_capture": 0.968213
     },
@@ -5169,6 +5269,7 @@
       "firm_split_usd": 6004.8,
       "path_ceiling_usd": 472299.1,
       "unextracted_usd": 15113.09,
+      "path_fingerprint": "e5cd2f8935877ac7",
       "economics": {
         "booked_net_trading_usd": 462022.2,
         "firm_split_usd": 6004.8,
@@ -5197,7 +5298,7 @@
       },
       "stage": "local_refinement",
       "trading_neutral": true,
-      "earnings_forgone_usd": 0.0,
+      "earnings_vs_benchmark_usd": 0.0,
       "book_ceiling_usd": 472299.1,
       "ceiling_capture": 0.968001
     },
@@ -5217,6 +5318,7 @@
       "firm_split_usd": 6004.8,
       "path_ceiling_usd": 472299.1,
       "unextracted_usd": 15213.09,
+      "path_fingerprint": "e5cd2f8935877ac7",
       "economics": {
         "booked_net_trading_usd": 462022.2,
         "firm_split_usd": 6004.8,
@@ -5245,7 +5347,7 @@
       },
       "stage": "local_refinement",
       "trading_neutral": true,
-      "earnings_forgone_usd": 0.0,
+      "earnings_vs_benchmark_usd": 0.0,
       "book_ceiling_usd": 472299.1,
       "ceiling_capture": 0.967789
     },
@@ -5265,6 +5367,7 @@
       "firm_split_usd": 6004.8,
       "path_ceiling_usd": 472299.1,
       "unextracted_usd": 15313.09,
+      "path_fingerprint": "e5cd2f8935877ac7",
       "economics": {
         "booked_net_trading_usd": 462022.2,
         "firm_split_usd": 6004.8,
@@ -5293,7 +5396,7 @@
       },
       "stage": "coarse",
       "trading_neutral": true,
-      "earnings_forgone_usd": 0.0,
+      "earnings_vs_benchmark_usd": 0.0,
       "book_ceiling_usd": 472299.1,
       "ceiling_capture": 0.967578
     },
@@ -5313,6 +5416,7 @@
       "firm_split_usd": 6004.8,
       "path_ceiling_usd": 472299.1,
       "unextracted_usd": 20283.88,
+      "path_fingerprint": "e5cd2f8935877ac7",
       "economics": {
         "booked_net_trading_usd": 462022.2,
         "firm_split_usd": 6004.8,
@@ -5341,7 +5445,7 @@
       },
       "stage": "coarse",
       "trading_neutral": true,
-      "earnings_forgone_usd": 0.0,
+      "earnings_vs_benchmark_usd": 0.0,
       "book_ceiling_usd": 472299.1,
       "ceiling_capture": 0.957053
     },
@@ -5361,6 +5465,7 @@
       "firm_split_usd": 6004.8,
       "path_ceiling_usd": 472299.1,
       "unextracted_usd": 25608.92,
+      "path_fingerprint": "e5cd2f8935877ac7",
       "economics": {
         "booked_net_trading_usd": 462022.2,
         "firm_split_usd": 6004.8,
@@ -5389,7 +5494,7 @@
       },
       "stage": "coarse",
       "trading_neutral": true,
-      "earnings_forgone_usd": 0.0,
+      "earnings_vs_benchmark_usd": 0.0,
       "book_ceiling_usd": 472299.1,
       "ceiling_capture": 0.945778
     },
@@ -5409,6 +5514,7 @@
       "firm_split_usd": 6004.8,
       "path_ceiling_usd": 472299.1,
       "unextracted_usd": 32191.81,
+      "path_fingerprint": "e5cd2f8935877ac7",
       "economics": {
         "booked_net_trading_usd": 462022.2,
         "firm_split_usd": 6004.8,
@@ -5437,7 +5543,7 @@
       },
       "stage": "coarse",
       "trading_neutral": true,
-      "earnings_forgone_usd": 0.0,
+      "earnings_vs_benchmark_usd": 0.0,
       "book_ceiling_usd": 472299.1,
       "ceiling_capture": 0.93184
     },
@@ -5457,6 +5563,7 @@
       "firm_split_usd": 6004.8,
       "path_ceiling_usd": 472299.1,
       "unextracted_usd": 33890.31,
+      "path_fingerprint": "e5cd2f8935877ac7",
       "economics": {
         "booked_net_trading_usd": 462022.2,
         "firm_split_usd": 6004.8,
@@ -5485,7 +5592,7 @@
       },
       "stage": "coarse",
       "trading_neutral": true,
-      "earnings_forgone_usd": 0.0,
+      "earnings_vs_benchmark_usd": 0.0,
       "book_ceiling_usd": 472299.1,
       "ceiling_capture": 0.928244
     },
@@ -5505,6 +5612,7 @@
       "firm_split_usd": 6004.8,
       "path_ceiling_usd": 472299.1,
       "unextracted_usd": 35890.31,
+      "path_fingerprint": "e5cd2f8935877ac7",
       "economics": {
         "booked_net_trading_usd": 462022.2,
         "firm_split_usd": 6004.8,
@@ -5533,7 +5641,7 @@
       },
       "stage": "coarse",
       "trading_neutral": true,
-      "earnings_forgone_usd": 0.0,
+      "earnings_vs_benchmark_usd": 0.0,
       "book_ceiling_usd": 472299.1,
       "ceiling_capture": 0.924009
     },
@@ -5553,6 +5661,7 @@
       "firm_split_usd": 6004.8,
       "path_ceiling_usd": 472299.1,
       "unextracted_usd": 37890.31,
+      "path_fingerprint": "e5cd2f8935877ac7",
       "economics": {
         "booked_net_trading_usd": 462022.2,
         "firm_split_usd": 6004.8,
@@ -5581,7 +5690,7 @@
       },
       "stage": "coarse",
       "trading_neutral": true,
-      "earnings_forgone_usd": 0.0,
+      "earnings_vs_benchmark_usd": 0.0,
       "book_ceiling_usd": 472299.1,
       "ceiling_capture": 0.919775
     },
@@ -5601,6 +5710,7 @@
       "firm_split_usd": 6004.8,
       "path_ceiling_usd": 472299.1,
       "unextracted_usd": 39890.31,
+      "path_fingerprint": "e5cd2f8935877ac7",
       "economics": {
         "booked_net_trading_usd": 462022.2,
         "firm_split_usd": 6004.8,
@@ -5629,7 +5739,7 @@
       },
       "stage": "coarse",
       "trading_neutral": true,
-      "earnings_forgone_usd": 0.0,
+      "earnings_vs_benchmark_usd": 0.0,
       "book_ceiling_usd": 472299.1,
       "ceiling_capture": 0.91554
     },
@@ -5649,6 +5759,7 @@
       "firm_split_usd": 6004.8,
       "path_ceiling_usd": 472299.1,
       "unextracted_usd": 41897.41,
+      "path_fingerprint": "e5cd2f8935877ac7",
       "economics": {
         "booked_net_trading_usd": 462022.2,
         "firm_split_usd": 6004.8,
@@ -5677,7 +5788,7 @@
       },
       "stage": "coarse",
       "trading_neutral": true,
-      "earnings_forgone_usd": 0.0,
+      "earnings_vs_benchmark_usd": 0.0,
       "book_ceiling_usd": 472299.1,
       "ceiling_capture": 0.911291
     },
@@ -5697,6 +5808,7 @@
       "firm_split_usd": 0.0,
       "path_ceiling_usd": 138328.5,
       "unextracted_usd": 4282.4,
+      "path_fingerprint": "6d259a3814381179",
       "economics": {
         "booked_net_trading_usd": 131311.05,
         "firm_split_usd": 0.0,
@@ -5725,7 +5837,7 @@
       },
       "stage": "coarse",
       "trading_neutral": false,
-      "earnings_forgone_usd": 330711.15,
+      "earnings_vs_benchmark_usd": -330711.15,
       "book_ceiling_usd": 472299.1,
       "ceiling_capture": 0.283816
     },
@@ -5745,6 +5857,7 @@
       "firm_split_usd": 0.0,
       "path_ceiling_usd": 138328.5,
       "unextracted_usd": 4282.4,
+      "path_fingerprint": "6d259a3814381179",
       "economics": {
         "booked_net_trading_usd": 131311.05,
         "firm_split_usd": 0.0,
@@ -5773,7 +5886,7 @@
       },
       "stage": "coarse",
       "trading_neutral": false,
-      "earnings_forgone_usd": 330711.15,
+      "earnings_vs_benchmark_usd": -330711.15,
       "book_ceiling_usd": 472299.1,
       "ceiling_capture": 0.283816
     },
@@ -5793,6 +5906,7 @@
       "firm_split_usd": 0.0,
       "path_ceiling_usd": 138328.5,
       "unextracted_usd": 4282.4,
+      "path_fingerprint": "6d259a3814381179",
       "economics": {
         "booked_net_trading_usd": 131311.05,
         "firm_split_usd": 0.0,
@@ -5821,7 +5935,7 @@
       },
       "stage": "coarse",
       "trading_neutral": false,
-      "earnings_forgone_usd": 330711.15,
+      "earnings_vs_benchmark_usd": -330711.15,
       "book_ceiling_usd": 472299.1,
       "ceiling_capture": 0.283816
     },
@@ -5841,6 +5955,7 @@
       "firm_split_usd": 0.0,
       "path_ceiling_usd": 138328.5,
       "unextracted_usd": 4282.4,
+      "path_fingerprint": "6d259a3814381179",
       "economics": {
         "booked_net_trading_usd": 131311.05,
         "firm_split_usd": 0.0,
@@ -5869,7 +5984,7 @@
       },
       "stage": "coarse",
       "trading_neutral": false,
-      "earnings_forgone_usd": 330711.15,
+      "earnings_vs_benchmark_usd": -330711.15,
       "book_ceiling_usd": 472299.1,
       "ceiling_capture": 0.283816
     },
@@ -5889,6 +6004,7 @@
       "firm_split_usd": 0.0,
       "path_ceiling_usd": 134995.9,
       "unextracted_usd": 4282.4,
+      "path_fingerprint": "ed18fe8892fd1ffb",
       "economics": {
         "booked_net_trading_usd": 127554.45,
         "firm_split_usd": 0.0,
@@ -5917,7 +6033,7 @@
       },
       "stage": "coarse",
       "trading_neutral": false,
-      "earnings_forgone_usd": 334467.75,
+      "earnings_vs_benchmark_usd": -334467.75,
       "book_ceiling_usd": 472299.1,
       "ceiling_capture": 0.27676
     },
@@ -5937,6 +6053,7 @@
       "firm_split_usd": 0.0,
       "path_ceiling_usd": 135259.45,
       "unextracted_usd": 4282.4,
+      "path_fingerprint": "fbed97070a1f672b",
       "economics": {
         "booked_net_trading_usd": 127676.25,
         "firm_split_usd": 0.0,
@@ -5965,7 +6082,7 @@
       },
       "stage": "coarse",
       "trading_neutral": false,
-      "earnings_forgone_usd": 334345.95,
+      "earnings_vs_benchmark_usd": -334345.95,
       "book_ceiling_usd": 472299.1,
       "ceiling_capture": 0.277318
     },
@@ -5985,6 +6102,7 @@
       "firm_split_usd": 0.0,
       "path_ceiling_usd": 150312.9,
       "unextracted_usd": 4282.4,
+      "path_fingerprint": "ae815de2b95042f7",
       "economics": {
         "booked_net_trading_usd": 142698.05,
         "firm_split_usd": 0.0,
@@ -6013,7 +6131,7 @@
       },
       "stage": "coarse",
       "trading_neutral": false,
-      "earnings_forgone_usd": 319324.15,
+      "earnings_vs_benchmark_usd": -319324.15,
       "book_ceiling_usd": 472299.1,
       "ceiling_capture": 0.309191
     },
@@ -6033,6 +6151,7 @@
       "firm_split_usd": 577.06,
       "path_ceiling_usd": 256226.15,
       "unextracted_usd": 5259.5,
+      "path_fingerprint": "f0f971f885565a99",
       "economics": {
         "booked_net_trading_usd": 248478.3,
         "firm_split_usd": 577.06,
@@ -6061,7 +6180,7 @@
       },
       "stage": "coarse",
       "trading_neutral": false,
-      "earnings_forgone_usd": 213543.9,
+      "earnings_vs_benchmark_usd": -213543.9,
       "book_ceiling_usd": 472299.1,
       "ceiling_capture": 0.531372
     },
@@ -6081,6 +6200,7 @@
       "firm_split_usd": 1485.6,
       "path_ceiling_usd": 284208.8,
       "unextracted_usd": 6268.05,
+      "path_fingerprint": "cf96566078ce11ed",
       "economics": {
         "booked_net_trading_usd": 275865.25,
         "firm_split_usd": 1485.6,
@@ -6109,7 +6229,7 @@
       },
       "stage": "coarse",
       "trading_neutral": false,
-      "earnings_forgone_usd": 186156.95,
+      "earnings_vs_benchmark_usd": -186156.95,
       "book_ceiling_usd": 472299.1,
       "ceiling_capture": 0.588485
     },
@@ -6129,6 +6249,7 @@
       "firm_split_usd": 1485.6,
       "path_ceiling_usd": 293762.8,
       "unextracted_usd": 6268.05,
+      "path_fingerprint": "847ad208ac6179f8",
       "economics": {
         "booked_net_trading_usd": 285393.25,
         "firm_split_usd": 1485.6,
@@ -6157,7 +6278,7 @@
       },
       "stage": "coarse",
       "trading_neutral": false,
-      "earnings_forgone_usd": 176628.95,
+      "earnings_vs_benchmark_usd": -176628.95,
       "book_ceiling_usd": 472299.1,
       "ceiling_capture": 0.608713
     },
@@ -6177,6 +6298,7 @@
       "firm_split_usd": 4137.46,
       "path_ceiling_usd": 409226.85,
       "unextracted_usd": 9219.94,
+      "path_fingerprint": "8a312a792f4c5a73",
       "economics": {
         "booked_net_trading_usd": 400406.25,
         "firm_split_usd": 4137.46,
@@ -6205,7 +6327,7 @@
       },
       "stage": "coarse",
       "trading_neutral": false,
-      "earnings_forgone_usd": 61615.95,
+      "earnings_vs_benchmark_usd": -61615.95,
       "book_ceiling_usd": 472299.1,
       "ceiling_capture": 0.846936
     },
@@ -6225,6 +6347,7 @@
       "firm_split_usd": 4137.46,
       "path_ceiling_usd": 408726.85,
       "unextracted_usd": 9219.94,
+      "path_fingerprint": "936826ee60cb8811",
       "economics": {
         "booked_net_trading_usd": 399429.9,
         "firm_split_usd": 4137.46,
@@ -6253,7 +6376,7 @@
       },
       "stage": "local_refinement",
       "trading_neutral": false,
-      "earnings_forgone_usd": 62592.3,
+      "earnings_vs_benchmark_usd": -62592.3,
       "book_ceiling_usd": 472299.1,
       "ceiling_capture": 0.845877
     },
@@ -6273,6 +6396,7 @@
       "firm_split_usd": 5531.57,
       "path_ceiling_usd": 448976.95,
       "unextracted_usd": 10814.07,
+      "path_fingerprint": "54fafce51d1d550a",
       "economics": {
         "booked_net_trading_usd": 439926.4,
         "firm_split_usd": 5531.57,
@@ -6301,7 +6425,7 @@
       },
       "stage": "local_refinement",
       "trading_neutral": false,
-      "earnings_forgone_usd": 22095.8,
+      "earnings_vs_benchmark_usd": -22095.8,
       "book_ceiling_usd": 472299.1,
       "ceiling_capture": 0.927723
     },
@@ -6321,6 +6445,7 @@
       "firm_split_usd": 5521.57,
       "path_ceiling_usd": 448557.2,
       "unextracted_usd": 10804.07,
+      "path_fingerprint": "d788fd81f55bf93a",
       "economics": {
         "booked_net_trading_usd": 438905.9,
         "firm_split_usd": 5521.57,
@@ -6349,7 +6474,7 @@
       },
       "stage": "local_refinement",
       "trading_neutral": false,
-      "earnings_forgone_usd": 23116.3,
+      "earnings_vs_benchmark_usd": -23116.3,
       "book_ceiling_usd": 472299.1,
       "ceiling_capture": 0.926856
     },
@@ -6369,6 +6494,7 @@
       "firm_split_usd": 5511.57,
       "path_ceiling_usd": 448057.2,
       "unextracted_usd": 10794.07,
+      "path_fingerprint": "5e61b9bb505d1cb7",
       "economics": {
         "booked_net_trading_usd": 438536.8,
         "firm_split_usd": 5511.57,
@@ -6397,7 +6523,7 @@
       },
       "stage": "local_refinement",
       "trading_neutral": false,
-      "earnings_forgone_usd": 23485.4,
+      "earnings_vs_benchmark_usd": -23485.4,
       "book_ceiling_usd": 472299.1,
       "ceiling_capture": 0.925818
     },
@@ -6417,6 +6543,7 @@
       "firm_split_usd": 5501.57,
       "path_ceiling_usd": 453191.0,
       "unextracted_usd": 13916.92,
+      "path_fingerprint": "e8358b7b41633c9e",
       "economics": {
         "booked_net_trading_usd": 443868.95,
         "firm_split_usd": 5501.57,
@@ -6445,7 +6572,7 @@
       },
       "stage": "coarse",
       "trading_neutral": false,
-      "earnings_forgone_usd": 18153.25,
+      "earnings_vs_benchmark_usd": -18153.25,
       "book_ceiling_usd": 472299.1,
       "ceiling_capture": 0.930076
     },
@@ -6465,6 +6592,7 @@
       "firm_split_usd": 5491.57,
       "path_ceiling_usd": 452791.0,
       "unextracted_usd": 13906.92,
+      "path_fingerprint": "3654bb307ce590f0",
       "economics": {
         "booked_net_trading_usd": 443058.75,
         "firm_split_usd": 5491.57,
@@ -6493,7 +6621,7 @@
       },
       "stage": "local_refinement",
       "trading_neutral": false,
-      "earnings_forgone_usd": 18963.45,
+      "earnings_vs_benchmark_usd": -18963.45,
       "book_ceiling_usd": 472299.1,
       "ceiling_capture": 0.92925
     },
@@ -6513,6 +6641,7 @@
       "firm_split_usd": 5481.56,
       "path_ceiling_usd": 452391.0,
       "unextracted_usd": 13896.91,
+      "path_fingerprint": "3654bb307ce590f0",
       "economics": {
         "booked_net_trading_usd": 443058.75,
         "firm_split_usd": 5481.56,
@@ -6541,7 +6670,7 @@
       },
       "stage": "local_refinement",
       "trading_neutral": false,
-      "earnings_forgone_usd": 18963.45,
+      "earnings_vs_benchmark_usd": -18963.45,
       "book_ceiling_usd": 472299.1,
       "ceiling_capture": 0.928425
     },
@@ -6561,6 +6690,7 @@
       "firm_split_usd": 5471.56,
       "path_ceiling_usd": 451991.0,
       "unextracted_usd": 13886.91,
+      "path_fingerprint": "bb543e4b954b518b",
       "economics": {
         "booked_net_trading_usd": 442377.8,
         "firm_split_usd": 5471.56,
@@ -6589,7 +6719,7 @@
       },
       "stage": "local_refinement",
       "trading_neutral": false,
-      "earnings_forgone_usd": 19644.4,
+      "earnings_vs_benchmark_usd": -19644.4,
       "book_ceiling_usd": 472299.1,
       "ceiling_capture": 0.927599
     },
@@ -6609,6 +6739,7 @@
       "firm_split_usd": 5461.56,
       "path_ceiling_usd": 451591.0,
       "unextracted_usd": 13876.91,
+      "path_fingerprint": "f8391ed7d1bdd1bb",
       "economics": {
         "booked_net_trading_usd": 442056.65,
         "firm_split_usd": 5461.56,
@@ -6637,7 +6768,7 @@
       },
       "stage": "local_refinement",
       "trading_neutral": false,
-      "earnings_forgone_usd": 19965.55,
+      "earnings_vs_benchmark_usd": -19965.55,
       "book_ceiling_usd": 472299.1,
       "ceiling_capture": 0.926773
     },
@@ -6657,6 +6788,7 @@
       "firm_split_usd": 5451.55,
       "path_ceiling_usd": 451191.0,
       "unextracted_usd": 13866.9,
+      "path_fingerprint": "93a5153c9bb403a9",
       "economics": {
         "booked_net_trading_usd": 441875.6,
         "firm_split_usd": 5451.55,
@@ -6685,7 +6817,7 @@
       },
       "stage": "coarse",
       "trading_neutral": false,
-      "earnings_forgone_usd": 20146.6,
+      "earnings_vs_benchmark_usd": -20146.6,
       "book_ceiling_usd": 472299.1,
       "ceiling_capture": 0.925947
     },
@@ -6705,6 +6837,7 @@
       "firm_split_usd": 6004.8,
       "path_ceiling_usd": 460982.0,
       "unextracted_usd": 15113.07,
+      "path_fingerprint": "86ee9e48cc6d0dfe",
       "economics": {
         "booked_net_trading_usd": 450995.8,
         "firm_split_usd": 6004.8,
@@ -6733,7 +6866,7 @@
       },
       "stage": "coarse",
       "trading_neutral": false,
-      "earnings_forgone_usd": 11026.4,
+      "earnings_vs_benchmark_usd": -11026.4,
       "book_ceiling_usd": 472299.1,
       "ceiling_capture": 0.944039
     },
@@ -6753,6 +6886,7 @@
       "firm_split_usd": 6004.8,
       "path_ceiling_usd": 460782.0,
       "unextracted_usd": 15213.07,
+      "path_fingerprint": "86ee9e48cc6d0dfe",
       "economics": {
         "booked_net_trading_usd": 450995.8,
         "firm_split_usd": 6004.8,
@@ -6781,7 +6915,7 @@
       },
       "stage": "local_refinement",
       "trading_neutral": false,
-      "earnings_forgone_usd": 11026.4,
+      "earnings_vs_benchmark_usd": -11026.4,
       "book_ceiling_usd": 472299.1,
       "ceiling_capture": 0.943404
     },
@@ -6801,6 +6935,7 @@
       "firm_split_usd": 6004.8,
       "path_ceiling_usd": 460582.0,
       "unextracted_usd": 15313.07,
+      "path_fingerprint": "c5f8971bb8501142",
       "economics": {
         "booked_net_trading_usd": 450504.6,
         "firm_split_usd": 6004.8,
@@ -6829,7 +6964,7 @@
       },
       "stage": "local_refinement",
       "trading_neutral": false,
-      "earnings_forgone_usd": 11517.6,
+      "earnings_vs_benchmark_usd": -11517.6,
       "book_ceiling_usd": 472299.1,
       "ceiling_capture": 0.942769
     },
@@ -6849,6 +6984,7 @@
       "firm_split_usd": 6004.8,
       "path_ceiling_usd": 460382.0,
       "unextracted_usd": 15413.07,
+      "path_fingerprint": "37a1f37fb6af0246",
       "economics": {
         "booked_net_trading_usd": 450309.5,
         "firm_split_usd": 6004.8,
@@ -6877,7 +7013,7 @@
       },
       "stage": "local_refinement",
       "trading_neutral": false,
-      "earnings_forgone_usd": 11712.7,
+      "earnings_vs_benchmark_usd": -11712.7,
       "book_ceiling_usd": 472299.1,
       "ceiling_capture": 0.942134
     },
@@ -6897,6 +7033,7 @@
       "firm_split_usd": 6004.8,
       "path_ceiling_usd": 460182.0,
       "unextracted_usd": 15513.07,
+      "path_fingerprint": "4db35aba3f77964b",
       "economics": {
         "booked_net_trading_usd": 450140.7,
         "firm_split_usd": 6004.8,
@@ -6925,7 +7062,7 @@
       },
       "stage": "local_refinement",
       "trading_neutral": false,
-      "earnings_forgone_usd": 11881.5,
+      "earnings_vs_benchmark_usd": -11881.5,
       "book_ceiling_usd": 472299.1,
       "ceiling_capture": 0.941499
     },
@@ -6945,6 +7082,7 @@
       "firm_split_usd": 6004.8,
       "path_ceiling_usd": 472299.1,
       "unextracted_usd": 15813.09,
+      "path_fingerprint": "e5cd2f8935877ac7",
       "economics": {
         "booked_net_trading_usd": 462022.2,
         "firm_split_usd": 6004.8,
@@ -6973,7 +7111,7 @@
       },
       "stage": "coarse",
       "trading_neutral": true,
-      "earnings_forgone_usd": 0.0,
+      "earnings_vs_benchmark_usd": 0.0,
       "book_ceiling_usd": 472299.1,
       "ceiling_capture": 0.966519
     },
@@ -6993,6 +7131,7 @@
       "firm_split_usd": 6004.8,
       "path_ceiling_usd": 472299.1,
       "unextracted_usd": 24164.57,
+      "path_fingerprint": "e5cd2f8935877ac7",
       "economics": {
         "booked_net_trading_usd": 462022.2,
         "firm_split_usd": 6004.8,
@@ -7021,7 +7160,7 @@
       },
       "stage": "local_refinement",
       "trading_neutral": true,
-      "earnings_forgone_usd": 0.0,
+      "earnings_vs_benchmark_usd": 0.0,
       "book_ceiling_usd": 472299.1,
       "ceiling_capture": 0.948836
     },
@@ -7041,6 +7180,7 @@
       "firm_split_usd": 6004.8,
       "path_ceiling_usd": 472299.1,
       "unextracted_usd": 24464.57,
+      "path_fingerprint": "e5cd2f8935877ac7",
       "economics": {
         "booked_net_trading_usd": 462022.2,
         "firm_split_usd": 6004.8,
@@ -7069,7 +7209,7 @@
       },
       "stage": "local_refinement",
       "trading_neutral": true,
-      "earnings_forgone_usd": 0.0,
+      "earnings_vs_benchmark_usd": 0.0,
       "book_ceiling_usd": 472299.1,
       "ceiling_capture": 0.948201
     },
@@ -7089,6 +7229,7 @@
       "firm_split_usd": 6004.8,
       "path_ceiling_usd": 472299.1,
       "unextracted_usd": 24764.57,
+      "path_fingerprint": "e5cd2f8935877ac7",
       "economics": {
         "booked_net_trading_usd": 462022.2,
         "firm_split_usd": 6004.8,
@@ -7117,7 +7258,7 @@
       },
       "stage": "local_refinement",
       "trading_neutral": true,
-      "earnings_forgone_usd": 0.0,
+      "earnings_vs_benchmark_usd": 0.0,
       "book_ceiling_usd": 472299.1,
       "ceiling_capture": 0.947566
     },
@@ -7137,6 +7278,7 @@
       "firm_split_usd": 6004.8,
       "path_ceiling_usd": 472299.1,
       "unextracted_usd": 25064.57,
+      "path_fingerprint": "e5cd2f8935877ac7",
       "economics": {
         "booked_net_trading_usd": 462022.2,
         "firm_split_usd": 6004.8,
@@ -7165,7 +7307,7 @@
       },
       "stage": "local_refinement",
       "trading_neutral": true,
-      "earnings_forgone_usd": 0.0,
+      "earnings_vs_benchmark_usd": 0.0,
       "book_ceiling_usd": 472299.1,
       "ceiling_capture": 0.946931
     },
@@ -7185,6 +7327,7 @@
       "firm_split_usd": 6004.8,
       "path_ceiling_usd": 472299.1,
       "unextracted_usd": 25364.57,
+      "path_fingerprint": "e5cd2f8935877ac7",
       "economics": {
         "booked_net_trading_usd": 462022.2,
         "firm_split_usd": 6004.8,
@@ -7213,7 +7356,7 @@
       },
       "stage": "coarse",
       "trading_neutral": true,
-      "earnings_forgone_usd": 0.0,
+      "earnings_vs_benchmark_usd": 0.0,
       "book_ceiling_usd": 472299.1,
       "ceiling_capture": 0.946296
     },
@@ -7233,6 +7376,7 @@
       "firm_split_usd": 6004.8,
       "path_ceiling_usd": 472299.1,
       "unextracted_usd": 31890.31,
+      "path_fingerprint": "e5cd2f8935877ac7",
       "economics": {
         "booked_net_trading_usd": 462022.2,
         "firm_split_usd": 6004.8,
@@ -7261,7 +7405,7 @@
       },
       "stage": "coarse",
       "trading_neutral": true,
-      "earnings_forgone_usd": 0.0,
+      "earnings_vs_benchmark_usd": 0.0,
       "book_ceiling_usd": 472299.1,
       "ceiling_capture": 0.932479
     },
@@ -7281,6 +7425,7 @@
       "firm_split_usd": 6004.8,
       "path_ceiling_usd": 472299.1,
       "unextracted_usd": 33890.31,
+      "path_fingerprint": "e5cd2f8935877ac7",
       "economics": {
         "booked_net_trading_usd": 462022.2,
         "firm_split_usd": 6004.8,
@@ -7309,7 +7454,7 @@
       },
       "stage": "coarse",
       "trading_neutral": true,
-      "earnings_forgone_usd": 0.0,
+      "earnings_vs_benchmark_usd": 0.0,
       "book_ceiling_usd": 472299.1,
       "ceiling_capture": 0.928244
     },
@@ -7329,6 +7474,7 @@
       "firm_split_usd": 6004.8,
       "path_ceiling_usd": 472299.1,
       "unextracted_usd": 35890.31,
+      "path_fingerprint": "e5cd2f8935877ac7",
       "economics": {
         "booked_net_trading_usd": 462022.2,
         "firm_split_usd": 6004.8,
@@ -7357,7 +7503,7 @@
       },
       "stage": "coarse",
       "trading_neutral": true,
-      "earnings_forgone_usd": 0.0,
+      "earnings_vs_benchmark_usd": 0.0,
       "book_ceiling_usd": 472299.1,
       "ceiling_capture": 0.924009
     },
@@ -7377,6 +7523,7 @@
       "firm_split_usd": 6004.8,
       "path_ceiling_usd": 472299.1,
       "unextracted_usd": 37890.31,
+      "path_fingerprint": "e5cd2f8935877ac7",
       "economics": {
         "booked_net_trading_usd": 462022.2,
         "firm_split_usd": 6004.8,
@@ -7405,7 +7552,7 @@
       },
       "stage": "coarse",
       "trading_neutral": true,
-      "earnings_forgone_usd": 0.0,
+      "earnings_vs_benchmark_usd": 0.0,
       "book_ceiling_usd": 472299.1,
       "ceiling_capture": 0.919775
     },
@@ -7425,6 +7572,7 @@
       "firm_split_usd": 6004.8,
       "path_ceiling_usd": 472299.1,
       "unextracted_usd": 39890.31,
+      "path_fingerprint": "e5cd2f8935877ac7",
       "economics": {
         "booked_net_trading_usd": 462022.2,
         "firm_split_usd": 6004.8,
@@ -7453,7 +7601,7 @@
       },
       "stage": "coarse",
       "trading_neutral": true,
-      "earnings_forgone_usd": 0.0,
+      "earnings_vs_benchmark_usd": 0.0,
       "book_ceiling_usd": 472299.1,
       "ceiling_capture": 0.91554
     },
@@ -7473,6 +7621,7 @@
       "firm_split_usd": 6004.8,
       "path_ceiling_usd": 472299.1,
       "unextracted_usd": 41897.41,
+      "path_fingerprint": "e5cd2f8935877ac7",
       "economics": {
         "booked_net_trading_usd": 462022.2,
         "firm_split_usd": 6004.8,
@@ -7501,7 +7650,7 @@
       },
       "stage": "coarse",
       "trading_neutral": true,
-      "earnings_forgone_usd": 0.0,
+      "earnings_vs_benchmark_usd": 0.0,
       "book_ceiling_usd": 472299.1,
       "ceiling_capture": 0.911291
     },
@@ -7521,6 +7670,7 @@
       "firm_split_usd": 0.0,
       "path_ceiling_usd": 93011.6,
       "unextracted_usd": 3782.35,
+      "path_fingerprint": "634a39241f5291ac",
       "economics": {
         "booked_net_trading_usd": 87134.8,
         "firm_split_usd": 0.0,
@@ -7549,7 +7699,7 @@
       },
       "stage": "coarse",
       "trading_neutral": false,
-      "earnings_forgone_usd": 374887.4,
+      "earnings_vs_benchmark_usd": -374887.4,
       "book_ceiling_usd": 472299.1,
       "ceiling_capture": 0.188925
     },
@@ -7569,6 +7719,7 @@
       "firm_split_usd": 0.0,
       "path_ceiling_usd": 93011.6,
       "unextracted_usd": 3782.35,
+      "path_fingerprint": "634a39241f5291ac",
       "economics": {
         "booked_net_trading_usd": 87134.8,
         "firm_split_usd": 0.0,
@@ -7597,7 +7748,7 @@
       },
       "stage": "coarse",
       "trading_neutral": false,
-      "earnings_forgone_usd": 374887.4,
+      "earnings_vs_benchmark_usd": -374887.4,
       "book_ceiling_usd": 472299.1,
       "ceiling_capture": 0.188925
     },
@@ -7617,6 +7768,7 @@
       "firm_split_usd": 0.0,
       "path_ceiling_usd": 93011.6,
       "unextracted_usd": 3782.35,
+      "path_fingerprint": "634a39241f5291ac",
       "economics": {
         "booked_net_trading_usd": 87134.8,
         "firm_split_usd": 0.0,
@@ -7645,7 +7797,7 @@
       },
       "stage": "coarse",
       "trading_neutral": false,
-      "earnings_forgone_usd": 374887.4,
+      "earnings_vs_benchmark_usd": -374887.4,
       "book_ceiling_usd": 472299.1,
       "ceiling_capture": 0.188925
     },
@@ -7665,6 +7817,7 @@
       "firm_split_usd": 0.0,
       "path_ceiling_usd": 92662.8,
       "unextracted_usd": 3782.35,
+      "path_fingerprint": "4532921e95ee4594",
       "economics": {
         "booked_net_trading_usd": 86705.4,
         "firm_split_usd": 0.0,
@@ -7693,7 +7846,7 @@
       },
       "stage": "coarse",
       "trading_neutral": false,
-      "earnings_forgone_usd": 375316.8,
+      "earnings_vs_benchmark_usd": -375316.8,
       "book_ceiling_usd": 472299.1,
       "ceiling_capture": 0.188187
     },
@@ -7713,6 +7866,7 @@
       "firm_split_usd": 0.0,
       "path_ceiling_usd": 88255.4,
       "unextracted_usd": 3782.35,
+      "path_fingerprint": "bcaa6ee69e2338d0",
       "economics": {
         "booked_net_trading_usd": 82254.5,
         "firm_split_usd": 0.0,
@@ -7741,7 +7895,7 @@
       },
       "stage": "coarse",
       "trading_neutral": false,
-      "earnings_forgone_usd": 379767.7,
+      "earnings_vs_benchmark_usd": -379767.7,
       "book_ceiling_usd": 472299.1,
       "ceiling_capture": 0.178855
     },
@@ -7761,6 +7915,7 @@
       "firm_split_usd": 0.0,
       "path_ceiling_usd": 121609.6,
       "unextracted_usd": 3782.35,
+      "path_fingerprint": "a4467d12df4d41ac",
       "economics": {
         "booked_net_trading_usd": 115294.75,
         "firm_split_usd": 0.0,
@@ -7789,7 +7944,7 @@
       },
       "stage": "coarse",
       "trading_neutral": false,
-      "earnings_forgone_usd": 346727.45,
+      "earnings_vs_benchmark_usd": -346727.45,
       "book_ceiling_usd": 472299.1,
       "ceiling_capture": 0.249476
     },
@@ -7809,6 +7964,7 @@
       "firm_split_usd": 0.0,
       "path_ceiling_usd": 140189.7,
       "unextracted_usd": 3782.35,
+      "path_fingerprint": "349762491210192e",
       "economics": {
         "booked_net_trading_usd": 133739.55,
         "firm_split_usd": 0.0,
@@ -7837,7 +7993,7 @@
       },
       "stage": "coarse",
       "trading_neutral": false,
-      "earnings_forgone_usd": 328282.65,
+      "earnings_vs_benchmark_usd": -328282.65,
       "book_ceiling_usd": 472299.1,
       "ceiling_capture": 0.288816
     },
@@ -7857,6 +8013,7 @@
       "firm_split_usd": 0.0,
       "path_ceiling_usd": 206630.3,
       "unextracted_usd": 3782.35,
+      "path_fingerprint": "b50845a499c9254f",
       "economics": {
         "booked_net_trading_usd": 199965.55,
         "firm_split_usd": 0.0,
@@ -7885,7 +8042,7 @@
       },
       "stage": "coarse",
       "trading_neutral": false,
-      "earnings_forgone_usd": 262056.65,
+      "earnings_vs_benchmark_usd": -262056.65,
       "book_ceiling_usd": 472299.1,
       "ceiling_capture": 0.42949
     },
@@ -7905,6 +8062,7 @@
       "firm_split_usd": 0.0,
       "path_ceiling_usd": 197486.5,
       "unextracted_usd": 3782.35,
+      "path_fingerprint": "d3be68ceb10503b2",
       "economics": {
         "booked_net_trading_usd": 191507.2,
         "firm_split_usd": 0.0,
@@ -7933,7 +8091,7 @@
       },
       "stage": "coarse",
       "trading_neutral": false,
-      "earnings_forgone_usd": 270515.0,
+      "earnings_vs_benchmark_usd": -270515.0,
       "book_ceiling_usd": 472299.1,
       "ceiling_capture": 0.41013
     },
@@ -7953,6 +8111,7 @@
       "firm_split_usd": 103.38,
       "path_ceiling_usd": 228184.75,
       "unextracted_usd": 3885.73,
+      "path_fingerprint": "e9573aab7ca28b33",
       "economics": {
         "booked_net_trading_usd": 221740.25,
         "firm_split_usd": 103.38,
@@ -7981,7 +8140,7 @@
       },
       "stage": "coarse",
       "trading_neutral": false,
-      "earnings_forgone_usd": 240281.95,
+      "earnings_vs_benchmark_usd": -240281.95,
       "book_ceiling_usd": 472299.1,
       "ceiling_capture": 0.474909
     },
@@ -8001,6 +8160,7 @@
       "firm_split_usd": 1490.14,
       "path_ceiling_usd": 327639.25,
       "unextracted_usd": 5272.49,
+      "path_fingerprint": "e4c7c1596b1d6c64",
       "economics": {
         "booked_net_trading_usd": 321583.9,
         "firm_split_usd": 1490.14,
@@ -8029,7 +8189,7 @@
       },
       "stage": "coarse",
       "trading_neutral": false,
-      "earnings_forgone_usd": 140438.3,
+      "earnings_vs_benchmark_usd": -140438.3,
       "book_ceiling_usd": 472299.1,
       "ceiling_capture": 0.682548
     },
@@ -8049,6 +8209,7 @@
       "firm_split_usd": 1440.14,
       "path_ceiling_usd": 324978.6,
       "unextracted_usd": 5222.49,
+      "path_fingerprint": "45d08f52acc45e65",
       "economics": {
         "booked_net_trading_usd": 317460.95,
         "firm_split_usd": 1440.14,
@@ -8077,7 +8238,7 @@
       },
       "stage": "local_refinement",
       "trading_neutral": false,
-      "earnings_forgone_usd": 144561.25,
+      "earnings_vs_benchmark_usd": -144561.25,
       "book_ceiling_usd": 472299.1,
       "ceiling_capture": 0.67702
     },
@@ -8097,6 +8258,7 @@
       "firm_split_usd": 2370.74,
       "path_ceiling_usd": 377650.1,
       "unextracted_usd": 6153.09,
+      "path_fingerprint": "939152c1a1d5f021",
       "economics": {
         "booked_net_trading_usd": 371722.15,
         "firm_split_usd": 2370.74,
@@ -8125,7 +8287,7 @@
       },
       "stage": "local_refinement",
       "trading_neutral": false,
-      "earnings_forgone_usd": 90300.05,
+      "earnings_vs_benchmark_usd": -90300.05,
       "book_ceiling_usd": 472299.1,
       "ceiling_capture": 0.786571
     },
@@ -8145,6 +8307,7 @@
       "firm_split_usd": 2300.74,
       "path_ceiling_usd": 375895.95,
       "unextracted_usd": 6083.09,
+      "path_fingerprint": "f3da3e1619273c80",
       "economics": {
         "booked_net_trading_usd": 368643.5,
         "firm_split_usd": 2300.74,
@@ -8173,7 +8336,7 @@
       },
       "stage": "local_refinement",
       "trading_neutral": false,
-      "earnings_forgone_usd": 93378.7,
+      "earnings_vs_benchmark_usd": -93378.7,
       "book_ceiling_usd": 472299.1,
       "ceiling_capture": 0.783006
     },
@@ -8193,6 +8356,7 @@
       "firm_split_usd": 2230.74,
       "path_ceiling_usd": 373992.15,
       "unextracted_usd": 6013.09,
+      "path_fingerprint": "d95ad536e3b0db97",
       "economics": {
         "booked_net_trading_usd": 366727.75,
         "firm_split_usd": 2230.74,
@@ -8221,7 +8385,7 @@
       },
       "stage": "local_refinement",
       "trading_neutral": false,
-      "earnings_forgone_usd": 95294.45,
+      "earnings_vs_benchmark_usd": -95294.45,
       "book_ceiling_usd": 472299.1,
       "ceiling_capture": 0.779123
     },
@@ -8241,6 +8405,7 @@
       "firm_split_usd": 2160.74,
       "path_ceiling_usd": 377130.1,
       "unextracted_usd": 9075.94,
+      "path_fingerprint": "695b2788209933be",
       "economics": {
         "booked_net_trading_usd": 371607.25,
         "firm_split_usd": 2160.74,
@@ -8269,7 +8434,7 @@
       },
       "stage": "coarse",
       "trading_neutral": false,
-      "earnings_forgone_usd": 90414.95,
+      "earnings_vs_benchmark_usd": -90414.95,
       "book_ceiling_usd": 472299.1,
       "ceiling_capture": 0.779282
     },
@@ -8289,6 +8454,7 @@
       "firm_split_usd": 2097.36,
       "path_ceiling_usd": 374770.3,
       "unextracted_usd": 9012.56,
+      "path_fingerprint": "05fe428d019f5388",
       "economics": {
         "booked_net_trading_usd": 366875.65,
         "firm_split_usd": 2097.36,
@@ -8317,7 +8483,7 @@
       },
       "stage": "local_refinement",
       "trading_neutral": false,
-      "earnings_forgone_usd": 95146.55,
+      "earnings_vs_benchmark_usd": -95146.55,
       "book_ceiling_usd": 472299.1,
       "ceiling_capture": 0.77442
     },
@@ -8337,6 +8503,7 @@
       "firm_split_usd": 2037.35,
       "path_ceiling_usd": 372404.25,
       "unextracted_usd": 8952.55,
+      "path_fingerprint": "39ad55b2194b5ba3",
       "economics": {
         "booked_net_trading_usd": 366381.0,
         "firm_split_usd": 2037.35,
@@ -8365,7 +8532,7 @@
       },
       "stage": "local_refinement",
       "trading_neutral": false,
-      "earnings_forgone_usd": 95641.2,
+      "earnings_vs_benchmark_usd": -95641.2,
       "book_ceiling_usd": 472299.1,
       "ceiling_capture": 0.769537
     },
@@ -8385,6 +8552,7 @@
       "firm_split_usd": 1977.35,
       "path_ceiling_usd": 370504.25,
       "unextracted_usd": 8892.55,
+      "path_fingerprint": "121efc262d30a69a",
       "economics": {
         "booked_net_trading_usd": 362395.55,
         "firm_split_usd": 1977.35,
@@ -8413,7 +8581,7 @@
       },
       "stage": "local_refinement",
       "trading_neutral": false,
-      "earnings_forgone_usd": 99626.65,
+      "earnings_vs_benchmark_usd": -99626.65,
       "book_ceiling_usd": 472299.1,
       "ceiling_capture": 0.765641
     },
@@ -8433,6 +8601,7 @@
       "firm_split_usd": 1917.35,
       "path_ceiling_usd": 368604.25,
       "unextracted_usd": 8832.55,
+      "path_fingerprint": "cbb64fa20347647c",
       "economics": {
         "booked_net_trading_usd": 362074.4,
         "firm_split_usd": 1917.35,
@@ -8461,7 +8630,7 @@
       },
       "stage": "local_refinement",
       "trading_neutral": false,
-      "earnings_forgone_usd": 99947.8,
+      "earnings_vs_benchmark_usd": -99947.8,
       "book_ceiling_usd": 472299.1,
       "ceiling_capture": 0.761745
     },
@@ -8481,6 +8650,7 @@
       "firm_split_usd": 1857.35,
       "path_ceiling_usd": 366704.25,
       "unextracted_usd": 8772.55,
+      "path_fingerprint": "a070003d21201ea4",
       "economics": {
         "booked_net_trading_usd": 359177.6,
         "firm_split_usd": 1857.35,
@@ -8509,7 +8679,7 @@
       },
       "stage": "coarse",
       "trading_neutral": false,
-      "earnings_forgone_usd": 102844.6,
+      "earnings_vs_benchmark_usd": -102844.6,
       "book_ceiling_usd": 472299.1,
       "ceiling_capture": 0.75785
     },
@@ -8529,6 +8699,7 @@
       "firm_split_usd": 6004.79,
       "path_ceiling_usd": 460982.0,
       "unextracted_usd": 15113.06,
+      "path_fingerprint": "86ee9e48cc6d0dfe",
       "economics": {
         "booked_net_trading_usd": 450995.8,
         "firm_split_usd": 6004.79,
@@ -8557,7 +8728,7 @@
       },
       "stage": "coarse",
       "trading_neutral": false,
-      "earnings_forgone_usd": 11026.4,
+      "earnings_vs_benchmark_usd": -11026.4,
       "book_ceiling_usd": 472299.1,
       "ceiling_capture": 0.944039
     },
@@ -8577,6 +8748,7 @@
       "firm_split_usd": 6004.8,
       "path_ceiling_usd": 460782.0,
       "unextracted_usd": 15213.07,
+      "path_fingerprint": "86ee9e48cc6d0dfe",
       "economics": {
         "booked_net_trading_usd": 450995.8,
         "firm_split_usd": 6004.8,
@@ -8605,7 +8777,7 @@
       },
       "stage": "local_refinement",
       "trading_neutral": false,
-      "earnings_forgone_usd": 11026.4,
+      "earnings_vs_benchmark_usd": -11026.4,
       "book_ceiling_usd": 472299.1,
       "ceiling_capture": 0.943404
     },
@@ -8625,6 +8797,7 @@
       "firm_split_usd": 6004.8,
       "path_ceiling_usd": 460582.0,
       "unextracted_usd": 15313.07,
+      "path_fingerprint": "c5f8971bb8501142",
       "economics": {
         "booked_net_trading_usd": 450504.6,
         "firm_split_usd": 6004.8,
@@ -8653,7 +8826,7 @@
       },
       "stage": "local_refinement",
       "trading_neutral": false,
-      "earnings_forgone_usd": 11517.6,
+      "earnings_vs_benchmark_usd": -11517.6,
       "book_ceiling_usd": 472299.1,
       "ceiling_capture": 0.942769
     },
@@ -8673,6 +8846,7 @@
       "firm_split_usd": 6004.8,
       "path_ceiling_usd": 460382.0,
       "unextracted_usd": 15413.07,
+      "path_fingerprint": "37a1f37fb6af0246",
       "economics": {
         "booked_net_trading_usd": 450309.5,
         "firm_split_usd": 6004.8,
@@ -8701,7 +8875,7 @@
       },
       "stage": "local_refinement",
       "trading_neutral": false,
-      "earnings_forgone_usd": 11712.7,
+      "earnings_vs_benchmark_usd": -11712.7,
       "book_ceiling_usd": 472299.1,
       "ceiling_capture": 0.942134
     },
@@ -8721,6 +8895,7 @@
       "firm_split_usd": 6004.8,
       "path_ceiling_usd": 460182.0,
       "unextracted_usd": 15513.07,
+      "path_fingerprint": "4db35aba3f77964b",
       "economics": {
         "booked_net_trading_usd": 450140.7,
         "firm_split_usd": 6004.8,
@@ -8749,7 +8924,7 @@
       },
       "stage": "local_refinement",
       "trading_neutral": false,
-      "earnings_forgone_usd": 11881.5,
+      "earnings_vs_benchmark_usd": -11881.5,
       "book_ceiling_usd": 472299.1,
       "ceiling_capture": 0.941499
     },
@@ -8769,6 +8944,7 @@
       "firm_split_usd": 6004.8,
       "path_ceiling_usd": 472299.1,
       "unextracted_usd": 15813.09,
+      "path_fingerprint": "e5cd2f8935877ac7",
       "economics": {
         "booked_net_trading_usd": 462022.2,
         "firm_split_usd": 6004.8,
@@ -8797,7 +8973,7 @@
       },
       "stage": "coarse",
       "trading_neutral": true,
-      "earnings_forgone_usd": 0.0,
+      "earnings_vs_benchmark_usd": 0.0,
       "book_ceiling_usd": 472299.1,
       "ceiling_capture": 0.966519
     },
@@ -8817,6 +8993,7 @@
       "firm_split_usd": 6004.8,
       "path_ceiling_usd": 472299.1,
       "unextracted_usd": 24164.57,
+      "path_fingerprint": "e5cd2f8935877ac7",
       "economics": {
         "booked_net_trading_usd": 462022.2,
         "firm_split_usd": 6004.8,
@@ -8845,7 +9022,7 @@
       },
       "stage": "local_refinement",
       "trading_neutral": true,
-      "earnings_forgone_usd": 0.0,
+      "earnings_vs_benchmark_usd": 0.0,
       "book_ceiling_usd": 472299.1,
       "ceiling_capture": 0.948836
     },
@@ -8865,6 +9042,7 @@
       "firm_split_usd": 6004.8,
       "path_ceiling_usd": 472299.1,
       "unextracted_usd": 24464.57,
+      "path_fingerprint": "e5cd2f8935877ac7",
       "economics": {
         "booked_net_trading_usd": 462022.2,
         "firm_split_usd": 6004.8,
@@ -8893,7 +9071,7 @@
       },
       "stage": "local_refinement",
       "trading_neutral": true,
-      "earnings_forgone_usd": 0.0,
+      "earnings_vs_benchmark_usd": 0.0,
       "book_ceiling_usd": 472299.1,
       "ceiling_capture": 0.948201
     },
@@ -8913,6 +9091,7 @@
       "firm_split_usd": 6004.8,
       "path_ceiling_usd": 472299.1,
       "unextracted_usd": 24764.57,
+      "path_fingerprint": "e5cd2f8935877ac7",
       "economics": {
         "booked_net_trading_usd": 462022.2,
         "firm_split_usd": 6004.8,
@@ -8941,7 +9120,7 @@
       },
       "stage": "local_refinement",
       "trading_neutral": true,
-      "earnings_forgone_usd": 0.0,
+      "earnings_vs_benchmark_usd": 0.0,
       "book_ceiling_usd": 472299.1,
       "ceiling_capture": 0.947566
     },
@@ -8961,6 +9140,7 @@
       "firm_split_usd": 6004.8,
       "path_ceiling_usd": 472299.1,
       "unextracted_usd": 25064.57,
+      "path_fingerprint": "e5cd2f8935877ac7",
       "economics": {
         "booked_net_trading_usd": 462022.2,
         "firm_split_usd": 6004.8,
@@ -8989,7 +9169,7 @@
       },
       "stage": "local_refinement",
       "trading_neutral": true,
-      "earnings_forgone_usd": 0.0,
+      "earnings_vs_benchmark_usd": 0.0,
       "book_ceiling_usd": 472299.1,
       "ceiling_capture": 0.946931
     },
@@ -9009,6 +9189,7 @@
       "firm_split_usd": 6004.8,
       "path_ceiling_usd": 472299.1,
       "unextracted_usd": 25364.57,
+      "path_fingerprint": "e5cd2f8935877ac7",
       "economics": {
         "booked_net_trading_usd": 462022.2,
         "firm_split_usd": 6004.8,
@@ -9037,7 +9218,7 @@
       },
       "stage": "coarse",
       "trading_neutral": true,
-      "earnings_forgone_usd": 0.0,
+      "earnings_vs_benchmark_usd": 0.0,
       "book_ceiling_usd": 472299.1,
       "ceiling_capture": 0.946296
     },
@@ -9057,6 +9238,7 @@
       "firm_split_usd": 6004.8,
       "path_ceiling_usd": 472299.1,
       "unextracted_usd": 31890.31,
+      "path_fingerprint": "e5cd2f8935877ac7",
       "economics": {
         "booked_net_trading_usd": 462022.2,
         "firm_split_usd": 6004.8,
@@ -9085,7 +9267,7 @@
       },
       "stage": "coarse",
       "trading_neutral": true,
-      "earnings_forgone_usd": 0.0,
+      "earnings_vs_benchmark_usd": 0.0,
       "book_ceiling_usd": 472299.1,
       "ceiling_capture": 0.932479
     },
@@ -9105,6 +9287,7 @@
       "firm_split_usd": 6004.8,
       "path_ceiling_usd": 472299.1,
       "unextracted_usd": 33890.31,
+      "path_fingerprint": "e5cd2f8935877ac7",
       "economics": {
         "booked_net_trading_usd": 462022.2,
         "firm_split_usd": 6004.8,
@@ -9133,7 +9316,7 @@
       },
       "stage": "coarse",
       "trading_neutral": true,
-      "earnings_forgone_usd": 0.0,
+      "earnings_vs_benchmark_usd": 0.0,
       "book_ceiling_usd": 472299.1,
       "ceiling_capture": 0.928244
     },
@@ -9153,6 +9336,7 @@
       "firm_split_usd": 6004.8,
       "path_ceiling_usd": 472299.1,
       "unextracted_usd": 35890.31,
+      "path_fingerprint": "e5cd2f8935877ac7",
       "economics": {
         "booked_net_trading_usd": 462022.2,
         "firm_split_usd": 6004.8,
@@ -9181,7 +9365,7 @@
       },
       "stage": "coarse",
       "trading_neutral": true,
-      "earnings_forgone_usd": 0.0,
+      "earnings_vs_benchmark_usd": 0.0,
       "book_ceiling_usd": 472299.1,
       "ceiling_capture": 0.924009
     },
@@ -9201,6 +9385,7 @@
       "firm_split_usd": 6004.8,
       "path_ceiling_usd": 472299.1,
       "unextracted_usd": 37890.31,
+      "path_fingerprint": "e5cd2f8935877ac7",
       "economics": {
         "booked_net_trading_usd": 462022.2,
         "firm_split_usd": 6004.8,
@@ -9229,7 +9414,7 @@
       },
       "stage": "coarse",
       "trading_neutral": true,
-      "earnings_forgone_usd": 0.0,
+      "earnings_vs_benchmark_usd": 0.0,
       "book_ceiling_usd": 472299.1,
       "ceiling_capture": 0.919775
     },
@@ -9249,6 +9434,7 @@
       "firm_split_usd": 6004.8,
       "path_ceiling_usd": 472299.1,
       "unextracted_usd": 39890.31,
+      "path_fingerprint": "e5cd2f8935877ac7",
       "economics": {
         "booked_net_trading_usd": 462022.2,
         "firm_split_usd": 6004.8,
@@ -9277,7 +9463,7 @@
       },
       "stage": "coarse",
       "trading_neutral": true,
-      "earnings_forgone_usd": 0.0,
+      "earnings_vs_benchmark_usd": 0.0,
       "book_ceiling_usd": 472299.1,
       "ceiling_capture": 0.91554
     },
@@ -9297,6 +9483,7 @@
       "firm_split_usd": 6004.8,
       "path_ceiling_usd": 472299.1,
       "unextracted_usd": 41897.41,
+      "path_fingerprint": "e5cd2f8935877ac7",
       "economics": {
         "booked_net_trading_usd": 462022.2,
         "firm_split_usd": 6004.8,
@@ -9325,7 +9512,7 @@
       },
       "stage": "coarse",
       "trading_neutral": true,
-      "earnings_forgone_usd": 0.0,
+      "earnings_vs_benchmark_usd": 0.0,
       "book_ceiling_usd": 472299.1,
       "ceiling_capture": 0.911291
     },
@@ -9345,6 +9532,7 @@
       "firm_split_usd": 0.0,
       "path_ceiling_usd": 472299.1,
       "unextracted_usd": 458099.1,
+      "path_fingerprint": "e5cd2f8935877ac7",
       "economics": {
         "booked_net_trading_usd": 462022.2,
         "firm_split_usd": 0.0,
@@ -9373,7 +9561,7 @@
       },
       "stage": "benchmark",
       "trading_neutral": true,
-      "earnings_forgone_usd": 0.0,
+      "earnings_vs_benchmark_usd": 0.0,
       "book_ceiling_usd": 472299.1,
       "ceiling_capture": 0.030066
     },
@@ -9393,6 +9581,7 @@
       "firm_split_usd": 0.0,
       "path_ceiling_usd": 138624.6,
       "unextracted_usd": 4282.4,
+      "path_fingerprint": "0e336b6b4bc28d54",
       "economics": {
         "booked_net_trading_usd": 131462.8,
         "firm_split_usd": 0.0,
@@ -9421,7 +9610,7 @@
       },
       "stage": "coarse",
       "trading_neutral": false,
-      "earnings_forgone_usd": 330559.4,
+      "earnings_vs_benchmark_usd": -330559.4,
       "book_ceiling_usd": 472299.1,
       "ceiling_capture": 0.284443
     },
@@ -9441,6 +9630,7 @@
       "firm_split_usd": 0.0,
       "path_ceiling_usd": 138624.6,
       "unextracted_usd": 4282.4,
+      "path_fingerprint": "0e336b6b4bc28d54",
       "economics": {
         "booked_net_trading_usd": 131462.8,
         "firm_split_usd": 0.0,
@@ -9469,7 +9659,7 @@
       },
       "stage": "coarse",
       "trading_neutral": false,
-      "earnings_forgone_usd": 330559.4,
+      "earnings_vs_benchmark_usd": -330559.4,
       "book_ceiling_usd": 472299.1,
       "ceiling_capture": 0.284443
     },
@@ -9489,6 +9679,7 @@
       "firm_split_usd": 0.0,
       "path_ceiling_usd": 138624.6,
       "unextracted_usd": 4282.4,
+      "path_fingerprint": "0e336b6b4bc28d54",
       "economics": {
         "booked_net_trading_usd": 131462.8,
         "firm_split_usd": 0.0,
@@ -9517,7 +9708,7 @@
       },
       "stage": "coarse",
       "trading_neutral": false,
-      "earnings_forgone_usd": 330559.4,
+      "earnings_vs_benchmark_usd": -330559.4,
       "book_ceiling_usd": 472299.1,
       "ceiling_capture": 0.284443
     },
@@ -9537,6 +9728,7 @@
       "firm_split_usd": 0.0,
       "path_ceiling_usd": 138624.6,
       "unextracted_usd": 4282.4,
+      "path_fingerprint": "0e336b6b4bc28d54",
       "economics": {
         "booked_net_trading_usd": 131462.8,
         "firm_split_usd": 0.0,
@@ -9565,7 +9757,7 @@
       },
       "stage": "coarse",
       "trading_neutral": false,
-      "earnings_forgone_usd": 330559.4,
+      "earnings_vs_benchmark_usd": -330559.4,
       "book_ceiling_usd": 472299.1,
       "ceiling_capture": 0.284443
     },
@@ -9585,6 +9777,7 @@
       "firm_split_usd": 0.0,
       "path_ceiling_usd": 138124.6,
       "unextracted_usd": 4282.4,
+      "path_fingerprint": "79b863bf1f2752a1",
       "economics": {
         "booked_net_trading_usd": 130749.4,
         "firm_split_usd": 0.0,
@@ -9613,7 +9806,7 @@
       },
       "stage": "coarse",
       "trading_neutral": false,
-      "earnings_forgone_usd": 331272.8,
+      "earnings_vs_benchmark_usd": -331272.8,
       "book_ceiling_usd": 472299.1,
       "ceiling_capture": 0.283384
     },
@@ -9633,6 +9826,7 @@
       "firm_split_usd": 0.0,
       "path_ceiling_usd": 138624.6,
       "unextracted_usd": 4282.4,
+      "path_fingerprint": "127e62c152e312b3",
       "economics": {
         "booked_net_trading_usd": 131228.35,
         "firm_split_usd": 0.0,
@@ -9661,7 +9855,7 @@
       },
       "stage": "coarse",
       "trading_neutral": false,
-      "earnings_forgone_usd": 330793.85,
+      "earnings_vs_benchmark_usd": -330793.85,
       "book_ceiling_usd": 472299.1,
       "ceiling_capture": 0.284443
     },
@@ -9681,6 +9875,7 @@
       "firm_split_usd": 70.44,
       "path_ceiling_usd": 207205.7,
       "unextracted_usd": 4552.86,
+      "path_fingerprint": "6ed154ac7a84ec80",
       "economics": {
         "booked_net_trading_usd": 199514.45,
         "firm_split_usd": 70.44,
@@ -9709,7 +9904,7 @@
       },
       "stage": "coarse",
       "trading_neutral": false,
-      "earnings_forgone_usd": 262507.75,
+      "earnings_vs_benchmark_usd": -262507.75,
       "book_ceiling_usd": 472299.1,
       "ceiling_capture": 0.429077
     },
@@ -9729,6 +9924,7 @@
       "firm_split_usd": 577.06,
       "path_ceiling_usd": 255570.4,
       "unextracted_usd": 5259.5,
+      "path_fingerprint": "b0d9c57073d08cae",
       "economics": {
         "booked_net_trading_usd": 247599.6,
         "firm_split_usd": 577.06,
@@ -9757,7 +9953,7 @@
       },
       "stage": "coarse",
       "trading_neutral": false,
-      "earnings_forgone_usd": 214422.6,
+      "earnings_vs_benchmark_usd": -214422.6,
       "book_ceiling_usd": 472299.1,
       "ceiling_capture": 0.529984
     },
@@ -9777,6 +9973,7 @@
       "firm_split_usd": 1485.6,
       "path_ceiling_usd": 282755.85,
       "unextracted_usd": 6268.05,
+      "path_fingerprint": "f9b13f73b188cac1",
       "economics": {
         "booked_net_trading_usd": 274612.0,
         "firm_split_usd": 1485.6,
@@ -9805,7 +10002,7 @@
       },
       "stage": "coarse",
       "trading_neutral": false,
-      "earnings_forgone_usd": 187410.2,
+      "earnings_vs_benchmark_usd": -187410.2,
       "book_ceiling_usd": 472299.1,
       "ceiling_capture": 0.585408
     },
@@ -9825,6 +10022,7 @@
       "firm_split_usd": 1485.6,
       "path_ceiling_usd": 295755.85,
       "unextracted_usd": 6268.05,
+      "path_fingerprint": "b9dfccd861f71f14",
       "economics": {
         "booked_net_trading_usd": 287113.15,
         "firm_split_usd": 1485.6,
@@ -9853,7 +10051,7 @@
       },
       "stage": "coarse",
       "trading_neutral": false,
-      "earnings_forgone_usd": 174909.05,
+      "earnings_vs_benchmark_usd": -174909.05,
       "book_ceiling_usd": 472299.1,
       "ceiling_capture": 0.612933
     },
@@ -9873,6 +10071,7 @@
       "firm_split_usd": 4737.46,
       "path_ceiling_usd": 437074.6,
       "unextracted_usd": 9819.94,
+      "path_fingerprint": "757915fca812036e",
       "economics": {
         "booked_net_trading_usd": 428138.5,
         "firm_split_usd": 4737.46,
@@ -9901,7 +10100,7 @@
       },
       "stage": "coarse",
       "trading_neutral": false,
-      "earnings_forgone_usd": 33883.7,
+      "earnings_vs_benchmark_usd": -33883.7,
       "book_ceiling_usd": 472299.1,
       "ceiling_capture": 0.904627
     },
@@ -9921,6 +10120,7 @@
       "firm_split_usd": 4737.46,
       "path_ceiling_usd": 437074.6,
       "unextracted_usd": 9819.94,
+      "path_fingerprint": "757915fca812036e",
       "economics": {
         "booked_net_trading_usd": 428138.5,
         "firm_split_usd": 4737.46,
@@ -9949,7 +10149,7 @@
       },
       "stage": "local_refinement",
       "trading_neutral": false,
-      "earnings_forgone_usd": 33883.7,
+      "earnings_vs_benchmark_usd": -33883.7,
       "book_ceiling_usd": 472299.1,
       "ceiling_capture": 0.904627
     },
@@ -9969,6 +10169,7 @@
       "firm_split_usd": 5536.27,
       "path_ceiling_usd": 448262.75,
       "unextracted_usd": 10818.77,
+      "path_fingerprint": "7646c00bb8e86d45",
       "economics": {
         "booked_net_trading_usd": 439030.1,
         "firm_split_usd": 5536.27,
@@ -9997,7 +10198,7 @@
       },
       "stage": "local_refinement",
       "trading_neutral": false,
-      "earnings_forgone_usd": 22992.1,
+      "earnings_vs_benchmark_usd": -22992.1,
       "book_ceiling_usd": 472299.1,
       "ceiling_capture": 0.926201
     },
@@ -10017,6 +10218,7 @@
       "firm_split_usd": 5536.27,
       "path_ceiling_usd": 447262.75,
       "unextracted_usd": 10818.77,
+      "path_fingerprint": "e45d14c1290c6760",
       "economics": {
         "booked_net_trading_usd": 437733.1,
         "firm_split_usd": 5536.27,
@@ -10045,7 +10247,7 @@
       },
       "stage": "local_refinement",
       "trading_neutral": false,
-      "earnings_forgone_usd": 24289.1,
+      "earnings_vs_benchmark_usd": -24289.1,
       "book_ceiling_usd": 472299.1,
       "ceiling_capture": 0.924084
     },
@@ -10065,6 +10267,7 @@
       "firm_split_usd": 5536.27,
       "path_ceiling_usd": 447262.75,
       "unextracted_usd": 10818.77,
+      "path_fingerprint": "e45d14c1290c6760",
       "economics": {
         "booked_net_trading_usd": 437733.1,
         "firm_split_usd": 5536.27,
@@ -10093,7 +10296,7 @@
       },
       "stage": "local_refinement",
       "trading_neutral": false,
-      "earnings_forgone_usd": 24289.1,
+      "earnings_vs_benchmark_usd": -24289.1,
       "book_ceiling_usd": 472299.1,
       "ceiling_capture": 0.924084
     },
@@ -10113,6 +10316,7 @@
       "firm_split_usd": 5536.27,
       "path_ceiling_usd": 452895.6,
       "unextracted_usd": 13951.62,
+      "path_fingerprint": "c900cb968d3ad9af",
       "economics": {
         "booked_net_trading_usd": 443246.3,
         "firm_split_usd": 5536.27,
@@ -10141,7 +10345,7 @@
       },
       "stage": "coarse",
       "trading_neutral": false,
-      "earnings_forgone_usd": 18775.9,
+      "earnings_vs_benchmark_usd": -18775.9,
       "book_ceiling_usd": 472299.1,
       "ceiling_capture": 0.929377
     },
@@ -10161,6 +10365,7 @@
       "firm_split_usd": 5536.27,
       "path_ceiling_usd": 452895.6,
       "unextracted_usd": 13951.62,
+      "path_fingerprint": "c900cb968d3ad9af",
       "economics": {
         "booked_net_trading_usd": 443246.3,
         "firm_split_usd": 5536.27,
@@ -10189,7 +10394,7 @@
       },
       "stage": "local_refinement",
       "trading_neutral": false,
-      "earnings_forgone_usd": 18775.9,
+      "earnings_vs_benchmark_usd": -18775.9,
       "book_ceiling_usd": 472299.1,
       "ceiling_capture": 0.929377
     },
@@ -10209,6 +10414,7 @@
       "firm_split_usd": 5486.27,
       "path_ceiling_usd": 451895.6,
       "unextracted_usd": 13901.62,
+      "path_fingerprint": "96bd11f3067581b4",
       "economics": {
         "booked_net_trading_usd": 442257.0,
         "firm_split_usd": 5486.27,
@@ -10237,7 +10443,7 @@
       },
       "stage": "local_refinement",
       "trading_neutral": false,
-      "earnings_forgone_usd": 19765.2,
+      "earnings_vs_benchmark_usd": -19765.2,
       "book_ceiling_usd": 472299.1,
       "ceiling_capture": 0.927366
     },
@@ -10257,6 +10463,7 @@
       "firm_split_usd": 5486.27,
       "path_ceiling_usd": 450895.6,
       "unextracted_usd": 13901.62,
+      "path_fingerprint": "9947c6456a4f3be0",
       "economics": {
         "booked_net_trading_usd": 441393.0,
         "firm_split_usd": 5486.27,
@@ -10285,7 +10492,7 @@
       },
       "stage": "local_refinement",
       "trading_neutral": false,
-      "earnings_forgone_usd": 20629.2,
+      "earnings_vs_benchmark_usd": -20629.2,
       "book_ceiling_usd": 472299.1,
       "ceiling_capture": 0.925248
     },
@@ -10305,6 +10512,7 @@
       "firm_split_usd": 5486.27,
       "path_ceiling_usd": 450895.6,
       "unextracted_usd": 13901.62,
+      "path_fingerprint": "9947c6456a4f3be0",
       "economics": {
         "booked_net_trading_usd": 441393.0,
         "firm_split_usd": 5486.27,
@@ -10333,7 +10541,7 @@
       },
       "stage": "local_refinement",
       "trading_neutral": false,
-      "earnings_forgone_usd": 20629.2,
+      "earnings_vs_benchmark_usd": -20629.2,
       "book_ceiling_usd": 472299.1,
       "ceiling_capture": 0.925248
     },
@@ -10353,6 +10561,7 @@
       "firm_split_usd": 5486.27,
       "path_ceiling_usd": 450895.6,
       "unextracted_usd": 13901.62,
+      "path_fingerprint": "9947c6456a4f3be0",
       "economics": {
         "booked_net_trading_usd": 441393.0,
         "firm_split_usd": 5486.27,
@@ -10381,7 +10590,7 @@
       },
       "stage": "coarse",
       "trading_neutral": false,
-      "earnings_forgone_usd": 20629.2,
+      "earnings_vs_benchmark_usd": -20629.2,
       "book_ceiling_usd": 472299.1,
       "ceiling_capture": 0.925248
     },
@@ -10401,6 +10610,7 @@
       "firm_split_usd": 5436.27,
       "path_ceiling_usd": 448895.6,
       "unextracted_usd": 14351.62,
+      "path_fingerprint": "ddf4051894146fe2",
       "economics": {
         "booked_net_trading_usd": 439478.2,
         "firm_split_usd": 5436.27,
@@ -10429,7 +10639,7 @@
       },
       "stage": "coarse",
       "trading_neutral": false,
-      "earnings_forgone_usd": 22544.0,
+      "earnings_vs_benchmark_usd": -22544.0,
       "book_ceiling_usd": 472299.1,
       "ceiling_capture": 0.920061
     },
@@ -10449,6 +10659,7 @@
       "firm_split_usd": 5436.27,
       "path_ceiling_usd": 448895.6,
       "unextracted_usd": 14851.62,
+      "path_fingerprint": "ddf4051894146fe2",
       "economics": {
         "booked_net_trading_usd": 439478.2,
         "firm_split_usd": 5436.27,
@@ -10477,7 +10688,7 @@
       },
       "stage": "local_refinement",
       "trading_neutral": false,
-      "earnings_forgone_usd": 22544.0,
+      "earnings_vs_benchmark_usd": -22544.0,
       "book_ceiling_usd": 472299.1,
       "ceiling_capture": 0.919002
     },
@@ -10497,6 +10708,7 @@
       "firm_split_usd": 6004.8,
       "path_ceiling_usd": 460501.75,
       "unextracted_usd": 15620.17,
+      "path_fingerprint": "19d36559e3cd382f",
       "economics": {
         "booked_net_trading_usd": 450504.6,
         "firm_split_usd": 6004.8,
@@ -10525,7 +10737,7 @@
       },
       "stage": "local_refinement",
       "trading_neutral": false,
-      "earnings_forgone_usd": 11517.6,
+      "earnings_vs_benchmark_usd": -11517.6,
       "book_ceiling_usd": 472299.1,
       "ceiling_capture": 0.941949
     },
@@ -10545,6 +10757,7 @@
       "firm_split_usd": 6004.8,
       "path_ceiling_usd": 472299.1,
       "unextracted_usd": 15820.19,
+      "path_fingerprint": "e5cd2f8935877ac7",
       "economics": {
         "booked_net_trading_usd": 462022.2,
         "firm_split_usd": 6004.8,
@@ -10573,7 +10786,7 @@
       },
       "stage": "local_refinement",
       "trading_neutral": true,
-      "earnings_forgone_usd": 0.0,
+      "earnings_vs_benchmark_usd": 0.0,
       "book_ceiling_usd": 472299.1,
       "ceiling_capture": 0.966504
     },
@@ -10593,6 +10806,7 @@
       "firm_split_usd": 6004.8,
       "path_ceiling_usd": 472299.1,
       "unextracted_usd": 15820.19,
+      "path_fingerprint": "e5cd2f8935877ac7",
       "economics": {
         "booked_net_trading_usd": 462022.2,
         "firm_split_usd": 6004.8,
@@ -10621,7 +10835,7 @@
       },
       "stage": "local_refinement",
       "trading_neutral": true,
-      "earnings_forgone_usd": 0.0,
+      "earnings_vs_benchmark_usd": 0.0,
       "book_ceiling_usd": 472299.1,
       "ceiling_capture": 0.966504
     },
@@ -10641,6 +10855,7 @@
       "firm_split_usd": 6004.8,
       "path_ceiling_usd": 472299.1,
       "unextracted_usd": 15820.19,
+      "path_fingerprint": "e5cd2f8935877ac7",
       "economics": {
         "booked_net_trading_usd": 462022.2,
         "firm_split_usd": 6004.8,
@@ -10669,7 +10884,7 @@
       },
       "stage": "coarse",
       "trading_neutral": true,
-      "earnings_forgone_usd": 0.0,
+      "earnings_vs_benchmark_usd": 0.0,
       "book_ceiling_usd": 472299.1,
       "ceiling_capture": 0.966504
     },
@@ -10689,6 +10904,7 @@
       "firm_split_usd": 6004.8,
       "path_ceiling_usd": 472299.1,
       "unextracted_usd": 24811.07,
+      "path_fingerprint": "e5cd2f8935877ac7",
       "economics": {
         "booked_net_trading_usd": 462022.2,
         "firm_split_usd": 6004.8,
@@ -10717,7 +10933,7 @@
       },
       "stage": "local_refinement",
       "trading_neutral": true,
-      "earnings_forgone_usd": 0.0,
+      "earnings_vs_benchmark_usd": 0.0,
       "book_ceiling_usd": 472299.1,
       "ceiling_capture": 0.947467
     },
@@ -10737,6 +10953,7 @@
       "firm_split_usd": 6004.8,
       "path_ceiling_usd": 472299.1,
       "unextracted_usd": 25311.07,
+      "path_fingerprint": "e5cd2f8935877ac7",
       "economics": {
         "booked_net_trading_usd": 462022.2,
         "firm_split_usd": 6004.8,
@@ -10765,7 +10982,7 @@
       },
       "stage": "local_refinement",
       "trading_neutral": true,
-      "earnings_forgone_usd": 0.0,
+      "earnings_vs_benchmark_usd": 0.0,
       "book_ceiling_usd": 472299.1,
       "ceiling_capture": 0.946409
     },
@@ -10785,6 +11002,7 @@
       "firm_split_usd": 6004.8,
       "path_ceiling_usd": 472299.1,
       "unextracted_usd": 25811.07,
+      "path_fingerprint": "e5cd2f8935877ac7",
       "economics": {
         "booked_net_trading_usd": 462022.2,
         "firm_split_usd": 6004.8,
@@ -10813,7 +11031,7 @@
       },
       "stage": "local_refinement",
       "trading_neutral": true,
-      "earnings_forgone_usd": 0.0,
+      "earnings_vs_benchmark_usd": 0.0,
       "book_ceiling_usd": 472299.1,
       "ceiling_capture": 0.94535
     },
@@ -10833,6 +11051,7 @@
       "firm_split_usd": 6004.8,
       "path_ceiling_usd": 472299.1,
       "unextracted_usd": 25811.07,
+      "path_fingerprint": "e5cd2f8935877ac7",
       "economics": {
         "booked_net_trading_usd": 462022.2,
         "firm_split_usd": 6004.8,
@@ -10861,7 +11080,7 @@
       },
       "stage": "local_refinement",
       "trading_neutral": true,
-      "earnings_forgone_usd": 0.0,
+      "earnings_vs_benchmark_usd": 0.0,
       "book_ceiling_usd": 472299.1,
       "ceiling_capture": 0.94535
     },
@@ -10881,6 +11100,7 @@
       "firm_split_usd": 6004.8,
       "path_ceiling_usd": 472299.1,
       "unextracted_usd": 25811.07,
+      "path_fingerprint": "e5cd2f8935877ac7",
       "economics": {
         "booked_net_trading_usd": 462022.2,
         "firm_split_usd": 6004.8,
@@ -10909,7 +11129,7 @@
       },
       "stage": "coarse",
       "trading_neutral": true,
-      "earnings_forgone_usd": 0.0,
+      "earnings_vs_benchmark_usd": 0.0,
       "book_ceiling_usd": 472299.1,
       "ceiling_capture": 0.94535
     },
@@ -10929,6 +11149,7 @@
       "firm_split_usd": 6004.8,
       "path_ceiling_usd": 472299.1,
       "unextracted_usd": 27311.07,
+      "path_fingerprint": "e5cd2f8935877ac7",
       "economics": {
         "booked_net_trading_usd": 462022.2,
         "firm_split_usd": 6004.8,
@@ -10957,7 +11178,7 @@
       },
       "stage": "coarse",
       "trading_neutral": true,
-      "earnings_forgone_usd": 0.0,
+      "earnings_vs_benchmark_usd": 0.0,
       "book_ceiling_usd": 472299.1,
       "ceiling_capture": 0.942174
     },
@@ -10977,6 +11198,7 @@
       "firm_split_usd": 6004.8,
       "path_ceiling_usd": 472299.1,
       "unextracted_usd": 28811.07,
+      "path_fingerprint": "e5cd2f8935877ac7",
       "economics": {
         "booked_net_trading_usd": 462022.2,
         "firm_split_usd": 6004.8,
@@ -11005,7 +11227,7 @@
       },
       "stage": "coarse",
       "trading_neutral": true,
-      "earnings_forgone_usd": 0.0,
+      "earnings_vs_benchmark_usd": 0.0,
       "book_ceiling_usd": 472299.1,
       "ceiling_capture": 0.938998
     },
@@ -11025,6 +11247,7 @@
       "firm_split_usd": 6004.8,
       "path_ceiling_usd": 472299.1,
       "unextracted_usd": 30311.07,
+      "path_fingerprint": "e5cd2f8935877ac7",
       "economics": {
         "booked_net_trading_usd": 462022.2,
         "firm_split_usd": 6004.8,
@@ -11053,7 +11276,7 @@
       },
       "stage": "coarse",
       "trading_neutral": true,
-      "earnings_forgone_usd": 0.0,
+      "earnings_vs_benchmark_usd": 0.0,
       "book_ceiling_usd": 472299.1,
       "ceiling_capture": 0.935822
     },
@@ -11073,6 +11296,7 @@
       "firm_split_usd": 6004.8,
       "path_ceiling_usd": 472299.1,
       "unextracted_usd": 38638.31,
+      "path_fingerprint": "e5cd2f8935877ac7",
       "economics": {
         "booked_net_trading_usd": 462022.2,
         "firm_split_usd": 6004.8,
@@ -11101,7 +11325,7 @@
       },
       "stage": "coarse",
       "trading_neutral": true,
-      "earnings_forgone_usd": 0.0,
+      "earnings_vs_benchmark_usd": 0.0,
       "book_ceiling_usd": 472299.1,
       "ceiling_capture": 0.918191
     },
@@ -11121,6 +11345,7 @@
       "firm_split_usd": 6004.8,
       "path_ceiling_usd": 472299.1,
       "unextracted_usd": 40638.31,
+      "path_fingerprint": "e5cd2f8935877ac7",
       "economics": {
         "booked_net_trading_usd": 462022.2,
         "firm_split_usd": 6004.8,
@@ -11149,7 +11374,7 @@
       },
       "stage": "coarse",
       "trading_neutral": true,
-      "earnings_forgone_usd": 0.0,
+      "earnings_vs_benchmark_usd": 0.0,
       "book_ceiling_usd": 472299.1,
       "ceiling_capture": 0.913956
     },
@@ -11169,6 +11394,7 @@
       "firm_split_usd": 6004.8,
       "path_ceiling_usd": 472299.1,
       "unextracted_usd": 42638.31,
+      "path_fingerprint": "e5cd2f8935877ac7",
       "economics": {
         "booked_net_trading_usd": 462022.2,
         "firm_split_usd": 6004.8,
@@ -11197,7 +11423,7 @@
       },
       "stage": "coarse",
       "trading_neutral": true,
-      "earnings_forgone_usd": 0.0,
+      "earnings_vs_benchmark_usd": 0.0,
       "book_ceiling_usd": 472299.1,
       "ceiling_capture": 0.909722
     },
@@ -11217,6 +11443,7 @@
       "firm_split_usd": 0.0,
       "path_ceiling_usd": 60396.65,
       "unextracted_usd": 3782.35,
+      "path_fingerprint": "e9b5b8ad9d869fce",
       "economics": {
         "booked_net_trading_usd": 54884.35,
         "firm_split_usd": 0.0,
@@ -11245,7 +11472,7 @@
       },
       "stage": "coarse",
       "trading_neutral": false,
-      "earnings_forgone_usd": 407137.85,
+      "earnings_vs_benchmark_usd": -407137.85,
       "book_ceiling_usd": 472299.1,
       "ceiling_capture": 0.11987
     },
@@ -11265,6 +11492,7 @@
       "firm_split_usd": 0.0,
       "path_ceiling_usd": 60396.65,
       "unextracted_usd": 3782.35,
+      "path_fingerprint": "e9b5b8ad9d869fce",
       "economics": {
         "booked_net_trading_usd": 54884.35,
         "firm_split_usd": 0.0,
@@ -11293,7 +11521,7 @@
       },
       "stage": "coarse",
       "trading_neutral": false,
-      "earnings_forgone_usd": 407137.85,
+      "earnings_vs_benchmark_usd": -407137.85,
       "book_ceiling_usd": 472299.1,
       "ceiling_capture": 0.11987
     },
@@ -11313,6 +11541,7 @@
       "firm_split_usd": 0.0,
       "path_ceiling_usd": 61949.8,
       "unextracted_usd": 3782.35,
+      "path_fingerprint": "05390973a109a182",
       "economics": {
         "booked_net_trading_usd": 56508.7,
         "firm_split_usd": 0.0,
@@ -11341,7 +11570,7 @@
       },
       "stage": "coarse",
       "trading_neutral": false,
-      "earnings_forgone_usd": 405513.5,
+      "earnings_vs_benchmark_usd": -405513.5,
       "book_ceiling_usd": 472299.1,
       "ceiling_capture": 0.123158
     },
@@ -11361,6 +11590,7 @@
       "firm_split_usd": 0.0,
       "path_ceiling_usd": 61123.85,
       "unextracted_usd": 3782.35,
+      "path_fingerprint": "09c9e12f44d94dab",
       "economics": {
         "booked_net_trading_usd": 55820.95,
         "firm_split_usd": 0.0,
@@ -11389,7 +11619,7 @@
       },
       "stage": "coarse",
       "trading_neutral": false,
-      "earnings_forgone_usd": 406201.25,
+      "earnings_vs_benchmark_usd": -406201.25,
       "book_ceiling_usd": 472299.1,
       "ceiling_capture": 0.121409
     },
@@ -11409,6 +11639,7 @@
       "firm_split_usd": 0.0,
       "path_ceiling_usd": 57999.95,
       "unextracted_usd": 3782.35,
+      "path_fingerprint": "cc537bc898eeb9c5",
       "economics": {
         "booked_net_trading_usd": 51955.75,
         "firm_split_usd": 0.0,
@@ -11437,7 +11668,7 @@
       },
       "stage": "coarse",
       "trading_neutral": false,
-      "earnings_forgone_usd": 410066.45,
+      "earnings_vs_benchmark_usd": -410066.45,
       "book_ceiling_usd": 472299.1,
       "ceiling_capture": 0.114795
     },
@@ -11457,6 +11688,7 @@
       "firm_split_usd": 0.0,
       "path_ceiling_usd": 99825.85,
       "unextracted_usd": 3782.35,
+      "path_fingerprint": "b6612a9ebcc2cbd2",
       "economics": {
         "booked_net_trading_usd": 93669.35,
         "firm_split_usd": 0.0,
@@ -11485,7 +11717,7 @@
       },
       "stage": "coarse",
       "trading_neutral": false,
-      "earnings_forgone_usd": 368352.85,
+      "earnings_vs_benchmark_usd": -368352.85,
       "book_ceiling_usd": 472299.1,
       "ceiling_capture": 0.203353
     },
@@ -11505,6 +11737,7 @@
       "firm_split_usd": 0.0,
       "path_ceiling_usd": 124058.25,
       "unextracted_usd": 3782.35,
+      "path_fingerprint": "f43303462c9c64f9",
       "economics": {
         "booked_net_trading_usd": 118513.15,
         "firm_split_usd": 0.0,
@@ -11533,7 +11766,7 @@
       },
       "stage": "coarse",
       "trading_neutral": false,
-      "earnings_forgone_usd": 343509.05,
+      "earnings_vs_benchmark_usd": -343509.05,
       "book_ceiling_usd": 472299.1,
       "ceiling_capture": 0.25466
     },
@@ -11553,6 +11786,7 @@
       "firm_split_usd": 0.0,
       "path_ceiling_usd": 185004.8,
       "unextracted_usd": 3782.35,
+      "path_fingerprint": "0829dff002df9a19",
       "economics": {
         "booked_net_trading_usd": 178700.85,
         "firm_split_usd": 0.0,
@@ -11581,7 +11815,7 @@
       },
       "stage": "coarse",
       "trading_neutral": false,
-      "earnings_forgone_usd": 283321.35,
+      "earnings_vs_benchmark_usd": -283321.35,
       "book_ceiling_usd": 472299.1,
       "ceiling_capture": 0.383703
     },
@@ -11601,6 +11835,7 @@
       "firm_split_usd": 0.0,
       "path_ceiling_usd": 175790.75,
       "unextracted_usd": 3782.35,
+      "path_fingerprint": "6c1a5c67fb53e6fc",
       "economics": {
         "booked_net_trading_usd": 170336.25,
         "firm_split_usd": 0.0,
@@ -11629,7 +11864,7 @@
       },
       "stage": "coarse",
       "trading_neutral": false,
-      "earnings_forgone_usd": 291685.95,
+      "earnings_vs_benchmark_usd": -291685.95,
       "book_ceiling_usd": 472299.1,
       "ceiling_capture": 0.364194
     },
@@ -11649,6 +11884,7 @@
       "firm_split_usd": 103.38,
       "path_ceiling_usd": 228914.75,
       "unextracted_usd": 3885.73,
+      "path_fingerprint": "66f427ffaa7fc622",
       "economics": {
         "booked_net_trading_usd": 222515.3,
         "firm_split_usd": 103.38,
@@ -11677,7 +11913,7 @@
       },
       "stage": "coarse",
       "trading_neutral": false,
-      "earnings_forgone_usd": 239506.9,
+      "earnings_vs_benchmark_usd": -239506.9,
       "book_ceiling_usd": 472299.1,
       "ceiling_capture": 0.476454
     },
@@ -11697,6 +11933,7 @@
       "firm_split_usd": 1490.14,
       "path_ceiling_usd": 326211.8,
       "unextracted_usd": 5272.49,
+      "path_fingerprint": "7d2b565f3949cbb5",
       "economics": {
         "booked_net_trading_usd": 320112.4,
         "firm_split_usd": 1490.14,
@@ -11725,7 +11962,7 @@
       },
       "stage": "coarse",
       "trading_neutral": false,
-      "earnings_forgone_usd": 141909.8,
+      "earnings_vs_benchmark_usd": -141909.8,
       "book_ceiling_usd": 472299.1,
       "ceiling_capture": 0.679526
     },
@@ -11745,6 +11982,7 @@
       "firm_split_usd": 1440.14,
       "path_ceiling_usd": 324211.8,
       "unextracted_usd": 5222.49,
+      "path_fingerprint": "9a904812bb30156f",
       "economics": {
         "booked_net_trading_usd": 316407.2,
         "firm_split_usd": 1440.14,
@@ -11773,7 +12011,7 @@
       },
       "stage": "local_refinement",
       "trading_neutral": false,
-      "earnings_forgone_usd": 145615.0,
+      "earnings_vs_benchmark_usd": -145615.0,
       "book_ceiling_usd": 472299.1,
       "ceiling_capture": 0.675397
     },
@@ -11793,6 +12031,7 @@
       "firm_split_usd": 2370.74,
       "path_ceiling_usd": 376570.45,
       "unextracted_usd": 6153.09,
+      "path_fingerprint": "f225e1f3887f9f40",
       "economics": {
         "booked_net_trading_usd": 370668.4,
         "firm_split_usd": 2370.74,
@@ -11821,7 +12060,7 @@
       },
       "stage": "local_refinement",
       "trading_neutral": false,
-      "earnings_forgone_usd": 91353.8,
+      "earnings_vs_benchmark_usd": -91353.8,
       "book_ceiling_usd": 472299.1,
       "ceiling_capture": 0.784286
     },
@@ -11841,6 +12080,7 @@
       "firm_split_usd": 2300.74,
       "path_ceiling_usd": 374570.45,
       "unextracted_usd": 6083.09,
+      "path_fingerprint": "fafebd9444ca9acf",
       "economics": {
         "booked_net_trading_usd": 367344.65,
         "firm_split_usd": 2300.74,
@@ -11869,7 +12109,7 @@
       },
       "stage": "local_refinement",
       "trading_neutral": false,
-      "earnings_forgone_usd": 94677.55,
+      "earnings_vs_benchmark_usd": -94677.55,
       "book_ceiling_usd": 472299.1,
       "ceiling_capture": 0.780199
     },
@@ -11889,6 +12129,7 @@
       "firm_split_usd": 2230.74,
       "path_ceiling_usd": 372570.45,
       "unextracted_usd": 6013.09,
+      "path_fingerprint": "6a46292186978bee",
       "economics": {
         "booked_net_trading_usd": 365369.8,
         "firm_split_usd": 2230.74,
@@ -11917,7 +12158,7 @@
       },
       "stage": "local_refinement",
       "trading_neutral": false,
-      "earnings_forgone_usd": 96652.4,
+      "earnings_vs_benchmark_usd": -96652.4,
       "book_ceiling_usd": 472299.1,
       "ceiling_capture": 0.776113
     },
@@ -11937,6 +12178,7 @@
       "firm_split_usd": 2160.74,
       "path_ceiling_usd": 376204.25,
       "unextracted_usd": 9075.94,
+      "path_fingerprint": "e04b25eed3b88faa",
       "economics": {
         "booked_net_trading_usd": 370701.95,
         "firm_split_usd": 2160.74,
@@ -11965,7 +12207,7 @@
       },
       "stage": "coarse",
       "trading_neutral": false,
-      "earnings_forgone_usd": 91320.25,
+      "earnings_vs_benchmark_usd": -91320.25,
       "book_ceiling_usd": 472299.1,
       "ceiling_capture": 0.777322
     },
@@ -11985,6 +12227,7 @@
       "firm_split_usd": 2097.36,
       "path_ceiling_usd": 374304.25,
       "unextracted_usd": 9012.56,
+      "path_fingerprint": "39ad55b2194b5ba3",
       "economics": {
         "booked_net_trading_usd": 366381.0,
         "firm_split_usd": 2097.36,
@@ -12013,7 +12256,7 @@
       },
       "stage": "local_refinement",
       "trading_neutral": false,
-      "earnings_forgone_usd": 95641.2,
+      "earnings_vs_benchmark_usd": -95641.2,
       "book_ceiling_usd": 472299.1,
       "ceiling_capture": 0.773433
     },
@@ -12033,6 +12276,7 @@
       "firm_split_usd": 2037.35,
       "path_ceiling_usd": 372404.25,
       "unextracted_usd": 8952.55,
+      "path_fingerprint": "39ad55b2194b5ba3",
       "economics": {
         "booked_net_trading_usd": 366381.0,
         "firm_split_usd": 2037.35,
@@ -12061,7 +12305,7 @@
       },
       "stage": "local_refinement",
       "trading_neutral": false,
-      "earnings_forgone_usd": 95641.2,
+      "earnings_vs_benchmark_usd": -95641.2,
       "book_ceiling_usd": 472299.1,
       "ceiling_capture": 0.769537
     },
@@ -12081,6 +12325,7 @@
       "firm_split_usd": 1977.35,
       "path_ceiling_usd": 370504.25,
       "unextracted_usd": 8892.55,
+      "path_fingerprint": "121efc262d30a69a",
       "economics": {
         "booked_net_trading_usd": 362395.55,
         "firm_split_usd": 1977.35,
@@ -12109,7 +12354,7 @@
       },
       "stage": "local_refinement",
       "trading_neutral": false,
-      "earnings_forgone_usd": 99626.65,
+      "earnings_vs_benchmark_usd": -99626.65,
       "book_ceiling_usd": 472299.1,
       "ceiling_capture": 0.765641
     },
@@ -12129,6 +12374,7 @@
       "firm_split_usd": 1917.35,
       "path_ceiling_usd": 368604.25,
       "unextracted_usd": 8832.55,
+      "path_fingerprint": "cbb64fa20347647c",
       "economics": {
         "booked_net_trading_usd": 362074.4,
         "firm_split_usd": 1917.35,
@@ -12157,7 +12403,7 @@
       },
       "stage": "local_refinement",
       "trading_neutral": false,
-      "earnings_forgone_usd": 99947.8,
+      "earnings_vs_benchmark_usd": -99947.8,
       "book_ceiling_usd": 472299.1,
       "ceiling_capture": 0.761745
     },
@@ -12177,6 +12423,7 @@
       "firm_split_usd": 1857.35,
       "path_ceiling_usd": 366704.25,
       "unextracted_usd": 8772.55,
+      "path_fingerprint": "a070003d21201ea4",
       "economics": {
         "booked_net_trading_usd": 359177.6,
         "firm_split_usd": 1857.35,
@@ -12205,7 +12452,7 @@
       },
       "stage": "coarse",
       "trading_neutral": false,
-      "earnings_forgone_usd": 102844.6,
+      "earnings_vs_benchmark_usd": -102844.6,
       "book_ceiling_usd": 472299.1,
       "ceiling_capture": 0.75785
     },
@@ -12225,6 +12472,7 @@
       "firm_split_usd": 6004.79,
       "path_ceiling_usd": 460982.0,
       "unextracted_usd": 15113.06,
+      "path_fingerprint": "86ee9e48cc6d0dfe",
       "economics": {
         "booked_net_trading_usd": 450995.8,
         "firm_split_usd": 6004.79,
@@ -12253,7 +12501,7 @@
       },
       "stage": "coarse",
       "trading_neutral": false,
-      "earnings_forgone_usd": 11026.4,
+      "earnings_vs_benchmark_usd": -11026.4,
       "book_ceiling_usd": 472299.1,
       "ceiling_capture": 0.944039
     },
@@ -12273,6 +12521,7 @@
       "firm_split_usd": 6004.8,
       "path_ceiling_usd": 460782.0,
       "unextracted_usd": 15213.07,
+      "path_fingerprint": "86ee9e48cc6d0dfe",
       "economics": {
         "booked_net_trading_usd": 450995.8,
         "firm_split_usd": 6004.8,
@@ -12301,7 +12550,7 @@
       },
       "stage": "local_refinement",
       "trading_neutral": false,
-      "earnings_forgone_usd": 11026.4,
+      "earnings_vs_benchmark_usd": -11026.4,
       "book_ceiling_usd": 472299.1,
       "ceiling_capture": 0.943404
     },
@@ -12321,6 +12570,7 @@
       "firm_split_usd": 6004.8,
       "path_ceiling_usd": 460582.0,
       "unextracted_usd": 15313.07,
+      "path_fingerprint": "c5f8971bb8501142",
       "economics": {
         "booked_net_trading_usd": 450504.6,
         "firm_split_usd": 6004.8,
@@ -12349,7 +12599,7 @@
       },
       "stage": "local_refinement",
       "trading_neutral": false,
-      "earnings_forgone_usd": 11517.6,
+      "earnings_vs_benchmark_usd": -11517.6,
       "book_ceiling_usd": 472299.1,
       "ceiling_capture": 0.942769
     },
@@ -12369,6 +12619,7 @@
       "firm_split_usd": 6004.8,
       "path_ceiling_usd": 460382.0,
       "unextracted_usd": 15413.07,
+      "path_fingerprint": "37a1f37fb6af0246",
       "economics": {
         "booked_net_trading_usd": 450309.5,
         "firm_split_usd": 6004.8,
@@ -12397,7 +12648,7 @@
       },
       "stage": "local_refinement",
       "trading_neutral": false,
-      "earnings_forgone_usd": 11712.7,
+      "earnings_vs_benchmark_usd": -11712.7,
       "book_ceiling_usd": 472299.1,
       "ceiling_capture": 0.942134
     },
@@ -12417,6 +12668,7 @@
       "firm_split_usd": 6004.8,
       "path_ceiling_usd": 460182.0,
       "unextracted_usd": 15513.07,
+      "path_fingerprint": "4db35aba3f77964b",
       "economics": {
         "booked_net_trading_usd": 450140.7,
         "firm_split_usd": 6004.8,
@@ -12445,7 +12697,7 @@
       },
       "stage": "local_refinement",
       "trading_neutral": false,
-      "earnings_forgone_usd": 11881.5,
+      "earnings_vs_benchmark_usd": -11881.5,
       "book_ceiling_usd": 472299.1,
       "ceiling_capture": 0.941499
     },
@@ -12465,6 +12717,7 @@
       "firm_split_usd": 6004.8,
       "path_ceiling_usd": 472299.1,
       "unextracted_usd": 15813.09,
+      "path_fingerprint": "e5cd2f8935877ac7",
       "economics": {
         "booked_net_trading_usd": 462022.2,
         "firm_split_usd": 6004.8,
@@ -12493,7 +12746,7 @@
       },
       "stage": "coarse",
       "trading_neutral": true,
-      "earnings_forgone_usd": 0.0,
+      "earnings_vs_benchmark_usd": 0.0,
       "book_ceiling_usd": 472299.1,
       "ceiling_capture": 0.966519
     },
@@ -12513,6 +12766,7 @@
       "firm_split_usd": 6004.8,
       "path_ceiling_usd": 472299.1,
       "unextracted_usd": 24164.57,
+      "path_fingerprint": "e5cd2f8935877ac7",
       "economics": {
         "booked_net_trading_usd": 462022.2,
         "firm_split_usd": 6004.8,
@@ -12541,7 +12795,7 @@
       },
       "stage": "local_refinement",
       "trading_neutral": true,
-      "earnings_forgone_usd": 0.0,
+      "earnings_vs_benchmark_usd": 0.0,
       "book_ceiling_usd": 472299.1,
       "ceiling_capture": 0.948836
     },
@@ -12561,6 +12815,7 @@
       "firm_split_usd": 6004.8,
       "path_ceiling_usd": 472299.1,
       "unextracted_usd": 24464.57,
+      "path_fingerprint": "e5cd2f8935877ac7",
       "economics": {
         "booked_net_trading_usd": 462022.2,
         "firm_split_usd": 6004.8,
@@ -12589,7 +12844,7 @@
       },
       "stage": "local_refinement",
       "trading_neutral": true,
-      "earnings_forgone_usd": 0.0,
+      "earnings_vs_benchmark_usd": 0.0,
       "book_ceiling_usd": 472299.1,
       "ceiling_capture": 0.948201
     },
@@ -12609,6 +12864,7 @@
       "firm_split_usd": 6004.8,
       "path_ceiling_usd": 472299.1,
       "unextracted_usd": 24764.57,
+      "path_fingerprint": "e5cd2f8935877ac7",
       "economics": {
         "booked_net_trading_usd": 462022.2,
         "firm_split_usd": 6004.8,
@@ -12637,7 +12893,7 @@
       },
       "stage": "local_refinement",
       "trading_neutral": true,
-      "earnings_forgone_usd": 0.0,
+      "earnings_vs_benchmark_usd": 0.0,
       "book_ceiling_usd": 472299.1,
       "ceiling_capture": 0.947566
     },
@@ -12657,6 +12913,7 @@
       "firm_split_usd": 6004.8,
       "path_ceiling_usd": 472299.1,
       "unextracted_usd": 25064.57,
+      "path_fingerprint": "e5cd2f8935877ac7",
       "economics": {
         "booked_net_trading_usd": 462022.2,
         "firm_split_usd": 6004.8,
@@ -12685,7 +12942,7 @@
       },
       "stage": "local_refinement",
       "trading_neutral": true,
-      "earnings_forgone_usd": 0.0,
+      "earnings_vs_benchmark_usd": 0.0,
       "book_ceiling_usd": 472299.1,
       "ceiling_capture": 0.946931
     },
@@ -12705,6 +12962,7 @@
       "firm_split_usd": 6004.8,
       "path_ceiling_usd": 472299.1,
       "unextracted_usd": 25364.57,
+      "path_fingerprint": "e5cd2f8935877ac7",
       "economics": {
         "booked_net_trading_usd": 462022.2,
         "firm_split_usd": 6004.8,
@@ -12733,7 +12991,7 @@
       },
       "stage": "coarse",
       "trading_neutral": true,
-      "earnings_forgone_usd": 0.0,
+      "earnings_vs_benchmark_usd": 0.0,
       "book_ceiling_usd": 472299.1,
       "ceiling_capture": 0.946296
     },
@@ -12753,6 +13011,7 @@
       "firm_split_usd": 6004.8,
       "path_ceiling_usd": 472299.1,
       "unextracted_usd": 31890.31,
+      "path_fingerprint": "e5cd2f8935877ac7",
       "economics": {
         "booked_net_trading_usd": 462022.2,
         "firm_split_usd": 6004.8,
@@ -12781,7 +13040,7 @@
       },
       "stage": "coarse",
       "trading_neutral": true,
-      "earnings_forgone_usd": 0.0,
+      "earnings_vs_benchmark_usd": 0.0,
       "book_ceiling_usd": 472299.1,
       "ceiling_capture": 0.932479
     },
@@ -12801,6 +13060,7 @@
       "firm_split_usd": 6004.8,
       "path_ceiling_usd": 472299.1,
       "unextracted_usd": 33890.31,
+      "path_fingerprint": "e5cd2f8935877ac7",
       "economics": {
         "booked_net_trading_usd": 462022.2,
         "firm_split_usd": 6004.8,
@@ -12829,7 +13089,7 @@
       },
       "stage": "coarse",
       "trading_neutral": true,
-      "earnings_forgone_usd": 0.0,
+      "earnings_vs_benchmark_usd": 0.0,
       "book_ceiling_usd": 472299.1,
       "ceiling_capture": 0.928244
     },
@@ -12849,6 +13109,7 @@
       "firm_split_usd": 6004.8,
       "path_ceiling_usd": 472299.1,
       "unextracted_usd": 35890.31,
+      "path_fingerprint": "e5cd2f8935877ac7",
       "economics": {
         "booked_net_trading_usd": 462022.2,
         "firm_split_usd": 6004.8,
@@ -12877,7 +13138,7 @@
       },
       "stage": "coarse",
       "trading_neutral": true,
-      "earnings_forgone_usd": 0.0,
+      "earnings_vs_benchmark_usd": 0.0,
       "book_ceiling_usd": 472299.1,
       "ceiling_capture": 0.924009
     },
@@ -12897,6 +13158,7 @@
       "firm_split_usd": 6004.8,
       "path_ceiling_usd": 472299.1,
       "unextracted_usd": 37890.31,
+      "path_fingerprint": "e5cd2f8935877ac7",
       "economics": {
         "booked_net_trading_usd": 462022.2,
         "firm_split_usd": 6004.8,
@@ -12925,7 +13187,7 @@
       },
       "stage": "coarse",
       "trading_neutral": true,
-      "earnings_forgone_usd": 0.0,
+      "earnings_vs_benchmark_usd": 0.0,
       "book_ceiling_usd": 472299.1,
       "ceiling_capture": 0.919775
     },
@@ -12945,6 +13207,7 @@
       "firm_split_usd": 6004.8,
       "path_ceiling_usd": 472299.1,
       "unextracted_usd": 39890.31,
+      "path_fingerprint": "e5cd2f8935877ac7",
       "economics": {
         "booked_net_trading_usd": 462022.2,
         "firm_split_usd": 6004.8,
@@ -12973,7 +13236,7 @@
       },
       "stage": "coarse",
       "trading_neutral": true,
-      "earnings_forgone_usd": 0.0,
+      "earnings_vs_benchmark_usd": 0.0,
       "book_ceiling_usd": 472299.1,
       "ceiling_capture": 0.91554
     },
@@ -12993,6 +13256,7 @@
       "firm_split_usd": 6004.8,
       "path_ceiling_usd": 472299.1,
       "unextracted_usd": 41897.41,
+      "path_fingerprint": "e5cd2f8935877ac7",
       "economics": {
         "booked_net_trading_usd": 462022.2,
         "firm_split_usd": 6004.8,
@@ -13021,7 +13285,7 @@
       },
       "stage": "coarse",
       "trading_neutral": true,
-      "earnings_forgone_usd": 0.0,
+      "earnings_vs_benchmark_usd": 0.0,
       "book_ceiling_usd": 472299.1,
       "ceiling_capture": 0.911291
     },
@@ -13041,6 +13305,7 @@
       "firm_split_usd": 1159.49,
       "path_ceiling_usd": 211610.45,
       "unextracted_usd": 5841.93,
+      "path_fingerprint": "7855ab98ae968892",
       "economics": {
         "booked_net_trading_usd": 202909.25,
         "firm_split_usd": 1159.49,
@@ -13069,7 +13334,7 @@
       },
       "stage": "coarse",
       "trading_neutral": false,
-      "earnings_forgone_usd": 259112.95,
+      "earnings_vs_benchmark_usd": -259112.95,
       "book_ceiling_usd": 472299.1,
       "ceiling_capture": 0.435674
     },
@@ -13089,6 +13354,7 @@
       "firm_split_usd": 1159.49,
       "path_ceiling_usd": 211610.45,
       "unextracted_usd": 5841.93,
+      "path_fingerprint": "7855ab98ae968892",
       "economics": {
         "booked_net_trading_usd": 202909.25,
         "firm_split_usd": 1159.49,
@@ -13117,7 +13383,7 @@
       },
       "stage": "coarse",
       "trading_neutral": false,
-      "earnings_forgone_usd": 259112.95,
+      "earnings_vs_benchmark_usd": -259112.95,
       "book_ceiling_usd": 472299.1,
       "ceiling_capture": 0.435674
     },
@@ -13137,6 +13403,7 @@
       "firm_split_usd": 1159.49,
       "path_ceiling_usd": 211610.45,
       "unextracted_usd": 5841.93,
+      "path_fingerprint": "7855ab98ae968892",
       "economics": {
         "booked_net_trading_usd": 202909.25,
         "firm_split_usd": 1159.49,
@@ -13165,7 +13432,7 @@
       },
       "stage": "coarse",
       "trading_neutral": false,
-      "earnings_forgone_usd": 259112.95,
+      "earnings_vs_benchmark_usd": -259112.95,
       "book_ceiling_usd": 472299.1,
       "ceiling_capture": 0.435674
     },
@@ -13185,6 +13452,7 @@
       "firm_split_usd": 1159.49,
       "path_ceiling_usd": 211610.45,
       "unextracted_usd": 5841.93,
+      "path_fingerprint": "7855ab98ae968892",
       "economics": {
         "booked_net_trading_usd": 202909.25,
         "firm_split_usd": 1159.49,
@@ -13213,7 +13481,7 @@
       },
       "stage": "coarse",
       "trading_neutral": false,
-      "earnings_forgone_usd": 259112.95,
+      "earnings_vs_benchmark_usd": -259112.95,
       "book_ceiling_usd": 472299.1,
       "ceiling_capture": 0.435674
     },
@@ -13233,6 +13501,7 @@
       "firm_split_usd": 2520.64,
       "path_ceiling_usd": 263922.0,
       "unextracted_usd": 7403.1,
+      "path_fingerprint": "0b22ea69cbe2cbfe",
       "economics": {
         "booked_net_trading_usd": 255091.7,
         "firm_split_usd": 2520.64,
@@ -13261,7 +13530,7 @@
       },
       "stage": "coarse",
       "trading_neutral": false,
-      "earnings_forgone_usd": 206930.5,
+      "earnings_vs_benchmark_usd": -206930.5,
       "book_ceiling_usd": 472299.1,
       "ceiling_capture": 0.543128
     },
@@ -13281,6 +13550,7 @@
       "firm_split_usd": 2591.08,
       "path_ceiling_usd": 307503.1,
       "unextracted_usd": 7673.56,
+      "path_fingerprint": "69deb4479705fcb6",
       "economics": {
         "booked_net_trading_usd": 298201.8,
         "firm_split_usd": 2591.08,
@@ -13309,7 +13579,7 @@
       },
       "stage": "coarse",
       "trading_neutral": false,
-      "earnings_forgone_usd": 163820.4,
+      "earnings_vs_benchmark_usd": -163820.4,
       "book_ceiling_usd": 472299.1,
       "ceiling_capture": 0.63483
     },
@@ -13329,6 +13599,7 @@
       "firm_split_usd": 4289.8,
       "path_ceiling_usd": 395388.9,
       "unextracted_usd": 9672.31,
+      "path_fingerprint": "ee3f434a3058eeae",
       "economics": {
         "booked_net_trading_usd": 385714.9,
         "firm_split_usd": 4289.8,
@@ -13357,7 +13628,7 @@
       },
       "stage": "coarse",
       "trading_neutral": false,
-      "earnings_forgone_usd": 76307.3,
+      "earnings_vs_benchmark_usd": -76307.3,
       "book_ceiling_usd": 472299.1,
       "ceiling_capture": 0.816679
     },
@@ -13377,6 +13648,7 @@
       "firm_split_usd": 5308.33,
       "path_ceiling_usd": 417983.35,
       "unextracted_usd": 10590.83,
+      "path_fingerprint": "4fca0a5dc87aca08",
       "economics": {
         "booked_net_trading_usd": 408515.0,
         "firm_split_usd": 5308.33,
@@ -13405,7 +13677,7 @@
       },
       "stage": "coarse",
       "trading_neutral": false,
-      "earnings_forgone_usd": 53507.2,
+      "earnings_vs_benchmark_usd": -53507.2,
       "book_ceiling_usd": 472299.1,
       "ceiling_capture": 0.862573
     },
@@ -13425,6 +13697,7 @@
       "firm_split_usd": 5308.33,
       "path_ceiling_usd": 417483.35,
       "unextracted_usd": 10590.83,
+      "path_fingerprint": "8a887f8fd9202f52",
       "economics": {
         "booked_net_trading_usd": 408133.45,
         "firm_split_usd": 5308.33,
@@ -13453,7 +13726,7 @@
       },
       "stage": "local_refinement",
       "trading_neutral": false,
-      "earnings_forgone_usd": 53888.75,
+      "earnings_vs_benchmark_usd": -53888.75,
       "book_ceiling_usd": 472299.1,
       "ceiling_capture": 0.861514
     },
@@ -13473,6 +13746,7 @@
       "firm_split_usd": 5308.33,
       "path_ceiling_usd": 417483.35,
       "unextracted_usd": 10590.83,
+      "path_fingerprint": "8a887f8fd9202f52",
       "economics": {
         "booked_net_trading_usd": 408133.45,
         "firm_split_usd": 5308.33,
@@ -13501,7 +13775,7 @@
       },
       "stage": "local_refinement",
       "trading_neutral": false,
-      "earnings_forgone_usd": 53888.75,
+      "earnings_vs_benchmark_usd": -53888.75,
       "book_ceiling_usd": 472299.1,
       "ceiling_capture": 0.861514
     },
@@ -13521,6 +13795,7 @@
       "firm_split_usd": 6004.8,
       "path_ceiling_usd": 447548.1,
       "unextracted_usd": 11387.31,
+      "path_fingerprint": "1d983ab5a71bcd54",
       "economics": {
         "booked_net_trading_usd": 438050.25,
         "firm_split_usd": 6004.8,
@@ -13549,7 +13824,7 @@
       },
       "stage": "local_refinement",
       "trading_neutral": false,
-      "earnings_forgone_usd": 23971.95,
+      "earnings_vs_benchmark_usd": -23971.95,
       "book_ceiling_usd": 472299.1,
       "ceiling_capture": 0.923484
     },
@@ -13569,6 +13844,7 @@
       "firm_split_usd": 6004.8,
       "path_ceiling_usd": 447548.1,
       "unextracted_usd": 11387.31,
+      "path_fingerprint": "1d983ab5a71bcd54",
       "economics": {
         "booked_net_trading_usd": 438050.25,
         "firm_split_usd": 6004.8,
@@ -13597,7 +13873,7 @@
       },
       "stage": "local_refinement",
       "trading_neutral": false,
-      "earnings_forgone_usd": 23971.95,
+      "earnings_vs_benchmark_usd": -23971.95,
       "book_ceiling_usd": 472299.1,
       "ceiling_capture": 0.923484
     },
@@ -13617,6 +13893,7 @@
       "firm_split_usd": 6004.8,
       "path_ceiling_usd": 447548.1,
       "unextracted_usd": 11387.31,
+      "path_fingerprint": "1d983ab5a71bcd54",
       "economics": {
         "booked_net_trading_usd": 438050.25,
         "firm_split_usd": 6004.8,
@@ -13645,7 +13922,7 @@
       },
       "stage": "coarse",
       "trading_neutral": false,
-      "earnings_forgone_usd": 23971.95,
+      "earnings_vs_benchmark_usd": -23971.95,
       "book_ceiling_usd": 472299.1,
       "ceiling_capture": 0.923484
     },
@@ -13665,6 +13942,7 @@
       "firm_split_usd": 6004.8,
       "path_ceiling_usd": 456180.95,
       "unextracted_usd": 11487.32,
+      "path_fingerprint": "da164bc379fa6241",
       "economics": {
         "booked_net_trading_usd": 446367.65,
         "firm_split_usd": 6004.8,
@@ -13693,7 +13971,7 @@
       },
       "stage": "local_refinement",
       "trading_neutral": false,
-      "earnings_forgone_usd": 15654.55,
+      "earnings_vs_benchmark_usd": -15654.55,
       "book_ceiling_usd": 472299.1,
       "ceiling_capture": 0.941551
     },
@@ -13713,6 +13991,7 @@
       "firm_split_usd": 6004.8,
       "path_ceiling_usd": 456180.95,
       "unextracted_usd": 11487.32,
+      "path_fingerprint": "da164bc379fa6241",
       "economics": {
         "booked_net_trading_usd": 446367.65,
         "firm_split_usd": 6004.8,
@@ -13741,7 +14020,7 @@
       },
       "stage": "local_refinement",
       "trading_neutral": false,
-      "earnings_forgone_usd": 15654.55,
+      "earnings_vs_benchmark_usd": -15654.55,
       "book_ceiling_usd": 472299.1,
       "ceiling_capture": 0.941551
     },
@@ -13761,6 +14040,7 @@
       "firm_split_usd": 6004.8,
       "path_ceiling_usd": 461608.2,
       "unextracted_usd": 11587.33,
+      "path_fingerprint": "18890541f360ce26",
       "economics": {
         "booked_net_trading_usd": 451644.95,
         "firm_split_usd": 6004.8,
@@ -13789,7 +14069,7 @@
       },
       "stage": "local_refinement",
       "trading_neutral": false,
-      "earnings_forgone_usd": 10377.25,
+      "earnings_vs_benchmark_usd": -10377.25,
       "book_ceiling_usd": 472299.1,
       "ceiling_capture": 0.95283
     },
@@ -13809,6 +14089,7 @@
       "firm_split_usd": 6004.8,
       "path_ceiling_usd": 461108.2,
       "unextracted_usd": 11587.33,
+      "path_fingerprint": "d15cd3cecfcba12f",
       "economics": {
         "booked_net_trading_usd": 451243.6,
         "firm_split_usd": 6004.8,
@@ -13837,7 +14118,7 @@
       },
       "stage": "local_refinement",
       "trading_neutral": false,
-      "earnings_forgone_usd": 10778.6,
+      "earnings_vs_benchmark_usd": -10778.6,
       "book_ceiling_usd": 472299.1,
       "ceiling_capture": 0.951772
     },
@@ -13857,6 +14138,7 @@
       "firm_split_usd": 6004.8,
       "path_ceiling_usd": 460608.2,
       "unextracted_usd": 11587.33,
+      "path_fingerprint": "ab58e90ebef11769",
       "economics": {
         "booked_net_trading_usd": 450750.2,
         "firm_split_usd": 6004.8,
@@ -13885,7 +14167,7 @@
       },
       "stage": "coarse",
       "trading_neutral": false,
-      "earnings_forgone_usd": 11272.0,
+      "earnings_vs_benchmark_usd": -11272.0,
       "book_ceiling_usd": 472299.1,
       "ceiling_capture": 0.950713
     },
@@ -13905,6 +14187,7 @@
       "firm_split_usd": 6004.8,
       "path_ceiling_usd": 460608.2,
       "unextracted_usd": 11587.33,
+      "path_fingerprint": "ab58e90ebef11769",
       "economics": {
         "booked_net_trading_usd": 450750.2,
         "firm_split_usd": 6004.8,
@@ -13933,7 +14216,7 @@
       },
       "stage": "coarse",
       "trading_neutral": false,
-      "earnings_forgone_usd": 11272.0,
+      "earnings_vs_benchmark_usd": -11272.0,
       "book_ceiling_usd": 472299.1,
       "ceiling_capture": 0.950713
     },
@@ -13953,6 +14236,7 @@
       "firm_split_usd": 6004.8,
       "path_ceiling_usd": 460608.2,
       "unextracted_usd": 11587.33,
+      "path_fingerprint": "ab58e90ebef11769",
       "economics": {
         "booked_net_trading_usd": 450750.2,
         "firm_split_usd": 6004.8,
@@ -13981,7 +14265,7 @@
       },
       "stage": "local_refinement",
       "trading_neutral": false,
-      "earnings_forgone_usd": 11272.0,
+      "earnings_vs_benchmark_usd": -11272.0,
       "book_ceiling_usd": 472299.1,
       "ceiling_capture": 0.950713
     },
@@ -14001,6 +14285,7 @@
       "firm_split_usd": 6004.8,
       "path_ceiling_usd": 460608.2,
       "unextracted_usd": 11587.33,
+      "path_fingerprint": "ab58e90ebef11769",
       "economics": {
         "booked_net_trading_usd": 450750.2,
         "firm_split_usd": 6004.8,
@@ -14029,7 +14314,7 @@
       },
       "stage": "local_refinement",
       "trading_neutral": false,
-      "earnings_forgone_usd": 11272.0,
+      "earnings_vs_benchmark_usd": -11272.0,
       "book_ceiling_usd": 472299.1,
       "ceiling_capture": 0.950713
     },
@@ -14049,6 +14334,7 @@
       "firm_split_usd": 6004.8,
       "path_ceiling_usd": 466429.0,
       "unextracted_usd": 11687.34,
+      "path_fingerprint": "4dc07c104e24b15c",
       "economics": {
         "booked_net_trading_usd": 456263.4,
         "firm_split_usd": 6004.8,
@@ -14077,7 +14363,7 @@
       },
       "stage": "local_refinement",
       "trading_neutral": false,
-      "earnings_forgone_usd": 5758.8,
+      "earnings_vs_benchmark_usd": -5758.8,
       "book_ceiling_usd": 472299.1,
       "ceiling_capture": 0.962826
     },
@@ -14097,6 +14383,7 @@
       "firm_split_usd": 6004.8,
       "path_ceiling_usd": 472299.1,
       "unextracted_usd": 11787.35,
+      "path_fingerprint": "e5cd2f8935877ac7",
       "economics": {
         "booked_net_trading_usd": 462022.2,
         "firm_split_usd": 6004.8,
@@ -14125,7 +14412,7 @@
       },
       "stage": "local_refinement",
       "trading_neutral": true,
-      "earnings_forgone_usd": 0.0,
+      "earnings_vs_benchmark_usd": 0.0,
       "book_ceiling_usd": 472299.1,
       "ceiling_capture": 0.975043
     },
@@ -14145,6 +14432,7 @@
       "firm_split_usd": 6004.8,
       "path_ceiling_usd": 472299.1,
       "unextracted_usd": 11787.35,
+      "path_fingerprint": "e5cd2f8935877ac7",
       "economics": {
         "booked_net_trading_usd": 462022.2,
         "firm_split_usd": 6004.8,
@@ -14173,7 +14461,7 @@
       },
       "stage": "coarse",
       "trading_neutral": true,
-      "earnings_forgone_usd": 0.0,
+      "earnings_vs_benchmark_usd": 0.0,
       "book_ceiling_usd": 472299.1,
       "ceiling_capture": 0.975043
     },
@@ -14193,6 +14481,7 @@
       "firm_split_usd": 6004.8,
       "path_ceiling_usd": 472299.1,
       "unextracted_usd": 11787.35,
+      "path_fingerprint": "e5cd2f8935877ac7",
       "economics": {
         "booked_net_trading_usd": 462022.2,
         "firm_split_usd": 6004.8,
@@ -14221,7 +14510,7 @@
       },
       "stage": "local_refinement",
       "trading_neutral": true,
-      "earnings_forgone_usd": 0.0,
+      "earnings_vs_benchmark_usd": 0.0,
       "book_ceiling_usd": 472299.1,
       "ceiling_capture": 0.975043
     },
@@ -14241,6 +14530,7 @@
       "firm_split_usd": 6004.8,
       "path_ceiling_usd": 472299.1,
       "unextracted_usd": 11787.35,
+      "path_fingerprint": "e5cd2f8935877ac7",
       "economics": {
         "booked_net_trading_usd": 462022.2,
         "firm_split_usd": 6004.8,
@@ -14269,7 +14559,7 @@
       },
       "stage": "local_refinement",
       "trading_neutral": true,
-      "earnings_forgone_usd": 0.0,
+      "earnings_vs_benchmark_usd": 0.0,
       "book_ceiling_usd": 472299.1,
       "ceiling_capture": 0.975043
     },
@@ -14289,6 +14579,7 @@
       "firm_split_usd": 6004.8,
       "path_ceiling_usd": 472299.1,
       "unextracted_usd": 11787.35,
+      "path_fingerprint": "e5cd2f8935877ac7",
       "economics": {
         "booked_net_trading_usd": 462022.2,
         "firm_split_usd": 6004.8,
@@ -14317,7 +14608,7 @@
       },
       "stage": "local_refinement",
       "trading_neutral": true,
-      "earnings_forgone_usd": 0.0,
+      "earnings_vs_benchmark_usd": 0.0,
       "book_ceiling_usd": 472299.1,
       "ceiling_capture": 0.975043
     },
@@ -14337,6 +14628,7 @@
       "firm_split_usd": 6004.8,
       "path_ceiling_usd": 472299.1,
       "unextracted_usd": 11787.35,
+      "path_fingerprint": "e5cd2f8935877ac7",
       "economics": {
         "booked_net_trading_usd": 462022.2,
         "firm_split_usd": 6004.8,
@@ -14365,7 +14657,7 @@
       },
       "stage": "local_refinement",
       "trading_neutral": true,
-      "earnings_forgone_usd": 0.0,
+      "earnings_vs_benchmark_usd": 0.0,
       "book_ceiling_usd": 472299.1,
       "ceiling_capture": 0.975043
     },
@@ -14385,6 +14677,7 @@
       "firm_split_usd": 6004.8,
       "path_ceiling_usd": 472299.1,
       "unextracted_usd": 11787.35,
+      "path_fingerprint": "e5cd2f8935877ac7",
       "economics": {
         "booked_net_trading_usd": 462022.2,
         "firm_split_usd": 6004.8,
@@ -14413,7 +14706,7 @@
       },
       "stage": "coarse",
       "trading_neutral": true,
-      "earnings_forgone_usd": 0.0,
+      "earnings_vs_benchmark_usd": 0.0,
       "book_ceiling_usd": 472299.1,
       "ceiling_capture": 0.975043
     },
@@ -14433,6 +14726,7 @@
       "firm_split_usd": 6004.8,
       "path_ceiling_usd": 472299.1,
       "unextracted_usd": 11787.35,
+      "path_fingerprint": "e5cd2f8935877ac7",
       "economics": {
         "booked_net_trading_usd": 462022.2,
         "firm_split_usd": 6004.8,
@@ -14461,7 +14755,7 @@
       },
       "stage": "coarse",
       "trading_neutral": true,
-      "earnings_forgone_usd": 0.0,
+      "earnings_vs_benchmark_usd": 0.0,
       "book_ceiling_usd": 472299.1,
       "ceiling_capture": 0.975043
     },
@@ -14481,6 +14775,7 @@
       "firm_split_usd": 6004.8,
       "path_ceiling_usd": 472299.1,
       "unextracted_usd": 17320.19,
+      "path_fingerprint": "e5cd2f8935877ac7",
       "economics": {
         "booked_net_trading_usd": 462022.2,
         "firm_split_usd": 6004.8,
@@ -14509,7 +14804,7 @@
       },
       "stage": "coarse",
       "trading_neutral": true,
-      "earnings_forgone_usd": 0.0,
+      "earnings_vs_benchmark_usd": 0.0,
       "book_ceiling_usd": 472299.1,
       "ceiling_capture": 0.963328
     },
@@ -14529,6 +14824,7 @@
       "firm_split_usd": 6004.8,
       "path_ceiling_usd": 472299.1,
       "unextracted_usd": 17820.19,
+      "path_fingerprint": "e5cd2f8935877ac7",
       "economics": {
         "booked_net_trading_usd": 462022.2,
         "firm_split_usd": 6004.8,
@@ -14557,7 +14853,7 @@
       },
       "stage": "coarse",
       "trading_neutral": true,
-      "earnings_forgone_usd": 0.0,
+      "earnings_vs_benchmark_usd": 0.0,
       "book_ceiling_usd": 472299.1,
       "ceiling_capture": 0.962269
     },
@@ -14577,6 +14873,7 @@
       "firm_split_usd": 6004.8,
       "path_ceiling_usd": 472299.1,
       "unextracted_usd": 17820.19,
+      "path_fingerprint": "e5cd2f8935877ac7",
       "economics": {
         "booked_net_trading_usd": 462022.2,
         "firm_split_usd": 6004.8,
@@ -14605,7 +14902,7 @@
       },
       "stage": "coarse",
       "trading_neutral": true,
-      "earnings_forgone_usd": 0.0,
+      "earnings_vs_benchmark_usd": 0.0,
       "book_ceiling_usd": 472299.1,
       "ceiling_capture": 0.962269
     },
@@ -14625,6 +14922,7 @@
       "firm_split_usd": 6004.8,
       "path_ceiling_usd": 472299.1,
       "unextracted_usd": 17820.19,
+      "path_fingerprint": "e5cd2f8935877ac7",
       "economics": {
         "booked_net_trading_usd": 462022.2,
         "firm_split_usd": 6004.8,
@@ -14653,7 +14951,7 @@
       },
       "stage": "coarse",
       "trading_neutral": true,
-      "earnings_forgone_usd": 0.0,
+      "earnings_vs_benchmark_usd": 0.0,
       "book_ceiling_usd": 472299.1,
       "ceiling_capture": 0.962269
     },
@@ -14673,6 +14971,7 @@
       "firm_split_usd": 6004.8,
       "path_ceiling_usd": 472299.1,
       "unextracted_usd": 32811.07,
+      "path_fingerprint": "e5cd2f8935877ac7",
       "economics": {
         "booked_net_trading_usd": 462022.2,
         "firm_split_usd": 6004.8,
@@ -14701,7 +15000,7 @@
       },
       "stage": "coarse",
       "trading_neutral": true,
-      "earnings_forgone_usd": 0.0,
+      "earnings_vs_benchmark_usd": 0.0,
       "book_ceiling_usd": 472299.1,
       "ceiling_capture": 0.930529
     },
@@ -14721,6 +15020,7 @@
       "firm_split_usd": 6004.8,
       "path_ceiling_usd": 472299.1,
       "unextracted_usd": 33811.07,
+      "path_fingerprint": "e5cd2f8935877ac7",
       "economics": {
         "booked_net_trading_usd": 462022.2,
         "firm_split_usd": 6004.8,
@@ -14749,7 +15049,7 @@
       },
       "stage": "coarse",
       "trading_neutral": true,
-      "earnings_forgone_usd": 0.0,
+      "earnings_vs_benchmark_usd": 0.0,
       "book_ceiling_usd": 472299.1,
       "ceiling_capture": 0.928412
     },
@@ -14769,6 +15069,7 @@
       "firm_split_usd": 6004.8,
       "path_ceiling_usd": 472299.1,
       "unextracted_usd": 42638.31,
+      "path_fingerprint": "e5cd2f8935877ac7",
       "economics": {
         "booked_net_trading_usd": 462022.2,
         "firm_split_usd": 6004.8,
@@ -14797,7 +15098,7 @@
       },
       "stage": "coarse",
       "trading_neutral": true,
-      "earnings_forgone_usd": 0.0,
+      "earnings_vs_benchmark_usd": 0.0,
       "book_ceiling_usd": 472299.1,
       "ceiling_capture": 0.909722
     },
@@ -14817,6 +15118,7 @@
       "firm_split_usd": 6004.8,
       "path_ceiling_usd": 472299.1,
       "unextracted_usd": 43138.31,
+      "path_fingerprint": "e5cd2f8935877ac7",
       "economics": {
         "booked_net_trading_usd": 462022.2,
         "firm_split_usd": 6004.8,
@@ -14845,7 +15147,7 @@
       },
       "stage": "coarse",
       "trading_neutral": true,
-      "earnings_forgone_usd": 0.0,
+      "earnings_vs_benchmark_usd": 0.0,
       "book_ceiling_usd": 472299.1,
       "ceiling_capture": 0.908663
     }

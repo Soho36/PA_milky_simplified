@@ -1,4 +1,5 @@
 """Paired ongoing/terminal scores from the same trading path."""
+import hashlib
 from dataclasses import replace
 from .account import money
 from .policy import WithdrawalPolicy
@@ -35,25 +36,39 @@ def path_ceiling(economics):
                  - economics.purchase_fees_usd)
 
 
-def annotate_against_benchmark(rows, benchmark):
-    """Score candidates against the no-withdrawal path, in place.
+def path_fingerprint(result):
+    """Identify the trades a book actually took, not what they summed to.
 
-    A withdrawal only ever lowers a balance, so the book that never withdraws
-    keeps the most accounts alive and books the most trading earnings. A
-    candidate booking exactly that much bought its cash without costing a
-    trade; anything less has killed accounts, and is charged for the earnings
-    it destroyed rather than being flattered by its own smaller path.
+    Equal booked earnings are not equal trading: two different sets of fills
+    can total the same dollar, and an account that dies early can even out-earn
+    one that trades on into a losing stretch. Per account this pins the count
+    and the booked result of what it traded and the trade it died on, so a path
+    that differs anywhere shows up even when the totals coincide.
+    """
+    material = [(a.account_id, a.trades_taken, money(a.gross_pnl_usd),
+                 money(a.commission_usd), a.death_trade_key)
+                for a in sorted(result.accounts, key=lambda a: a.account_id)]
+    return hashlib.sha256(repr(material).encode()).hexdigest()[:16]
+
+
+def annotate_against_benchmark(rows, benchmark):
+    """Score candidates against the no-withdrawal reference path, in place.
+
+    A withdrawal only ever lowers a balance, so no candidate outlives the book
+    that never withdraws. Living longer is not the same as earning more, though
+    -- the extra trades can lose -- so the benchmark is a common yardstick, not
+    a proven maximum. Capture above 100% is therefore possible and is recorded
+    rather than rejected: it means a candidate's earlier deaths sat out a
+    net-losing stretch the benchmark traded through. Neutrality is decided on
+    the path fingerprint, never on the earnings total, so a candidate counts as
+    neutral only when every account took exactly the trades it took under the
+    benchmark.
     """
     reference = benchmark["booked_net_trading_usd"]
     ceiling = benchmark["path_ceiling_usd"]
     for row in rows:
-        if row["booked_net_trading_usd"] > reference:
-            raise ValueError(
-                "Benchmark is not the survival upper bound: "
-                f"{row['policy']} at {row['retained_balance_usd']} booked "
-                f"{row['booked_net_trading_usd']} against {reference}")
-        row["trading_neutral"] = row["booked_net_trading_usd"] == reference
-        row["earnings_forgone_usd"] = money(reference - row["booked_net_trading_usd"])
+        row["trading_neutral"] = row["path_fingerprint"] == benchmark["path_fingerprint"]
+        row["earnings_vs_benchmark_usd"] = money(row["booked_net_trading_usd"] - reference)
         row["book_ceiling_usd"] = ceiling
         row["ceiling_capture"] = (round(row["combined_pocket_usd"] / ceiling, 6)
                                   if ceiling > 0 else None)
@@ -84,5 +99,6 @@ def measure(trades, config, policy, cushion):
         "firm_split_usd": economics.firm_split_usd,
         "path_ceiling_usd": ceiling,
         "unextracted_usd": money(ceiling - result.pocket_usd),
+        "path_fingerprint": path_fingerprint(result),
         "economics": economics.to_payload(), "policy_config": p.to_payload(),
     }

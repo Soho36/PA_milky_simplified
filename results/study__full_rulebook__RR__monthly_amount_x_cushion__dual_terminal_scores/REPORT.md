@@ -4,11 +4,13 @@
 
 ## Extraction ceiling
 
-The hold benchmark makes no withdrawal during trading, so no account dies from one and its path books the most trading earnings any candidate here can: $462,022.20. Emptying that path completely -- nothing left standing in live accounts, no profit split -- would put $472,299.10 in the pocket. Ceiling capture scores combined net cash against that one number, so a candidate is charged for the earnings its own withdrawals destroyed rather than flattered by the smaller path they left it.
+The hold benchmark makes no withdrawal during trading, so no account dies from one and no candidate outlives it. Its path books $462,022.20 of trading earnings, and emptying that path completely -- nothing left standing in live accounts, no profit split -- would put $472,299.10 in the pocket. Ceiling capture scores combined net cash against that one number, so candidates are read on a fixed yardstick instead of each against the smaller path its own withdrawals left it.
 
-Trading-neutral candidates book the benchmark's earnings exactly: their withdrawals cost no trade. 109 of 300 tested settings qualify. Best capture is 97.50% (minimum_monthly at $30,000), leaving $11,787.35 unextracted -- $6,004.80 to the firm's split and $5,782.55 still standing in live accounts. The benchmark captures 3.01% of its own ceiling: one permitted request per account strands $458,099.10 of its equity.
+Outliving the benchmark is impossible; out-earning it is not. An account that dies early sits out whatever the benchmark went on to trade, and that stretch can lose money, so a capture above 100% is recorded rather than treated as an error. None of the 300 tested settings out-earn it, so on this tape the reference path is the earnings maximum as well. That is an observed result, not a property of the rulebook.
 
-Both columns are properties of this tape and this monthly acquisition cadence. Capture is an accounting bound, not a probability of success, and not a comparison against any alternative anyone could actually run.
+Trading-neutral means every account took exactly the trades it took under the benchmark. It is decided on a per-account fingerprint of trade counts, booked results and killing trade, never on the earnings total, which two different paths can share. 109 of 300 tested settings qualify. Best capture is 97.50% (minimum_monthly at $30,000), leaving $11,787.35 unextracted -- $6,004.80 to the firm's split and $5,782.55 still standing in live accounts. The benchmark captures 3.01% of its own ceiling: one permitted request per account strands $458,099.10 of its equity.
+
+Both columns are properties of this tape and this monthly acquisition cadence. Capture is an accounting ratio, not a probability of success, and not a comparison against any alternative anyone could actually run.
 
 ## Best tested cushion per policy: ongoing cash
 
@@ -56,7 +58,7 @@ Reproduce from project root: `venv/Scripts/python.exe scripts/study_withdrawal_a
 
 The ongoing-cash leader is fixed_750_backlog at $29,800, with $371,497.01 and 2 survivors. The closing-cash leader is minimum_monthly at $30,000, with $460,511.75, including $194,311.75 at exit.
 
-The ongoing-cash leader is not trading-neutral: it forgoes $90,300.05 of booked trading earnings against the benchmark path, and captures 78.66% of the ceiling. The closing-cash leader is trading-neutral: its withdrawals cost no trade.
+The ongoing-cash leader is not trading-neutral: its withdrawals changed which trades were taken, moving booked trading earnings by $-90,300.05 against the benchmark path, and it captures 78.66% of the ceiling. The closing-cash leader is trading-neutral: its withdrawals cost no trade.
 
 The closing leader ties at these tested retained balances: $30,000, $30,100, $30,200, $30,300, $30,400, $30,500, $30,600, $31,100. A tie in closing cash can still hide different cash timing. The first table selects only one representative per family.
 

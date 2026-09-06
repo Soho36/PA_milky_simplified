@@ -5,7 +5,7 @@ from pa_milky.config import CONFIG_ROOT, load_config
 from pa_milky.loader import Trade
 from pa_milky.policy import WithdrawalPolicy
 from pa_milky.policy_study import (annotate_against_benchmark, measure,
-                                   path_ceiling, policies)
+                                   path_ceiling, path_fingerprint, policies)
 from pa_milky.simulator import run_book
 
 
@@ -38,30 +38,69 @@ class TestPolicyStudy(unittest.TestCase):
             self.assertEqual(row['unextracted_usd'],
                              round(row['path_ceiling_usd'] - row['combined_pocket_usd'], 2))
 
-    def test_neutrality_is_booked_earnings_not_survivor_count(self):
-        rows = [{'policy': 'neutral', 'retained_balance_usd': 30000.0,
-                 'booked_net_trading_usd': 1000.0, 'combined_pocket_usd': 800.0},
-                {'policy': 'killer', 'retained_balance_usd': 29000.0,
-                 'booked_net_trading_usd': 940.0, 'combined_pocket_usd': 900.0}]
+    def test_matching_the_benchmark_total_is_not_matching_its_trades(self):
+        # Same booked earnings as the benchmark, reached on a different path.
+        # Neutrality must read the fingerprint, not the total.
+        rows = [{'policy': 'same_path', 'retained_balance_usd': 30000.0,
+                 'booked_net_trading_usd': 1000.0, 'combined_pocket_usd': 800.0,
+                 'path_fingerprint': 'benchmarkpath'},
+                {'policy': 'same_total', 'retained_balance_usd': 29000.0,
+                 'booked_net_trading_usd': 1000.0, 'combined_pocket_usd': 900.0,
+                 'path_fingerprint': 'someotherpath'}]
         benchmark = {'policy': 'hold', 'retained_balance_usd': None,
                      'booked_net_trading_usd': 1000.0, 'path_ceiling_usd': 1000.0,
-                     'combined_pocket_usd': 100.0}
+                     'combined_pocket_usd': 100.0, 'path_fingerprint': 'benchmarkpath'}
         annotate_against_benchmark(rows + [benchmark], benchmark)
         self.assertEqual([r['trading_neutral'] for r in rows], [True, False])
-        self.assertEqual([r['earnings_forgone_usd'] for r in rows], [0.0, 60.0])
-        # The killer pockets more cash and still scores below the neutral row:
-        # capture charges it for the earnings its withdrawals destroyed.
+        self.assertEqual([r['earnings_vs_benchmark_usd'] for r in rows], [0.0, 0.0])
         self.assertEqual([r['ceiling_capture'] for r in rows], [0.8, 0.9])
         self.assertEqual(benchmark['ceiling_capture'], 0.1)
         self.assertTrue(all(r['book_ceiling_usd'] == 1000.0 for r in rows))
 
-    def test_a_candidate_out_earning_the_benchmark_breaks_the_ceiling_claim(self):
+    def test_out_earning_the_benchmark_is_recorded_not_rejected(self):
+        # Dying early sits out whatever the benchmark went on to trade, and
+        # that stretch can lose money. The benchmark bounds survival, not
+        # earnings, so this is a result to report rather than an error.
         benchmark = {'policy': 'hold', 'retained_balance_usd': None,
                      'booked_net_trading_usd': 1000.0, 'path_ceiling_usd': 1000.0,
-                     'combined_pocket_usd': 100.0}
-        rows = [{'policy': 'impossible', 'retained_balance_usd': 30000.0,
-                 'booked_net_trading_usd': 1000.01, 'combined_pocket_usd': 900.0}]
-        with self.assertRaises(ValueError): annotate_against_benchmark(rows, benchmark)
+                     'combined_pocket_usd': 100.0, 'path_fingerprint': 'benchmarkpath'}
+        row = {'policy': 'dodged_a_losing_stretch', 'retained_balance_usd': 30000.0,
+               'booked_net_trading_usd': 1060.0, 'combined_pocket_usd': 1010.0,
+               'path_fingerprint': 'diedearlier'}
+        annotate_against_benchmark([row], benchmark)
+        self.assertFalse(row['trading_neutral'])
+        self.assertEqual(row['earnings_vs_benchmark_usd'], 60.0)
+        self.assertGreater(row['ceiling_capture'], 1.0)
+
+    def test_fingerprint_separates_paths_that_share_a_total(self):
+        class Book:
+            def __init__(self, accounts): self.accounts = accounts
+
+        def account(account_id, trades, gross):
+            return type('A', (), {'account_id': account_id, 'trades_taken': trades,
+                                  'gross_pnl_usd': gross, 'commission_usd': 1.0,
+                                  'death_trade_key': None})()
+        same = Book([account(1, 10, 400.0), account(2, 10, 600.0)])
+        # Identical account count, trade count and total; different per account.
+        shuffled = Book([account(1, 10, 600.0), account(2, 10, 400.0)])
+        died = Book([account(1, 10, 400.0), account(2, 9, 600.0)])
+        self.assertEqual(path_fingerprint(same),
+                         path_fingerprint(Book(list(reversed(same.accounts)))))
+        self.assertNotEqual(path_fingerprint(same), path_fingerprint(shuffled))
+        self.assertNotEqual(path_fingerprint(same), path_fingerprint(died))
+
+    def test_a_cushion_alone_does_not_move_a_book_off_the_benchmark_path(self):
+        # This tape never kills an account, so nothing a cushion does can cost
+        # a trade. Every setting must fingerprint to the benchmark path: a
+        # cushion is a rule about asking, not a rule about trading.
+        hold = measure(self.trades, self.config, WithdrawalPolicy(name='hold'), None)
+        rows = [measure(self.trades, self.config, policies()[1], level)
+                for level in (None, 26100, 30000, 35100)]
+        annotate_against_benchmark(rows, hold)
+        self.assertTrue(all(r['trading_neutral'] for r in rows))
+        self.assertEqual({r['earnings_vs_benchmark_usd'] for r in rows}, {0.0})
+        # Same trades, different cash: the scores still have to move.
+        self.assertGreater(len({r['combined_pocket_usd'] for r in rows}), 1)
 
     def test_ceiling_ignores_how_the_split_and_standing_profit_landed(self):
         class Fake:
