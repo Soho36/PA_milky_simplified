@@ -61,9 +61,12 @@ class TestValueDecomposition(unittest.TestCase):
             self.assertEqual(arm.value_usd, self.baseline.value_usd, key)
             self.assertEqual(arm.fates_changed_against(self.baseline), 0, key)
 
-    def test_consistency_mostly_blocks_access_rather_than_destroying_value(self):
-        # Removing it gains far more pocket than it gains value, so most of
-        # what it withheld was still sitting in the accounts.
+    def test_consistencys_pocket_gain_exceeds_its_value_gain(self):
+        # The arithmetic only. It was once read as "the rule mostly blocks
+        # access, and the money was still sitting in the accounts" -- which a
+        # per-account split disproves: every dollar of the gain, and every
+        # dollar of the retained difference, lives in the seven accounts whose
+        # fate changed. See TestWhereTheDeltaLives below.
         arm = self.by_rule["consistency"]
         gained_pocket = arm.pocket_usd - self.baseline.pocket_usd
         gained_value = arm.value_usd - self.baseline.value_usd
@@ -92,6 +95,73 @@ class TestValueDecomposition(unittest.TestCase):
             self.assertIn("delta_value_usd", row)
             self.assertIn("fates_changed", row)
             self.assertIn("withheld", row)
+
+
+class TestWhereTheDeltaLives(unittest.TestCase):
+    """For these selected rules on this fixed arm, cash deltas occur in
+    changed-fate accounts. This is an empirical observation, not an invariant:
+    profit split can change cash without changing any account fate.
+    """
+
+    @staticmethod
+    def _split(rule: str):
+        import dataclasses as dc
+
+        from pa_milky.simulator import run_book
+
+        base = run_book(TRADES, FULL)
+        arm = run_book(TRADES, dc.replace(FULL, rulebook=FULL.rulebook.without(rule)))
+        same = changed = 0.0
+        for before, after in zip(base.accounts, arm.accounts):
+            delta = after.received_usd - before.received_usd
+            if (before.died_at, before.alive) == (after.died_at, after.alive):
+                same += delta
+            else:
+                changed += delta
+        return round(same, 2), round(changed, 2), arm.pocket_usd - base.pocket_usd
+
+    def test_consistency_moves_no_cash_in_an_account_that_survives_the_same(self):
+        same, changed, total = self._split("consistency")
+        self.assertEqual(same, 0.0)
+        self.assertAlmostEqual(changed, total, places=2)
+
+    def test_nor_does_the_safety_net(self):
+        same, changed, total = self._split("safety_net")
+        self.assertEqual(same, 0.0)
+        self.assertAlmostEqual(changed, total, places=2)
+
+
+class TestFirmMoneyIsTwoMeasures(unittest.TestCase):
+    """Booked deficits are distinct from gross payouts exceeding booked earnings."""
+
+    def test_they_are_reported_separately(self):
+        econ = BASELINE.economics
+        self.assertGreater(econ.firm_capital_consumed_usd, 25_000.0)
+        self.assertEqual(econ.withdrawals_financed_by_firm_usd, 0.0)
+
+    def test_a_losing_account_that_never_paid_us_financed_nothing(self):
+        # The whole consumed figure sits in accounts that never paid out, so
+        # none of our cash came from the firm's capital. Reading the consumed
+        # number as a subsidy to the pocket would be wrong.
+        from pa_milky.simulator import run_book
+
+        result = run_book(TRADES, FULL)
+        consumed_by_non_payers = sum(
+            max(0.0, -a.equity_profit_usd)
+            for a in result.accounts
+            if a.gross_paid_usd == 0
+        )
+        self.assertAlmostEqual(
+            consumed_by_non_payers, BASELINE.economics.firm_capital_consumed_usd, places=2
+        )
+
+    def test_the_six_identity_terms_still_bridge_the_pocket(self):
+        # The two firm-money measures are descriptive and must not leak into
+        # the bridge, or contributions would stop summing to the delta.
+        for arm in ARMS:
+            bridge = arm.economics.bridge_against(BASELINE.economics)
+            self.assertEqual(len(bridge["contributions_usd"]), 6)
+            self.assertEqual(bridge["residual_usd"], 0)
 
 
 class TestAdaptedPolicyEffect(unittest.TestCase):

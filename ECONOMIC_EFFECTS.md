@@ -5,11 +5,11 @@ Run the existing `--ablate` command. Each arm in `ablation.json` now has
 and timing summary, also saved in `report.txt`. Historical saved outputs must be regenerated to gain these fields.
 
 The canonical results for this experiment are in
-`results/full_rulebook_monthly_500/`, including `INTERPRETATION.md`. Regenerate with:
+`results/full_rulebook__monthly_500__no_cushion__no_terminal/`, including `INTERPRETATION.md`. Regenerate with:
 
 ```powershell
 $env:PYTHONPATH = "src"
-.\venv\Scripts\python.exe -m pa_milky --config config/scenarios/full_rulebook_monthly_500.json --ablate --out results/full_rulebook_monthly_500
+.\venv\Scripts\python.exe -m pa_milky --config config/scenarios/full_rulebook_monthly_500.json --ablate --out results/full_rulebook__monthly_500__no_cushion__no_terminal
 ```
 
 ## An exact cash bridge
@@ -69,3 +69,24 @@ Use the bridge to explain the arithmetic, the receipt schedule to describe
 timing, and fate counts as supporting context. None alone establishes a causal
 allocation of a rule's total effect. Adapted deltas remain differences between
 best tested policies, not mathematical bounds on the unrestricted optimum.
+
+## Deficits and limited liability
+
+The headline is **booked account deficits not funded by owner**, split between
+failed accounts and live accounts at the endpoint. It is not an estimate of
+actual firm losses, cash financing, or the economic value of limited liability.
+The killing excursion is unbooked. Gross withdrawals exceeding each account's
+positive booked net earnings are reported separately.
+
+The no-cushion arm has $29,055.55 of deficits versus $102,700 pocket (28.3%).
+The $30,000 retained-balance arm with terminal request has the same deficits
+versus $436,443.98 pocket (6.7%). Neither has uncovered gross withdrawals.
+Those ratios are comparisons, not shares of cash financed by the firm. The
+results do not establish that profitability depends on this deficit amount.
+
+JSON exposes explicit names `booked_deficits_not_funded_by_owner_usd`,
+`dead_account_booked_deficits_usd`, `live_account_booked_deficits_usd`, and
+`gross_withdrawals_exceeding_booked_earnings_usd`. The old
+`firm_capital_consumed_usd` and `withdrawals_financed_by_firm_usd` keys remain
+compatibility aliases only; their historical names should not be interpreted
+literally.

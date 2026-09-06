@@ -114,8 +114,14 @@ def render_ablation(baseline: Arm, arms: list[Arm]) -> str:
         add(f"    matched receipts: ${timing['arm_earlier_usd']:,.2f} earlier, "
             f"${timing['arm_later_usd']:,.2f} later; unmatched baseline/arm "
             f"${timing['unmatched_baseline_usd']:,.2f}/${timing['unmatched_arm_usd']:,.2f}")
+        if timing["gross_schedule_identical"] is True and (
+            timing["arm_earlier_usd"] or timing["arm_later_usd"]
+        ):
+            add("      (every payout date and gross amount is unchanged, so this "
+                "shift is an amount artifact, not timing)")
     add("  Failure buckets are booked residuals, not broker liquidation valuations.")
     add("  FIFO receipt timing is descriptive, not attribution of denied requests.")
+    add("  It matches received dollars, so amount-only changes can look like timing.")
     add("=" * 92)
     return "\n".join(lines)
 

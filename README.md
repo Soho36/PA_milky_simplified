@@ -45,8 +45,8 @@ liquidatable at all:
 | monthly $500 + $30k cushion → firm-permitted | **$436,444** | 94.0% |
 | monthly $500 + $30k cushion → idealized | $446,063 | 100% |
 
-The best realizable arm reaches **$436,444** — within 8% of the $472,299
-idealized upper bound, and 31× the held book. Once the history exists, the
+The tested $30,000 retained-balance arm reaches **$436,444** — within 8% of the $472,299
+idealized hold benchmark, and 31× the held book. Once the history exists, the
 rules barely bind at liquidation.
 
 ## What the rulebook costs, measured two ways
@@ -146,6 +146,12 @@ in an account, independent of anything the firm requires — and
 `terminal_withdrawal` (`none` / `liquidate_profit` / `firm_permitted`), what to
 do with a live account when the tape runs out. Brick 1 is `cadence: never` with
 no closing withdrawal; the two hold benchmarks are the same with one.
+
+## Result folders
+
+See [the results index](results/README.md) for descriptive folder names, report
+links, original scenario IDs, and regeneration commands. Config filenames and
+sealed baseline names remain stable.
 
 ## Scenarios
 

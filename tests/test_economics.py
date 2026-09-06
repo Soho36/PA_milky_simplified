@@ -23,6 +23,15 @@ def receipt(day, amount, key=1):
 
 
 class TestEconomics(unittest.TestCase):
+    def test_deficit_headline_separates_live_and_failed_accounts(self):
+        e = Economics.measure(result(account(-1200, alive=False), account(-300)))
+        payload = e.to_payload()
+        self.assertEqual(payload['booked_deficits_not_funded_by_owner_usd'], 1500)
+        self.assertEqual(payload['dead_account_booked_deficits_usd'], 1200)
+        self.assertEqual(payload['live_account_booked_deficits_usd'], 300)
+        self.assertEqual(payload['gross_withdrawals_exceeding_booked_earnings_usd'], 0)
+        self.assertEqual(e.residual_usd, 0)
+
     def test_split_is_a_loss_without_a_survival_change(self):
         base = Economics.measure(result(account(2000, 1000, 900)))
         arm = Economics.measure(result(account(2000, 1000, 1000)))

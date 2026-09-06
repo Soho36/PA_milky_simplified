@@ -10,6 +10,7 @@ from pathlib import Path
 from statistics import median
 
 from .account import money
+from .economics import Economics
 from .simulator import BookResult
 
 
@@ -58,6 +59,7 @@ def summarize(result: BookResult) -> dict:
     withdrawn = result.total_withdrawn_usd
     received = result.total_received_usd
     payers = [a for a in result.accounts if a.payout_count > 0]
+    economics = Economics.measure(result)
 
     summary = {
         "schema_version": "pa_milky_simplified.result.v1",
@@ -99,6 +101,7 @@ def summarize(result: BookResult) -> dict:
             "withdrawn_usd": withdrawn,
             "owner_cash_position_usd": money(received - cost),
         },
+        "economics": economics.to_payload(),
         "alive_equity": {
             "profit_above_start": _stats(alive_profit),
             "total_balance_usd": money(sum(a.balance_usd for a in alive)),
@@ -290,9 +293,29 @@ def render_text(result: BookResult) -> str:
     lines: list[str] = []
     add = lines.append
 
-    title = s["scenario"].replace("_", " ").upper()
+    policy = result.config.policy
+    active = rulebook.active_keys
+    if not active:
+        rules_label = "NO PAYOUT RULES"
+    elif set(active) == {"minimum_balance", "safety_net"}:
+        rules_label = "LEGACY RULES: MINIMUM BALANCE + SAFETY NET"
+    else:
+        rules_label = "CONFIGURED PAYOUT RULEBOOK"
+    if not policy.enabled:
+        policy_label = "HOLD"
+    elif policy.amount_rule == "fixed":
+        policy_label = f"${policy.amount_usd:,.0f} MONTHLY"
+    else:
+        policy_label = f"MONTHLY {policy.amount_rule.upper()}"
+    title = f"{rules_label} | {policy_label}"
     add("=" * 78)
     add(f"  {title}")
+    cushion = policy.min_retained_balance_usd
+    add("  Retained balance: " + ("none" if cushion is None else f"${cushion:,.0f}"))
+    terminal_label = {"none": "no terminal withdrawal", "firm_permitted": "one firm-permitted terminal request",
+                      "liquidate_profit": "idealized terminal profit liquidation"}[policy.terminal_withdrawal]
+    add(f"  Closing action: {terminal_label}")
+    add(f"  Scenario config ID: {s['scenario']}")
     add("=" * 78)
     add(
         f"  strategy {run['strategy']} @ RR {run['risk_reward']}"
@@ -327,6 +350,30 @@ def render_text(result: BookResult) -> str:
         f"  ({book['survival_rate'] * 100:.1f}%)"
     )
     add(f"    blown on the trailing drawdown ....... {book['accounts_dead']}")
+    add("")
+
+    econ = s["economics"]
+    add("  WHERE THE POCKET CAME FROM")
+    add(f"    booked net trading earnings .......... ${econ['booked_net_trading_usd']:>14,.2f}")
+    add(f"    less profit still in live accounts ... ${-econ['retained_profit_usd']:>14,.2f}")
+    add(f"    less profit stranded in dead accounts  ${-econ['failed_positive_ledger_usd']:>14,.2f}")
+    add(f"    plus failed-account booked deficits ... ${econ['failed_negative_ledger_usd']:>14,.2f}")
+    add(f"    less the firm's profit split ......... ${-econ['firm_split_usd'] or 0.0:>14,.2f}")
+    add(f"    less account purchase fees ........... ${-econ['purchase_fees_usd']:>14,.2f}")
+    add(f"    ---------------------------------------{'-' * 15}")
+    add(f"    IN OUR POCKET ........................ ${econ['pocket_usd']:>14,.2f}")
+    if econ["residual_usd"]:
+        add(f"    RECONCILIATION RESIDUAL .............. ${econ['residual_usd']:>14,.2f}")
+    add("")
+
+    add("  BOOKED DEFICITS NOT FUNDED BY OWNER")
+    add(f"    total booked deficits ............... ${econ['booked_deficits_not_funded_by_owner_usd']:>14,.2f}")
+    add(f"      failed accounts ................... ${econ['dead_account_booked_deficits_usd']:>14,.2f}")
+    add(f"      live accounts at endpoint ......... ${econ['live_account_booked_deficits_usd']:>14,.2f}")
+    add("    Booked balances, not actual firm losses or cash financing.")
+    add("    The unbooked killing excursion is excluded.")
+    add(f"    gross payouts exceeding own earnings ${econ['gross_withdrawals_exceeding_booked_earnings_usd']:>14,.2f}")
+    add("      per-account gross payouts above positive booked net trading earnings")
     add("")
 
     add("  CASH IN OUR POCKET")
