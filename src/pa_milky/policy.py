@@ -8,7 +8,7 @@ from __future__ import annotations
 
 from dataclasses import dataclass
 
-CADENCES = ("never", "calendar_month")
+CADENCES = ("never", "calendar_month", "weekly", "daily")
 AMOUNT_RULES = ("fixed", "maximum", "minimum")
 SHORTFALL_RULES = ("skip", "accrue_backlog", "partial")
 

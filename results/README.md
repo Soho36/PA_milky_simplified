@@ -50,3 +50,11 @@ not on matching earnings totals, which two different paths can share.
 all tested settings. These are in-sample search results, not validated optima.
 
 Reproduce: `venv/Scripts/python.exe scripts/study_withdrawal_amount.py`.
+
+## Withdrawal cadence study
+
+[Monthly, weekly and daily eligibility checks](study__full_rulebook__RR__withdrawal_cadence__monthly_purchases/REPORT.md)
+with monthly account purchases and monthly fixed-target entitlement unchanged.
+The 93 candidates cover the $31,600-$32,100 band plus the minimum-policy $30,000
+control. Minimum requests mean $500 per eligible check, not a monthly budget.
+Reproduce: `venv/Scripts/python.exe scripts/study_withdrawal_cadence.py`.

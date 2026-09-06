@@ -1,0 +1,221 @@
+The main takeaway is: you can get much more of the money out earlier without reducing the final total—but you need to leave enough money in each account to survive losses.
+Think of the retained balance as the account’s reserve. A $31,900 target means: “Only withdraw money above $31,900.” Trading losses can still push the balance below that level.
+The four approaches tell this story:
+- Take $500 monthly, keep $30,000: You receive about $266k along the way, then collect the rest at the end. Total: $461k.
+- Check weekly for a $500 payout, keep $31,600: You receive about $350k along the way, with the same final total.
+- Check daily for a $500 payout, keep $31,900: You receive about $358k along the way, again with the same final total.
+- Check weekly and take everything allowed above $31,600: You receive about $369k along the way, but finish slightly lower, at $457k.
+“Check daily” does not mean you receive $500 every day. It means asking whether the account has enough spare money and meets the firm’s payout rules.
+The daily-$500 approach looks like a useful middle ground: it gets roughly $92k out earlier than monthly withdrawals, without giving up any final cash in this test.
+The weekly “take all available excess” approach goes a little further: roughly $12k more cash earlier, in exchange for about $3k less overall.
+But taking money aggressively every day was too much at the tested $31,600 reserve. It repeatedly left accounts vulnerable to later losses, and only two survived. So the lesson isn’t simply “withdraw more often.” It’s “withdraw more often in manageable amounts, while keeping a sufficient reserve.”
+All four approaches in the table ended with 22 surviving accounts—the same number as holding everything. That means they extracted cash without cutting those accounts’ trading lives short on this dataset.
+These are promising ways to operate based on this historical run, rather than promises about future earnings.
+
+
+Sunday 11:30 PM
+
+
+
+
+
+
+
+
+So basically if I understand it correctly it daily-weekly-monthly is not about withdrawing it is about checking whether withdrawal is available?
+
+
+
+
+
+
+
+11:36 PM
+
+
+
+
+
+
+Yes—with one important detail: when the check succeeds, the simulation actually withdraws the money.
+- Daily: check each day; withdraw if eligible.
+- Weekly: check each Monday; withdraw if eligible.
+- Monthly: check on the first of each month; withdraw if eligible.
+“Eligible” means both:
+1. Your policy allows taking money out while preserving its chosen reserve.
+2. The firm’s payout rules permit the withdrawal.
+If either condition fails, no withdrawal happens. So daily checks do not mean daily payouts—just more opportunities to collect a payout as soon as it becomes available.
+
+
+11:36 PM
+
+
+
+
+
+
+
+
+OK, so other words, the optimal strategy seems to be "maintain balance 30000-32000, take minimum per check 500 and check if withdrawal available on daily basis"?
+
+
+
+
+
+
+
+11:39 PM
+
+
+
+
+
+
+Yes—as a promising candidate, with a narrower balance target.
+The tested daily approach was:
+Check daily. Withdraw $500 when the firm allows it and doing so leaves at least $31,900 in the account. Otherwise, wait.
+
+That means the balance generally needs to reach $32,400 before a $500 withdrawal. The reserve is a withdrawal limit; trading losses can still push the balance below it.
+I wouldn’t broaden that to “$30,000–$32,000” for daily checks:
+- Daily checks, $31,900 reserve: about $358k during trading, $461k including the final request, 22 survivors.
+- Daily checks, $30,000 reserve: about $373k during trading, but only 2 survivors and no additional terminal payout.
+So $31,900 with daily minimum withdrawals is one of the strongest tested candidates, particularly if you want substantial cash along the way while preserving accounts. It is not yet a proven optimum for future trading.
+
+
+11:39 PM
+
+
+
+
+
+
+
+
+Those two tables here in results [REPORT.md](results/study__full_rulebook__RR__withdrawal_cadence__monthly_purchases/REPORT.md)
+Please break down those.
+What is the difference between minimum_500_per_check  daily in first table and minimum_500_per_check  daily in second? Yes I see that the first one doesnt have final receipt, but all other rows do have it.
+What is a backlog and what is excess?
+
+
+
+
+
+
+
+11:53 PM
+
+
+
+
+
+
+Worked for 12s
+
+
+
+Both tables allow a final withdrawal. The difference is how they choose the best reserve balance.
+- First table: “Which reserve produced the most cash during trading?”
+- Second table: “Which reserve produced the most cash during trading plus the final withdrawal?”
+For each policy and checking schedule, the study tries several reserves. Each table then shows the reserve that wins for its particular goal. Sometimes the same reserve wins both, so the rows are identical.
+For daily $500 withdrawals, different reserves win:
+	First table	Second table
+Reserve kept after withdrawals	$30,000	$31,900
+Cash during trading	$373,200	$357,800
+Final withdrawal	$0	$102,712
+Total cash	$373,200	$460,512
+Accounts still alive	2	22
+
+
+The first approach leaves a smaller reserve, allowing more withdrawals along the way. But it also leaves accounts more vulnerable to losses.
+The second approach leaves an extra $1,900 in each account. It receives $15,400 less along the way, but preserves enough accounts to collect another $102,712 at the end.
+The $0 final receipt does not mean the final withdrawal was switched off. It means the two surviving accounts could not make a permitted payout at that point. Being alive does not automatically mean an account qualifies for withdrawal.
+Also, the final request is special: it tries to take the maximum the firm permits, releasing your voluntary reserve. It is not limited to another $500.
+“Backlog” means carrying forward withdrawals you wanted but couldn’t take.
+For example, fixed_750_backlog means:
+“Add $750 to my withdrawal target each month. If I can’t collect it, carry it forward.”
+
+Suppose three monthly targets accumulate without a payout:
+- First month: $750 outstanding.
+- Second month: $1,500 outstanding.
+- Third month: $2,250 outstanding.
+At the next successful check, the policy tries to collect that outstanding amount, subject to your reserve and the firm’s restrictions. If only $1,500 is permitted, $750 remains outstanding.
+That backlog is your own bookkeeping target, not money the firm owes you or profit the account necessarily earned. Daily checks don’t add $750 daily; the target still increases only monthly.
+By contrast, minimum_500_per_check has no backlog:
+“Whenever a check succeeds, take $500. Failed checks don’t accumulate into a larger request.”
+
+“Excess” means money above your chosen reserve.
+With a $31,600 reserve and a $34,000 balance:
+Excess = $34,000 − $31,600 = $2,400
+
+maximum_excess_per_check tries to withdraw that $2,400, but the firm might cap it at a smaller amount or refuse it.
+So the three policies are:
+Policy	What it tries to take
+Minimum $500	$500 whenever eligible
+Fixed target with backlog	The accumulated, unpaid monthly target
+Maximum excess	Everything available above your reserve
+
+
+All three still respect the firm’s rules and your reserve during trading.
+
+
+11:53 PM
+
+
+
+
+
+
+
+
+Alright.... seems reserve means a lot. Actually only 1900 difference means about 90k difference for  minimum_500_per_check  daily? Wouldnt it be a good idea to hold bigger cushion (just in case like 34k)?
+Also so far study shows that just cushion means a lot and once it reached and held at that level other rules and policies dont mean that much as the final number look pretty much the same?
+By the way what does "Same trading path" column shows and how it affects the results?
+
+
+
+
+
+
+
+12:18 AM
+
+
+
+
+
+
+Worked for 18s
+
+
+
+
+
+
+
+Yes—that extra $1,900 per account changed the outcome by about $87,300 in this comparison.
+But the extra reserve didn’t directly earn $87,300. It helped accounts survive losses, so they could keep trading and producing payouts. The difference was 22 survivors versus 2. Small balance differences can have large consequences when crossing a threshold permanently closes an account.
+Would $34,000 be a sensible cushion to test? Absolutely. But “bigger” does not automatically mean “better.”
+A larger reserve:
+- Gives an account more room to absorb losses once it has built that reserve.
+- Delays withdrawals while the account builds up to it.
+- Leaves more money exposed to being lost if the account eventually fails.
+- Can delay the early payouts needed to get past payout-count restrictions.
+Also, setting a $34,000 reserve doesn’t give a new account $34,000. It starts at $25,000 and must earn its way there. The setting means “don’t withdraw money that would take the balance below $34,000.”
+The daily-cadence study hasn’t established what happens at $34,000. Testing a wider range would tell us whether the extra protection changes survival or simply postpones cash.
+Your second interpretation is broadly right, with a qualification.
+The results suggest this pattern:
+Once withdrawals stop killing accounts earlier, many policies mainly change when you receive the money, rather than how much trading profit gets produced.
+
+That explains why several final totals are identical or close. But the policies still matter for:
+- How much money arrives during trading.
+- Whether enough early payouts happen to unlock larger later payouts.
+- How much goes to profit split.
+- How much remains inaccessible at the final request.
+So “the final totals are similar” does not mean “the policies are interchangeable.” Receiving $350k along the way is quite different from receiving $185k and waiting until the end for the rest.
+“Same trading path” compares each candidate with the hold-everything benchmark.
+The benchmark buys accounts monthly and makes no withdrawals during trading.
+- True: Each account took the same trades as its counterpart in that benchmark. In this study, withdrawals did not cut its trading life short.
+- False: At least one account’s trading history differed. Here, withdrawals can make an account fail earlier and miss subsequent trades.
+Importantly, True does not mean every account survived. The hold benchmark itself loses accounts. It means the withdrawal policy didn’t change which trades those accounts got to take.
+That column helps explain the similar totals: same trades → same booked trading earnings. Different payout schedules then divide those earnings between cash already received, the firm’s share, and money still in accounts.
+I would describe the emerging goal as: find a reserve that preserves trading capacity while letting you collect cash reasonably early. Your $34,000 idea is a useful test of whether a larger reserve adds protection—or mostly adds waiting.

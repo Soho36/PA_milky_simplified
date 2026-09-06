@@ -306,10 +306,12 @@ def render_text(result: BookResult) -> str:
     elif policy.amount_rule == "fixed":
         policy_label = f"${policy.amount_usd:,.0f} MONTHLY"
     else:
-        policy_label = f"MONTHLY {policy.amount_rule.upper()}"
+        request_label = {"calendar_month": "MONTHLY", "weekly": "WEEKLY", "daily": "DAILY"}.get(policy.cadence, policy.cadence.upper())
+        policy_label = f"{request_label} {policy.amount_rule.upper()}"
     title = f"{rules_label} | {policy_label}"
     add("=" * 78)
     add(f"  {title}")
+    add(f"  Request cadence: {policy.cadence}; account purchases and target accrual: monthly")
     cushion = policy.min_retained_balance_usd
     add("  Retained balance: " + ("none" if cushion is None else f"${cushion:,.0f}"))
     terminal_label = {"none": "no terminal withdrawal", "firm_permitted": "one firm-permitted terminal request",
@@ -328,10 +330,12 @@ def render_text(result: BookResult) -> str:
         f"  |  {tape['trades_loaded']:,} trades -> {tape['copies_filled']:,} copies filled"
     )
     if withdrawals:
-        add(
-            f"  policy: ${withdrawals['amount_usd']:,.0f}/month per account"
-            f"  ({withdrawals['policy']}, {withdrawals['shortfall']})"
-        )
+        if policy.amount_rule == "fixed":
+            add(f"  policy: ${policy.amount_usd:,.0f}/month entitlement per account ({policy.shortfall})")
+        elif policy.amount_rule == "minimum":
+            add(f"  policy: ${result.config.firm_minimum_payout_usd:,.0f} per eligible check; no backlog")
+        else:
+            add("  policy: maximum permitted excess above retained balance per check")
     add("")
 
     add("  FIRM RULES")

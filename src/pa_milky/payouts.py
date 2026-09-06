@@ -104,8 +104,14 @@ def run_monthly_decision(
     boundary: datetime,
     config,
     pending: list[PendingPayout],
+    *, accrue: bool = True, request: bool = True,
 ) -> tuple[list[PayoutEvent], list[DenialEvent]]:
-    """Accrue one month for every live account, then ask the firm."""
+    """Accrue monthly entitlement and/or check requests, independently.
+
+    Non-monthly checks begin in the second calendar month, matching the monthly
+    control's opening-month exclusion. Daily checks occur at midnight after
+    completed exits, never using a day's as-yet-unrealized result.
+    """
 
     policy = config.policy
     rulebook = config.rulebook
@@ -119,9 +125,13 @@ def run_monthly_decision(
     for account in accounts:
         if not account.alive or account.activated_at >= boundary:
             continue
-        if policy.amount_rule == "fixed":
+        if accrue and policy.amount_rule == "fixed":
             account.accrue(policy.amount_usd, keep_backlog=policy.keeps_backlog)
 
+        if not request or account.activated_at >= datetime(boundary.year, boundary.month, 1):
+            continue
+        if any(item.account.account_id == account.account_id for item in pending):
+            continue
         requested = policy.requested_usd(account, firm_minimum_usd=firm_minimum)
         decision = rulebook.decide(
             build_context(account, boundary, requested, config), quantize

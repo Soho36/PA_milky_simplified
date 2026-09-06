@@ -16,7 +16,7 @@ at T.
 from __future__ import annotations
 
 from dataclasses import dataclass
-from datetime import datetime
+from datetime import datetime, timedelta
 
 from .account import Account, money
 from .config import RunConfig
@@ -149,6 +149,18 @@ def _advance(
     return index, copies, payouts, denials
 
 
+def decision_boundaries(first: datetime, last: datetime, cadence: str):
+    """Monthly purchase/accrual boundaries plus midnight request checks."""
+    dates = {datetime(y, m, 1) for y, m in months_in_span(first, last)}
+    if cadence in {"weekly", "daily"}:
+        day = datetime(first.year, first.month, 1)
+        while day <= last:
+            if cadence == "daily" or day.weekday() == 0:
+                dates.add(day)
+            day += timedelta(days=1)
+    return sorted(dates)
+
+
 def run_book(trades: list[Trade], config: RunConfig) -> BookResult:
     """Walk the tape, opening one account a month and asking the firm monthly."""
 
@@ -167,8 +179,12 @@ def run_book(trades: list[Trade], config: RunConfig) -> BookResult:
     index = 0
     copies = 0
 
-    for opened, (year, month) in enumerate(months_in_span(first_entry, last_exit), start=1):
-        boundary = datetime(year, month, 1)
+    opened = 0
+    for boundary in decision_boundaries(first_entry, last_exit, config.policy.cadence):
+        year, month = boundary.year, boundary.month
+        monthly = boundary.day == 1
+        if monthly:
+            opened += 1
         index, settled, paid, denied = _advance(
             trades, index, boundary, accounts, pending, config, commission=commission
         )
@@ -177,12 +193,16 @@ def run_book(trades: list[Trade], config: RunConfig) -> BookResult:
         denials.extend(denied)
 
         if asks:
-            paid, denied = run_monthly_decision(accounts, boundary, config, pending)
+            request = (config.policy.cadence == "daily" or
+                       (config.policy.cadence == "weekly" and boundary.weekday() == 0) or
+                       (config.policy.cadence == "calendar_month" and monthly))
+            paid, denied = run_monthly_decision(
+                accounts, boundary, config, pending, accrue=monthly, request=request)
             payouts.extend(paid)
             denials.extend(denied)
             pending.sort(key=lambda item: item.due_at)
 
-        if config.max_accounts is None or opened <= config.max_accounts:
+        if monthly and (config.max_accounts is None or opened <= config.max_accounts):
             accounts.append(
                 Account(
                     account_id=opened,
