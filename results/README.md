@@ -34,3 +34,17 @@ The other folders contain single-policy experiments and optional fixed ablations
 See `sweeps/`: filenames identify rulebook, tape, monthly withdrawal policy,
 and whether the retained-balance grid is coarse or fine. These are historical
 search outputs, not newly optimized policies. Terminal withdrawal is absent.
+
+## Withdrawal amount x cushion study
+
+[Compare monthly withdrawal policies and retained balances](study__full_rulebook__RR__monthly_amount_x_cushion__dual_terminal_scores/REPORT.md).
+The study scores ongoing net cash and cash including one permitted terminal
+request on each candidate's identical trading path. Account purchases remain
+monthly. Every candidate also carries a trading-neutral flag and a ceiling
+capture: the hold benchmark never withdraws, so its path books the most trading
+earnings available, and candidates are scored against emptying that path rather
+than against the smaller path their own withdrawals left them.
+`study.json` includes full provenance and `candidates.csv` contains
+all tested settings. These are in-sample search results, not validated optima.
+
+Reproduce: `venv/Scripts/python.exe scripts/study_withdrawal_amount.py`.
