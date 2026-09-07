@@ -1,0 +1,238 @@
+The report asks: “Given a limited pot of money, when should we buy accounts, and how should we use payouts to keep the operation going?”
+It replayed the same trading history with 108 combinations. The numbers are totals across the dataset, not annual income or a forecast.
+What the purchase names mean
+Name	In everyday language
+monthly_one	Try to buy one account every month.
+quarterly_one	Try to buy one account every three months.
+quarterly_three	Try to buy three accounts together every three months.
+replace_one	Keep one account running; replace it when it dies.
+replace_five	Try to keep five accounts running.
+reinvest_50pct / 100pct	Start with one account. Use half or all received payouts as the budget for additional accounts.
+reinvest_restart_50pct / 100pct	Same, but if all accounts die, use available cash to buy a fresh account and try again.
+
+
+Every account costs $200. Purchases happen only when there is enough cash, and no policy can have more than 20 live accounts.
+“Reinvest 100%” means all payouts become available for purchases. It does not mean every dollar actually gets spent: the 20-account limit can leave plenty of cash unused.
+How to read the money columns
+Take the first winning row:
+- Start with $1,000 and add nothing later.
+- Buy 85 accounts over time, spending $17,000. Later purchases are financed by payouts.
+- Finish with 20 accounts still alive.
+- Receive $240,500 net during trading, after subtracting account purchases.
+- The final permitted withdrawal adds about $189,972.
+- Total net cash becomes $430,472.
+- Add your original $1,000 back, and ending owner cash is $431,472.
+The final withdrawal is one request allowed by the configured rules. It does not assume you can empty every account.
+What the results are telling us
+1. With only $1,000 and no top-ups, restarting and reinvesting works best among the tested choices.
+Its best total is about $430k, versus $302k for buying monthly.
+The restart rule matters enormously. Without it, the first account dies before paying anything. The policy then stops forever, losing $200 while $800 sits unused. That poor result tells us the policy needs a way to restart; it tells us little about whether 50% or 100% reinvestment is better.
+2. With more funding available, buying three accounts quarterly comes out ahead.
+Your funding	Best tested purchase approach	Total net cash
+$1,000, no top-ups	Restart + reinvest 100%	$430k
+$1,000 + $200/month	Three quarterly	$593k
+$5,000, no top-ups	Three quarterly	$561k
+$5,000 + $200/month	Three quarterly	$593k
+
+
+Notice that the two $200/month scenarios produce the same profit. Starting with an extra $4,000 did not improve that winning policy’s result. It simply left $4,000 more of your own money in the ending cash balance.
+3. Buying more accounts does not automatically make more money.
+With $1,000 plus monthly funding:
+- Three quarterly: 45 accounts bought → $593k
+- One monthly: 60 accounts bought → $464k
+- Restart and reinvest everything: 85 accounts bought → $430k
+When the accounts start, how long they survive, and what they pay matter more than the purchase count alone.
+4. “Most money during trading” and “most money after the final withdrawal” pick different settings.
+The main tables select the best final total for each purchase policy.
+For example, with $1,000 and no top-ups, restarting and reinvesting can produce:
+- $269,100 during trading with daily withdrawal checks and a $31,900 retained balance.
+- $430,472 total with monthly withdrawal checks and a $30,000 retained balance—but that version produces only $240,500 during trading.
+So the highest final number can involve leaving substantially more money inside accounts until the end.
+My main takeaway: the study shows that purchase timing and the ability to recover from early failures make a large difference. It also shows that extra funding eventually stops helping under the tested limits.
+I would still treat “three quarterly is best” as a promising finding to check. Three accounts bought together experience the same stretch of trading, so this schedule may have landed on favourable dates in this dataset. Shifting the purchase months and changing the 20-account limit would tell us whether that advantage holds up.
+
+
+1:12 AM
+
+
+
+
+
+
+
+
+If we take $1,000 starting cash; $0/month thereafter and monthly_one  - we start with one account ($200) and each next month we buy brand new account whether using starting cash or withdrawn money, correct? If happened that 5 accounts would die initially we would end up with 0?
+
+
+
+
+
+
+
+1:48 AM
+
+
+
+
+
+
+Yes, correct.
+With $1,000 starting cash, no top-ups, and monthly_one:
+- Buy one $200 account at the start.
+- Each next month, try to buy one new $200 account using remaining starting cash plus payouts already received.
+- Existing surviving accounts continue trading alongside the new accounts.
+- Purchases require at least $200 available and space under the 20-live-account cap.
+If the first five accounts all died without paying anything, you would have $0 cash and no live accounts. With no further funding, the operation would stop.
+One distinction: if you spent the full $1,000 but some accounts remained alive, you would pause purchases while waiting for payouts. A later payout could fund a purchase at the next monthly buying date.
+
+
+1:48 AM
+
+
+
+
+
+
+
+
+For $1,000 starting cash; $200/month thereafter and monthly_one  why there is a difference in Total net cash of about 160k if in both cases we buy 1 account each month. In first case we use initial 1k and then withdrawals and in second case we use basically use the same? Or not? I mean additional $200/month from own pocket shouldnt make any difference as we use withdrawals anyway?
+
+
+
+
+
+
+
+1:55 AM
+
+
+
+
+
+
+Worked for 36s
+
+
+
+Your reasoning would be correct if withdrawals arrived early enough to fund every monthly purchase. Here, they don’t. I checked both runs: the first payout arrives on 1 March 2022.
+monthly_one means try to buy one each month, subject to available cash and the 20-account cap.
+Here is what actually happens:
+Period	$1,000 only	$1,000 + $200/month
+January–May 2020	Buys five accounts; spends the initial $1,000	Buys five accounts, with monthly top-ups replenishing cash
+June 2020–February 2022	Misses 21 purchases: no cash and no payouts yet	Keeps buying one each month
+March 2022 onward	Payouts allow purchases to resume	Continues buying
+January 2025–July 2026	Keeps buying	Misses 19 purchases: already at the 20-live-account cap
+
+
+That explains the seemingly small difference in account count:
+- Without top-ups: 58 accounts bought
+- With top-ups: 60 accounts bought
+But these are different accounts bought at different dates. The funded version buys 21 accounts earlier; the unfunded version instead buys 19 later. They experience different trades and have different amounts of time to generate payouts.
+The resulting total net cash is:
+- No top-ups: $302,287
+- $200/month: $464,312
+- Difference: $162,025
+The extra contributions are not counted as profit. They enable purchases during that long period before the first payout, and those changed purchases produce the difference.
+So your intuition holds once cash is plentiful. In this run, the crucial gap is running out of purchase money in May 2020 and waiting until March 2022 for the first withdrawal.
+
+
+1:56 AM
+
+
+
+
+
+
+
+
+Ok I get the difference - $1,000 + $200/month  keeps buying even when there is withdrawal available.
+What about  reinvest_restart_50pct / 100pct  - "use available cash to buy a fresh account and try again."  If we had 10 accounts and all died what we do - start over with one or buy 10 accounts in one go?
+
+
+
+
+
+
+
+2:05 AM
+
+
+
+
+
+
+Start over with one account, provided at least $200 cash remains—not ten at once.
+Then, at the next daily purchase check:
+- If there is unused reinvestment allowance from earlier payouts, the policy can buy multiple additional accounts, subject to available cash and the 20-account cap.
+- If that allowance is exhausted, it waits for new payouts before expanding.
+The allowance carries over when accounts die. So restarting buys one immediately, but the portfolio could grow again the following day using previously received payouts.
+One small correction to your first sentence: $1,000 + $200/month keeps buying even when no withdrawal is available, because your monthly contribution covers the purchase.
+
+
+2:05 AM
+
+
+
+
+
+
+
+
+1 annotation
+
+
+Did you mean "at the next monthly purchase check" (or whatever Purchase policy we use)? Because we have not daily purchase policy, we have only daily withdrawal... So did I understand correctly in this example (lets say we have 2k in received payouts): if 10 accounts die, it start over with one account and next purchase check (say monthly) it can buy additional 9?
+
+
+
+
+
+
+
+2:13 AM
+
+
+
+
+
+
+I meant daily. The implemented reinvestment policies check for purchases every day, independently of the withdrawal schedule. I should have made that clearer. Annotation 1
+Monthly purchasing applies to monthly_one. Replacement and reinvestment policies use daily purchase checks.
+For your example, assume all ten accounts die, you have $2,000 cash from payouts, and none of the reinvestment allowance has already been spent:
+Policy	First daily check: restart	Following daily check
+Reinvest 100%	Buy one for $200; $1,800 remains	Buy nine more
+Reinvest 50%	Buy one for $200; $1,800 remains	Buy five more, using the $1,000 allowance
+
+
+The restart purchase is separate from the expansion allowance in the current implementation.
+So your “one, then another nine” understanding is correct for 100% reinvestment—with daily timing. Making those checks monthly would be a different policy, and the reported results do not currently test that version.
+
+
+2:13 AM
+
+
+
+
+
+
+
+
+OK, and this subsequently means that if there is sufficient cash in reinvestment allowance it restores the max number of accounts very quickly - in couple of days?
+
+
+
+
+
+
+
+2:21 AM
+
+
+
+
+
+
+Yes—if both available cash and unused reinvestment allowance are sufficient, it can refill to the 20-live-account cap very quickly:
+- Some accounts survive: buy enough to reach 20 at the next daily purchase check.
+- All accounts die: buy one at the next daily check, then up to 19 more at the following daily check.
+There is no gradual buying limit for reinvestment. That makes it a much faster expansion and replacement policy than buying one account per month.

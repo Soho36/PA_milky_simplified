@@ -68,6 +68,8 @@ Each table holds the withdrawal setting and funding fixed. These are purchase-st
 | replace_one | daily_minimum_retain_31900 | 4 | 1 | $800 | $29,600.00 | $34,499.95 | $35,499.95 |
 | reinvest_50pct | daily_minimum_retain_31900 | 1 | 0 | $200 | $-200.00 | $-200.00 | $800.00 |
 | reinvest_100pct | daily_minimum_retain_31900 | 1 | 0 | $200 | $-200.00 | $-200.00 | $800.00 |
+| monthly_two | daily_minimum_retain_31900 | 5 | 0 | $1,000 | $-1,000.00 | $-1,000.00 | $0.00 |
+| weekly_one | daily_minimum_retain_31900 | 5 | 0 | $1,000 | $-1,000.00 | $-1,000.00 | $0.00 |
 | replace_five | daily_minimum_retain_31900 | 5 | 0 | $1,000 | $-1,000.00 | $-1,000.00 | $0.00 |
 
 #### weekly_excess_retain_31600
@@ -82,6 +84,8 @@ Each table holds the withdrawal setting and funding fixed. These are purchase-st
 | replace_one | weekly_excess_retain_31600 | 4 | 1 | $800 | $30,232.96 | $34,499.94 | $35,499.94 |
 | reinvest_50pct | weekly_excess_retain_31600 | 1 | 0 | $200 | $-200.00 | $-200.00 | $800.00 |
 | reinvest_100pct | weekly_excess_retain_31600 | 1 | 0 | $200 | $-200.00 | $-200.00 | $800.00 |
+| monthly_two | weekly_excess_retain_31600 | 5 | 0 | $1,000 | $-1,000.00 | $-1,000.00 | $0.00 |
+| weekly_one | weekly_excess_retain_31600 | 5 | 0 | $1,000 | $-1,000.00 | $-1,000.00 | $0.00 |
 | replace_five | weekly_excess_retain_31600 | 5 | 0 | $1,000 | $-1,000.00 | $-1,000.00 | $0.00 |
 
 #### monthly_minimum_retain_30000
@@ -96,6 +100,8 @@ Each table holds the withdrawal setting and funding fixed. These are purchase-st
 | replace_one | monthly_minimum_retain_30000 | 4 | 1 | $800 | $23,700.00 | $34,499.95 | $35,499.95 |
 | reinvest_50pct | monthly_minimum_retain_30000 | 1 | 0 | $200 | $-200.00 | $-200.00 | $800.00 |
 | reinvest_100pct | monthly_minimum_retain_30000 | 1 | 0 | $200 | $-200.00 | $-200.00 | $800.00 |
+| monthly_two | monthly_minimum_retain_30000 | 5 | 0 | $1,000 | $-1,000.00 | $-1,000.00 | $0.00 |
+| weekly_one | monthly_minimum_retain_30000 | 5 | 0 | $1,000 | $-1,000.00 | $-1,000.00 | $0.00 |
 | replace_five | monthly_minimum_retain_30000 | 5 | 0 | $1,000 | $-1,000.00 | $-1,000.00 | $0.00 |
 
 ## $1,000 initial; $200/month
@@ -153,6 +159,8 @@ Each table holds the withdrawal setting and funding fixed. These are purchase-st
 | Purchase policy | Withdrawal policy | Accounts | Alive | Purchase spend | Ongoing net cash | Total net cash | Ending owner cash |
 |---|---|---:|---:|---:|---:|---:|---:|
 | quarterly_three | daily_minimum_retain_31900 | 45 | 20 | $9,000 | $493,100.00 | $592,747.41 | $609,347.41 |
+| weekly_one | daily_minimum_retain_31900 | 75 | 20 | $15,000 | $449,800.00 | $550,681.87 | $567,281.87 |
+| monthly_two | daily_minimum_retain_31900 | 65 | 20 | $13,000 | $447,600.00 | $548,926.21 | $565,526.21 |
 | monthly_one | daily_minimum_retain_31900 | 60 | 20 | $12,000 | $361,600.00 | $464,311.75 | $480,911.75 |
 | reinvest_restart_100pct | daily_minimum_retain_31900 | 84 | 20 | $16,800 | $269,100.00 | $342,104.82 | $358,704.82 |
 | reinvest_restart_50pct | daily_minimum_retain_31900 | 68 | 20 | $13,600 | $227,300.00 | $315,935.89 | $332,535.89 |
@@ -167,6 +175,8 @@ Each table holds the withdrawal setting and funding fixed. These are purchase-st
 | Purchase policy | Withdrawal policy | Accounts | Alive | Purchase spend | Ongoing net cash | Total net cash | Ending owner cash |
 |---|---|---:|---:|---:|---:|---:|---:|
 | quarterly_three | weekly_excess_retain_31600 | 45 | 20 | $9,000 | $505,248.40 | $592,747.23 | $609,347.23 |
+| weekly_one | weekly_excess_retain_31600 | 75 | 20 | $15,000 | $460,918.96 | $550,681.79 | $567,281.79 |
+| monthly_two | weekly_excess_retain_31600 | 65 | 20 | $13,000 | $459,014.08 | $548,926.11 | $565,526.11 |
 | monthly_one | weekly_excess_retain_31600 | 60 | 20 | $12,000 | $373,130.03 | $461,070.58 | $477,670.58 |
 | reinvest_restart_100pct | weekly_excess_retain_31600 | 94 | 20 | $18,800 | $213,511.76 | $307,859.45 | $324,459.45 |
 | reinvest_restart_50pct | weekly_excess_retain_31600 | 58 | 20 | $11,600 | $186,719.71 | $281,067.40 | $297,667.40 |
@@ -181,6 +191,8 @@ Each table holds the withdrawal setting and funding fixed. These are purchase-st
 | Purchase policy | Withdrawal policy | Accounts | Alive | Purchase spend | Ongoing net cash | Total net cash | Ending owner cash |
 |---|---|---:|---:|---:|---:|---:|---:|
 | quarterly_three | monthly_minimum_retain_30000 | 45 | 20 | $9,000 | $369,500.00 | $592,747.41 | $609,347.41 |
+| weekly_one | monthly_minimum_retain_30000 | 75 | 20 | $15,000 | $324,500.00 | $550,681.87 | $567,281.87 |
+| monthly_two | monthly_minimum_retain_30000 | 65 | 20 | $13,000 | $326,000.00 | $548,926.21 | $565,526.21 |
 | monthly_one | monthly_minimum_retain_30000 | 60 | 20 | $12,000 | $270,000.00 | $464,311.75 | $480,911.75 |
 | reinvest_restart_100pct | monthly_minimum_retain_30000 | 85 | 20 | $17,000 | $240,500.00 | $430,471.51 | $447,071.51 |
 | reinvest_restart_50pct | monthly_minimum_retain_30000 | 70 | 20 | $14,000 | $213,500.00 | $376,626.56 | $393,226.56 |
@@ -245,6 +257,8 @@ Each table holds the withdrawal setting and funding fixed. These are purchase-st
 | Purchase policy | Withdrawal policy | Accounts | Alive | Purchase spend | Ongoing net cash | Total net cash | Ending owner cash |
 |---|---|---:|---:|---:|---:|---:|---:|
 | quarterly_three | daily_minimum_retain_31900 | 50 | 20 | $10,000 | $460,900.00 | $561,060.90 | $566,060.90 |
+| weekly_one | daily_minimum_retain_31900 | 75 | 20 | $15,000 | $443,000.00 | $544,526.53 | $549,526.53 |
+| monthly_two | daily_minimum_retain_31900 | 73 | 20 | $14,600 | $388,400.00 | $491,363.72 | $496,363.72 |
 | monthly_one | daily_minimum_retain_31900 | 59 | 20 | $11,800 | $361,800.00 | $464,511.75 | $469,511.75 |
 | reinvest_restart_100pct | daily_minimum_retain_31900 | 84 | 20 | $16,800 | $269,100.00 | $342,104.82 | $347,104.82 |
 | reinvest_restart_50pct | daily_minimum_retain_31900 | 68 | 20 | $13,600 | $227,300.00 | $315,935.89 | $320,935.89 |
@@ -259,6 +273,8 @@ Each table holds the withdrawal setting and funding fixed. These are purchase-st
 | Purchase policy | Withdrawal policy | Accounts | Alive | Purchase spend | Ongoing net cash | Total net cash | Ending owner cash |
 |---|---|---:|---:|---:|---:|---:|---:|
 | quarterly_three | weekly_excess_retain_31600 | 50 | 20 | $10,000 | $472,613.69 | $561,060.74 | $566,060.74 |
+| weekly_one | weekly_excess_retain_31600 | 76 | 20 | $15,200 | $453,735.95 | $544,326.46 | $549,326.46 |
+| monthly_two | weekly_excess_retain_31600 | 73 | 20 | $14,600 | $399,081.10 | $491,363.68 | $496,363.68 |
 | monthly_one | weekly_excess_retain_31600 | 59 | 20 | $11,800 | $373,330.03 | $461,270.58 | $466,270.58 |
 | reinvest_restart_100pct | weekly_excess_retain_31600 | 94 | 20 | $18,800 | $213,511.76 | $307,859.45 | $312,859.45 |
 | reinvest_restart_50pct | weekly_excess_retain_31600 | 58 | 20 | $11,600 | $186,719.71 | $281,067.40 | $286,067.40 |
@@ -273,6 +289,8 @@ Each table holds the withdrawal setting and funding fixed. These are purchase-st
 | Purchase policy | Withdrawal policy | Accounts | Alive | Purchase spend | Ongoing net cash | Total net cash | Ending owner cash |
 |---|---|---:|---:|---:|---:|---:|---:|
 | quarterly_three | monthly_minimum_retain_30000 | 50 | 20 | $10,000 | $345,000.00 | $561,060.90 | $566,060.90 |
+| weekly_one | monthly_minimum_retain_30000 | 76 | 20 | $15,200 | $318,800.00 | $544,326.53 | $549,326.53 |
+| monthly_two | monthly_minimum_retain_30000 | 73 | 20 | $14,600 | $276,400.00 | $491,363.72 | $496,363.72 |
 | monthly_one | monthly_minimum_retain_30000 | 59 | 20 | $11,800 | $270,200.00 | $464,511.75 | $469,511.75 |
 | reinvest_restart_100pct | monthly_minimum_retain_30000 | 85 | 20 | $17,000 | $240,500.00 | $430,471.51 | $435,471.51 |
 | reinvest_restart_50pct | monthly_minimum_retain_30000 | 70 | 20 | $14,000 | $213,500.00 | $376,626.56 | $381,626.56 |
@@ -337,6 +355,8 @@ Each table holds the withdrawal setting and funding fixed. These are purchase-st
 | Purchase policy | Withdrawal policy | Accounts | Alive | Purchase spend | Ongoing net cash | Total net cash | Ending owner cash |
 |---|---|---:|---:|---:|---:|---:|---:|
 | quarterly_three | daily_minimum_retain_31900 | 45 | 20 | $9,000 | $493,100.00 | $592,747.41 | $613,347.41 |
+| weekly_one | daily_minimum_retain_31900 | 83 | 20 | $16,600 | $490,700.00 | $589,340.13 | $609,940.13 |
+| monthly_two | daily_minimum_retain_31900 | 74 | 20 | $14,800 | $485,550.00 | $585,970.42 | $606,570.42 |
 | monthly_one | daily_minimum_retain_31900 | 60 | 20 | $12,000 | $361,600.00 | $464,311.75 | $484,911.75 |
 | reinvest_restart_100pct | daily_minimum_retain_31900 | 84 | 20 | $16,800 | $269,100.00 | $342,104.82 | $362,704.82 |
 | reinvest_restart_50pct | daily_minimum_retain_31900 | 68 | 20 | $13,600 | $227,300.00 | $315,935.89 | $336,535.89 |
@@ -351,6 +371,8 @@ Each table holds the withdrawal setting and funding fixed. These are purchase-st
 | Purchase policy | Withdrawal policy | Accounts | Alive | Purchase spend | Ongoing net cash | Total net cash | Ending owner cash |
 |---|---|---:|---:|---:|---:|---:|---:|
 | quarterly_three | weekly_excess_retain_31600 | 45 | 20 | $9,000 | $505,248.40 | $592,747.23 | $613,347.23 |
+| weekly_one | weekly_excess_retain_31600 | 84 | 20 | $16,800 | $501,273.61 | $589,140.00 | $609,740.00 |
+| monthly_two | weekly_excess_retain_31600 | 74 | 20 | $14,800 | $497,954.68 | $585,970.27 | $606,570.27 |
 | monthly_one | weekly_excess_retain_31600 | 60 | 20 | $12,000 | $373,130.03 | $461,070.58 | $481,670.58 |
 | reinvest_restart_100pct | weekly_excess_retain_31600 | 94 | 20 | $18,800 | $213,511.76 | $307,859.45 | $328,459.45 |
 | reinvest_restart_50pct | weekly_excess_retain_31600 | 58 | 20 | $11,600 | $186,719.71 | $281,067.40 | $301,667.40 |
@@ -365,6 +387,8 @@ Each table holds the withdrawal setting and funding fixed. These are purchase-st
 | Purchase policy | Withdrawal policy | Accounts | Alive | Purchase spend | Ongoing net cash | Total net cash | Ending owner cash |
 |---|---|---:|---:|---:|---:|---:|---:|
 | quarterly_three | monthly_minimum_retain_30000 | 45 | 20 | $9,000 | $369,500.00 | $592,747.41 | $613,347.41 |
+| weekly_one | monthly_minimum_retain_30000 | 84 | 20 | $16,800 | $362,700.00 | $589,140.13 | $609,740.13 |
+| monthly_two | monthly_minimum_retain_30000 | 74 | 20 | $14,800 | $359,700.00 | $585,970.42 | $606,570.42 |
 | monthly_one | monthly_minimum_retain_30000 | 60 | 20 | $12,000 | $270,000.00 | $464,311.75 | $484,911.75 |
 | reinvest_restart_100pct | monthly_minimum_retain_30000 | 85 | 20 | $17,000 | $240,500.00 | $430,471.51 | $451,071.51 |
 | reinvest_restart_50pct | monthly_minimum_retain_30000 | 70 | 20 | $14,000 | $213,500.00 | $376,626.56 | $397,226.56 |

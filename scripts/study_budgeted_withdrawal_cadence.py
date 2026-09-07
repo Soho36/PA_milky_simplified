@@ -3,7 +3,7 @@ from concurrent.futures import ProcessPoolExecutor
 from dataclasses import replace
 from datetime import datetime, timezone
 from pathlib import Path
-import csv, json
+import csv, json, sys
 import study_account_purchases as purchases
 from pa_milky.acquisition import AcquisitionPolicy
 from pa_milky.policy_study import policies
@@ -45,10 +45,19 @@ def main():
                 for level in levels:
                     jobs.append(('monthly_one',a,replace(p,cadence=c,min_retained_balance_usd=level,terminal_withdrawal='firm_permitted')))
     rows=[]
-    with ProcessPoolExecutor(max_workers=4,initializer=purchases.initialize) as pool:
-        for i,r in enumerate(pool.map(purchases.evaluate,jobs),1):
-            rows.append(r)
-            if i%20==0: print(f'Completed {i}/{len(jobs)}',flush=True)
+    cached=None
+    if '--refresh-purchase-tables' in sys.argv:
+        # This is a presentation refresh, not a new simulation. Keep original provenance.
+        cached=json.loads((OUT/'study.json').read_text())
+        assert cached['config']==to_payload(purchases.C)
+        assert cached['inputs']==input_digest(purchases.C)
+        rows=cached['rows']
+        assert len(rows)==len(jobs)
+    else:
+        with ProcessPoolExecutor(max_workers=4,initializer=purchases.initialize) as pool:
+            for i,r in enumerate(pool.map(purchases.evaluate,jobs),1):
+                rows.append(r)
+                if i%20==0: print(f'Completed {i}/{len(jobs)}',flush=True)
     lookup={key(r):r for r in rows}
     checks=[]
     for old in source['rows']:
@@ -66,6 +75,11 @@ def main():
             r['delta_'+score+'_vs_monthly']=round(r[score]-control[score],2)
     OUT.mkdir(parents=True,exist_ok=True)
     payload={'schema':'pa_milky.budget_cadence_study.v1','generated_utc':datetime.now(timezone.utc).isoformat(),'config':to_payload(purchases.C),'inputs':input_digest(purchases.C),'engine':engine_digest(),'runner_sha256':sha256_file(Path(__file__)),'evaluator_sha256':sha256_file(Path(purchases.__file__)),'design':{'budgets':BUDGETS,'max_live_accounts':20,'purchase_policy':'monthly_one','funding_starts':'second calendar month','selection':'same historical 93 settings per budget; no fresh cushion optimization','terminal':'one permitted request; no reinvestment of terminal receipts'},'purchase_source_sha256':sha256_file(SOURCE),'shared_controls':checks,'rows':rows}
+    if cached is not None:
+        payload=cached
+        payload['report_refresh']={'generated_utc':datetime.now(timezone.utc).isoformat(),
+            'runner_sha256':sha256_file(Path(__file__)), 'purchase_source_sha256':sha256_file(SOURCE),
+            'shared_controls':checks, 'note':'Original cadence simulations and provenance retained; purchase tables refreshed.'}
     (OUT/'study.json').write_text(json.dumps(payload,indent=2),encoding='utf-8')
     fields=[k for k in rows[0] if k not in ('economics','acquisition_config','withdrawal_config')]
     with (OUT/'candidates.csv').open('w',newline='',encoding='utf-8') as f:

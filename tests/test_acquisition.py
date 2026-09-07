@@ -9,6 +9,26 @@ from tests import test_policy_study
 
 
 class TestAcquisition(unittest.TestCase):
+    def test_monthly_two_partial_fill_and_no_catchup(self):
+        ledger=AcquisitionLedger(AcquisitionPolicy('monthly_two',300))
+        ledger.fund(datetime(2020,1,1))
+        self.assertEqual(ledger.decide(datetime(2020,1,1),0,0,0,200),1)
+        ledger.receive([NS(at=datetime(2020,1,2),received_usd=1000)])
+        self.assertEqual(ledger.decide(datetime(2020,1,2),0,1,1,200),0)
+        self.assertEqual(ledger.decide(datetime(2020,2,1),1,19,19,200),1)
+        self.assertEqual(ledger.cash_usd,900)
+
+    def test_weekly_one_monday_anchor_and_no_catchup(self):
+        ledger=AcquisitionLedger(AcquisitionPolicy('weekly_one',100))
+        ledger.fund(datetime(2020,1,1))
+        self.assertEqual(ledger.decide(datetime(2020,1,1),0,0,0,200),0)
+        self.assertEqual(ledger.decide(datetime(2020,1,6),0,0,0,200),0)
+        ledger.receive([NS(at=datetime(2020,1,7),received_usd=1000)])
+        self.assertEqual(ledger.decide(datetime(2020,1,7),0,0,0,200),0)
+        self.assertEqual(ledger.decide(datetime(2020,1,13),0,0,0,200),1)
+        self.assertEqual(ledger.decide(datetime(2020,1,20),0,20,20,200),0)
+        self.assertEqual(ledger.cash_usd,900)
+
     def test_cash_blocks_purchases_and_contributions_are_monthly(self):
         ledger=AcquisitionLedger(AcquisitionPolicy('monthly_one',100,50))
         ledger.fund(datetime(2020,1,1));ledger.fund(datetime(2020,1,1))

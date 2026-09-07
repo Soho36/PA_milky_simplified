@@ -96,12 +96,22 @@ For capped, budget-matched comparisons, reproduce with
 
 ## Account purchase study
 
-[Purchase policies under cash budgets](study__full_rulebook__RR__account_purchases__cash_budgets/REPORT.md):
+[Purchase policies under cash budgets — latest generated results](study__full_rulebook__RR__account_purchases__cash_budgets/REPORT.generated.md):
 monthly purchases, quarterly purchases, failure replacements, and payout
 reinvestment. Four approved funding scenarios ($1,000/$5,000 initially, with
 $0/$200 monthly thereafter) use the same 20-live-account modelled capacity cap.
 Owner contributions are excluded from net cash created; unused principal remains
 in ending owner cash. Each candidate uses one of the three previously studied
 withdrawal policies without re-optimizing its cushion.
+
+The expanded study has 132 candidates and includes `monthly_two` (up to two
+on each month's first day) and `weekly_one` (one each Monday at midnight, no
+extra opening purchase). Missed purchases expire. All 108 original candidates
+reproduce exactly. Faster schedules change planned volume as well as timing.
+The original reader report and breakdown remain intact; the pre-expansion
+outputs are archived in `archives/studies/account_purchases_before_faster_schedules`.
+The capped cadence study's
+[refreshed fixed-withdrawal purchase tables](study__full_rulebook__RR__withdrawal_cadence__monthly_purchases__cap_20__cash_budgets/REPORT.generated.md)
+also include both additions, with the original cadence simulations retained.
 
 Reproduce: `venv/Scripts/python.exe scripts/study_account_purchases.py`.

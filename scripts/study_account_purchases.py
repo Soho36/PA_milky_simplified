@@ -36,7 +36,7 @@ def withdrawal_choices():
 def purchase_choices(initial,monthly):
     base=dict(initial_cash_usd=initial,monthly_contribution_usd=monthly,max_live_accounts=20)
     return [(name,AcquisitionPolicy(name=name,**base)) for name in
-            ('monthly_one','quarterly_one','quarterly_three')]+[
+            ('monthly_one','monthly_two','weekly_one','quarterly_one','quarterly_three')]+[
             ('replace_one',AcquisitionPolicy(name='replace',replacement_target=1,**base)),
             ('replace_five',AcquisitionPolicy(name='replace',replacement_target=5,**base)),
             ('reinvest_50pct',AcquisitionPolicy(name='reinvest',reinvest_fraction=.5,**base)),
@@ -105,14 +105,14 @@ def main():
              'git_revision':git_revision(),'runner_sha256':sha256_file(Path(__file__)),
              'design':{'budgets':budgets,'max_live_accounts':20,'purchase_checks':'midnight daily',
                        'monthly_contributions_start':'second calendar month',
-                       'quarterly_anchor':'every third month from tape start',
+                       'quarterly_anchor':'every third month from tape start','weekly_anchor':'Monday 00:00 tape clock; no opening seed',
                        'reinvestment_seed_accounts':1,'restart_variants':'one replacement from available owner cash when empty','terminal_payouts_reinvested':False},'rows':rows}
     (out/'study.json').write_text(json.dumps(payload,indent=2),encoding='utf-8')
     fields=[k for k in rows[0] if k not in ('economics','acquisition_config','withdrawal_config')]
     with (out/'candidates.csv').open('w',newline='',encoding='utf-8') as f:
         w=csv.DictWriter(f,fieldnames=fields);w.writeheader();w.writerows({k:r[k] for k in fields} for r in rows)
     report='# Account purchases under explicit cash budgets\n\n'
-    report+='108 candidates: nine purchase policies x three fixed withdrawal policies x four funding scenarios. Full configured payout rules; processing delay off; RR tape.\n\n'
+    report+=f'{len(rows)} candidates: eleven purchase policies x three fixed withdrawal policies x four funding scenarios. Full configured payout rules; processing delay off; RR tape.\n\n'
     for initial,monthly in budgets:
         family=[r for r in rows if r['initial_cash_usd']==initial and r['monthly_contribution_usd']==monthly]
         best=[max([r for r in family if r['purchase_policy']==label],key=lambda r:(r['combined_net_cash_usd'],r['ongoing_net_cash_usd']))
@@ -136,12 +136,18 @@ def main():
                         w=csv.DictWriter(f,fieldnames=events[0].keys());w.writeheader();w.writerows(events)
             report+=f'[{kind.capitalize()}-cash leader ledger]({folder.name}/report.txt). '
         report+='\n\n'
+    report+='## Fixed-withdrawal comparisons\n\nEach table holds withdrawal behaviour and funding constant. Faster schedules change both entry timing and planned purchase volume (12, 24 or roughly 52 seats per year for monthly-one, monthly-two and weekly-one). This is not a pure cadence effect. The cap and available cash determine actual purchases.\n\n'
+    for initial,monthly in budgets:
+        for policy in withdrawal_choices():
+            family=[r for r in rows if r['initial_cash_usd']==initial and r['monthly_contribution_usd']==monthly and r['withdrawal_policy']==policy.name]
+            report+=f'### ${initial:,} initial; ${monthly:,}/month; {policy.name}\n\n'
+            report+=table(sorted(family,key=lambda r:r['combined_net_cash_usd'],reverse=True))+'\n\n'
     report+='## Reading the comparison\n\n'
-    report+='The ranking changes with the budget: restarting reinvestment leads terminal-inclusive cash with $1,000 and no contributions; quarterly batches of three lead the other scenarios. The ongoing-cash objective can select a different withdrawal policy. Strict reinvestment loses its initial seat before receiving a payout and never restarts, so its -$200 result diagnoses startup dependence rather than the merits of the reinvestment fraction.\n\n'
+    report+='Rankings are conditional on the budget and objective. Strict reinvestment loses its initial seat before receiving a payout and never restarts, so its -$200 result diagnoses startup dependence rather than the merits of the reinvestment fraction.\n\n'
     report+='Three quarterly purchases and one monthly purchase have the same planned purchase count per quarter, but enter different cohorts. Their difference combines entry timing, funding constraints, survival and capacity occupancy. It does not establish that quarterly buying is generally superior. Test alternative calendar phases, starting dates and live-account caps before treating these rankings as robust.\n\n'
     report+='Net cash is received payouts minus account fees, never owner contributions. Ending owner cash equals cumulative owner contributions plus net cash, and includes unused principal. '
     report+='Ongoing net cash excludes the final receipt. Live account paper balances are never purchase funds. Cash cannot go negative. Contributions are scheduled equally, even when unused; no $200 contribution is added in the opening month.\n\n'
-    report+='Monthly buys one at each month boundary; quarterly buys one or three every third month. Missed scheduled buys expire. '
+    report+='Monthly buys one or two at each month boundary; weekly buys one each Monday at midnight, starting with the first Monday on or after the simulation opening boundary, with no extra opening seed. Quarterly buys one or three every third month. Missed scheduled buys expire; monthly-two may buy only one when cash or capacity permits only one. '
     report+='Replacement retries at midnight to maintain one or five live accounts, including the opening purchase. Strict reinvestment starts with one account and never restarts; the restart variants buy one replacement from available owner cash when the portfolio is empty. Both then spend 50% or 100% of cumulative received payouts on additional accounts; unused payout allocation carries forward. '
     report+='Other purchase policies may use both contributed cash and received payouts. All share a modelled capacity of 20 live accounts; it is not a verified firm limit. Capacity and funding blocks are in candidates.csv.\n\n'
     report+='Trades settle before requests and purchases. Purchases use only already-received payouts, with activation at the check time, so earlier entries are excluded. '

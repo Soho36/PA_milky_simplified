@@ -16,7 +16,7 @@ class AcquisitionPolicy:
     restart_when_empty: bool = False
 
     def __post_init__(self):
-        if self.name not in {'monthly_one','quarterly_one','quarterly_three','replace','reinvest'}:
+        if self.name not in {'monthly_one','monthly_two','weekly_one','quarterly_one','quarterly_three','replace','reinvest'}:
             raise ValueError('Unknown acquisition policy')
         if any(not math.isfinite(v) or v < 0 for v in
                (self.initial_cash_usd,self.monthly_contribution_usd)):
@@ -69,6 +69,8 @@ class AcquisitionLedger:
         wanted=0
         seed_purchase = not self.seed_bought or (p.restart_when_empty and alive == 0)
         if p.name=='monthly_one' and at.day==1: wanted=1
+        elif p.name=='monthly_two' and at.day==1: wanted=2
+        elif p.name=='weekly_one' and at.weekday()==0: wanted=1
         elif p.name in {'quarterly_one','quarterly_three'} and at.day==1 and month_index%3==0:
             wanted=1 if p.name=='quarterly_one' else 3
         elif p.name=='replace': wanted=max(0,p.replacement_target-alive)
