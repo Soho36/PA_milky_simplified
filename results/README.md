@@ -15,9 +15,14 @@ See the [saved-results consistency audit](CONSISTENCY_AUDIT.md) before comparing
 study totals. The amount/cushion and cadence studies are historical **uncapped**
 experiments; the purchase study uses **20 live accounts** and explicit owner cash.
 Their overlapping withdrawal settings agree, but acquisition-study totals are not
-direct comparisons against those earlier experiments.
+direct comparisons against those earlier experiments. The new
+[budget-matched capped cadence study](study__full_rulebook__RR__withdrawal_cadence__monthly_purchases__cap_20__cash_budgets/REPORT.md)
+provides that comparison: 372 settings, four identical funding scenarios, a
+20-live-account cap and 12 exact shared controls against monthly purchases in
+the purchase study. It also shows purchase comparisons with withdrawal settings
+held fixed. Historical uncapped studies retain their original scope.
 
-The three study runners now write refreshed prose to `REPORT.generated.md`.
+The study runners write refreshed prose to `REPORT.generated.md`.
 Existing `REPORT.md` and `report_breakdown.txt` files are reader-maintained and
 are never overwritten. A new result directory also gets an initial `REPORT.md`.
 After a rerun, review generated numbers before updating reader notes; those notes
@@ -82,6 +87,12 @@ with monthly account purchases and monthly fixed-target entitlement unchanged.
 The 93 candidates cover the $31,600-$32,100 band plus the minimum-policy $30,000
 control. Minimum requests mean $500 per eligible check, not a monthly budget.
 Reproduce: `venv/Scripts/python.exe scripts/study_withdrawal_cadence.py`.
+
+For capped, budget-matched comparisons, reproduce with
+`venv/Scripts/python.exe scripts/study_budgeted_withdrawal_cadence.py`.
+`Accounts` in study tables means total purchases over the full dataset;
+`Alive` means survivors before the terminal request. Total purchases can exceed
+20 while respecting a maximum of 20 simultaneously live accounts.
 
 ## Account purchase study
 

@@ -46,7 +46,7 @@ def main():
                 check(r['minimum_owner_cash_usd']>=0,name+': negative cash')
                 check(r['alive_before_terminal']<=r['acquisition_config']['max_live_accounts'],name+': live cap')
     amount=next(d for n,d in studies.items() if 'amount_x_cushion' in n)
-    cadence=next(d for n,d in studies.items() if 'withdrawal_cadence' in n)
+    cadence=next(d for n,d in studies.items() if d['schema']=='pa_milky.cadence_study.v1')
     check(amount['config']==cadence['config'],'Amount/cadence base configs differ')
     def policy_key(r):
         p=dict(r['policy_config']);p.pop('name',None)
@@ -59,6 +59,22 @@ def main():
                 check(a[k]==r[k],f'Amount/cadence overlap {r["policy"]}/{r["retained_balance_usd"]}: {k}')
             counts['matched_candidates']+=1
     check(counts['matched_candidates']>0, 'No amount/cadence controls matched')
+    capped=next((d for d in studies.values() if d['schema']=='pa_milky.budget_cadence_study.v1'),None)
+    if capped:
+        purchase=next(d for d in studies.values() if d['schema']=='pa_milky.acquisition_study.v1')
+        def funded_key(r):
+            p=dict(r['withdrawal_config']);p.pop('name',None)
+            return (r['initial_cash_usd'],r['monthly_contribution_usd'],tuple(sorted(p.items())))
+        funded_lookup={funded_key(r):r for r in capped['rows']}
+        counts['funded_shared_controls']=0
+        for r in purchase['rows']:
+            if r['purchase_policy']!='monthly_one': continue
+            new=funded_lookup[funded_key(r)]
+            for k,v in r.items():
+                if k not in ('withdrawal_policy','withdrawal_config'):
+                    check(new[k]==v,'Capped cadence/purchase shared control: '+k)
+            counts['funded_shared_controls']+=1
+        check(counts['funded_shared_controls']==12,'Expected 12 funded shared controls')
     for p in ROOT.rglob('summary.json'):
         s=json.loads(p.read_text()); c=s['cash']; b=s['book']
         check(round(c.get('received_usd',c['withdrawn_usd'])-c['spent_on_accounts_usd']-c['owner_cash_position_usd'],2)==0,str(p)+': summary cash')
@@ -69,9 +85,10 @@ def main():
     lines += ['',f'Failures: {len(failures)}.']+[f'- {f}' for f in failures]
     lines += ['', '## Comparability', '', '| Family | Acquisition / capacity | Funding | Status |','|---|---|---|---|']
     for name,d in studies.items():
-        funded='account_purchases' in name
-        lines.append(f'| [{name}]({name}/REPORT.md) | '+('Nine policies; 20 live maximum' if funded else 'One monthly; no live cap')+' | '+('Four explicit budgets' if funded else 'Purchases not cash-constrained')+' | '+('Internally comparable within each budget' if funded else 'Historical uncapped experiment')+' |')
-    lines += ['', 'The amount and cadence studies agree on their overlapping settings. The purchase study changes both capacity and funding, so its monthly rows are not controls for the earlier uncapped studies. Its withdrawal settings were selected from those uncapped searches; they are not established capped optima.', '', 'Other scenario results and cushion sweeps are historical experiments with deliberately different rulebooks, terminal treatments, policies and (for GG) tapes. They must not be ranked as one common-policy study. Older sweep JSON files do not embed complete configurations or input/engine hashes, so their exact provenance cannot be verified from the saved files alone.', '', '## Required before a common 20-account comparison', '', 'Rerun amount/cushion and cadence candidates with a common live-account cap and an explicit funding convention; then reconsider the withdrawal shortlist used for purchase comparisons. Preserve the historical uncapped outputs. Do not simply set max_accounts=20: the legacy field limits monthly purchases, not simultaneous live accounts.', '', 'A binding live cap also changes the acquisition schedule when withdrawals change survival. Consequently, the existing fixed-cohort claim that hold bounds survival does not carry over automatically. A capped study must compare activation dates/trade identities and label its hold reference as a different portfolio when cohorts differ.', '', '## Reader reports', '', 'REPORT.md and report_breakdown.txt are reader-maintained and are never overwritten by the three study runners. Reruns write REPORT.generated.md; on a new directory only, REPORT.md is also initialized. Reader notes remain tied to their original results until reviewed. In particular, the cadence breakdown describes the uncapped 22-survivor experiment.', '']
+        funded='acquisition_config' in d['rows'][0]
+        acquisition_label=('Nine policies; 20 live maximum' if 'account_purchases' in name else 'One monthly; 20 live maximum') if funded else 'One monthly; no live cap'
+        lines.append(f'| [{name}]({name}/REPORT.md) | '+acquisition_label+' | '+('Four explicit budgets' if funded else 'Purchases not cash-constrained')+' | '+('Internally comparable within each budget' if funded else 'Historical uncapped experiment')+' |')
+    lines += ['', 'The amount and cadence studies agree on their overlapping settings. The purchase study changes both capacity and funding, so its monthly rows are not controls for the earlier uncapped studies. Its withdrawal settings were selected from those uncapped searches; they are not established capped optima.', '', 'Other scenario results and cushion sweeps are historical experiments with deliberately different rulebooks, terminal treatments, policies and (for GG) tapes. They must not be ranked as one common-policy study. Older sweep JSON files do not embed complete configurations or input/engine hashes, so their exact provenance cannot be verified from the saved files alone.', '', '## Common 20-account comparison', '', 'The budget-matched cadence study adds 372 capped candidates and 12 explicit shared controls against the purchase study. Earlier amount/cushion and cadence results remain historical uncapped experiments answering their original questions. No wholesale rerun is required. The purchase shortlist is not automatically optimal over the wider capped cadence grid.', '', 'A binding live cap also changes the acquisition schedule when withdrawals change survival. Consequently, the existing fixed-cohort claim that hold bounds survival does not carry over automatically. A capped study must compare activation dates/trade identities and label its hold reference as a different portfolio when cohorts differ.', '', '## Reader reports', '', 'REPORT.md and report_breakdown.txt are reader-maintained and are never overwritten by the study runners. Reruns write REPORT.generated.md; on a new directory only, REPORT.md is also initialized. Reader notes remain tied to their original results until reviewed. In particular, the cadence breakdown describes the uncapped 22-survivor experiment.', '']
     (ROOT/'CONSISTENCY_AUDIT.md').write_text('\n'.join(lines),encoding='utf-8')
     print(json.dumps({'counts':counts,'failures':failures},indent=2))
     return bool(failures)

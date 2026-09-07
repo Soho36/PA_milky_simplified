@@ -31,13 +31,13 @@ def work(job):
 
 
 def table(rows):
-    lines=['| Policy | Checks | Retain | Ongoing cash | Final receipt | Total cash | Alive | Same trading path |',
-           '|---|---|---:|---:|---:|---:|---:|:---:|']
+    lines=['| Policy | Checks | Retain | Ongoing cash | Final receipt | Total cash | Accounts | Alive | Same trading path |',
+           '|---|---|---:|---:|---:|---:|---:|---:|:---:|']
     for r in rows:
         display={'minimum_monthly':'minimum_500_per_check','maximum_excess_monthly':'maximum_excess_per_check'}.get(r['policy'],r['policy'])
         lines.append(f"| {display} | {r['cadence']} | ${r['retained_balance_usd']:,.0f} | "
                      f"${r['ongoing_pocket_usd']:,.2f} | ${r['terminal_received_usd']:,.2f} | "
-                     f"${r['combined_pocket_usd']:,.2f} | {r['alive_before_terminal']} | {r['trading_neutral']} |")
+                     f"${r['combined_pocket_usd']:,.2f} | {int(r['economics']['purchase_fees_usd'] / C.purchase_fee_usd)} | {r['alive_before_terminal']} | {r['trading_neutral']} |")
     return '\n'.join(lines)
 
 

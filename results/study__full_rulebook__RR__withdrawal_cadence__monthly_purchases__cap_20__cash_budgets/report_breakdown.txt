@@ -1,0 +1,44 @@
+The report asks: “If we have limited money and can run at most 20 accounts at once, how often should we try to withdraw—and how much should we leave in each account?”
+Its main finding is that frequent, small withdrawals can get money out earlier while preserving a similar final total—but the reserve matters a lot.
+The numbers cover the whole historical dataset. They are not annual income or a forecast.
+First, how to read the tables
+- Checks: how often the simulator checks eligibility and requests a payout if allowed. Daily checks do not mean daily payouts.
+- Retain: the balance withdrawals try to leave untouched. Retaining $31,900 means withdrawing only from money above that level. Trading losses can still push the balance below it.
+- Accounts: everything purchased over the full period. Buying 60 accounts over time is compatible with a limit of 20 running simultaneously.
+- Alive: accounts still running before the final withdrawal.
+- Ongoing net cash: payouts received during trading, minus account purchase costs.
+- Terminal receipt: an extra payout from one permitted request per eligible account at the end. It does not assume every account can be emptied.
+- Total net cash: ongoing cash plus that final receipt. Your own contributions are excluded.
+The name minimum_monthly is confusing: read it as “request the $500 minimum.” The separate Checks column tells you whether that happens monthly, weekly or daily.
+The clearest example is $1,000 initially plus $200 per month
+With monthly account purchases:
+Withdrawal approach	During trading	At the end	Total	Alive
+$500 monthly; retain $30,000	$270,000	$194,312	$464,312	20
+$500 weekly; retain $31,600	$353,400	$110,912	$464,312	20
+$500 daily; retain $31,900	$361,600	$102,712	$464,312	20
+
+
+The daily approach puts $91,600 more into owner cash during trading than the monthly approach, while reaching the same final total.
+That is mainly a difference in when you receive the money. Notice that the reserve also changes, so this compares complete withdrawal approaches—not frequency alone.
+Why not withdraw daily while keeping only $30,000?
+That produces the highest ongoing cash in this budget: $376,200.
+But only two accounts survive, and the final request pays nothing. Total cash therefore stays at $376,200—about $88,112 below the daily approach retaining $31,900.
+So the “ongoing-cash winner” gets only $14,600 more out during trading, while giving up much more at the endpoint. The headline winner depends on what you choose to measure.
+Weekly versus daily is often a close decision
+With $1,000 and no top-ups:
+- Weekly $500 checks, retaining $31,900: $213,700 during trading; $302,487 total.
+- Daily $500 checks, retaining $31,900: $224,400 during trading; $302,287 total.
+Weekly wins the final total by only $200, while daily receives $10,700 more during trading. Weekly also purchases one fewer account.
+I would read that as a close trade-off, not strong evidence that weekly is universally better.
+The purchase tables answer a second question
+They keep the withdrawal approach unchanged and ask: “What happens if we change when we buy accounts?”
+For example, with $1,000 plus $200/month, using daily $500 checks and retaining $31,900:
+Purchase approach	Accounts purchased	Total net cash
+One monthly	60	$464,312
+Three quarterly	45	$592,747
+
+
+Buying more accounts did not produce more money here. Which accounts entered at which dates—and how long they survived—mattered more than the purchase count. This supports quarterly buying on this particular history; it does not establish that every quarterly starting schedule would win.
+What changed from the previous reports?
+We now have a fair connection between the cadence and purchase studies: their 12 matching cases produce exactly the same results under the same budgets and 20-account limit.
+My reading is that the results support investigating small, frequent withdrawals with enough reserve, while treating purchase timing as an equally important part of the approach. They have not yet identified one best combination for every budget and starting date.

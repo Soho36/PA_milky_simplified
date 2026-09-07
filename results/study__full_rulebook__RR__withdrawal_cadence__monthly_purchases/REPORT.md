@@ -5,53 +5,53 @@
 ## Ongoing cash: best tested cushion per policy and cadence
 “Which reserve produced the most cash during trading?”
 
-| Policy | Checks | Retain | Ongoing cash | Final receipt | Total cash | Alive | Same trading path |
-|---|---|---:|---:|---:|---:|---:|:---:|
-| fixed_750_backlog | calendar_month | $31,600 | $354,140.38 | $102,345.63 | $456,486.01 | 22 | True |
-| fixed_750_backlog | weekly | $31,600 | $369,330.03 | $87,940.55 | $457,270.58 | 22 | True |
-| fixed_750_backlog | daily | $31,900 | $354,075.72 | $89,267.71 | $443,343.43 | 19 | False |
-| fixed_1000_backlog | calendar_month | $31,600 | $354,140.38 | $102,345.63 | $456,486.01 | 22 | True |
-| fixed_1000_backlog | weekly | $31,600 | $369,330.03 | $87,940.55 | $457,270.58 | 22 | True |
-| fixed_1000_backlog | daily | $31,900 | $354,534.02 | $100,254.99 | $454,789.01 | 21 | False |
-| fixed_1500_backlog | calendar_month | $31,600 | $354,140.38 | $102,345.63 | $456,486.01 | 22 | True |
-| fixed_1500_backlog | weekly | $31,600 | $369,330.03 | $87,940.55 | $457,270.58 | 22 | True |
-| fixed_1500_backlog | daily | $31,900 | $354,534.02 | $100,254.99 | $454,789.01 | 21 | False |
-| minimum_500_per_check | calendar_month | $30,000 | $266,200.00 | $194,311.75 | $460,511.75 | 22 | True |
-| minimum_500_per_check | weekly | $30,000 | $355,450.00 | $4,532.84 | $359,982.84 | 3 | False |
-| minimum_500_per_check | daily | $30,000 | $373,200.00 | $0.00 | $373,200.00 | 2 | False |
-| maximum_excess_per_check | calendar_month | $31,600 | $354,140.38 | $102,345.63 | $456,486.01 | 22 | True |
-| maximum_excess_per_check | weekly | $31,600 | $369,330.03 | $87,940.55 | $457,270.58 | 22 | True |
-| maximum_excess_per_check | daily | $31,900 | $354,534.02 | $100,254.99 | $454,789.01 | 21 | False |
+| Policy | Checks | Retain | Ongoing cash | Final receipt | Total cash | Accounts | Alive | Same trading path |
+|---|---|---:|---:|---:|---:|---:|---:|:---:|
+| fixed_750_backlog | calendar_month | $31,600 | $354,140.38 | $102,345.63 | $456,486.01 | 79 | 22 | True |
+| fixed_750_backlog | weekly | $31,600 | $369,330.03 | $87,940.55 | $457,270.58 | 79 | 22 | True |
+| fixed_750_backlog | daily | $31,900 | $354,075.72 | $89,267.71 | $443,343.43 | 79 | 19 | False |
+| fixed_1000_backlog | calendar_month | $31,600 | $354,140.38 | $102,345.63 | $456,486.01 | 79 | 22 | True |
+| fixed_1000_backlog | weekly | $31,600 | $369,330.03 | $87,940.55 | $457,270.58 | 79 | 22 | True |
+| fixed_1000_backlog | daily | $31,900 | $354,534.02 | $100,254.99 | $454,789.01 | 79 | 21 | False |
+| fixed_1500_backlog | calendar_month | $31,600 | $354,140.38 | $102,345.63 | $456,486.01 | 79 | 22 | True |
+| fixed_1500_backlog | weekly | $31,600 | $369,330.03 | $87,940.55 | $457,270.58 | 79 | 22 | True |
+| fixed_1500_backlog | daily | $31,900 | $354,534.02 | $100,254.99 | $454,789.01 | 79 | 21 | False |
+| minimum_500_per_check | calendar_month | $30,000 | $266,200.00 | $194,311.75 | $460,511.75 | 79 | 22 | True |
+| minimum_500_per_check | weekly | $30,000 | $355,450.00 | $4,532.84 | $359,982.84 | 79 | 3 | False |
+| minimum_500_per_check | daily | $30,000 | $373,200.00 | $0.00 | $373,200.00 | 79 | 2 | False |
+| maximum_excess_per_check | calendar_month | $31,600 | $354,140.38 | $102,345.63 | $456,486.01 | 79 | 22 | True |
+| maximum_excess_per_check | weekly | $31,600 | $369,330.03 | $87,940.55 | $457,270.58 | 79 | 22 | True |
+| maximum_excess_per_check | daily | $31,900 | $354,534.02 | $100,254.99 | $454,789.01 | 79 | 21 | False |
 *“Same trading path” compares each candidate with the hold-everything benchmark.
 
 ## Cash including final request: best tested cushion per policy and cadence
 “Which reserve produced the most cash during trading plus the final withdrawal?”
 
-| Policy | Checks | Retain | Ongoing cash | Final receipt | Total cash | Alive | Same trading path |
-|---|---|---:|---:|---:|---:|---:|:---:|
-| fixed_750_backlog | calendar_month | $31,600 | $354,140.38 | $102,345.63 | $456,486.01 | 22 | True |
-| fixed_750_backlog | weekly | $31,600 | $369,330.03 | $87,940.55 | $457,270.58 | 22 | True |
-| fixed_750_backlog | daily | $32,000 | $352,594.02 | $102,094.99 | $454,689.01 | 21 | False |
-| fixed_1000_backlog | calendar_month | $31,600 | $354,140.38 | $102,345.63 | $456,486.01 | 22 | True |
-| fixed_1000_backlog | weekly | $31,600 | $369,330.03 | $87,940.55 | $457,270.58 | 22 | True |
-| fixed_1000_backlog | daily | $31,900 | $354,534.02 | $100,254.99 | $454,789.01 | 21 | False |
-| fixed_1500_backlog | calendar_month | $31,600 | $354,140.38 | $102,345.63 | $456,486.01 | 22 | True |
-| fixed_1500_backlog | weekly | $31,600 | $369,330.03 | $87,940.55 | $457,270.58 | 22 | True |
-| fixed_1500_backlog | daily | $31,900 | $354,534.02 | $100,254.99 | $454,789.01 | 21 | False |
-| minimum_500_per_check | calendar_month | $30,000 | $266,200.00 | $194,311.75 | $460,511.75 | 22 | True |
-| minimum_500_per_check | weekly | $31,600 | $349,600.00 | $110,911.75 | $460,511.75 | 22 | True |
-| minimum_500_per_check | daily | $31,900 | $357,800.00 | $102,711.75 | $460,511.75 | 22 | True |
-| maximum_excess_per_check | calendar_month | $31,600 | $354,140.38 | $102,345.63 | $456,486.01 | 22 | True |
-| maximum_excess_per_check | weekly | $31,600 | $369,330.03 | $87,940.55 | $457,270.58 | 22 | True |
-| maximum_excess_per_check | daily | $31,900 | $354,534.02 | $100,254.99 | $454,789.01 | 21 | False |
+| Policy | Checks | Retain | Ongoing cash | Final receipt | Total cash | Accounts | Alive | Same trading path |
+|---|---|---:|---:|---:|---:|---:|---:|:---:|
+| fixed_750_backlog | calendar_month | $31,600 | $354,140.38 | $102,345.63 | $456,486.01 | 79 | 22 | True |
+| fixed_750_backlog | weekly | $31,600 | $369,330.03 | $87,940.55 | $457,270.58 | 79 | 22 | True |
+| fixed_750_backlog | daily | $32,000 | $352,594.02 | $102,094.99 | $454,689.01 | 79 | 21 | False |
+| fixed_1000_backlog | calendar_month | $31,600 | $354,140.38 | $102,345.63 | $456,486.01 | 79 | 22 | True |
+| fixed_1000_backlog | weekly | $31,600 | $369,330.03 | $87,940.55 | $457,270.58 | 79 | 22 | True |
+| fixed_1000_backlog | daily | $31,900 | $354,534.02 | $100,254.99 | $454,789.01 | 79 | 21 | False |
+| fixed_1500_backlog | calendar_month | $31,600 | $354,140.38 | $102,345.63 | $456,486.01 | 79 | 22 | True |
+| fixed_1500_backlog | weekly | $31,600 | $369,330.03 | $87,940.55 | $457,270.58 | 79 | 22 | True |
+| fixed_1500_backlog | daily | $31,900 | $354,534.02 | $100,254.99 | $454,789.01 | 79 | 21 | False |
+| minimum_500_per_check | calendar_month | $30,000 | $266,200.00 | $194,311.75 | $460,511.75 | 79 | 22 | True |
+| minimum_500_per_check | weekly | $31,600 | $349,600.00 | $110,911.75 | $460,511.75 | 79 | 22 | True |
+| minimum_500_per_check | daily | $31,900 | $357,800.00 | $102,711.75 | $460,511.75 | 79 | 22 | True |
+| maximum_excess_per_check | calendar_month | $31,600 | $354,140.38 | $102,345.63 | $456,486.01 | 79 | 22 | True |
+| maximum_excess_per_check | weekly | $31,600 | $369,330.03 | $87,940.55 | $457,270.58 | 79 | 22 | True |
+| maximum_excess_per_check | daily | $31,900 | $354,534.02 | $100,254.99 | $454,789.01 | 79 | 21 | False |
 *“Same trading path” compares each candidate with the hold-everything benchmark.
 ## Controlled comparison: maximum excess at $31,600
 
-| Policy | Checks | Retain | Ongoing cash | Final receipt | Total cash | Alive | Same trading path |
-|---|---|---:|---:|---:|---:|---:|:---:|
-| maximum_excess_per_check | calendar_month | $31,600 | $354,140.38 | $102,345.63 | $456,486.01 | 22 | True |
-| maximum_excess_per_check | weekly | $31,600 | $369,330.03 | $87,940.55 | $457,270.58 | 22 | True |
-| maximum_excess_per_check | daily | $31,600 | $350,261.63 | $0.00 | $350,261.63 | 2 | False |
+| Policy | Checks | Retain | Ongoing cash | Final receipt | Total cash | Accounts | Alive | Same trading path |
+|---|---|---:|---:|---:|---:|---:|---:|:---:|
+| maximum_excess_per_check | calendar_month | $31,600 | $354,140.38 | $102,345.63 | $456,486.01 | 79 | 22 | True |
+| maximum_excess_per_check | weekly | $31,600 | $369,330.03 | $87,940.55 | $457,270.58 | 79 | 22 | True |
+| maximum_excess_per_check | daily | $31,600 | $350,261.63 | $0.00 | $350,261.63 | 79 | 2 | False |
 
 ## Interpretation
 

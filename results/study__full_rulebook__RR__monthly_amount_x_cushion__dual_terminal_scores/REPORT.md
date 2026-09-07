@@ -14,35 +14,35 @@ Both columns are properties of this tape and this monthly acquisition cadence. C
 
 ## Best tested cushion per policy: ongoing cash
 
-| Policy | Retained balance | Ongoing net cash | Terminal receipt | Combined net cash | Alive | Trading-neutral | Ceiling capture |
-|---|---:|---:|---:|---:|---:|:-:|---:|
-| fixed_750_backlog | $29,800 | $371,497.01 | $0.00 | $371,497.01 | 2 | no | 78.66% |
-| fixed_1000_backlog | $29,800 | $370,417.36 | $0.00 | $370,417.36 | 2 | no | 78.43% |
-| fixed_1500_backlog | $29,800 | $370,417.36 | $0.00 | $370,417.36 | 2 | no | 78.43% |
-| maximum_excess_monthly | $29,800 | $370,417.36 | $0.00 | $370,417.36 | 2 | no | 78.43% |
-| fixed_500_backlog | $29,800 | $358,718.90 | $79,443.98 | $438,162.88 | 17 | no | 92.77% |
-| legacy_500_blocks | $29,800 | $358,000.00 | $79,443.98 | $437,443.98 | 17 | no | 92.62% |
-| minimum_monthly | $28,400 | $283,200.00 | $152,960.79 | $436,160.79 | 18 | no | 92.35% |
-| fixed_250_backlog | $30,800 | $185,507.10 | $271,778.91 | $457,286.01 | 22 | yes | 96.82% |
+| Policy | Retained balance | Ongoing net cash | Terminal receipt | Combined net cash | Accounts | Alive | Trading-neutral | Ceiling capture |
+|---|---:|---:|---:|---:|---:|---:|:-:|---:|
+| fixed_750_backlog | $29,800 | $371,497.01 | $0.00 | $371,497.01 | 79 | 2 | no | 78.66% |
+| fixed_1000_backlog | $29,800 | $370,417.36 | $0.00 | $370,417.36 | 79 | 2 | no | 78.43% |
+| fixed_1500_backlog | $29,800 | $370,417.36 | $0.00 | $370,417.36 | 79 | 2 | no | 78.43% |
+| maximum_excess_monthly | $29,800 | $370,417.36 | $0.00 | $370,417.36 | 79 | 2 | no | 78.43% |
+| fixed_500_backlog | $29,800 | $358,718.90 | $79,443.98 | $438,162.88 | 79 | 17 | no | 92.77% |
+| legacy_500_blocks | $29,800 | $358,000.00 | $79,443.98 | $437,443.98 | 79 | 17 | no | 92.62% |
+| minimum_monthly | $28,400 | $283,200.00 | $152,960.79 | $436,160.79 | 79 | 18 | no | 92.35% |
+| fixed_250_backlog | $30,800 | $185,507.10 | $271,778.91 | $457,286.01 | 79 | 22 | yes | 96.82% |
 
 ## Best tested cushion per policy: cash including terminal request
 
-| Policy | Retained balance | Ongoing net cash | Terminal receipt | Combined net cash | Alive | Trading-neutral | Ceiling capture |
-|---|---:|---:|---:|---:|---:|:-:|---:|
-| minimum_monthly | $30,000 | $266,200.00 | $194,311.75 | $460,511.75 | 22 | yes | 97.50% |
-| fixed_250_backlog | $30,100 | $185,200.00 | $272,278.91 | $457,478.91 | 22 | yes | 96.86% |
-| fixed_500_backlog | $31,600 | $346,082.70 | $110,403.31 | $456,486.01 | 22 | yes | 96.65% |
-| fixed_750_backlog | $31,600 | $354,140.38 | $102,345.63 | $456,486.01 | 22 | yes | 96.65% |
-| fixed_1000_backlog | $31,600 | $354,140.38 | $102,345.63 | $456,486.01 | 22 | yes | 96.65% |
-| fixed_1500_backlog | $31,600 | $354,140.38 | $102,345.63 | $456,486.01 | 22 | yes | 96.65% |
-| maximum_excess_monthly | $31,600 | $354,140.38 | $102,345.63 | $456,486.01 | 22 | yes | 96.65% |
-| legacy_500_blocks | $31,400 | $345,400.00 | $111,078.91 | $456,478.91 | 22 | yes | 96.65% |
+| Policy | Retained balance | Ongoing net cash | Terminal receipt | Combined net cash | Accounts | Alive | Trading-neutral | Ceiling capture |
+|---|---:|---:|---:|---:|---:|---:|:-:|---:|
+| minimum_monthly | $30,000 | $266,200.00 | $194,311.75 | $460,511.75 | 79 | 22 | yes | 97.50% |
+| fixed_250_backlog | $30,100 | $185,200.00 | $272,278.91 | $457,478.91 | 79 | 22 | yes | 96.86% |
+| fixed_500_backlog | $31,600 | $346,082.70 | $110,403.31 | $456,486.01 | 79 | 22 | yes | 96.65% |
+| fixed_750_backlog | $31,600 | $354,140.38 | $102,345.63 | $456,486.01 | 79 | 22 | yes | 96.65% |
+| fixed_1000_backlog | $31,600 | $354,140.38 | $102,345.63 | $456,486.01 | 79 | 22 | yes | 96.65% |
+| fixed_1500_backlog | $31,600 | $354,140.38 | $102,345.63 | $456,486.01 | 79 | 22 | yes | 96.65% |
+| maximum_excess_monthly | $31,600 | $354,140.38 | $102,345.63 | $456,486.01 | 79 | 22 | yes | 96.65% |
+| legacy_500_blocks | $31,400 | $345,400.00 | $111,078.91 | $456,478.91 | 79 | 22 | yes | 96.65% |
 
 ## Hold benchmark
 
-| Policy | Retained balance | Ongoing net cash | Terminal receipt | Combined net cash | Alive | Trading-neutral | Ceiling capture |
-|---|---:|---:|---:|---:|---:|:-:|---:|
-| hold | none | $-15,800.00 | $30,000.00 | $14,200.00 | 22 | yes | 3.01% |
+| Policy | Retained balance | Ongoing net cash | Terminal receipt | Combined net cash | Accounts | Alive | Trading-neutral | Ceiling capture |
+|---|---:|---:|---:|---:|---:|---:|:-:|---:|
+| hold | none | $-15,800.00 | $30,000.00 | $14,200.00 | 79 | 22 | yes | 3.01% |
 
 ## Design and interpretation
 
@@ -66,21 +66,21 @@ Minimum monthly requests are fundamentally different from a $500 backlog entitle
 
 ### Nearby tested settings for the two leaders
 
-| Policy | Retained balance | Ongoing net cash | Terminal receipt | Combined net cash | Alive | Trading-neutral | Ceiling capture |
-|---|---:|---:|---:|---:|---:|:-:|---:|
-| fixed_750_backlog | $29,600 | $322,366.76 | $0.00 | $322,366.76 | 2 | no | 68.25% |
-| fixed_750_backlog | $29,700 | $319,756.11 | $0.00 | $319,756.11 | 2 | no | 67.70% |
-| fixed_750_backlog | $29,800 | $371,497.01 | $0.00 | $371,497.01 | 2 | no | 78.66% |
-| fixed_750_backlog | $29,900 | $369,812.86 | $0.00 | $369,812.86 | 2 | no | 78.30% |
-| fixed_750_backlog | $30,000 | $367,979.06 | $0.00 | $367,979.06 | 2 | no | 77.91% |
-| fixed_750_backlog | $30,100 | $366,554.16 | $1,500.00 | $368,054.16 | 3 | no | 77.93% |
-| minimum_monthly | $29,700 | $267,700.00 | $181,320.87 | $449,020.87 | 20 | no | 95.07% |
-| minimum_monthly | $29,800 | $266,700.00 | $182,320.87 | $449,020.87 | 20 | no | 95.07% |
-| minimum_monthly | $29,900 | $266,200.00 | $188,541.66 | $454,741.66 | 21 | no | 96.28% |
-| minimum_monthly | $30,000 | $266,200.00 | $194,311.75 | $460,511.75 | 22 | yes | 97.50% |
-| minimum_monthly | $30,100 | $264,700.00 | $195,811.75 | $460,511.75 | 22 | yes | 97.50% |
-| minimum_monthly | $30,200 | $262,200.00 | $198,311.75 | $460,511.75 | 22 | yes | 97.50% |
-| minimum_monthly | $30,300 | $260,700.00 | $199,811.75 | $460,511.75 | 22 | yes | 97.50% |
+| Policy | Retained balance | Ongoing net cash | Terminal receipt | Combined net cash | Accounts | Alive | Trading-neutral | Ceiling capture |
+|---|---:|---:|---:|---:|---:|---:|:-:|---:|
+| fixed_750_backlog | $29,600 | $322,366.76 | $0.00 | $322,366.76 | 79 | 2 | no | 68.25% |
+| fixed_750_backlog | $29,700 | $319,756.11 | $0.00 | $319,756.11 | 79 | 2 | no | 67.70% |
+| fixed_750_backlog | $29,800 | $371,497.01 | $0.00 | $371,497.01 | 79 | 2 | no | 78.66% |
+| fixed_750_backlog | $29,900 | $369,812.86 | $0.00 | $369,812.86 | 79 | 2 | no | 78.30% |
+| fixed_750_backlog | $30,000 | $367,979.06 | $0.00 | $367,979.06 | 79 | 2 | no | 77.91% |
+| fixed_750_backlog | $30,100 | $366,554.16 | $1,500.00 | $368,054.16 | 79 | 3 | no | 77.93% |
+| minimum_monthly | $29,700 | $267,700.00 | $181,320.87 | $449,020.87 | 79 | 20 | no | 95.07% |
+| minimum_monthly | $29,800 | $266,700.00 | $182,320.87 | $449,020.87 | 79 | 20 | no | 95.07% |
+| minimum_monthly | $29,900 | $266,200.00 | $188,541.66 | $454,741.66 | 79 | 21 | no | 96.28% |
+| minimum_monthly | $30,000 | $266,200.00 | $194,311.75 | $460,511.75 | 79 | 22 | yes | 97.50% |
+| minimum_monthly | $30,100 | $264,700.00 | $195,811.75 | $460,511.75 | 79 | 22 | yes | 97.50% |
+| minimum_monthly | $30,200 | $262,200.00 | $198,311.75 | $460,511.75 | 79 | 22 | yes | 97.50% |
+| minimum_monthly | $30,300 | $260,700.00 | $199,811.75 | $460,511.75 | 79 | 22 | yes | 97.50% |
 
 ## Reproduced leading runs
 

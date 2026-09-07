@@ -40,13 +40,13 @@ def cushion(row):
 
 def table(rows):
     lines = ["| Policy | Retained balance | Ongoing net cash | Terminal receipt | Combined net cash "
-             "| Alive | Trading-neutral | Ceiling capture |",
-             "|---|---:|---:|---:|---:|---:|:-:|---:|"]
+             "| Accounts | Alive | Trading-neutral | Ceiling capture |",
+             "|---|---:|---:|---:|---:|---:|---:|:-:|---:|"]
     for r in rows:
         capture = "n/a" if r['ceiling_capture'] is None else f"{r['ceiling_capture']:.2%}"
         lines.append(f"| {r['policy']} | {cushion(r)} | ${r['ongoing_pocket_usd']:,.2f} | "
                      f"${r['terminal_received_usd']:,.2f} | ${r['combined_pocket_usd']:,.2f} | "
-                     f"{r['alive_before_terminal']} | {'yes' if r['trading_neutral'] else 'no'} | {capture} |")
+                     f"{int(r['economics']['purchase_fees_usd'] / CONFIG.purchase_fee_usd)} | {r['alive_before_terminal']} | {'yes' if r['trading_neutral'] else 'no'} | {capture} |")
     return "\n".join(lines)
 
 
