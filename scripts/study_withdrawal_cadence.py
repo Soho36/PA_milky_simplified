@@ -13,6 +13,7 @@ from pa_milky.policy import WithdrawalPolicy
 from pa_milky.policy_study import policies,measure,annotate_against_benchmark
 from pa_milky.provenance import input_digest,engine_digest,git_revision,sha256_file
 from pa_milky.report import write_outputs
+from pa_milky.study_reports import write_study_report
 from pa_milky.simulator import run_book
 C=None
 T=None
@@ -107,7 +108,7 @@ def main():
         (out/label/'config.json').write_text(json.dumps(to_payload(cfg),indent=2),encoding='utf-8')
         report+=f'[{label} detailed report]({label}/report.txt) and its embedded config.json reproduce the leading run.\n\n'
     report+='Reproduce: `venv/Scripts/python.exe scripts/study_withdrawal_cadence.py`.\n'
-    (out/'REPORT.md').write_text(report,encoding='utf-8')
+    write_study_report(out, report)
     print(report,flush=True)
 
 

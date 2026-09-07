@@ -13,6 +13,7 @@ from pa_milky.simulator import run_book
 from pa_milky.economics import Economics
 from pa_milky.provenance import input_digest,engine_digest,git_revision,sha256_file
 from pa_milky.report import write_outputs
+from pa_milky.study_reports import write_study_report
 C=None
 T=None
 
@@ -149,7 +150,7 @@ def main():
     report+='Changing acquisition changes cohorts and the offered book of trades, so the old fixed-acquisition hold fingerprint and reference capture are not comparable here. '
     report+='The withdrawal choices are held at previously tested settings; this is not a joint global optimization. Results are in-sample and conditional on the starting date, cash budget and capacity cap. '
     report+='Reproduce with `venv/Scripts/python.exe scripts/study_account_purchases.py`. Each leading run has an experiment.json containing both run configuration and acquisition policy; replay through run_book(..., acquisition=AcquisitionPolicy(...)).\n'
-    (out/'REPORT.md').write_text(report,encoding='utf-8')
+    write_study_report(out, report)
     print(report,flush=True)
 
 

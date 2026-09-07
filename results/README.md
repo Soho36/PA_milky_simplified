@@ -5,7 +5,31 @@ Folder names show rulebook, withdrawal policy, retained balance, and closing act
 payout restrictions for the closing profit withdrawal. `no_terminal` leaves
 remaining account profit unwithdrawn. `retain_N` is nominal account balance,
 not headroom above liquidation. Fixed monthly policies here accrue backlog.
-All these runs buy one account monthly and use RR; sweep files identify their tape.
+The single-scenario runs below buy one account monthly without a live-account cap
+and use RR; sweep files identify their tape. The purchase study has separate
+funding and capacity assumptions, described below.
+
+## Consistency and reader notes
+
+See the [saved-results consistency audit](CONSISTENCY_AUDIT.md) before comparing
+study totals. The amount/cushion and cadence studies are historical **uncapped**
+experiments; the purchase study uses **20 live accounts** and explicit owner cash.
+Their overlapping withdrawal settings agree, but acquisition-study totals are not
+direct comparisons against those earlier experiments.
+
+The three study runners now write refreshed prose to `REPORT.generated.md`.
+Existing `REPORT.md` and `report_breakdown.txt` files are reader-maintained and
+are never overwritten. A new result directory also gets an initial `REPORT.md`.
+After a rerun, review generated numbers before updating reader notes; those notes
+may still describe the earlier run. The runners still replace generated CSV/JSON
+and detailed run ledgers, so use a separate output directory for changed study designs.
+
+Retained explanatory notes:
+[purchase breakdown](study__full_rulebook__RR__account_purchases__cash_budgets/report_breakdown.txt)
+and [cadence breakdown](study__full_rulebook__RR__withdrawal_cadence__monthly_purchases/report_breakdown.txt).
+
+Repeat the read-only checks with `venv/Scripts/python.exe scripts/audit_study_results.py`
+(only the audit document itself is regenerated).
 
 `full_rulebook` means the configured rulebook, with processing delay OFF.
 `no_payout_rules` still enforces account drawdown mechanics.

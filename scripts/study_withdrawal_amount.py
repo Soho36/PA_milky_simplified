@@ -16,6 +16,7 @@ from pa_milky.policy_study import annotate_against_benchmark, measure, policies
 from pa_milky.provenance import input_digest, engine_digest, git_revision, sha256_file
 from pa_milky.simulator import run_book
 from pa_milky.report import write_outputs
+from pa_milky.study_reports import write_study_report
 
 CONFIG = None
 TRADES = None
@@ -229,7 +230,7 @@ def main():
         write_outputs(result, out/label)
         (out/label/'config.json').write_text(json.dumps(to_payload(config), indent=2), encoding='utf-8')
     report += "\n## Reproduced leading runs\n\n[Ongoing-cash leader](best_ongoing/report.txt) and [closing-cash leader](best_terminal/report.txt) include account/payout ledgers and embedded config.json files runnable with the normal CLI --config option.\n"
-    (out/'REPORT.md').write_text(report,encoding='utf-8')
+    write_study_report(out, report)
     print(report,flush=True)
     return 0
 
