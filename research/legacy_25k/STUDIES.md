@@ -28,3 +28,8 @@ These describe what happens month by month and how to read the results, without 
 - [Historical withdrawal cadence](../../results/study__full_rulebook__RR__withdrawal_cadence__monthly_purchases/HOW_THIS_STUDY_WORKS.md)
 - [Capped, budget-matched cadence](../../results/study__full_rulebook__RR__withdrawal_cadence__monthly_purchases__cap_20__cash_budgets/HOW_THIS_STUDY_WORKS.md)
 - [Account purchases](../../results/study__full_rulebook__RR__account_purchases__cash_budgets/HOW_THIS_STUDY_WORKS.md)
+
+The current purchase report separates one-account scheduled purchases
+(quarterly-one, monthly-one, weekly-one), monthly-two expansion, replacement/
+reinvestment, and historical quarterly-three batches. All 132 simulation rows
+are retained; quarterly-three is excluded from main rankings.

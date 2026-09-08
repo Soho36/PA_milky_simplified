@@ -54,3 +54,10 @@ These are historical full-dataset totals for Legacy 25K on the RR tape, with
 configured payout rules and processing delay off. They are not annual income,
 forecasts, or promises that every account reaches its reserve. The terminal
 request is a scoring convention, not a recurring operating instruction.
+
+## Current comparison scope
+
+The main scheduled-purchase family is quarterly-one, monthly-one and weekly-one.
+Monthly-two is an expansion comparison; replacement and reinvestment are separate
+operating families. Quarterly-three remains historical batch-purchase evidence
+and is excluded from main rankings. No historical cash results have been deleted.

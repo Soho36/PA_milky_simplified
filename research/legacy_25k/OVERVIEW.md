@@ -20,18 +20,30 @@ and the applicable split and excludes owner contributions. Paper balances
 cannot fund purchases. Terminal cash means one firm-permitted closing request,
 not unrestricted liquidation. These are full-dataset totals, not annual income.
 
-Best tested purchase/withdrawal bundle by terminal-inclusive net cash:
+The main scheduled-purchase comparison now includes **quarterly-one,
+monthly-one and weekly-one**. Monthly-two is a separate expansion policy;
+replacement/reinvestment are separate operating-policy families. Quarterly-three
+is retained as historical batch evidence and excluded from headline rankings.
 
-| Initial cash | Monthly funding | Purchases | Withdrawals / retained balance | Ongoing net cash | Total net cash |
+Best tested terminal-inclusive bundle among the three main schedules:
+
+| Initial cash | Monthly funding | Purchases | Withdrawals / reserve | Ongoing net cash | Total net cash |
 |---|---:|---|---|---:|---:|
-| $1,000 | $0 | Restart and reinvest 100% | Monthly minimum / $30,000 | $240,500 | $430,472 |
-| $1,000 | $200 | Three quarterly | Daily minimum / $31,900 | $493,100 | $592,747 |
-| $5,000 | $0 | Three quarterly | Daily minimum / $31,900 | $460,900 | $561,061 |
-| $5,000 | $200 | Three quarterly | Daily minimum / $31,900 | $493,100 | $592,747 |
+| $1,000 | $0 | monthly_one | daily_minimum_retain_31900 | $224,400 | $302,287 |
+| $1,000 | $200 | weekly_one | daily_minimum_retain_31900 | $449,800 | $550,682 |
+| $5,000 | $0 | weekly_one | daily_minimum_retain_31900 | $443,000 | $544,527 |
+| $5,000 | $200 | weekly_one | daily_minimum_retain_31900 | $490,700 | $589,340 |
 
-Source: [132 purchase candidates](../../results/study__full_rulebook__RR__account_purchases__cash_budgets/REPORT.generated.md).
-These winners are selected among three withdrawal settings per purchase policy.
-They are not the result of optimizing every possible policy combination.
+Source: [current grouped purchase report](../../results/study__full_rulebook__RR__account_purchases__cash_budgets/REPORT.generated.md).
+This restricted ranking is not the best of every operating family. The tightest
+budget still has a higher historical result under restarting reinvestment.
+
+The earlier quarterly-three headline depended on its January purchase phase.
+[User-supplied phase checks](../../results/study__full_rulebook__RR__account_purchases__cash_budgets/PHASE_SENSITIVITY.md)
+showed large reversals and much smaller weekday variation for weekly-one in
+the funded examples. Those additional simulations have not been independently
+reproduced here. Weekly-one is a less phase-sensitive candidate on that evidence,
+not a proven universally robust policy.
 
 ## What the studies support
 
@@ -47,7 +59,8 @@ They are not the result of optimizing every possible policy combination.
   preserve more accounts while receiving less during trading.
 - **Faster scheduled buying is funding-sensitive.** Monthly-two and weekly-one
   both lose $1,000 on five accounts with no top-ups. They beat monthly-one in
-  the other budgets but do not change the overall total-cash winners above.
+  the other budgets. Monthly-two remains an expansion comparison; weekly-one
+  leads the three main schedules in the funded examples.
 - **Restarting is economically distinct from reinvesting.** Strict one-seed
   reinvestment stops after a $200 initial loss before receiving any payout.
   Restart variants can use available owner cash to buy a new seed when empty.

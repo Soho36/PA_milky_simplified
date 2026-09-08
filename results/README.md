@@ -121,3 +121,8 @@ The capped cadence study's
 also include both additions, with the original cadence simulations retained.
 
 Reproduce: `venv/Scripts/python.exe scripts/study_account_purchases.py`.
+
+The current purchase report separates one-account scheduled purchases
+(quarterly-one, monthly-one, weekly-one), monthly-two expansion, replacement/
+reinvestment, and historical quarterly-three batches. All 132 simulation rows
+are retained; quarterly-three is excluded from main rankings.

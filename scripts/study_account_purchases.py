@@ -76,6 +76,46 @@ def table(rows):
     return '\n'.join(lines)
 
 
+MAIN_SCHEDULES = ('quarterly_one', 'monthly_one', 'weekly_one')
+COMPARISON_GROUPS = (
+    ('Main scheduled purchases: one account per date', MAIN_SCHEDULES),
+    ('Expansion comparison: two accounts monthly', ('monthly_two',)),
+    ('Replacement and reinvestment comparisons', ('replace_one','replace_five','reinvest_50pct','reinvest_100pct','reinvest_restart_50pct','reinvest_restart_100pct')),
+    ('Historical batch purchases: three accounts quarterly', ('quarterly_three',)),
+)
+
+
+def grouped_tables(rows):
+    text=''
+    for title,names in COMPARISON_GROUPS:
+        selected=[r for r in rows if r['purchase_policy'] in names]
+        if selected:
+            text+='##### '+title+'\n\n'+table(sorted(selected,key=lambda r:r['combined_net_cash_usd'],reverse=True))+'\n\n'
+    return text
+
+
+def render_purchase_comparison(rows):
+    text='# Account purchases: main schedules and separate policy comparisons\n\n'
+    text+=f'{len(rows)} saved candidates retained. The main scheduled-purchase comparison is quarterly-one, monthly-one and weekly-one. Monthly-two is an expansion comparison. Quarterly-three is historical batch-purchase evidence, excluded from main rankings and recommendations. Replacement and reinvestment are separate operating-policy families.\n\n'
+    text+='All families use the same configured cash budgets, 20-live-account cap and payout settings in these saved Legacy 25K results. Single purchases still imply different annual volumes; this is not a pure timing experiment. Net cash excludes contributions and subtracts seat fees. Total includes one permitted terminal request.\n\n'
+    budgets=sorted({(r['initial_cash_usd'],r['monthly_contribution_usd']) for r in rows})
+    for initial,monthly in budgets:
+        family=[r for r in rows if (r['initial_cash_usd'],r['monthly_contribution_usd'])==(initial,monthly)]
+        text+=f'## ${initial:,} initial; ${monthly:,}/month\n\n'
+        main=[r for r in family if r['purchase_policy'] in MAIN_SCHEDULES]
+        for metric,label in [('ongoing_net_cash_usd','Ongoing'),('combined_net_cash_usd','Terminal-inclusive')]:
+            best=max(main,key=lambda r:(r[metric],r['ongoing_net_cash_usd']))
+            text+=f"**{label} main-schedule leader:** {best['purchase_policy']} / {best['withdrawal_policy']}: ${best[metric]:,.2f}.\n\n"
+        best=[max([r for r in family if r['purchase_policy']==name],key=lambda r:(r['combined_net_cash_usd'],r['ongoing_net_cash_usd'])) for name in dict.fromkeys(r['purchase_policy'] for r in family)]
+        text+='### Best tested withdrawal bundle within each purchase policy\n\n'+grouped_tables(best)
+        text+='### Fixed-withdrawal comparisons\n\nThese hold withdrawal settings and funding fixed. Compare purchase strategies within a family; the separate expansion and historical tables retain their evidence without entering the main ranking.\n\n'
+        for policy in dict.fromkeys(r['withdrawal_policy'] for r in family):
+            text+='#### '+policy+'\n\n'+grouped_tables([r for r in family if r['withdrawal_policy']==policy])
+    text+='## Why quarterly-three is historical\n\nQuarterly-three schedules 12 seats a year, like monthly-one, but batches three identical accounts on the same date. Under the shared deterministic tape those accounts share outcomes. The January quarterly phase was the original single-phase winner, not evidence of general superiority. User-supplied phase checks showed large reversals; see [phase sensitivity](PHASE_SENSITIVITY.md) for attribution and limits. Those checks have not been independently reproduced by this report generator.\n\n'
+    text+='No simulation rows were discarded. Existing reader reports and detailed best-run folders may describe the earlier all-policy ranking; use this report for the current comparison scope. See [operating notes](HOW_THIS_STUDY_WORKS.md) for funding, purchase and withdrawal conventions. Historical results are not forecasts; weekday stability alone is not validation across market periods.\n'
+    return text
+
+
 def main():
     initialize()
     out=study_path(STUDY, 'purchases')
@@ -123,7 +163,7 @@ def main():
         report+=table(sorted(best,key=lambda r:r['combined_net_cash_usd'],reverse=True))+'\n\n'
         # Persist both objective leaders, even when different policies win.
         for metric,kind in [('ongoing_net_cash_usd','ongoing'),('combined_net_cash_usd','terminal')]:
-            winner=max(family,key=lambda r:(r[metric],r['ongoing_net_cash_usd']))
+            winner=max([r for r in family if r['purchase_policy'] in MAIN_SCHEDULES],key=lambda r:(r[metric],r['ongoing_net_cash_usd']))
             report+=f"**{kind.capitalize()} objective leader:** {winner['purchase_policy']} / {winner['withdrawal_policy']}: ${winner[metric]:,.2f}. "
             job=(winner['purchase_policy'],AcquisitionPolicy(**winner['acquisition_config']),WithdrawalPolicy.from_payload(winner['withdrawal_config']))
             reproduced,result=evaluate(job,True)
@@ -157,6 +197,7 @@ def main():
     report+='Changing acquisition changes cohorts and the offered book of trades, so the old fixed-acquisition hold fingerprint and reference capture are not comparable here. '
     report+='The withdrawal choices are held at previously tested settings; this is not a joint global optimization. Results are in-sample and conditional on the starting date, cash budget and capacity cap. '
     report+='Reproduce with `venv/Scripts/python.exe scripts/study_account_purchases.py`. Each leading run has an experiment.json containing both run configuration and acquisition policy; replay through run_book(..., acquisition=AcquisitionPolicy(...)).\n'
+    report=render_purchase_comparison(rows)
     write_study_report(out, report)
     print(report,flush=True)
 
