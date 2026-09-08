@@ -14,27 +14,24 @@ from pa_milky.economics import Economics
 from pa_milky.provenance import input_digest,engine_digest,git_revision,sha256_file
 from pa_milky.report import write_outputs
 from pa_milky.study_reports import write_study_report
+from pa_milky.study_config import load_study_profile, study_path, study_policies, profile_provenance
+STUDY = load_study_profile()
 C=None
 T=None
 
 
 def initialize():
     global C,T
-    C=load_config(CONFIG_ROOT/'scenarios/full_rulebook_monthly_500.json')
+    C=load_config(study_path(STUDY, 'scenario'))
     T=load_tape(C)
 
 
 def withdrawal_choices():
-    return [WithdrawalPolicy(name='daily_minimum_retain_31900',cadence='daily',amount_rule='minimum',
-                quantize_to_amount=False,min_retained_balance_usd=31900,terminal_withdrawal='firm_permitted'),
-            WithdrawalPolicy(name='weekly_excess_retain_31600',cadence='weekly',amount_rule='maximum',
-                quantize_to_amount=False,min_retained_balance_usd=31600,terminal_withdrawal='firm_permitted'),
-            WithdrawalPolicy(name='monthly_minimum_retain_30000',cadence='calendar_month',amount_rule='minimum',
-                quantize_to_amount=False,min_retained_balance_usd=30000,terminal_withdrawal='firm_permitted')]
+    return [WithdrawalPolicy.from_payload(p) for p in STUDY['purchase_withdrawals']]
 
 
 def purchase_choices(initial,monthly):
-    base=dict(initial_cash_usd=initial,monthly_contribution_usd=monthly,max_live_accounts=20)
+    base=dict(initial_cash_usd=initial,monthly_contribution_usd=monthly,max_live_accounts=STUDY['max_live_accounts'])
     return [(name,AcquisitionPolicy(name=name,**base)) for name in
             ('monthly_one','monthly_two','weekly_one','quarterly_one','quarterly_three')]+[
             ('replace_one',AcquisitionPolicy(name='replace',replacement_target=1,**base)),
@@ -81,9 +78,9 @@ def table(rows):
 
 def main():
     initialize()
-    out=Path('results/study__full_rulebook__RR__account_purchases__cash_budgets')
+    out=study_path(STUDY, 'purchases')
     out.mkdir(parents=True,exist_ok=True)
-    budgets=[(1000,0),(1000,200),(5000,0),(5000,200)]
+    budgets=STUDY['budgets']
     jobs=[(name,a,p) for initial,monthly in budgets for name,a in purchase_choices(initial,monthly) for p in withdrawal_choices()]
     rows=[]
     if '--reuse-rows' in sys.argv:
@@ -95,15 +92,19 @@ def main():
             if name != 'report.py': assert current['files'][name]==entry, 'Computation changed; rerun without --reuse-rows'
         assert len(cached['rows'])==len(jobs)
         rows=cached['rows']
+        for row, (label, acquisition, policy) in zip(rows, jobs):
+            assert row['purchase_policy']==label
+            assert row['acquisition_config']==asdict(acquisition), 'Study acquisition settings changed; rerun'
+            assert row['withdrawal_config']==policy.to_payload(), 'Study withdrawal settings changed; rerun'
     else:
-        with ProcessPoolExecutor(max_workers=4,initializer=initialize) as pool:
+        with ProcessPoolExecutor(max_workers=STUDY["workers"],initializer=initialize) as pool:
             for i,row in enumerate(pool.map(evaluate,jobs),1):
                 rows.append(row)
                 if i%10==0:print(f'Completed {i}/{len(jobs)}',flush=True)
     payload={'schema':'pa_milky.acquisition_study.v1','generated_utc':datetime.now(timezone.utc).isoformat(),
-             'config':to_payload(C),'inputs':input_digest(C),'engine':engine_digest(),
+             'study_profile':profile_provenance(STUDY),'config':to_payload(C),'inputs':input_digest(C),'engine':engine_digest(),
              'git_revision':git_revision(),'runner_sha256':sha256_file(Path(__file__)),
-             'design':{'budgets':budgets,'max_live_accounts':20,'purchase_checks':'midnight daily',
+             'design':{'budgets':budgets,'max_live_accounts':STUDY['max_live_accounts'],'purchase_checks':'midnight daily',
                        'monthly_contributions_start':'second calendar month',
                        'quarterly_anchor':'every third month from tape start','weekly_anchor':'Monday 00:00 tape clock; no opening seed',
                        'reinvestment_seed_accounts':1,'restart_variants':'one replacement from available owner cash when empty','terminal_payouts_reinvested':False},'rows':rows}
@@ -112,7 +113,7 @@ def main():
     with (out/'candidates.csv').open('w',newline='',encoding='utf-8') as f:
         w=csv.DictWriter(f,fieldnames=fields);w.writeheader();w.writerows({k:r[k] for k in fields} for r in rows)
     report='# Account purchases under explicit cash budgets\n\n'
-    report+=f'{len(rows)} candidates: eleven purchase policies x three fixed withdrawal policies x four funding scenarios. Full configured payout rules; processing delay off; RR tape.\n\n'
+    report+=f'{len(rows)} candidates: {len(purchase_choices(*budgets[0]))} purchase policies x {len(withdrawal_choices())} withdrawal policies x {len(budgets)} funding scenarios. Full configured payout rules; processing delay off; {C.strategy} tape.\n\n'
     for initial,monthly in budgets:
         family=[r for r in rows if r['initial_cash_usd']==initial and r['monthly_contribution_usd']==monthly]
         best=[max([r for r in family if r['purchase_policy']==label],key=lambda r:(r['combined_net_cash_usd'],r['ongoing_net_cash_usd']))
@@ -143,15 +144,15 @@ def main():
             report+=f'### ${initial:,} initial; ${monthly:,}/month; {policy.name}\n\n'
             report+=table(sorted(family,key=lambda r:r['combined_net_cash_usd'],reverse=True))+'\n\n'
     report+='## Reading the comparison\n\n'
-    report+='Rankings are conditional on the budget and objective. Strict reinvestment loses its initial seat before receiving a payout and never restarts, so its -$200 result diagnoses startup dependence rather than the merits of the reinvestment fraction.\n\n'
+    report+='Rankings are conditional on the budget and objective. Strict reinvestment never restarts after its seed dies. If that seed fails before a payout, its result diagnoses startup dependence rather than the merits of the reinvestment fraction.\n\n'
     report+='Three quarterly purchases and one monthly purchase have the same planned purchase count per quarter, but enter different cohorts. Their difference combines entry timing, funding constraints, survival and capacity occupancy. It does not establish that quarterly buying is generally superior. Test alternative calendar phases, starting dates and live-account caps before treating these rankings as robust.\n\n'
     report+='Net cash is received payouts minus account fees, never owner contributions. Ending owner cash equals cumulative owner contributions plus net cash, and includes unused principal. '
     report+='Ongoing net cash excludes the final receipt. Live account paper balances are never purchase funds. Cash cannot go negative. Contributions are scheduled equally, even when unused; no $200 contribution is added in the opening month.\n\n'
     report+='Monthly buys one or two at each month boundary; weekly buys one each Monday at midnight, starting with the first Monday on or after the simulation opening boundary, with no extra opening seed. Quarterly buys one or three every third month. Missed scheduled buys expire; monthly-two may buy only one when cash or capacity permits only one. '
     report+='Replacement retries at midnight to maintain one or five live accounts, including the opening purchase. Strict reinvestment starts with one account and never restarts; the restart variants buy one replacement from available owner cash when the portfolio is empty. Both then spend 50% or 100% of cumulative received payouts on additional accounts; unused payout allocation carries forward. '
-    report+='Other purchase policies may use both contributed cash and received payouts. All share a modelled capacity of 20 live accounts; it is not a verified firm limit. Capacity and funding blocks are in candidates.csv.\n\n'
+    report+=f"Other purchase policies may use both contributed cash and received payouts. All share a configured capacity of {STUDY['max_live_accounts']} live accounts. Capacity and funding blocks are in candidates.csv.\n\n"
     report+='Trades settle before requests and purchases. Purchases use only already-received payouts, with activation at the check time, so earlier entries are excluded. '
-    report+='All account types are the same $200 seat. No evaluation cost, personal trading margin, or economic firm-failure model is added. '
+    report+=f'All accounts use the same ${C.purchase_fee_usd:,.0f} seat. No evaluation cost, personal trading margin, or economic firm-failure model is added. '
     report+='All withdrawal policies begin requests in the second calendar month of each account. Midnight reinvestment can buy near the endpoint; the experiment does not add a hindsight stop-buying rule. Terminal proceeds are never reinvested.\n\n'
     report+='Changing acquisition changes cohorts and the offered book of trades, so the old fixed-acquisition hold fingerprint and reference capture are not comparable here. '
     report+='The withdrawal choices are held at previously tested settings; this is not a joint global optimization. Results are in-sample and conditional on the starting date, cash budget and capacity cap. '

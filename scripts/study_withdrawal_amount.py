@@ -17,6 +17,8 @@ from pa_milky.provenance import input_digest, engine_digest, git_revision, sha25
 from pa_milky.simulator import run_book
 from pa_milky.report import write_outputs
 from pa_milky.study_reports import write_study_report
+from pa_milky.study_config import load_study_profile, study_path, study_policies, profile_provenance
+STUDY = load_study_profile()
 
 CONFIG = None
 TRADES = None
@@ -24,7 +26,7 @@ TRADES = None
 
 def initialize():
     global CONFIG, TRADES
-    CONFIG = load_config(CONFIG_ROOT / "scenarios/full_rulebook_monthly_500.json")
+    CONFIG = load_config(study_path(STUDY, 'scenario'))
     TRADES = load_tape(CONFIG)
 
 
@@ -130,16 +132,17 @@ def findings(rows):
 
 def main():
     parser = argparse.ArgumentParser()
-    parser.add_argument('--workers', type=int, default=4)
-    parser.add_argument('--out', type=Path, default=Path('results/study__full_rulebook__RR__monthly_amount_x_cushion__dual_terminal_scores'))
+    parser.add_argument('--study', default=STUDY['_source'])
+    parser.add_argument('--workers', type=int, default=STUDY['workers'])
+    parser.add_argument('--out', type=Path, default=study_path(STUDY, 'amount'))
     args = parser.parse_args()
     if args.workers < 1: parser.error('workers must be positive')
     initialize()
     out = args.out
     out.mkdir(parents=True, exist_ok=True)
     floor = CONFIG.trailing_floor_balance_usd
-    levels = [None] + [floor + i*500 for i in range(21)]
-    choices = policies()
+    levels = [None] + [floor + value for value in STUDY['amount']['headroom_grid']]
+    choices = study_policies(STUDY)
     jobs = [(p, level, 'coarse') for p in choices for level in levels]
     jobs.append((WithdrawalPolicy(name='hold'), None, 'benchmark'))
     rows = []
@@ -155,7 +158,7 @@ def main():
                 best = max(family, key=lambda r:r[metric])
                 center = best['retained_balance_usd']
                 if center is None: continue
-                for offset in range(-500,501,100):
+                for offset in range(-STUDY['amount']['refinement_radius'],STUDY['amount']['refinement_radius']+1,STUDY['amount']['refinement_step']):
                     level = center+offset
                     key = (p.name,level)
                     if level >= floor and key not in seen:
@@ -169,7 +172,7 @@ def main():
     rows.sort(key=lambda r:(r['policy'], -1 if r['retained_balance_usd'] is None else r['retained_balance_usd']))
     payload = {'schema':'pa_milky.amount_cushion_study.v1',
                'generated_utc':datetime.now(timezone.utc).isoformat(),
-               'config':to_payload(CONFIG),'inputs':input_digest(CONFIG),
+               'study_profile':profile_provenance(STUDY),'config':to_payload(CONFIG),'inputs':input_digest(CONFIG),
                'engine':engine_digest(),'git_revision':git_revision(),
                'runner_sha256':sha256_file(Path(__file__)),
                'benchmark':{'policy':benchmark['policy'],
@@ -182,8 +185,8 @@ def main():
                                                  'trades an early death avoids can be losing ones',
                             'neutrality_test':'per-account fingerprint of trade count, booked gross and '
                                               'commission, and killing trade; not equality of totals'},
-               'design':{'coarse_retained_balances':levels, 'local_refinement_step':100,
-                         'local_refinement_radius':500, 'objectives':['ongoing_pocket_usd','combined_pocket_usd'],
+               'design':{'coarse_retained_balances':levels, 'local_refinement_step':STUDY['amount']['refinement_step'],
+                         'local_refinement_radius':STUDY['amount']['refinement_radius'], 'objectives':['ongoing_pocket_usd','combined_pocket_usd'],
                          'terminal':'one firm-permitted request, voluntary cushion released',
                          'selection':'in-sample; local refinement around each family/objective coarse winner'},
                'rows':rows}
@@ -200,7 +203,7 @@ def main():
     best_ongoing.sort(key=lambda r:r['ongoing_pocket_usd'],reverse=True)
     best_combined.sort(key=lambda r:r['combined_pocket_usd'],reverse=True)
     report = "# Withdrawal amount x cushion\n\n"
-    report += f"{len(rows)} candidates, configured full payout rulebook (processing delay off), RR tape. "
+    report += f"{len(rows)} candidates, configured full payout rulebook (processing delay off), {CONFIG.strategy} tape. "
     report += "One new account monthly; identical trading path for each candidate's two endpoint scores.\n\n"
     report += ceiling_section(rows, benchmark)
     report += "\n## Best tested cushion per policy: ongoing cash\n\n"+table(best_ongoing)
@@ -213,8 +216,8 @@ def main():
     report += "All net cash deducts the same purchase fees and applicable split. Terminal scoring releases the voluntary cushion "
     report += "and makes one request through the same rulebook; it does not turn paper profit into unrestricted cash. "
     report += "Alive counts are before terminal withdrawal. The two scores are alternative objectives, not independent simulations.\n\n"
-    report += "The coarse grid spans $0-$10,000 headroom above the frozen floor, plus no cushion. "
-    report += "Each policy's coarse winner for each objective is refined within $500 in $100 steps. "
+    report += "The coarse headroom grid is recorded in the study profile, plus no cushion. "
+    report += f"Each policy's coarse winner is refined within ${STUDY['amount']['refinement_radius']:,} in ${STUDY['amount']['refinement_step']:,} steps. "
     report += "This local search can miss other peaks; winning settings are in-sample, not validated operating recommendations. "
     report += "Acquisition cadence, withdrawal cadence, execution assumptions and tape remain fixed.\n\n"
     report += "Reproduce from project root: `venv/Scripts/python.exe scripts/study_withdrawal_amount.py`. "

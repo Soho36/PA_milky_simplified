@@ -1,0 +1,197 @@
+{
+  "schema": "pa_milky.study_profile.v1",
+  "status": "ready",
+  "product_id": "legacy_25k",
+  "scenario": "config/scenarios/full_rulebook_monthly_500.json",
+  "workers": 4,
+  "budgets": [
+    [
+      1000,
+      0
+    ],
+    [
+      1000,
+      200
+    ],
+    [
+      5000,
+      0
+    ],
+    [
+      5000,
+      200
+    ]
+  ],
+  "max_live_accounts": 20,
+  "amount": {
+    "policies": [
+      {
+        "name": "fixed_250_backlog",
+        "cadence": "calendar_month",
+        "amount_usd": 250,
+        "amount_rule": "fixed",
+        "shortfall": "accrue_backlog",
+        "quantize_to_amount": false,
+        "min_retained_balance_usd": null,
+        "terminal_withdrawal": "none"
+      },
+      {
+        "name": "fixed_500_backlog",
+        "cadence": "calendar_month",
+        "amount_usd": 500,
+        "amount_rule": "fixed",
+        "shortfall": "accrue_backlog",
+        "quantize_to_amount": false,
+        "min_retained_balance_usd": null,
+        "terminal_withdrawal": "none"
+      },
+      {
+        "name": "fixed_750_backlog",
+        "cadence": "calendar_month",
+        "amount_usd": 750,
+        "amount_rule": "fixed",
+        "shortfall": "accrue_backlog",
+        "quantize_to_amount": false,
+        "min_retained_balance_usd": null,
+        "terminal_withdrawal": "none"
+      },
+      {
+        "name": "fixed_1000_backlog",
+        "cadence": "calendar_month",
+        "amount_usd": 1000,
+        "amount_rule": "fixed",
+        "shortfall": "accrue_backlog",
+        "quantize_to_amount": false,
+        "min_retained_balance_usd": null,
+        "terminal_withdrawal": "none"
+      },
+      {
+        "name": "fixed_1500_backlog",
+        "cadence": "calendar_month",
+        "amount_usd": 1500,
+        "amount_rule": "fixed",
+        "shortfall": "accrue_backlog",
+        "quantize_to_amount": false,
+        "min_retained_balance_usd": null,
+        "terminal_withdrawal": "none"
+      },
+      {
+        "name": "minimum_monthly",
+        "cadence": "calendar_month",
+        "amount_usd": 0.0,
+        "amount_rule": "minimum",
+        "shortfall": "skip",
+        "quantize_to_amount": false,
+        "min_retained_balance_usd": null,
+        "terminal_withdrawal": "none"
+      },
+      {
+        "name": "maximum_excess_monthly",
+        "cadence": "calendar_month",
+        "amount_usd": 0.0,
+        "amount_rule": "maximum",
+        "shortfall": "skip",
+        "quantize_to_amount": false,
+        "min_retained_balance_usd": null,
+        "terminal_withdrawal": "none"
+      },
+      {
+        "name": "legacy_500_blocks",
+        "cadence": "calendar_month",
+        "amount_usd": 500,
+        "amount_rule": "fixed",
+        "shortfall": "accrue_backlog",
+        "quantize_to_amount": true,
+        "min_retained_balance_usd": null,
+        "terminal_withdrawal": "none"
+      }
+    ],
+    "headroom_grid": [
+      0,
+      500,
+      1000,
+      1500,
+      2000,
+      2500,
+      3000,
+      3500,
+      4000,
+      4500,
+      5000,
+      5500,
+      6000,
+      6500,
+      7000,
+      7500,
+      8000,
+      8500,
+      9000,
+      9500,
+      10000
+    ],
+    "refinement_radius": 500,
+    "refinement_step": 100
+  },
+  "cadence": {
+    "policy_names": [
+      "fixed_750_backlog",
+      "fixed_1000_backlog",
+      "fixed_1500_backlog",
+      "minimum_monthly",
+      "maximum_excess_monthly"
+    ],
+    "cadences": [
+      "calendar_month",
+      "weekly",
+      "daily"
+    ],
+    "retained_balances": [
+      31600,
+      31700,
+      31800,
+      31900,
+      32000,
+      32100
+    ],
+    "minimum_extra_retained_balance": 30000,
+    "comparison_retained_balance": 31600
+  },
+  "purchase_withdrawals": [
+    {
+      "name": "daily_minimum_retain_31900",
+      "cadence": "daily",
+      "amount_usd": 0.0,
+      "amount_rule": "minimum",
+      "shortfall": "skip",
+      "quantize_to_amount": false,
+      "min_retained_balance_usd": 31900,
+      "terminal_withdrawal": "firm_permitted"
+    },
+    {
+      "name": "weekly_excess_retain_31600",
+      "cadence": "weekly",
+      "amount_usd": 0.0,
+      "amount_rule": "maximum",
+      "shortfall": "skip",
+      "quantize_to_amount": false,
+      "min_retained_balance_usd": 31600,
+      "terminal_withdrawal": "firm_permitted"
+    },
+    {
+      "name": "monthly_minimum_retain_30000",
+      "cadence": "calendar_month",
+      "amount_usd": 0.0,
+      "amount_rule": "minimum",
+      "shortfall": "skip",
+      "quantize_to_amount": false,
+      "min_retained_balance_usd": 30000,
+      "terminal_withdrawal": "firm_permitted"
+    }
+  ],
+  "outputs": {
+    "amount": "results/study__full_rulebook__RR__monthly_amount_x_cushion__dual_terminal_scores",
+    "cadence": "results/study__full_rulebook__RR__withdrawal_cadence__monthly_purchases",
+    "purchases": "results/study__full_rulebook__RR__account_purchases__cash_budgets",
+    "budgeted_cadence": "results/study__full_rulebook__RR__withdrawal_cadence__monthly_purchases__cap_20__cash_budgets"
+  }
+}

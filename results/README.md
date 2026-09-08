@@ -1,5 +1,11 @@
 # Results index
 
+For a shorter reading path, start with the
+[Legacy 25K current findings](../research/legacy_25k/OVERVIEW.md) and
+[study guide](../research/legacy_25k/STUDIES.md). This index retains the complete
+historical output inventory. Product-specific study settings now live in
+[study profiles](../config/studies/README.md).
+
 Folder names show rulebook, withdrawal policy, retained balance, and closing action.
 `terminal_request` is one firm-permitted request; `terminal_idealized` bypasses
 payout restrictions for the closing profit withdrawal. `no_terminal` leaves

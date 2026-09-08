@@ -1,0 +1,21 @@
+# Legacy 25K study guide
+
+Read [current findings](OVERVIEW.md) first. Detailed evidence remains at stable
+paths; there is no need to browse the full results tree to follow the research.
+
+| Question | Evidence | Scope |
+|---|---|---|
+| Which purchase policy works with our cash budget? | [Current purchase report](../../results/study__full_rulebook__RR__account_purchases__cash_budgets/REPORT.generated.md) | 132 candidates; cap 20; four budgets |
+| Which withdrawal cadence works with monthly purchases? | [Current capped cadence report](../../results/study__full_rulebook__RR__withdrawal_cadence__monthly_purchases__cap_20__cash_budgets/REPORT.generated.md) | 372 candidates; matched budgets and controls |
+| How did cadence affect the original book? | [Historical cadence report and notes](../../results/study__full_rulebook__RR__withdrawal_cadence__monthly_purchases/REPORT.md) | Uncapped monthly purchases |
+| How do withdrawal amounts and reserves interact? | [Amount/cushion report](../../results/study__full_rulebook__RR__monthly_amount_x_cushion__dual_terminal_scores/REPORT.md) | Uncapped monthly purchases |
+| Which firm restrictions matter under a fixed/adapted policy? | [Rule-effect report](../../results/full_rulebook__monthly_500__no_cushion__no_terminal__adapted_search/report.txt) | Historical cushion-only adaptation |
+| What does a cash difference actually represent? | [Economic definitions](../../ECONOMIC_EFFECTS.md) | Accounting identities and timing limits |
+| How were the original conclusions developed? | [Historical introduction](HISTORICAL_FINDINGS.md) | Preserved earlier narrative |
+
+Reader explanations are preserved separately:
+[purchase breakdown](../../results/study__full_rulebook__RR__account_purchases__cash_budgets/report_breakdown.txt)
+and [cadence breakdown](../../results/study__full_rulebook__RR__withdrawal_cadence__monthly_purchases/report_breakdown.txt).
+They describe their original runs; use the generated purchase report for the
+monthly-two and weekly-one additions. The [complete results index](../../results/README.md)
+also contains single-scenario and coarse/fine sweep history.
