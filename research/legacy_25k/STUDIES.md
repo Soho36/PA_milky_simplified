@@ -19,3 +19,12 @@ and [cadence breakdown](../../results/study__full_rulebook__RR__withdrawal_caden
 They describe their original runs; use the generated purchase report for the
 monthly-two and weekly-one additions. The [complete results index](../../results/README.md)
 also contains single-scenario and coarse/fine sweep history.
+
+## Plain-language operating notes
+
+These describe what happens month by month and how to read the results, without listing every tested setting.
+
+- [Withdrawal amount and reserve](../../results/study__full_rulebook__RR__monthly_amount_x_cushion__dual_terminal_scores/HOW_THIS_STUDY_WORKS.md)
+- [Historical withdrawal cadence](../../results/study__full_rulebook__RR__withdrawal_cadence__monthly_purchases/HOW_THIS_STUDY_WORKS.md)
+- [Capped, budget-matched cadence](../../results/study__full_rulebook__RR__withdrawal_cadence__monthly_purchases__cap_20__cash_budgets/HOW_THIS_STUDY_WORKS.md)
+- [Account purchases](../../results/study__full_rulebook__RR__account_purchases__cash_budgets/HOW_THIS_STUDY_WORKS.md)
