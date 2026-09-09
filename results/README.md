@@ -126,3 +126,12 @@ The current purchase report separates one-account scheduled purchases
 (quarterly-one, monthly-one, weekly-one), monthly-two expansion, replacement/
 reinvestment, and historical quarterly-three batches. All 132 simulation rows
 are retained; quarterly-three is excluded from main rankings.
+
+## Monthly purchases with earlier replacements
+
+[Replacement comparison](study__full_rulebook__RR__monthly_replacements__cap_20__cash_budgets/REPORT.generated.md): 48 candidates, comparing monthly-one and
+weekly-one with replacements consuming an unused current-month slot or added to normal
+monthly growth. All 24 existing-policy controls reproduce exactly.
+
+The current-month replacement rule never cancels future purchases. The former
+future-slot experiment is retained in `archives/studies/monthly_replacements_future_slots`.

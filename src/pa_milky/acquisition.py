@@ -16,7 +16,7 @@ class AcquisitionPolicy:
     restart_when_empty: bool = False
 
     def __post_init__(self):
-        if self.name not in {'monthly_one','monthly_two','weekly_one','quarterly_one','quarterly_three','replace','reinvest'}:
+        if self.name not in {'monthly_one','monthly_two','weekly_one','quarterly_one','quarterly_three','replace','reinvest','monthly_advance_replacements','monthly_plus_replacements','monthly_current_slot_replacements'}:
             raise ValueError('Unknown acquisition policy')
         if any(not math.isfinite(v) or v < 0 for v in
                (self.initial_cash_usd,self.monthly_contribution_usd)):
@@ -40,6 +40,11 @@ class AcquisitionLedger:
     funded_months: set = field(default_factory=set)
     cash_events: list = field(default_factory=list)
     decisions: list = field(default_factory=list)
+    filled_month_slots: set = field(default_factory=set)
+    observed_deaths: int = 0
+    pending_replacements: int = 0
+    future_slots_used: int = 0
+    replacement_events: list = field(default_factory=list)
 
     def cash_event(self, at, kind, amount):
         self.cash_usd = money(self.cash_usd + amount)
@@ -65,6 +70,8 @@ class AcquisitionLedger:
     def decide(self, at, month_index, alive, account_count, fee):
         if fee <= 0: raise ValueError('Cash purchase study requires a positive fee')
         p=self.policy
+        if p.name in {'monthly_advance_replacements','monthly_plus_replacements','monthly_current_slot_replacements'}:
+            return self.decide_hybrid(at, alive, account_count, fee)
         room=max(0,p.max_live_accounts-alive)
         wanted=0
         seed_purchase = not self.seed_bought or (p.restart_when_empty and alive == 0)
@@ -89,6 +96,47 @@ class AcquisitionLedger:
             if p.name=='reinvest' and not seed_purchase:
                 self.payout_budget_spent_usd=money(self.payout_budget_spent_usd+amount)
             self.seed_bought=True
+            self.spent_usd=money(self.spent_usd+amount)
+            self.cash_event(at,'account_purchase',-amount)
+        return count
+
+    def decide_hybrid(self, at, alive, account_count, fee):
+        deaths = account_count-alive
+        self.pending_replacements += deaths-self.observed_deaths
+        self.observed_deaths = deaths
+        advance = self.policy.name == 'monthly_advance_replacements'
+        current_slot = self.policy.name == 'monthly_current_slot_replacements'
+        month = (at.year,at.month)
+        scheduled = at.day == 1 and (not current_slot or month not in self.filled_month_slots)
+        skipped = scheduled and advance and self.future_slots_used > 0
+        if skipped:
+            self.future_slots_used -= 1
+        # Settle existing slot debt first. Replacements now consume future dates.
+        room = max(0,self.policy.max_live_accounts-alive)
+        wanted = self.pending_replacements + int(scheduled and not skipped)
+        replaced = min(self.pending_replacements,room,int(self.cash_usd//fee))
+        self.pending_replacements -= replaced
+        if advance:
+            self.future_slots_used += replaced
+        consumed_current = current_slot and replaced > 0 and month not in self.filled_month_slots
+        if consumed_current:
+            self.filled_month_slots.add(month)
+        scheduled_bought = int(scheduled and not skipped and not consumed_current and room>replaced
+                               and self.cash_usd >= (replaced+1)*fee)
+        if current_slot and scheduled_bought:
+            self.filled_month_slots.add(month)
+        count = replaced+scheduled_bought
+        self.replacement_events.append({'at':at.isoformat(),'replacements':replaced,
+            'scheduled_bought':scheduled_bought,'consumed_current_month_slot':bool(consumed_current),'scheduled_skipped_for_debt':bool(skipped),
+            'pending_replacements':self.pending_replacements,'future_slots_used':self.future_slots_used})
+        if consumed_current and scheduled:
+            wanted -= 1
+        if wanted:
+            self.decisions.append({'at':at.isoformat(),'wanted':wanted,'bought':count,
+                'capacity_limited':min(wanted,room)<wanted,
+                'cash_limited':count<min(wanted,room),'alive_before':alive})
+        if count:
+            amount=money(count*fee)
             self.spent_usd=money(self.spent_usd+amount)
             self.cash_event(at,'account_purchase',-amount)
         return count

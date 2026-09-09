@@ -9,6 +9,64 @@ from tests import test_policy_study
 
 
 class TestAcquisition(unittest.TestCase):
+    def test_current_slot_midmonth_death_never_cancels_next_month(self):
+        ledger=AcquisitionLedger(AcquisitionPolicy('monthly_current_slot_replacements',2000))
+        ledger.fund(datetime(2020,1,1))
+        self.assertEqual(ledger.decide(datetime(2020,1,1),0,0,0,200),1)
+        self.assertEqual(ledger.decide(datetime(2020,1,8),0,0,1,200),1)
+        self.assertEqual(ledger.decide(datetime(2020,2,1),1,1,2,200),1)
+        self.assertEqual(ledger.future_slots_used,0)
+
+    def test_current_slot_boundary_deaths_absorb_monthly_purchase(self):
+        ledger=AcquisitionLedger(AcquisitionPolicy('monthly_current_slot_replacements',2000))
+        ledger.fund(datetime(2020,1,1))
+        ledger.decide(datetime(2020,1,1),0,0,0,200)
+        self.assertEqual(ledger.decide(datetime(2020,2,1),1,0,1,200),1)
+        self.assertEqual(ledger.replacement_events[-1]['scheduled_bought'],0)
+        self.assertTrue(ledger.replacement_events[-1]['consumed_current_month_slot'])
+        self.assertEqual(ledger.decide(datetime(2020,3,1),2,1,2,200),1)
+
+    def test_current_slot_multiple_deaths_and_unaffordable_attempt(self):
+        ledger=AcquisitionLedger(AcquisitionPolicy('monthly_current_slot_replacements',0))
+        ledger.fund(datetime(2020,2,1))
+        self.assertEqual(ledger.decide(datetime(2020,2,1),1,0,2,200),0)
+        self.assertNotIn((2020,2),ledger.filled_month_slots)
+        ledger.receive([NS(at=datetime(2020,2,2),received_usd=1000)])
+        self.assertEqual(ledger.decide(datetime(2020,2,2),1,0,2,200),2)
+        self.assertIn((2020,2),ledger.filled_month_slots)
+        self.assertEqual(ledger.future_slots_used,0)
+        self.assertEqual(ledger.decide(datetime(2020,3,1),2,2,4,200),1)
+
+    def test_advanced_replacements_consume_future_slots(self):
+        ledger=AcquisitionLedger(AcquisitionPolicy('monthly_advance_replacements',2000))
+        ledger.fund(datetime(2020,1,1))
+        self.assertEqual(ledger.decide(datetime(2020,1,1),0,0,0,200),1)
+        self.assertEqual(ledger.decide(datetime(2020,1,8),0,0,1,200),1)
+        self.assertEqual(ledger.future_slots_used,1)
+        self.assertEqual(ledger.decide(datetime(2020,2,1),1,1,2,200),0)
+        self.assertEqual(ledger.future_slots_used,0)
+        self.assertEqual(ledger.decide(datetime(2020,3,1),2,1,2,200),1)
+
+    def test_failed_replacement_retries_without_slot_debt(self):
+        ledger=AcquisitionLedger(AcquisitionPolicy('monthly_advance_replacements',200))
+        ledger.fund(datetime(2020,1,1))
+        ledger.decide(datetime(2020,1,1),0,0,0,200)
+        self.assertEqual(ledger.decide(datetime(2020,1,8),0,0,1,200),0)
+        self.assertEqual(ledger.future_slots_used,0)
+        ledger.receive([NS(at=datetime(2020,1,9),received_usd=400)])
+        self.assertEqual(ledger.decide(datetime(2020,1,9),0,0,1,200),1)
+        self.assertEqual(ledger.decide(datetime(2020,1,10),0,0,2,200),1)
+        self.assertEqual(ledger.future_slots_used,2)
+        self.assertEqual(ledger.pending_replacements,0)
+
+    def test_plus_replacement_does_not_cancel_monthly_purchase(self):
+        ledger=AcquisitionLedger(AcquisitionPolicy('monthly_plus_replacements',2000))
+        ledger.fund(datetime(2020,1,1))
+        ledger.decide(datetime(2020,1,1),0,0,0,200)
+        self.assertEqual(ledger.decide(datetime(2020,2,1),1,0,1,200),2)
+        self.assertEqual(ledger.future_slots_used,0)
+
+
     def test_monthly_two_partial_fill_and_no_catchup(self):
         ledger=AcquisitionLedger(AcquisitionPolicy('monthly_two',300))
         ledger.fund(datetime(2020,1,1))

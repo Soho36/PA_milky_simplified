@@ -75,6 +75,18 @@ def main():
                     check(new[k]==v,'Capped cadence/purchase shared control: '+k)
             counts['funded_shared_controls']+=1
         check(counts['funded_shared_controls']==12,'Expected 12 funded shared controls')
+    replacement=next((d for d in studies.values() if d['schema']=='pa_milky.monthly_replacements.v1'),None)
+    if replacement:
+        purchase=next(d for d in studies.values() if d['schema']=='pa_milky.acquisition_study.v1')
+        control_key=lambda r:(r['initial_cash_usd'],r['monthly_contribution_usd'],r['purchase_policy'],r['withdrawal_policy'])
+        controls={control_key(r):r for r in purchase['rows']}
+        counts['replacement_shared_controls']=0
+        for r in replacement['rows']:
+            if r['purchase_policy'] not in ('monthly_one','weekly_one'):continue
+            old=controls[control_key(r)]
+            check(all(r[k]==v for k,v in old.items()),'Replacement-study shared control differs')
+            counts['replacement_shared_controls']+=1
+        check(counts['replacement_shared_controls']==24,'Expected 24 replacement controls')
     for p in ROOT.rglob('summary.json'):
         s=json.loads(p.read_text()); c=s['cash']; b=s['book']
         check(round(c.get('received_usd',c['withdrawn_usd'])-c['spent_on_accounts_usd']-c['owner_cash_position_usd'],2)==0,str(p)+': summary cash')
@@ -86,7 +98,7 @@ def main():
     lines += ['', '## Comparability', '', '| Family | Acquisition / capacity | Funding | Status |','|---|---|---|---|']
     for name,d in studies.items():
         funded='acquisition_config' in d['rows'][0]
-        acquisition_label=(f"{len({r['purchase_policy'] for r in d['rows']})} policies; 20 live maximum" if 'account_purchases' in name else 'One monthly; 20 live maximum') if funded else 'One monthly; no live cap'
+        acquisition_label=(f"{len({r['purchase_policy'] for r in d['rows']})} policies; 20 live maximum" if ('account_purchases' in name or 'monthly_replacements' in name) else 'One monthly; 20 live maximum') if funded else 'One monthly; no live cap'
         report_file='REPORT.generated.md' if (ROOT/name/'REPORT.generated.md').exists() else 'REPORT.md'
         lines.append(f'| [{name}]({name}/{report_file}) | '+acquisition_label+' | '+('Four explicit budgets' if funded else 'Purchases not cash-constrained')+' | '+('Internally comparable within each budget' if funded else 'Historical uncapped experiment')+' |')
     lines += ['', 'The amount and cadence studies agree on their overlapping settings. The purchase study changes both capacity and funding, so its monthly rows are not controls for the earlier uncapped studies. Its withdrawal settings were selected from those uncapped searches; they are not established capped optima.', '', 'Other scenario results and cushion sweeps are historical experiments with deliberately different rulebooks, terminal treatments, policies and (for GG) tapes. They must not be ranked as one common-policy study. Older sweep JSON files do not embed complete configurations or input/engine hashes, so their exact provenance cannot be verified from the saved files alone.', '', '## Common 20-account comparison', '', 'The budget-matched cadence study adds 372 capped candidates and 12 explicit shared controls against the purchase study. Earlier amount/cushion and cadence results remain historical uncapped experiments answering their original questions. No wholesale rerun is required. The purchase shortlist is not automatically optimal over the wider capped cadence grid.', '', 'A binding live cap also changes the acquisition schedule when withdrawals change survival. Consequently, the existing fixed-cohort claim that hold bounds survival does not carry over automatically. A capped study must compare activation dates/trade identities and label its hold reference as a different portfolio when cohorts differ.', '', '## Reader reports', '', 'REPORT.md and report_breakdown.txt are reader-maintained and are never overwritten by the study runners. Reruns write REPORT.generated.md; on a new directory only, REPORT.md is also initialized. Reader notes remain tied to their original results until reviewed. In particular, the cadence breakdown describes the uncapped 22-survivor experiment.', '']

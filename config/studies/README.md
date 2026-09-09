@@ -1,6 +1,6 @@
 # Study profiles
 
-The four study runners accept `--study PATH`. Paths inside a profile resolve
+The study runners accept `--study PATH`. Paths inside a profile resolve
 from the repository root. The default is `config/studies/legacy_25k.json`.
 Existing commands and output locations are retained.
 
@@ -23,7 +23,7 @@ family, headroom/refinement grid, cadence grid and purchase withdrawal shortlist
 The eleven acquisition algorithms and common simulation conventions remain code;
 this is not an arbitrary workflow language. Use separate output locations for a
 new product or changed experiment design. A ready profile must use distinct
-folders for its four studies.
+folders for its studies.
 
 `legacy_50k.json` is a placeholder and fails before loading data or writing
 results. It must not be enabled simply by changing `status`: all verified
@@ -33,3 +33,6 @@ Reader-maintained REPORT.md and report_breakdown.txt are not replaced by runs.
 Current generated reports live in REPORT.generated.md. Budgeted cadence's
 `--refresh-purchase-tables` refreshes presentation from saved cadence rows and
 rechecks purchase controls; it is not a new cadence simulation.
+
+The replacement comparison uses the `replacements` output key:
+`venv/Scripts/python.exe scripts/study_monthly_replacements.py --study config/studies/legacy_25k.json`.

@@ -99,3 +99,20 @@ claim is made for those comparisons.
 
 The next product should have its own verified configuration, policy grid and
 results. The 25K thresholds and rankings are not transferable findings for 50K.
+
+## Additional replacement experiment
+
+The [current 48-candidate replacement study](../../results/study__full_rulebook__RR__monthly_replacements__cap_20__cash_budgets/REPORT.generated.md)
+replaces deaths at the next daily check, consumes an unused current-month slot,
+and never cancels a future scheduled purchase. The earlier future-slot version
+is archived and is not the current policy.
+
+With $1,000 plus $200/month and daily minimum withdrawals retaining $31,900,
+monthly-one totals $464,312, current-slot replacement $559,996, and unconditional
+additional replacements $567,277. The variants differ when replacements coincide
+with an unused scheduled monthly purchase. All are in-sample cohort comparisons.
+
+Monthly-one first reaches 20 live accounts in December 2024 in that setting,
+compared with September 2022 for weekly-one. Ending at 20 does not imply most of
+the dataset was spent at capacity. Both replacement variants exhaust the
+$1,000/no-top-up budget. These results do not establish start-date robustness.

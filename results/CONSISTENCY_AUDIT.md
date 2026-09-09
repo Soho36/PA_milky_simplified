@@ -4,12 +4,13 @@ This audit checks saved arithmetic, CSV/JSON agreement, current input hashes and
 
 ## Checks
 
-- economic identities: 940
-- paired scores: 898
-- csv rows: 898
+- economic identities: 988
+- paired scores: 946
+- csv rows: 946
 - summary cash: 21
 - matched candidates: 27
 - funded shared controls: 12
+- replacement shared controls: 24
 
 Failures: 0.
 
@@ -19,6 +20,7 @@ Failures: 0.
 |---|---|---|---|
 | [study__full_rulebook__RR__account_purchases__cash_budgets](study__full_rulebook__RR__account_purchases__cash_budgets/REPORT.generated.md) | 11 policies; 20 live maximum | Four explicit budgets | Internally comparable within each budget |
 | [study__full_rulebook__RR__monthly_amount_x_cushion__dual_terminal_scores](study__full_rulebook__RR__monthly_amount_x_cushion__dual_terminal_scores/REPORT.md) | One monthly; no live cap | Purchases not cash-constrained | Historical uncapped experiment |
+| [study__full_rulebook__RR__monthly_replacements__cap_20__cash_budgets](study__full_rulebook__RR__monthly_replacements__cap_20__cash_budgets/REPORT.generated.md) | 4 policies; 20 live maximum | Four explicit budgets | Internally comparable within each budget |
 | [study__full_rulebook__RR__withdrawal_cadence__monthly_purchases](study__full_rulebook__RR__withdrawal_cadence__monthly_purchases/REPORT.md) | One monthly; no live cap | Purchases not cash-constrained | Historical uncapped experiment |
 | [study__full_rulebook__RR__withdrawal_cadence__monthly_purchases__cap_20__cash_budgets](study__full_rulebook__RR__withdrawal_cadence__monthly_purchases__cap_20__cash_budgets/REPORT.generated.md) | One monthly; 20 live maximum | Four explicit budgets | Internally comparable within each budget |
 
