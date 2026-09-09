@@ -1,0 +1,610 @@
+<title>Legacy 25K Results Map</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Archivo:wght@500;600;700&family=IBM+Plex+Mono:wght@400;500&family=Source+Serif+4:opsz,wght@8..60,400;8..60,600&display=swap">
+<style>
+  :root {
+    --paper: #eceff4;
+    --surface: #fbfcfe;
+    --sunk: #e3e8ef;
+    --ink: #16202b;
+    --muted: #59697a;
+    --rule: #ccd6e1;
+    --hist: #94621c;
+    --hist-wash: rgba(148, 98, 28, 0.08);
+    --fund: #0f6270;
+    --fund-wash: rgba(15, 98, 112, 0.08);
+    --flag: #9a3246;
+    --display: "Archivo", "Helvetica Neue", Arial, sans-serif;
+    --body: "Source Serif 4", Georgia, "Times New Roman", serif;
+    --mono: "IBM Plex Mono", Consolas, "Courier New", monospace;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root:not([data-theme="light"]) {
+      --paper: #101720;
+      --surface: #19222d;
+      --sunk: #141c25;
+      --ink: #dde5ef;
+      --muted: #93a2b4;
+      --rule: #2b3846;
+      --hist: #d59a44;
+      --hist-wash: rgba(213, 154, 68, 0.10);
+      --fund: #4db2be;
+      --fund-wash: rgba(77, 178, 190, 0.10);
+      --flag: #dd8395;
+    }
+  }
+  :root[data-theme="dark"] {
+    --paper: #101720;
+    --surface: #19222d;
+    --sunk: #141c25;
+    --ink: #dde5ef;
+    --muted: #93a2b4;
+    --rule: #2b3846;
+    --hist: #d59a44;
+    --hist-wash: rgba(213, 154, 68, 0.10);
+    --fund: #4db2be;
+    --fund-wash: rgba(77, 178, 190, 0.10);
+    --flag: #dd8395;
+  }
+
+  body {
+    background: var(--paper);
+    color: var(--ink);
+    font-family: var(--body);
+    font-size: 16px;
+    line-height: 1.6;
+    -webkit-font-smoothing: antialiased;
+  }
+  .page {
+    max-width: 1120px;
+    margin: 0 auto;
+    padding: 40px 24px 80px;
+    display: flex;
+    flex-direction: column;
+    gap: 56px;
+  }
+  .prose { max-width: 64ch; }
+  p { margin: 0 0 0.85em; }
+  p:last-child { margin-bottom: 0; }
+  code, .mono { font-family: var(--mono); font-size: 0.86em; }
+
+  .masthead { display: flex; flex-direction: column; gap: 16px; }
+  .eyebrow {
+    font-family: var(--mono); font-size: 11px; font-weight: 500;
+    letter-spacing: 0.14em; text-transform: uppercase; color: var(--muted);
+  }
+  h1 {
+    font-family: var(--display); font-weight: 700; font-size: clamp(30px, 5vw, 46px);
+    line-height: 1.06; letter-spacing: -0.025em; margin: 0; text-wrap: balance;
+  }
+  .standfirst { font-size: 18px; color: var(--muted); max-width: 62ch; margin: 0; }
+  .facts {
+    display: grid; grid-template-columns: repeat(auto-fit, minmax(148px, 1fr));
+    gap: 1px; background: var(--rule); border: 1px solid var(--rule);
+    border-radius: 3px; overflow: hidden; margin: 6px 0 0;
+  }
+  .fact { background: var(--surface); padding: 12px 14px; }
+  .fact dt {
+    font-family: var(--mono); font-size: 10px; letter-spacing: 0.1em;
+    text-transform: uppercase; color: var(--muted); margin-bottom: 4px;
+  }
+  .fact dd {
+    margin: 0; font-family: var(--display); font-weight: 600; font-size: 15px;
+    font-variant-numeric: tabular-nums; letter-spacing: -0.01em;
+  }
+
+  section { display: flex; flex-direction: column; gap: 20px; }
+  h2 {
+    font-family: var(--display); font-weight: 600; font-size: 24px;
+    letter-spacing: -0.02em; margin: 0; padding-bottom: 10px;
+    border-bottom: 1px solid var(--rule); text-wrap: balance;
+  }
+  h2 .count {
+    font-family: var(--mono); font-size: 12px; font-weight: 400;
+    color: var(--muted); letter-spacing: 0; margin-left: 10px;
+  }
+  h3 { font-family: var(--display); font-weight: 600; font-size: 17px; letter-spacing: -0.01em; margin: 0; }
+
+  .path { list-style: none; margin: 0; padding: 0; display: flex; flex-direction: column; counter-reset: step; }
+  .path li {
+    display: grid; grid-template-columns: 30px 1fr; gap: 14px; align-items: baseline;
+    padding: 11px 0; border-top: 1px solid var(--rule); counter-increment: step;
+  }
+  .path li:last-child { border-bottom: 1px solid var(--rule); }
+  .path li::before {
+    content: counter(step, decimal-leading-zero);
+    font-family: var(--mono); font-size: 11px; font-weight: 500; color: var(--fund);
+    letter-spacing: 0.04em;
+  }
+  .path .what { font-family: var(--mono); font-size: 12.5px; display: block; margin-bottom: 2px; word-break: break-word; }
+  .path .why { color: var(--muted); font-size: 15px; }
+
+  figure { margin: 0; }
+  .figframe {
+    background: var(--surface); border: 1px solid var(--rule); border-radius: 3px;
+    padding: 8px; overflow-x: auto;
+  }
+  .figframe svg { display: block; min-width: 780px; max-width: 100%; height: auto; }
+  .figframe svg text { font-family: var(--mono); }
+  .figframe svg .ttl { font-family: var(--display); }
+  figcaption { margin-top: 12px; color: var(--muted); font-size: 15px; max-width: 74ch; }
+
+  .studies { display: flex; flex-direction: column; gap: 14px; }
+  .study {
+    background: var(--surface); border: 1px solid var(--rule); border-left: 3px solid var(--gen);
+    border-radius: 3px; padding: 20px 22px;
+    display: grid; grid-template-columns: minmax(0, 1.2fr) minmax(0, 1fr); gap: 10px 32px;
+    align-items: start;
+  }
+  .study.hist { --gen: var(--hist); --gen-wash: var(--hist-wash); }
+  .study.fund { --gen: var(--fund); --gen-wash: var(--fund-wash); }
+  .study-head { grid-column: 1 / -1; display: flex; flex-wrap: wrap; align-items: baseline; gap: 8px 14px; }
+  .study-head h3 { font-size: 19px; }
+  .pill {
+    font-family: var(--mono); font-size: 10px; font-weight: 500; letter-spacing: 0.09em;
+    text-transform: uppercase; padding: 3px 8px; border-radius: 2px;
+    color: var(--gen); background: var(--gen-wash); border: 1px solid var(--gen);
+  }
+  .study-q { grid-column: 1 / -1; font-size: 16.5px; max-width: 70ch; margin: 0; }
+  .study-q strong { font-weight: 600; }
+  .folder {
+    grid-column: 1 / -1; font-family: var(--mono); font-size: 12px; color: var(--muted);
+    background: var(--sunk); padding: 7px 10px; border-radius: 2px; word-break: break-all;
+  }
+  .kv { margin: 0; display: grid; grid-template-columns: auto 1fr; gap: 5px 14px; font-size: 14px; }
+  .kv dt {
+    font-family: var(--mono); font-size: 10.5px; letter-spacing: 0.08em; text-transform: uppercase;
+    color: var(--muted); padding-top: 3px; white-space: nowrap;
+  }
+  .kv dd { margin: 0; font-variant-numeric: tabular-nums; }
+  .kv dd .mono { word-break: break-word; }
+  .inside { margin: 0; padding: 0; list-style: none; display: flex; flex-direction: column; gap: 5px; font-size: 14px; }
+  .inside li { display: grid; grid-template-columns: auto 1fr; gap: 10px; }
+  .inside .f { font-family: var(--mono); font-size: 11.5px; padding-top: 2px; }
+  .inside .d { color: var(--muted); }
+  .colhead {
+    font-family: var(--mono); font-size: 10.5px; letter-spacing: 0.1em; text-transform: uppercase;
+    color: var(--muted); margin-bottom: 8px;
+  }
+
+  .tablewrap { overflow-x: auto; border: 1px solid var(--rule); border-radius: 3px; background: var(--surface); }
+  table { border-collapse: collapse; width: 100%; font-size: 14px; min-width: 640px; }
+  th, td { text-align: left; padding: 9px 14px; border-bottom: 1px solid var(--rule); vertical-align: top; }
+  thead th {
+    font-family: var(--mono); font-size: 10.5px; letter-spacing: 0.09em; text-transform: uppercase;
+    color: var(--muted); font-weight: 500; background: var(--sunk); white-space: nowrap;
+  }
+  tbody tr:last-child td { border-bottom: none; }
+  td.p { font-family: var(--mono); font-size: 11.5px; word-break: break-all; }
+  .rb { font-family: var(--mono); font-size: 10.5px; letter-spacing: 0.06em; text-transform: uppercase; white-space: nowrap; }
+  .rb.full { color: var(--fund); }
+  .rb.nopay { color: var(--hist); }
+  .rb.legacy { color: var(--flag); }
+
+  .decoder {
+    background: var(--surface); border: 1px solid var(--rule); border-radius: 3px;
+    padding: 18px 20px; display: flex; flex-direction: column; gap: 16px;
+  }
+  .grammar { font-family: var(--mono); font-size: 13px; line-height: 2.1; word-break: break-word; }
+  .grammar span { padding: 3px 6px; border-radius: 2px; background: var(--sunk); }
+  .grammar b { color: var(--muted); font-weight: 400; padding: 0 2px; }
+  .slots { margin: 0; display: grid; grid-template-columns: repeat(auto-fit, minmax(215px, 1fr)); gap: 12px 24px; }
+  .slots dt { font-family: var(--mono); font-size: 11.5px; margin-bottom: 2px; }
+  .slots dd { margin: 0; color: var(--muted); font-size: 14px; }
+
+  .flags {
+    margin: 0; padding: 0; list-style: none;
+    display: grid; grid-template-columns: repeat(auto-fit, minmax(290px, 1fr)); gap: 1px;
+    background: var(--rule); border: 1px solid var(--rule); border-radius: 3px; overflow: hidden;
+  }
+  .flags li { background: var(--surface); padding: 15px 17px; }
+  .flags .claim {
+    font-family: var(--display); font-weight: 600; font-size: 15px; color: var(--flag);
+    display: block; margin-bottom: 5px; letter-spacing: -0.01em;
+  }
+  .flags .body { font-size: 14.5px; color: var(--muted); }
+
+  .elsewhere {
+    margin: 0; padding: 0; list-style: none;
+    display: grid; grid-template-columns: repeat(auto-fit, minmax(270px, 1fr)); gap: 16px 32px;
+  }
+  .elsewhere li { display: flex; flex-direction: column; gap: 3px; padding-top: 11px; border-top: 1px solid var(--rule); }
+  .elsewhere .f { font-family: var(--mono); font-size: 12px; word-break: break-word; }
+  .elsewhere .d { color: var(--muted); font-size: 14.5px; }
+
+  footer { color: var(--muted); font-size: 13.5px; border-top: 1px solid var(--rule); padding-top: 18px; max-width: 76ch; }
+
+  @media (max-width: 720px) {
+    .study { grid-template-columns: 1fr; gap: 14px; }
+    .page { gap: 44px; padding: 28px 16px 60px; }
+  }
+</style>
+
+<div class="page">
+
+  <header class="masthead">
+    <div class="eyebrow">results/ &nbsp;&middot;&nbsp; apex legacy 25k pa &nbsp;&middot;&nbsp; map current to 2026-09-10</div>
+    <h1>Legacy 25K Results Map</h1>
+    <p class="standfirst">Five multi-candidate studies, nine single-scenario runs and four cushion sweeps &mdash; what each one asked, and which of their numbers may stand next to each other.</p>
+    <dl class="facts">
+      <div class="fact"><dt>Tape</dt><dd>RR @ 1.00</dd></div>
+      <div class="fact"><dt>Trades</dt><dd>12,658</dd></div>
+      <div class="fact"><dt>Windows</dt><dd>23</dd></div>
+      <div class="fact"><dt>Span</dt><dd>Jan 2020 &ndash; Jul 2026</dd></div>
+      <div class="fact"><dt>Account start</dt><dd>$25,000</dd></div>
+      <div class="fact"><dt>Trailing DD</dt><dd>$1,500</dd></div>
+      <div class="fact"><dt>Seat</dt><dd>$200</dd></div>
+    </dl>
+  </header>
+
+  <section>
+    <h2>If you have been away, read in this order</h2>
+    <div class="prose">
+      <p>Each step answers the question the one before it raises. You do not need to browse the results tree to follow the research &mdash; the first two files carry the current conclusions and route you to the single study your question belongs to.</p>
+    </div>
+    <ol class="path">
+      <li><div><span class="what">research/legacy_25k/OVERVIEW.md</span><span class="why">What we currently believe, with every claim's scope attached. Start nowhere else.</span></div></li>
+      <li><div><span class="what">research/legacy_25k/STUDIES.md</span><span class="why">A question &rarr; evidence table. Find your question, follow its one link.</span></div></li>
+      <li><div><span class="what">&lt;study&gt;/REPORT.generated.md</span><span class="why">The numbers from the last run. Where a study has one, this is the report to quote.</span></div></li>
+      <li><div><span class="what">&lt;study&gt;/HOW_THIS_STUDY_WORKS.md</span><span class="why">Plain language, month by month, when the mechanism rather than the ranking is what is unclear.</span></div></li>
+      <li><div><span class="what">&lt;study&gt;/candidates.csv &nbsp;&middot;&nbsp; best_ongoing/ &nbsp;&middot;&nbsp; best_terminal/</span><span class="why">Every tested setting, then the full ledger for the winner under each objective.</span></div></li>
+      <li><div><span class="what">results/CONSISTENCY_AUDIT.md</span><span class="why">Before putting a number from one study beside a number from another. 946 saved rows re-checked, 0 failures.</span></div></li>
+    </ol>
+  </section>
+
+  <section>
+    <h2>How the studies descend from one another</h2>
+    <figure>
+      <div class="figframe">
+        <svg viewBox="0 0 940 820" role="img" aria-label="Genealogy of the results folder. One shared RR tape and product feed nine single-scenario runs and four cushion sweeps, which between them fixed the headline config that all five studies are pinned to. Two uncapped historical studies agree at 27 matched settings and hand their withdrawal shortlist to three funded, capped studies, which share 12 and 24 exact controls with each other. Superseded designs are kept in archives.">
+          <defs>
+            <marker id="ar" viewBox="0 0 9 8" refX="8" refY="4" markerWidth="7" markerHeight="6" orient="auto-start-reverse">
+              <polygon points="0,0 9,4 0,8" fill="currentColor"></polygon>
+            </marker>
+          </defs>
+
+          <rect x="30" y="20" width="880" height="54" rx="3" fill="var(--sunk)" stroke="currentColor"></rect>
+          <text class="ttl" x="470" y="44" text-anchor="middle" font-size="13.5" font-weight="600" fill="currentColor">Shared foundation &mdash; the 1_sweeps RR tape and the Apex Legacy 25K PA product</text>
+          <text x="470" y="62" text-anchor="middle" font-size="10.5" fill="currentColor" opacity="0.68">23 windows &#183; 12,658 trades &#183; $25,000 start &#183; $1,500 trailing drawdown &#183; $200 per seat &#183; processing delay off</text>
+
+          <line x1="470" y1="74" x2="470" y2="88" stroke="currentColor"></line>
+          <line x1="245" y1="88" x2="695" y2="88" stroke="currentColor"></line>
+          <line x1="245" y1="88" x2="245" y2="101" stroke="currentColor" marker-end="url(#ar)"></line>
+          <line x1="695" y1="88" x2="695" y2="101" stroke="currentColor" marker-end="url(#ar)"></line>
+
+          <rect x="30" y="104" width="430" height="100" rx="3" fill="var(--surface)" stroke="var(--rule)"></rect>
+          <text class="ttl" x="48" y="127" font-size="12.5" font-weight="600" fill="currentColor">Single-scenario runs &mdash; 9 folders</text>
+          <text x="48" y="146" font-size="10.5" fill="currentColor" opacity="0.72">one config each; the rulebook varied one brick at a time</text>
+          <text x="48" y="162" font-size="10.5" fill="currentColor" opacity="0.72">full_rulebook &#215;5 &#183; no_payout_rules &#215;3 &#183; legacy_rules &#215;1</text>
+          <text x="48" y="188" font-size="10.5" fill="var(--fund)">&#8594; fixed the headline rulebook and the $500 monthly policy</text>
+
+          <rect x="480" y="104" width="430" height="100" rx="3" fill="var(--surface)" stroke="var(--rule)"></rect>
+          <text class="ttl" x="498" y="127" font-size="12.5" font-weight="600" fill="currentColor">Cushion sweeps &mdash; 4 retained-balance grids</text>
+          <text x="498" y="146" font-size="10.5" fill="currentColor" opacity="0.72">coarse and fine; no terminal withdrawal anywhere</text>
+          <text x="498" y="162" font-size="10.5" fill="currentColor" opacity="0.72">3 on RR, 1 on GG &#183; no embedded provenance</text>
+          <text x="498" y="188" font-size="10.5" fill="var(--fund)">&#8594; set the retained-balance bands the studies grid over</text>
+
+          <line x1="245" y1="204" x2="245" y2="218" stroke="currentColor"></line>
+          <line x1="695" y1="204" x2="695" y2="218" stroke="currentColor"></line>
+          <line x1="245" y1="218" x2="695" y2="218" stroke="currentColor"></line>
+          <line x1="470" y1="218" x2="470" y2="231" stroke="currentColor" marker-end="url(#ar)"></line>
+
+          <rect x="30" y="234" width="880" height="46" rx="3" fill="var(--sunk)" stroke="currentColor"></rect>
+          <text class="ttl" x="470" y="253" text-anchor="middle" font-size="12.5" font-weight="600" fill="currentColor">All five studies below are pinned to one config</text>
+          <text x="470" y="270" text-anchor="middle" font-size="11" fill="currentColor" opacity="0.8">config/scenarios/full_rulebook_monthly_500.json</text>
+
+          <line x1="470" y1="280" x2="470" y2="301" stroke="currentColor" marker-end="url(#ar)"></line>
+
+          <rect x="30" y="304" width="880" height="152" rx="3" fill="var(--hist-wash)" stroke="var(--hist)" stroke-dasharray="5 4"></rect>
+          <text class="ttl" x="48" y="328" font-size="12.5" font-weight="600" fill="var(--hist)">Historical generation &mdash; uncapped</text>
+          <text x="48" y="345" font-size="10.5" fill="currentColor" opacity="0.7">no live-account cap &#183; purchases never cash-constrained &#183; read for mechanism, not for dollar totals</text>
+
+          <rect x="54" y="358" width="350" height="80" rx="3" fill="var(--surface)" stroke="var(--rule)"></rect>
+          <text class="ttl" x="72" y="382" font-size="12.5" font-weight="600" fill="currentColor">Withdrawal amount &#215; cushion</text>
+          <text x="72" y="401" font-size="10.5" fill="currentColor" opacity="0.72">301 candidates &#183; dual terminal scores</text>
+          <text x="72" y="420" font-size="10.5" fill="currentColor" opacity="0.72">how much to ask, what to leave behind</text>
+
+          <rect x="536" y="358" width="350" height="80" rx="3" fill="var(--surface)" stroke="var(--rule)"></rect>
+          <text class="ttl" x="554" y="382" font-size="12.5" font-weight="600" fill="currentColor">Withdrawal cadence</text>
+          <text x="554" y="401" font-size="10.5" fill="currentColor" opacity="0.72">93 candidates &#183; monthly / weekly / daily</text>
+          <text x="554" y="420" font-size="10.5" fill="currentColor" opacity="0.72">$31,600&#8211;$32,100 band + $30,000 control</text>
+
+          <text x="470" y="382" text-anchor="middle" font-size="10" fill="currentColor" opacity="0.82">27 matched</text>
+          <text x="470" y="394" text-anchor="middle" font-size="10" fill="currentColor" opacity="0.82">settings agree</text>
+          <line x1="405" y1="410" x2="535" y2="410" stroke="currentColor" marker-start="url(#ar)" marker-end="url(#ar)"></line>
+
+          <line x1="300" y1="456" x2="300" y2="517" stroke="var(--fund)" stroke-width="1.4" stroke-dasharray="5 4" marker-end="url(#ar)"></line>
+          <text class="ttl" x="320" y="477" font-size="12" font-weight="600" fill="currentColor">The funded generation re-asks these questions</text>
+          <text x="320" y="495" font-size="10.5" fill="currentColor" opacity="0.75">under a 20-live-account cap and four explicit cash budgets &mdash;</text>
+          <text x="320" y="511" font-size="10.5" fill="currentColor" opacity="0.75">reusing this withdrawal shortlist, with the cushion never re-optimized under the cap</text>
+
+          <rect x="30" y="522" width="880" height="186" rx="3" fill="var(--fund-wash)" stroke="var(--fund)"></rect>
+          <text class="ttl" x="48" y="546" font-size="12.5" font-weight="600" fill="var(--fund)">Current generation &mdash; funded and capped</text>
+          <text x="48" y="563" font-size="10.5" fill="currentColor" opacity="0.7">20 live accounts maximum &#183; $1,000 or $5,000 initial &#215; $0 or $200 monthly &#183; comparable within one budget</text>
+
+          <rect x="54" y="576" width="204" height="110" rx="3" fill="var(--surface)" stroke="var(--rule)"></rect>
+          <text class="ttl" x="70" y="600" font-size="12" font-weight="600" fill="currentColor">Capped cadence</text>
+          <text x="70" y="619" font-size="10.5" fill="currentColor" opacity="0.72">372 candidates</text>
+          <text x="70" y="636" font-size="10.5" fill="currentColor" opacity="0.72">one monthly purchase</text>
+          <text x="70" y="653" font-size="10.5" fill="currentColor" opacity="0.72">4 matched budgets</text>
+          <text x="70" y="673" font-size="10" fill="var(--fund)">the comparison bridge</text>
+
+          <rect x="368" y="576" width="204" height="110" rx="3" fill="var(--surface)" stroke="var(--fund)" stroke-width="1.5"></rect>
+          <text class="ttl" x="384" y="600" font-size="12" font-weight="600" fill="currentColor">Account purchases</text>
+          <text x="384" y="619" font-size="10.5" fill="currentColor" opacity="0.72">132 candidates</text>
+          <text x="384" y="636" font-size="10.5" fill="currentColor" opacity="0.72">11 purchase policies</text>
+          <text x="384" y="653" font-size="10.5" fill="currentColor" opacity="0.72">4 budgets, 2 objectives</text>
+          <text x="384" y="673" font-size="10" fill="var(--fund)">the hub &mdash; headline rankings</text>
+
+          <rect x="682" y="576" width="204" height="110" rx="3" fill="var(--surface)" stroke="var(--rule)"></rect>
+          <text class="ttl" x="698" y="600" font-size="12" font-weight="600" fill="currentColor">Monthly replacements</text>
+          <text x="698" y="619" font-size="10.5" fill="currentColor" opacity="0.72">48 candidates</text>
+          <text x="698" y="636" font-size="10.5" fill="currentColor" opacity="0.72">monthly-one, weekly-one</text>
+          <text x="698" y="653" font-size="10.5" fill="currentColor" opacity="0.72">refill a dead seat sooner</text>
+          <text x="698" y="673" font-size="10" fill="var(--fund)">newest &mdash; 2026-09-09</text>
+
+          <text x="313" y="608" text-anchor="middle" font-size="9.5" fill="currentColor" opacity="0.82">12 shared</text>
+          <text x="313" y="620" text-anchor="middle" font-size="9.5" fill="currentColor" opacity="0.82">controls</text>
+          <line x1="259" y1="636" x2="367" y2="636" stroke="currentColor" marker-start="url(#ar)" marker-end="url(#ar)"></line>
+
+          <text x="627" y="608" text-anchor="middle" font-size="9.5" fill="currentColor" opacity="0.82">24 controls</text>
+          <text x="627" y="620" text-anchor="middle" font-size="9.5" fill="currentColor" opacity="0.82">reproduce</text>
+          <line x1="573" y1="636" x2="681" y2="636" stroke="currentColor" marker-end="url(#ar)"></line>
+
+          <line x1="470" y1="686" x2="470" y2="716" stroke="currentColor" opacity="0.55"></line>
+          <line x1="784" y1="686" x2="784" y2="716" stroke="currentColor" opacity="0.55"></line>
+          <line x1="470" y1="716" x2="784" y2="716" stroke="currentColor" opacity="0.55"></line>
+          <line x1="700" y1="716" x2="700" y2="741" stroke="currentColor" opacity="0.55" marker-end="url(#ar)"></line>
+
+          <rect x="540" y="744" width="370" height="54" rx="3" fill="var(--surface)" stroke="var(--rule)" stroke-dasharray="4 3"></rect>
+          <text class="ttl" x="558" y="766" font-size="11.5" font-weight="600" fill="currentColor">archives/studies &mdash; superseded designs</text>
+          <text x="558" y="784" font-size="10" fill="currentColor" opacity="0.68">pre-expansion purchases (108) &#183; future-slot replacements</text>
+        </svg>
+      </div>
+      <figcaption>The whole tree hangs off one tape and one config, so the break that matters is horizontal. Everything above the dashed teal arrow was run <em>uncapped</em> with unlimited purchase cash, so its dollars only explain mechanisms. Everything below has a 20-account cap and a real budget, so its dollars can be ranked &mdash; inside one budget.</figcaption>
+    </figure>
+  </section>
+
+  <section>
+    <h2>The five studies<span class="count">946 candidate rows in total</span></h2>
+    <div class="studies">
+
+      <article class="study fund">
+        <div class="study-head">
+          <h3>Account purchases under cash budgets</h3>
+          <span class="pill">funded &amp; capped &middot; the hub</span>
+        </div>
+        <p class="study-q">Which buying policy works with the cash we actually have? <strong>132 candidates</strong> over 11 purchase policies &mdash; quarterly-one, monthly-one, weekly-one, monthly-two, failure replacements, payout reinvestment, and the historical quarterly-three batches, which are kept but excluded from headline rankings because their result turned on the January phase.</p>
+        <div class="folder">results/study__full_rulebook__RR__account_purchases__cash_budgets/</div>
+        <div>
+          <div class="colhead">Design</div>
+          <dl class="kv">
+            <dt>Candidates</dt><dd>132 &nbsp;<span class="mono" style="color:var(--muted)">(was 108; all 108 reproduce exactly)</span></dd>
+            <dt>Capacity</dt><dd>20 live accounts maximum</dd>
+            <dt>Funding</dt><dd>$1,000 or $5,000 initial &times; $0 or $200 monthly</dd>
+            <dt>Withdrawals</dt><dd>three settings borrowed from the uncapped searches, cushions not re-optimized</dd>
+            <dt>Last run</dt><dd>2026-09-07 22:03 UTC</dd>
+            <dt>Reproduce</dt><dd><span class="mono">scripts/study_account_purchases.py</span></dd>
+          </dl>
+        </div>
+        <div>
+          <div class="colhead">What is in the folder</div>
+          <ul class="inside">
+            <li><span class="f">REPORT.generated.md</span><span class="d">current numbers &mdash; read this one</span></li>
+            <li><span class="f">PHASE_SENSITIVITY.md</span><span class="d">supplied phase checks; quarterly-three collapses to &minus;$1,000 on two of three phases at the tightest budget</span></li>
+            <li><span class="f">budget_&hellip;__best_ongoing/</span><span class="d">eight winner ledgers &mdash; four budgets &times; two objectives</span></li>
+            <li><span class="f">report_breakdown.txt</span><span class="d">your notes on the original run</span></li>
+          </ul>
+        </div>
+      </article>
+
+      <article class="study fund">
+        <div class="study-head">
+          <h3>Withdrawal cadence, capped and budget-matched</h3>
+          <span class="pill">funded &amp; capped &middot; the bridge</span>
+        </div>
+        <p class="study-q">The cadence question again, re-run with the cap and the budgets so the two generations can finally be compared. <strong>372 candidates</strong>, and <strong>12 exact shared controls</strong> against the purchase study &mdash; that overlap is what makes any cross-study sentence legitimate.</p>
+        <div class="folder">results/study__full_rulebook__RR__withdrawal_cadence__monthly_purchases__cap_20__cash_budgets/</div>
+        <div>
+          <div class="colhead">Design</div>
+          <dl class="kv">
+            <dt>Candidates</dt><dd>372</dd>
+            <dt>Purchases</dt><dd>one monthly, held fixed</dd>
+            <dt>Capacity</dt><dd>20 live accounts maximum</dd>
+            <dt>Also holds</dt><dd>refreshed fixed-withdrawal purchase tables, including monthly-two and weekly-one</dd>
+            <dt>Last run</dt><dd>2026-09-07 21:00 UTC</dd>
+            <dt>Reproduce</dt><dd><span class="mono">scripts/study_budgeted_withdrawal_cadence.py</span></dd>
+          </dl>
+        </div>
+        <div>
+          <div class="colhead">What is in the folder</div>
+          <ul class="inside">
+            <li><span class="f">REPORT.generated.md</span><span class="d">current numbers &mdash; read this one</span></li>
+            <li><span class="f">HOW_THIS_STUDY_WORKS.md</span><span class="d">what a capped, budgeted month actually looks like</span></li>
+            <li><span class="f">candidates.csv</span><span class="d">372 rows, each with deltas against the monthly baseline</span></li>
+            <li><span class="f">report_breakdown.txt</span><span class="d">your notes &mdash; but they describe the earlier uncapped 22-survivor run</span></li>
+          </ul>
+        </div>
+      </article>
+
+      <article class="study fund">
+        <div class="study-head">
+          <h3>Monthly purchases with earlier replacements</h3>
+          <span class="pill">funded &amp; capped &middot; newest</span>
+        </div>
+        <p class="study-q">Does refilling a dead seat sooner pay? <strong>48 candidates</strong> comparing monthly-one and weekly-one when a replacement either consumes an unused current-month slot or is added on top of normal growth. The current rule never cancels a future purchase; the earlier future-slot version is archived. All <strong>24 existing-policy controls reproduce exactly</strong> against the purchase study.</p>
+        <div class="folder">results/study__full_rulebook__RR__monthly_replacements__cap_20__cash_budgets/</div>
+        <div>
+          <div class="colhead">Design</div>
+          <dl class="kv">
+            <dt>Candidates</dt><dd>48</dd>
+            <dt>Headline</dt><dd>at $1,000 + $200/mo with daily minimum requests retaining $31,900: monthly-one $464,312, current-slot replacement $559,996, unconditional additional $567,277</dd>
+            <dt>Also tracks</dt><dd>average live accounts, days below cap, first cap date, death-to-replacement wait</dd>
+            <dt>Last run</dt><dd>2026-09-09 20:33 UTC</dd>
+            <dt>Reproduce</dt><dd><span class="mono">scripts/study_monthly_replacements.py</span></dd>
+          </dl>
+        </div>
+        <div>
+          <div class="colhead">What is in the folder</div>
+          <ul class="inside">
+            <li><span class="f">REPORT.generated.md</span><span class="d">current numbers &mdash; read this one</span></li>
+            <li><span class="f">candidates.csv</span><span class="d">48 rows, with replacement-timing columns no other study has</span></li>
+            <li><span class="f">HOW_THIS_STUDY_WORKS.md</span><span class="d">how a slot gets consumed, or added</span></li>
+            <li><span class="f">no best_*/</span><span class="d">this study ships tables only &mdash; no winner ledgers</span></li>
+          </ul>
+        </div>
+      </article>
+
+      <article class="study hist">
+        <div class="study-head">
+          <h3>Withdrawal amount &times; cushion</h3>
+          <span class="pill">historical &middot; uncapped</span>
+        </div>
+        <p class="study-q">How do the size of the monthly request and the balance left behind interact? <strong>301 candidates</strong>, each scored twice on its own identical trading path &mdash; cash received while trading, and cash including one firm-permitted closing request. This is the study that established the two objectives everything downstream still reports.</p>
+        <div class="folder">results/study__full_rulebook__RR__monthly_amount_x_cushion__dual_terminal_scores/</div>
+        <div>
+          <div class="colhead">Design</div>
+          <dl class="kv">
+            <dt>Candidates</dt><dd>301</dd>
+            <dt>Capacity</dt><dd>none &mdash; uncapped, purchases never cash-constrained</dd>
+            <dt>Unusual columns</dt><dd>trading-neutral flag, ceiling capture and path fingerprint, all read against the hold benchmark's own path</dd>
+            <dt>Last run</dt><dd>2026-09-06 12:12 UTC</dd>
+            <dt>Reproduce</dt><dd><span class="mono">scripts/study_withdrawal_amount.py</span></dd>
+          </dl>
+        </div>
+        <div>
+          <div class="colhead">What is in the folder</div>
+          <ul class="inside">
+            <li><span class="f">REPORT.md</span><span class="d">your writing &mdash; there is no generated report here</span></li>
+            <li><span class="f">best_ongoing/ best_terminal/</span><span class="d">full ledger for each objective's winner</span></li>
+            <li><span class="f">candidates.csv</span><span class="d">301 rows &mdash; the widest schema of any study</span></li>
+          </ul>
+        </div>
+      </article>
+
+      <article class="study hist">
+        <div class="study-head">
+          <h3>Withdrawal cadence, original book</h3>
+          <span class="pill">historical &middot; uncapped</span>
+        </div>
+        <p class="study-q">Does checking eligibility monthly, weekly or daily change the outcome? <strong>93 candidates</strong> over the $31,600&ndash;$32,100 band plus the $30,000 minimum-policy control. A minimum request means $500 per eligible check, not $500 a month. It <strong>agrees with the amount study at 27 common settings</strong>, which is why both are trusted as mechanism evidence.</p>
+        <div class="folder">results/study__full_rulebook__RR__withdrawal_cadence__monthly_purchases/</div>
+        <div>
+          <div class="colhead">Design</div>
+          <dl class="kv">
+            <dt>Candidates</dt><dd>93</dd>
+            <dt>Capacity</dt><dd>none &mdash; uncapped, one monthly purchase</dd>
+            <dt>Superseded by</dt><dd>the capped, budget-matched cadence study, for anything decision-shaped</dd>
+            <dt>Last run</dt><dd>2026-09-06 12:21 UTC</dd>
+            <dt>Reproduce</dt><dd><span class="mono">scripts/study_withdrawal_cadence.py</span></dd>
+          </dl>
+        </div>
+        <div>
+          <div class="colhead">What is in the folder</div>
+          <ul class="inside">
+            <li><span class="f">REPORT.md</span><span class="d">your writing &mdash; no generated report</span></li>
+            <li><span class="f">report_breakdown.txt</span><span class="d">the 22-survivor narrative, deliberately kept and tied to this uncapped run</span></li>
+            <li><span class="f">best_ongoing/ best_terminal/</span><span class="d">winner ledger per objective</span></li>
+          </ul>
+        </div>
+      </article>
+
+    </div>
+  </section>
+
+  <section>
+    <h2>What each file in a study folder is for</h2>
+    <div class="prose">
+      <p>This is the distinction most worth re-reading after a break, because getting it backwards means quoting stale numbers with full confidence: <strong>the runners never overwrite anything you wrote.</strong></p>
+    </div>
+    <div class="tablewrap">
+      <table>
+        <thead><tr><th>File</th><th>Who writes it</th><th>What it is for</th></tr></thead>
+        <tbody>
+          <tr><td class="p">REPORT.generated.md</td><td>the runner, every run</td><td>The current numbers. Where a folder has one, this is the report to quote.</td></tr>
+          <tr><td class="p">REPORT.md</td><td>you, once</td><td>Your reading of the results. Never overwritten &mdash; so it may still describe an earlier run.</td></tr>
+          <tr><td class="p">report_breakdown.txt</td><td>you, once</td><td>Longer prose explanation, tied to the run it was written against.</td></tr>
+          <tr><td class="p">HOW_THIS_STUDY_WORKS.md</td><td>you, once</td><td>Plain-language month-by-month mechanics, without the setting list.</td></tr>
+          <tr><td class="p">candidates.csv</td><td>the runner</td><td>One row per tested setting, with every score column.</td></tr>
+          <tr><td class="p">study.json</td><td>the runner</td><td>Full provenance: schema, <span class="mono">generated_utc</span>, the whole resolved config, expected trade and window counts.</td></tr>
+          <tr><td class="p">best_ongoing/ best_terminal/</td><td>the runner</td><td>The winning candidate re-run as a complete ledger: <span class="mono">accounts.csv</span>, <span class="mono">withdrawals.csv</span>, <span class="mono">denials.csv</span>, <span class="mono">report.txt</span>, <span class="mono">summary.json</span>, <span class="mono">config.json</span>.</td></tr>
+          <tr><td class="p">RUN.md</td><td>the runner, on creation</td><td>Single-scenario folders only: the exact command that regenerates that folder.</td></tr>
+        </tbody>
+      </table>
+    </div>
+    <div class="prose">
+      <p>A rerun replaces the generated report, the CSV and JSON, and the winner ledgers in place. A <em>changed</em> study design therefore needs a new output directory, or it silently overwrites evidence for a design that no longer exists.</p>
+    </div>
+  </section>
+
+  <section>
+    <h2>The nine single-scenario runs<span class="count">one config each &middot; the brick-by-brick layer</span></h2>
+    <div class="decoder">
+      <div class="grammar">
+        <span>rulebook</span><b>__</b><span>withdrawal policy</span><b>__</b><span>retained balance</span><b>__</b><span>closing action</span>
+      </div>
+      <dl class="slots">
+        <dt>full_rulebook</dt><dd>the configured rulebook, processing delay off</dd>
+        <dt>no_payout_rules</dt><dd>payout restrictions off; account drawdown mechanics still enforced</dd>
+        <dt>legacy_rules</dt><dd>minimum balance and the historical safety net only, with its $100 encroachment allowance</dd>
+        <dt>retain_N</dt><dd>the nominal balance you request down to &mdash; not headroom above liquidation, and not a floor losses respect</dd>
+        <dt>terminal_request</dt><dd>one firm-permitted closing request</dd>
+        <dt>terminal_idealized</dt><dd>a closing withdrawal that bypasses payout restrictions &mdash; a bound, not a plan</dd>
+        <dt>no_terminal</dt><dd>remaining account profit is left unwithdrawn</dd>
+      </dl>
+    </div>
+    <div class="tablewrap">
+      <table>
+        <thead><tr><th>Rulebook</th><th>Folder under results/</th><th>Config under config/</th></tr></thead>
+        <tbody>
+          <tr><td class="rb full">full rulebook</td><td class="p">full_rulebook__monthly_500__no_cushion__no_terminal</td><td class="p">scenarios/full_rulebook_monthly_500.json</td></tr>
+          <tr><td class="rb full">full rulebook</td><td class="p">full_rulebook__monthly_500__no_cushion__no_terminal__adapted_search</td><td class="p">scenarios/full_rulebook_monthly_500.json</td></tr>
+          <tr><td class="rb full">full rulebook</td><td class="p">full_rulebook__monthly_500__retain_30000__terminal_request</td><td class="p">scenarios/monthly_500_cushion_liquidated.json</td></tr>
+          <tr><td class="rb full">full rulebook</td><td class="p">full_rulebook__monthly_maximum__no_cushion__no_terminal</td><td class="p">scenarios/full_rulebook_monthly_maximum.json</td></tr>
+          <tr><td class="rb full">full rulebook</td><td class="p">full_rulebook__hold__terminal_request</td><td class="p">scenarios/hold_then_firm_permitted.json</td></tr>
+          <tr><td class="rb nopay">no payout rules</td><td class="p">no_payout_rules__hold__no_terminal</td><td class="p">bricks/brick1_ideal_world.json</td></tr>
+          <tr><td class="rb nopay">no payout rules</td><td class="p">no_payout_rules__hold__terminal_idealized</td><td class="p">scenarios/hold_then_liquidate.json</td></tr>
+          <tr><td class="rb nopay">no payout rules</td><td class="p">no_payout_rules__monthly_500__retain_26100__no_terminal</td><td class="p">scenarios/no_rules_monthly_500_cushion.json</td></tr>
+          <tr><td class="rb legacy">legacy rules</td><td class="p">legacy_rules__monthly_100__no_cushion__no_terminal</td><td class="p">bricks/brick2_monthly_100.json</td></tr>
+        </tbody>
+      </table>
+    </div>
+    <div class="prose">
+      <p>Every one of these folders carries a <span class="mono">RUN.md</span> with its own regeneration command, so none of them has to be reconstructed from memory.</p>
+      <p>The <span class="mono">__adapted_search</span> folder is the same fixed-policy baseline plus the cushion re-optimization experiment &mdash; its baseline cash is identical on purpose. It is the folder to open for rule-effect questions, and also the one whose historical $2,200 figure is easiest to misquote as the price of the whole rulebook.</p>
+      <p>Alongside them, <span class="mono">results/sweeps/</span> holds four cushion grids: <span class="mono">RR__monthly_500</span> coarse and fine, <span class="mono">RR__monthly_maximum</span>, and one on the <span class="mono">GG</span> tape. They are historical searches with no terminal withdrawal, and they do not embed a full config or input hashes &mdash; their provenance cannot be verified from the saved files alone.</p>
+    </div>
+  </section>
+
+  <section>
+    <h2>Before you put two numbers side by side</h2>
+    <ul class="flags">
+      <li><span class="claim">Uncapped dollars are not funded dollars</span><span class="body">The amount and cadence studies had no live-account cap and never ran out of cash. Their totals explain mechanisms; ranking them against the funded studies compares different worlds.</span></li>
+      <li><span class="claim">Comparable within one budget</span><span class="body">The three funded studies are internally comparable inside each of the four funding scenarios &mdash; not across them, and not against the uncapped generation.</span></li>
+      <li><span class="claim">retain_N is a threshold, not a floor</span><span class="body">A $31,900 retained balance is what you request down to. Trading losses can still take an account below it, and a faster eligibility check is not a guaranteed payout.</span></li>
+      <li><span class="claim">Terminal cash is one request</span><span class="body">Terminal-inclusive totals add a single firm-permitted closing request &mdash; never an unrestricted liquidation, except in the folder explicitly named <span class="mono">terminal_idealized</span>.</span></li>
+      <li><span class="claim">These are dataset totals</span><span class="body">Every figure is a full-dataset total across Jan 2020 to Jul 2026, not annual income. An endpoint the dataset happens to end on is not a forecast.</span></li>
+      <li><span class="claim">Rule-removal deltas do not add up</span><span class="body">Fixed-policy removal and cushion-adapted removal answer different questions. Individual deltas are not additive components of one total cost.</span></li>
+      <li><span class="claim">Accounts are not independent trials</span><span class="body">One tape drives every cohort in every study, so more accounts is not more evidence. Start dates and calendar phases stay untested except where <span class="mono">PHASE_SENSITIVITY.md</span> records supplied checks.</span></li>
+      <li><span class="claim">The audit checks arithmetic, not truth</span><span class="body"><span class="mono">CONSISTENCY_AUDIT.md</span> verifies saved identities, CSV/JSON agreement, input hashes and shared controls. It is not out-of-sample validation, and it certifies no reader prose.</span></li>
+    </ul>
+  </section>
+
+  <section>
+    <h2>Everything else you will want to find again</h2>
+    <ul class="elsewhere">
+      <li><span class="f">research/legacy_25k/HISTORICAL_FINDINGS.md</span><span class="d">The earlier narrative, preserved &mdash; how the original conclusions were reached.</span></li>
+      <li><span class="f">research/MAINTENANCE.md</span><span class="d">Which directory owns what: research interprets, results generate, baselines seal, archives snapshot.</span></li>
+      <li><span class="f">research/legacy_50k/README.md</span><span class="d">The next product, deliberately empty. Its study profile is blocked from running and no 25K value has been borrowed into its templates.</span></li>
+      <li><span class="f">ASSUMPTIONS.md</span><span class="d">Why each configured value is what it is, and which way it bends the answer. <span class="mono">products/</span> is stone, <span class="mono">firm/</span> switchable, <span class="mono">policies/</span> ours, <span class="mono">scenarios/</span> binds them.</span></li>
+      <li><span class="f">ECONOMIC_EFFECTS.md</span><span class="d">What a cash difference actually represents &mdash; accounting identities, cash bridges and receipt timing.</span></li>
+      <li><span class="f">config/studies/README.md</span><span class="d">Per-product study settings, so a new product gets its own verified design rather than inherited numbers.</span></li>
+      <li><span class="f">scripts/audit_study_results.py</span><span class="d">Re-runs the read-only consistency checks; only the audit document itself is regenerated.</span></li>
+      <li><span class="f">archives/studies/</span><span class="d">Two superseded designs kept for reproduction. Current rankings should never link here.</span></li>
+    </ul>
+  </section>
+
+  <footer>
+    Assembled 2026-09-10 from <span class="mono">results/README.md</span>, <span class="mono">results/CONSISTENCY_AUDIT.md</span>, the five <span class="mono">study.json</span> provenance blocks and the current <span class="mono">research/legacy_25k/</span> notes. Candidate counts are the actual row counts of each <span class="mono">candidates.csv</span>, and they sum to the 946 the audit checks. If a rerun has happened since, those counts and the run timestamps are what to re-check first.
+  </footer>
+
+</div>
