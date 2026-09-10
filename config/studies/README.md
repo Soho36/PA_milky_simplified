@@ -39,3 +39,28 @@ rechecks purchase controls; it is not a new cadence simulation.
 
 The replacement comparison uses the `replacements` output key:
 `venv/Scripts/python.exe scripts/study_monthly_replacements.py --study config/studies/legacy_25k.json`.
+
+## Paired account-size reserve search
+
+Run `venv/Scripts/python.exe scripts/study_legacy_reserve_comparison.py`.
+Its dedicated experiment specification is `legacy_reserve_comparison.json`;
+this is not a product profile to pass to `--study`. It loads both ready product
+profiles and writes only to
+`results/comparisons/legacy_25k_vs_50k/reserve_by_policy/`.
+
+Both products receive the same coarse grid and the union of local refinements
+within every budget/purchase/withdrawal/cadence family. The search covers minimum
+and maximum withdrawals with both ongoing and terminal-inclusive objectives.
+It does not re-optimize the optional stricter payout interpretation.
+
+Completed rows are checkpointed. Re-running the unchanged experiment resumes
+missing simulations and rebuilds generated outputs. Changes to the experiment,
+resolved scenarios, tape, engine, evaluator or runner require a new output
+directory; stale checkpoints are rejected rather than silently mixed.
+
+After the search, run
+`venv/Scripts/python.exe scripts/explain_legacy_reserve_comparison.py` to replay
+the headline winners and refresh the shorter `FINDINGS.generated.md`, including
+account turnover, purchase fees, owner-excluded account deficits and detailed
+winner ledgers. It also checks the selected winners under the stricter later-payout
+minimum, without re-optimizing them. Existing `FINDINGS.md` is kept as reader-maintained commentary.

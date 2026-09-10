@@ -1,0 +1,13 @@
+{
+  "products": ["legacy_25k", "legacy_50k"],
+  "budgets": [[1000, 0], [1000, 200], [5000, 0], [5000, 200]],
+  "acquisitions": ["monthly_one", "weekly_one", "monthly_current_slot_replacements"],
+  "amount_rules": ["minimum", "maximum"],
+  "cadences": ["calendar_month", "weekly", "daily"],
+  "headrooms": [0, 1000, 2000, 3000, 4000, 4900, 5000, 6000, 6500, 6800, 7000, 8000, 9000, 10000, 12500, 15000],
+  "refinement_radius": 500,
+  "refinement_step": 100,
+  "workers": 4,
+  "output": "results/comparisons/legacy_25k_vs_50k/reserve_by_policy",
+  "note": "Common coarse grid; union of local refinements around BOTH products' ongoing and total winners within EACH budget/acquisition/withdrawal/cadence family. Inherited payout interpretation, minimum/maximum families only."
+}

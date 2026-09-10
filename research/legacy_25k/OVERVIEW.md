@@ -1,5 +1,12 @@
 # Legacy 25K: current findings
 
+**Broader reserve comparison:** start with the
+[paired 25K/50K findings](../../results/comparisons/legacy_25k_vs_50k/reserve_by_policy/FINDINGS.generated.md)
+for fresh reserve searches within each funded purchase/withdrawal/cadence family.
+The conclusions below describe the earlier candidate sets. In particular,
+$31,900 is not a universally selected reserve, and a 20-live-account limit
+does not imply low account turnover.
+
 We have a coherent in-sample picture of the tested operating policies. The best
 choice depends on funding, purchase timing and whether the objective is cash
 received during trading or cash including the terminal request. We have not

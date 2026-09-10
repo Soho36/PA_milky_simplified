@@ -10,6 +10,7 @@ historical trade tapes; it does not establish future returns or a universal opti
 | Understand the current conclusions | [Legacy 25K overview](research/legacy_25k/OVERVIEW.md) |
 | Find the evidence for a question | [Legacy 25K study guide](research/legacy_25k/STUDIES.md) |
 | Compare the next product | [Legacy 50K research](research/legacy_50k/README.md) |
+| Compare reserves for both account sizes | [Paired reserve findings](results/comparisons/legacy_25k_vs_50k/reserve_by_policy/FINDINGS.generated.md) |
 | Run or configure experiments | [Study configuration guide](config/studies/README.md) |
 | Understand accounting and assumptions | [Economic effects](ECONOMIC_EFFECTS.md), [assumptions](ASSUMPTIONS.md) |
 | Check saved-result consistency | [Audit](results/CONSISTENCY_AUDIT.md) |

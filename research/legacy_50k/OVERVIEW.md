@@ -1,5 +1,10 @@
 # Legacy 50K: initial operating-policy findings
 
+**Extension:** the [paired reserve findings](../../results/comparisons/legacy_25k_vs_50k/reserve_by_policy/FINDINGS.generated.md)
+give both products equal reserve coverage within each budget and operating-policy
+family. Read them for best-tested reserve comparisons; the initial matched controls
+and monthly-purchase-led shortlist below retain their original scope.
+
 The first focused comparison is complete. It uses the same RR tape, contract exposure, four owner budgets and 20-live-account cap as 25K, with the user-specified $250 fee for 50K versus $200 for 25K. The comparison is therefore of account product **and its acquisition cost**, not drawdown alone.
 
 ## Matched policy: monthly purchases, daily $500 requests

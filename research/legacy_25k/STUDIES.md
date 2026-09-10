@@ -5,6 +5,7 @@ paths; there is no need to browse the full results tree to follow the research.
 
 | Question | Evidence | Scope |
 |---|---|---|
+| Which reserve works best for each policy and account size? | [Paired 25K/50K reserve search](../../results/comparisons/legacy_25k_vs_50k/reserve_by_policy/REPORT.generated.md) | Same grids per pair; funded cap 20; minimum/maximum withdrawal families; both cash objectives |
 | Which purchase policy works with our cash budget? | [Current purchase report](../../results/study__full_rulebook__RR__account_purchases__cash_budgets/REPORT.generated.md) | 132 candidates; cap 20; four budgets |
 | Which withdrawal cadence works with monthly purchases? | [Current capped cadence report](../../results/study__full_rulebook__RR__withdrawal_cadence__monthly_purchases__cap_20__cash_budgets/REPORT.generated.md) | 372 candidates; matched budgets and controls |
 | How did cadence affect the original book? | [Historical cadence report and notes](../../results/study__full_rulebook__RR__withdrawal_cadence__monthly_purchases/REPORT.md) | Uncapped monthly purchases |

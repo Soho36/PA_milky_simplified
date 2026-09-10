@@ -1,0 +1,51 @@
+The important part is that the optimization uncovered a different mechanism than “50K has more drawdown, therefore it should make more money.”
+
+In the earlier studies, we were mostly thinking of the reserve as a safety cushion: keep, say, $31,900 in a 25K account, withdraw above that, and try to preserve the account. Under that philosophy, account longevity matters a lot.
+
+But once the new search was allowed to optimize the reserve separately for every acquisition/withdrawal policy, it discovered another viable strategy inside the simulator:
+
+> withdraw much more aggressively → accept that accounts die more often → replace them quickly → continue extracting payouts from new accounts.
+
+That is what the **611 accounts bought** figure is telling us.
+
+For the $1,000 initial + $200/month scenario, the best overall 25K result apparently came from a high-turnover policy that bought **611 accounts over the entire historical simulation**, versus **368 accounts for the corresponding optimized 50K leader**. This does *not* mean 611 simultaneous accounts—the cap remained 20 live accounts. It means accounts repeatedly died and were replaced.
+
+So imagine the portfolio at some point has 20 live accounts. Under the old “protect the accounts” philosophy, perhaps only a few die over a period because you retain a larger cushion. Under the aggressive policy, you withdraw more money, leave less protection, accounts hit their drawdown limits more frequently, and replacements are purchased. Over many years that can produce hundreds of account lifecycles.
+
+This also explains why the apparently “optimal cushion” for the replacement policy became surprisingly low. In your $1,000 + $200 example, daily-minimum terminal scoring selected:
+
+| Policy | 25K | 50K |
+|---|---:|---:|
+| Monthly purchases | $31,900 | $57,300 |
+| Weekly purchases | $32,800 | $56,900 |
+| Monthly + replacements | **$26,800** | **$52,500** |
+
+For 25K, $26,800 is basically the frozen-floor level with little or no voluntary safety cushion. The optimizer is effectively saying: **don't spend owner cash protecting an account indefinitely if extracting money and replacing failed accounts produces more total owner cash in this historical tape.**
+
+And this is where the 25K versus 50K result becomes particularly interesting.
+
+The 50K gives considerably more trading room, so accounts survive better. But a replacement costs $250 rather than $200, and both products use the same trade size in this experiment. A 50K account therefore doesn't automatically generate twice the trading profit simply because its nominal size is twice as large. Its main advantage is survival room.
+
+If the economically successful strategy turns out to be “extract aggressively and replace failures,” then the cheaper 25K account can actually benefit from being more disposable. The simulation can cycle through many more 25K accounts. That's one reason a separately optimized 25K configuration can beat an optimized 50K configuration even though an individual 50K account is more robust.
+
+There is another subtle point. The **611 vs 368** result doesn't by itself mean that “more deaths are good.” It means that, *under this particular historical tape and simulator economics*, the extra payouts obtained before those deaths more than compensated for the additional $200 purchase fees. That's a very different statement.
+
+For example, suppose an additional 25K account costs $200 but, before eventually dying, contributes $1,000 of additional net withdrawals. Replacing it is economically attractive in the model. If it contributes only $100 before dying, the churn is destructive. The optimization indirectly finds the balance through total owner cash.
+
+This is why I would now think of the study as having discovered **two distinct operating regimes**:
+
+**Preservation regime:** maintain relatively large reserves, minimize deaths, keep a stable portfolio of accounts, and extract cash more conservatively.
+
+**Harvest-and-replace regime:** maintain small reserves, withdraw aggressively, tolerate account deaths, and recycle owner cash into replacement accounts.
+
+The 611-account result belongs much more to the second regime.
+
+And that means I would not yet conclude that the high-turnover policy is genuinely superior. It deserves its own validation. It is especially sensitive to anything the simulator may be simplifying: replacement availability, purchase/evaluation costs, account activation delays, payout processing delays, limits on how frequently accounts can be replaced, rule changes, and whether the historical account-deficit treatment accurately represents what happens economically when an account fails.
+
+There is also a potentially very useful next analysis hiding here. Instead of looking only at final cash, I would calculate for each winning policy something like:
+
+**cash extracted per account purchased**, **average account lifetime**, **deaths per year**, **replacement purchases per year**, **total purchase fees**, **payouts generated per €/$1 of purchase cost**, and the proportion of total profit produced by accounts that eventually died versus accounts that survived.
+
+That would tell us whether the 611-account strategy is a genuinely efficient “account recycling” mechanism or whether its huge headline result depends on a simulator assumption that becomes increasingly amplified as turnover rises.
+
+In fact, given how extreme **611 purchases** is, I think this diagnostic should come *before* doing much more optimization. The optimizer may have found something economically important—or it may have found the edge of the model.

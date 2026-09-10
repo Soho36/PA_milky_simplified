@@ -1,0 +1,222 @@
+==============================================================================
+  CONFIGURED PAYOUT RULEBOOK | DAILY MAXIMUM
+  Request cadence: daily; account purchases: monthly_current_slot_replacements; fixed-target accrual: monthly
+  Retained balance: $53,600
+  Closing action: one firm-permitted terminal request
+  Scenario config ID: legacy_50k_full_rulebook
+==============================================================================
+  strategy RR @ RR 1.00  |  1 MNQ/copy  |  commission $1.05 round turn  |  path mae_first
+  tape 2020-01-02 07:50:40 -> 2026-07-13 21:30:40  |  12,658 trades -> 154,346 copies filled
+  policy: maximum permitted excess above retained balance per check
+
+  FIRM RULES
+    [ON ] consistency          max_day_fraction=0.3, applies_through_payout=5
+    [ON ] denial_on_shortfall  
+    [ON ] maximum_payout       amount_usd=2000, applies_through_payout=5
+    [ON ] minimum_balance      balance_usd=52600
+    [ON ] minimum_payout       amount_usd=500.0
+    [off] processing_delay     days=0
+    [ON ] profit_split         mode=cumulative_threshold, full_rate_threshold_usd=25000.0, reduced_rate=0.9, full_rate_from_payout=6
+    [ON ] profitable_days      required_days=5, profit_threshold_usd=50.0
+    [ON ] safety_net           net_balance_usd=52600, encroachment_allowance_usd=500.0, applies_through_payout=3
+    [ON ] trading_days         required_days=8
+
+  THE BOOK
+    months in dataset .................... 79
+    accounts opened ...................... 122
+    owner contributions .................. $1,000.00
+    ending owner cash (incl. principal) .. $508,356.85
+    net cash created (excl. principal) ... $507,356.85
+    modelled live-account cap ............ 20
+    alive at end of dataset .............. 20  (16.4%)
+    blown on the trailing drawdown ....... 102
+
+  WHERE THE POCKET CAME FROM
+    booked net trading earnings .......... $    530,853.80
+    less profit still in live accounts ... $    -25,724.00
+    less profit stranded in dead accounts  $    -14,563.55
+    plus failed-account booked deficits ... $     47,290.60
+    less the firm's profit split ......... $          0.00
+    less account purchase fees ........... $    -30,500.00
+    ------------------------------------------------------
+    IN OUR POCKET ........................ $    507,356.85
+
+  BOOKED DEFICITS NOT FUNDED BY OWNER
+    total booked deficits ............... $     47,290.60
+      failed accounts ................... $     47,290.60
+      live accounts at endpoint ......... $          0.00
+    Booked balances, not actual firm losses or cash financing.
+    The unbooked killing excursion is excluded.
+    gross payouts exceeding own earnings $          0.00
+      per-account gross payouts above positive booked net trading earnings
+
+  CASH IN OUR POCKET
+    gross out of the accounts ............ $537,856.85  (568 payouts)
+    lost to the firm's split ............. $0.00
+    spent buying accounts ................ $-30,500.00  (122 x $250)
+    -----------------------------------------------------
+    IN OUR POCKET ........................ $507,356.85
+
+  WHICH RULE STOPPED US
+    requests approved .................... 568
+    requests denied ...................... 10,204
+    withheld by our own cushion .......... 15,953  (we never asked)
+    denied by rule (a request may trip several):
+      profitable_days         4,617   (first blocker 1,120)
+      consistency             4,040   (first blocker 4,020)
+      trading_days            3,600   (first blocker 3,600)
+      minimum_payout          1,444   (first blocker 1,444)
+      minimum_balance            20   (first blocker 20)
+    on approved payouts, the amount was capped by:
+      maximum_payout             40
+
+  CLOSING THE BOOK
+    mode ................................. firm_permitted
+    accounts alive at the horizon ........ 20
+    equity standing in them .............. $25,724.00
+    accounts that could take anything .... 0
+    extracted ............................ $0.00   (0.0% of it)
+    stranded in the accounts ............. $25,724.00
+
+  PAYOUT DETAIL
+    accounts that ever paid .............. 63 of 122   (never paid: 59)
+    first / last ......................... 2021-11-05 00:00:00  ->  2026-06-13 00:00:00
+    per paying account: mean     8,537.41  median     6,066.15
+                        min        661.00  max       22,068.55
+
+  EQUITY LEFT IN SURVIVING ACCOUNTS
+    combined balance ..................... $1,025,724.00
+    combined profit above start .......... $25,724.00
+    per account: mean     1,286.20  median     1,286.20
+                 min      1,286.20  max        1,286.20
+
+  BLOWN ACCOUNTS
+    lifetime days: median        98.00  min        11.00  max     1,024.00
+    intratrade_excursion        102
+
+  PER-ACCOUNT LEDGER
+    cohort     trades  status  died          lifetime      payouts    received      balance
+    ---------------------------------------------------------------------------------------
+    2020-01     383  dead   2020-03-18         77d             -           -             -
+    2020-02     222  dead   2020-03-18         46d             -           -             -
+    2020-03      69  dead   2020-03-18         17d             -           -             -
+    2020-03   4,118  dead   2022-05-12        784d             7    6,713.25             -
+    2021-11     339  dead   2022-01-10         66d             -           -             -
+    2021-11     339  dead   2022-01-10         66d             -           -             -
+    2022-02     742  dead   2022-06-15        134d             1      661.00             -
+    2022-02     742  dead   2022-06-15        134d             1      661.00             -
+    2022-03     386  dead   2022-05-10         70d             -           -             -
+    2022-04     193  dead   2022-05-09         38d             -           -             -
+    2022-05      68  dead   2022-05-12         11d             -           -             -
+    2022-05     210  dead   2022-06-14         35d             -           -             -
+    2022-05     202  dead   2022-06-14         34d             -           -             -
+    2022-05     184  dead   2022-06-14         32d             -           -             -
+    2022-05     184  dead   2022-06-14         32d             -           -             -
+    2022-06      75  dead   2022-06-14         13d             -           -             -
+    2022-06   5,442  dead   2025-04-04       1024d            26   21,058.65             -
+    2022-06   5,442  dead   2025-04-04       1024d            26   21,058.65             -
+    2022-06   5,442  dead   2025-04-04       1024d            26   21,058.65             -
+    2022-06   5,442  dead   2025-04-04       1024d            26   21,058.65             -
+    2022-06   5,442  dead   2025-04-04       1024d            26   21,058.65             -
+    2022-06   5,431  dead   2025-04-04       1023d            27   21,417.20             -
+    2022-06   5,431  dead   2025-04-04       1023d            27   21,417.20             -
+    2022-07   5,354  dead   2025-04-04       1008d            28   22,068.55             -
+    2022-08   5,198  dead   2025-04-04        977d            24   19,511.85             -
+    2022-09     646  dead   2023-01-05        126d             -           -             -
+    2022-10     476  dead   2023-01-05         96d             -           -             -
+    2022-11   4,718  dead   2025-04-04        885d            20   16,503.35             -
+    2022-12   4,560  dead   2025-04-04        855d            21   16,672.75             -
+    2023-01   4,410  dead   2025-04-04        824d            22   17,706.75             -
+    2023-01   4,391  dead   2025-04-04        819d            23   18,318.20             -
+    2023-01   4,391  dead   2025-04-04        819d            23   18,318.20             -
+    2023-02   4,274  dead   2025-04-04        793d            21   16,679.05             -
+    2023-03   4,138  dead   2025-04-04        765d            21   16,600.85             -
+    2023-04   1,152  dead   2023-10-25        207d             -           -             -
+    2023-05   1,002  dead   2023-10-25        177d             -           -             -
+    2023-06     810  dead   2023-10-25        146d             -           -             -
+    2023-07     646  dead   2023-10-25        116d             -           -             -
+    2023-10   2,813  dead   2025-04-04        526d            18   14,585.60             -
+    2023-10   2,813  dead   2025-04-04        526d            18   14,585.60             -
+    2023-10   2,813  dead   2025-04-04        526d            18   14,585.60             -
+    2023-10   2,813  dead   2025-04-04        526d            18   14,585.60             -
+    2025-04   1,815  dead   2026-03-04        333d             4    6,066.15             -
+    2025-04   1,815  dead   2026-03-04        333d             4    6,066.15             -
+    2025-04   1,815  dead   2026-03-04        333d             4    6,066.15             -
+    2025-04   1,815  dead   2026-03-04        333d             4    6,066.15             -
+    2025-04   1,815  dead   2026-03-04        333d             4    6,066.15             -
+    2025-04   1,815  dead   2026-03-04        333d             4    6,066.15             -
+    2025-04   1,815  dead   2026-03-04        333d             4    6,066.15             -
+    2025-04   1,815  dead   2026-03-04        333d             4    6,066.15             -
+    2025-04   1,815  dead   2026-03-04        333d             4    6,066.15             -
+    2025-04   1,815  dead   2026-03-04        333d             4    6,066.15             -
+    2025-04   1,815  dead   2026-03-04        333d             4    6,066.15             -
+    2025-04   1,815  dead   2026-03-04        333d             4    6,066.15             -
+    2025-04   1,815  dead   2026-03-04        333d             4    6,066.15             -
+    2025-04   1,815  dead   2026-03-04        333d             4    6,066.15             -
+    2025-04   1,815  dead   2026-03-04        333d             4    6,066.15             -
+    2025-04   1,815  dead   2026-03-04        333d             4    6,066.15             -
+    2025-04   1,815  dead   2026-03-04        333d             4    6,066.15             -
+    2025-04   1,815  dead   2026-03-04        333d             4    6,066.15             -
+    2025-04   1,815  dead   2026-03-04        333d             4    6,066.15             -
+    2025-04   1,815  dead   2026-03-04        333d             4    6,066.15             -
+    2026-03      77  dead   2026-03-18         13d             -           -             -
+    2026-03      77  dead   2026-03-18         13d             -           -             -
+    2026-03      77  dead   2026-03-18         13d             -           -             -
+    2026-03      77  dead   2026-03-18         13d             -           -             -
+    2026-03      77  dead   2026-03-18         13d             -           -             -
+    2026-03      77  dead   2026-03-18         13d             -           -             -
+    2026-03      77  dead   2026-03-18         13d             -           -             -
+    2026-03      77  dead   2026-03-18         13d             -           -             -
+    2026-03      77  dead   2026-03-18         13d             -           -             -
+    2026-03      77  dead   2026-03-18         13d             -           -             -
+    2026-03      77  dead   2026-03-18         13d             -           -             -
+    2026-03      77  dead   2026-03-18         13d             -           -             -
+    2026-03      77  dead   2026-03-18         13d             -           -             -
+    2026-03      77  dead   2026-03-18         13d             -           -             -
+    2026-03      77  dead   2026-03-18         13d             -           -             -
+    2026-03      77  dead   2026-03-18         13d             -           -             -
+    2026-03      77  dead   2026-03-18         13d             -           -             -
+    2026-03      77  dead   2026-03-18         13d             -           -             -
+    2026-03      77  dead   2026-03-18         13d             -           -             -
+    2026-03      77  dead   2026-03-18         13d             -           -             -
+    2026-03     532  dead   2026-06-25         98d             1    1,982.45             -
+    2026-03     532  dead   2026-06-25         98d             1    1,982.45             -
+    2026-03     532  dead   2026-06-25         98d             1    1,982.45             -
+    2026-03     532  dead   2026-06-25         98d             1    1,982.45             -
+    2026-03     532  dead   2026-06-25         98d             1    1,982.45             -
+    2026-03     532  dead   2026-06-25         98d             1    1,982.45             -
+    2026-03     532  dead   2026-06-25         98d             1    1,982.45             -
+    2026-03     532  dead   2026-06-25         98d             1    1,982.45             -
+    2026-03     532  dead   2026-06-25         98d             1    1,982.45             -
+    2026-03     532  dead   2026-06-25         98d             1    1,982.45             -
+    2026-03     532  dead   2026-06-25         98d             1    1,982.45             -
+    2026-03     532  dead   2026-06-25         98d             1    1,982.45             -
+    2026-03     532  dead   2026-06-25         98d             1    1,982.45             -
+    2026-03     532  dead   2026-06-25         98d             1    1,982.45             -
+    2026-03     532  dead   2026-06-25         98d             1    1,982.45             -
+    2026-03     532  dead   2026-06-25         98d             1    1,982.45             -
+    2026-03     532  dead   2026-06-25         98d             1    1,982.45             -
+    2026-03     532  dead   2026-06-25         98d             1    1,982.45             -
+    2026-03     532  dead   2026-06-25         98d             1    1,982.45             -
+    2026-03     532  dead   2026-06-25         98d             1    1,982.45             -
+    2026-06      96  ALIVE  -                    -             -           -     51,286.20
+    2026-06      96  ALIVE  -                    -             -           -     51,286.20
+    2026-06      96  ALIVE  -                    -             -           -     51,286.20
+    2026-06      96  ALIVE  -                    -             -           -     51,286.20
+    2026-06      96  ALIVE  -                    -             -           -     51,286.20
+    2026-06      96  ALIVE  -                    -             -           -     51,286.20
+    2026-06      96  ALIVE  -                    -             -           -     51,286.20
+    2026-06      96  ALIVE  -                    -             -           -     51,286.20
+    2026-06      96  ALIVE  -                    -             -           -     51,286.20
+    2026-06      96  ALIVE  -                    -             -           -     51,286.20
+    2026-06      96  ALIVE  -                    -             -           -     51,286.20
+    2026-06      96  ALIVE  -                    -             -           -     51,286.20
+    2026-06      96  ALIVE  -                    -             -           -     51,286.20
+    2026-06      96  ALIVE  -                    -             -           -     51,286.20
+    2026-06      96  ALIVE  -                    -             -           -     51,286.20
+    2026-06      96  ALIVE  -                    -             -           -     51,286.20
+    2026-06      96  ALIVE  -                    -             -           -     51,286.20
+    2026-06      96  ALIVE  -                    -             -           -     51,286.20
+    2026-06      96  ALIVE  -                    -             -           -     51,286.20
+    2026-06      96  ALIVE  -                    -             -           -     51,286.20
+==============================================================================
