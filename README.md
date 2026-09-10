@@ -9,7 +9,7 @@ historical trade tapes; it does not establish future returns or a universal opti
 |---|---|
 | Understand the current conclusions | [Legacy 25K overview](research/legacy_25k/OVERVIEW.md) |
 | Find the evidence for a question | [Legacy 25K study guide](research/legacy_25k/STUDIES.md) |
-| Prepare the next product | [Legacy 50K placeholders](research/legacy_50k/README.md) |
+| Compare the next product | [Legacy 50K research](research/legacy_50k/README.md) |
 | Run or configure experiments | [Study configuration guide](config/studies/README.md) |
 | Understand accounting and assumptions | [Economic effects](ECONOMIC_EFFECTS.md), [assumptions](ASSUMPTIONS.md) |
 | Check saved-result consistency | [Audit](results/CONSISTENCY_AUDIT.md) |
@@ -33,4 +33,4 @@ Runners refresh `REPORT.generated.md` and machine-readable outputs. Reader notes
 may describe an earlier run; the study guide identifies the current generated report.
 
 The former introduction is preserved as [historical findings](research/legacy_25k/HISTORICAL_FINDINGS.md).
-50K Legacy is not runnable yet. EOD accounts are outside this change.
+50K Legacy has a separate focused operating study and source audit. EOD accounts remain deferred.

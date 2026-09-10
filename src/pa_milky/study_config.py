@@ -25,6 +25,21 @@ def load_study_profile(path=None):
         raise ValueError('Workers and live-account cap must be positive')
     if len(set(profile['outputs'].values())) != len(profile['outputs']):
         raise ValueError('Each study must have a distinct output directory')
+    def resolve(value):
+        p=Path(value)
+        return (p if p.is_absolute() else PROJECT_ROOT/p).resolve()
+    destinations=[resolve(v) for v in profile['outputs'].values()]
+    def overlaps(a,b):
+        return a==b or a in b.parents or b in a.parents
+    for i,a in enumerate(destinations):
+        if any(overlaps(a,b) for b in destinations[i+1:]):
+            raise ValueError('Study output directories must not overlap')
+    for other_path in (PROJECT_ROOT/'config/studies').glob('*.json'):
+        other=json.loads(other_path.read_text(encoding='utf-8'))
+        if other.get('status')!='ready' or other.get('product_id')==profile['product_id']:
+            continue
+        if any(overlaps(a,resolve(v)) for a in destinations for v in other['outputs'].values()):
+            raise ValueError('Output overlaps another product study; choose isolated destinations')
     profile['_source'] = str(path.resolve())
     profile['_sha256'] = hashlib.sha256(raw).hexdigest()
     return profile

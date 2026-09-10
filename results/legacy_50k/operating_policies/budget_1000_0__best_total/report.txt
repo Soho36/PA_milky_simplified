@@ -1,0 +1,134 @@
+==============================================================================
+  CONFIGURED PAYOUT RULEBOOK | WEEKLY MAXIMUM
+  Request cadence: weekly; account purchases: monthly_current_slot_replacements; fixed-target accrual: monthly
+  Retained balance: $56,600
+  Closing action: one firm-permitted terminal request
+  Scenario config ID: legacy_50k_full_rulebook
+==============================================================================
+  strategy RR @ RR 1.00  |  1 MNQ/copy  |  commission $1.05 round turn  |  path mae_first
+  tape 2020-01-02 07:50:40 -> 2026-07-13 21:30:40  |  12,658 trades -> 139,422 copies filled
+  policy: maximum permitted excess above retained balance per check
+
+  FIRM RULES
+    [ON ] consistency          max_day_fraction=0.3, applies_through_payout=5
+    [ON ] denial_on_shortfall  
+    [ON ] maximum_payout       amount_usd=2000, applies_through_payout=5
+    [ON ] minimum_balance      balance_usd=52600
+    [ON ] minimum_payout       amount_usd=500.0
+    [off] processing_delay     days=0
+    [ON ] profit_split         mode=cumulative_threshold, full_rate_threshold_usd=25000.0, reduced_rate=0.9, full_rate_from_payout=6
+    [ON ] profitable_days      required_days=5, profit_threshold_usd=50.0
+    [ON ] safety_net           net_balance_usd=52600, encroachment_allowance_usd=500.0, applies_through_payout=3
+    [ON ] trading_days         required_days=8
+
+  THE BOOK
+    months in dataset .................... 79
+    accounts opened ...................... 36
+    owner contributions .................. $1,000.00
+    ending owner cash (incl. principal) .. $492,378.26
+    net cash created (excl. principal) ... $491,378.26
+    modelled live-account cap ............ 20
+    alive at end of dataset .............. 20  (55.6%)
+    blown on the trailing drawdown ....... 16
+
+  WHERE THE POCKET CAME FROM
+    booked net trading earnings .......... $    493,070.70
+    less profit still in live accounts ... $     -2,000.20
+    less profit stranded in dead accounts  $       -297.40
+    plus failed-account booked deficits ... $     12,807.75
+    less the firm's profit split ......... $     -3,202.59
+    less account purchase fees ........... $     -9,000.00
+    ------------------------------------------------------
+    IN OUR POCKET ........................ $    491,378.26
+
+  BOOKED DEFICITS NOT FUNDED BY OWNER
+    total booked deficits ............... $     12,807.75
+      failed accounts ................... $     12,807.75
+      live accounts at endpoint ......... $          0.00
+    Booked balances, not actual firm losses or cash financing.
+    The unbooked killing excursion is excluded.
+    gross payouts exceeding own earnings $          0.00
+      per-account gross payouts above positive booked net trading earnings
+
+  CASH IN OUR POCKET
+    gross out of the accounts ............ $503,580.85  (426 payouts)
+    lost to the firm's split ............. $-3,202.59
+    spent buying accounts ................ $-9,000.00  (36 x $250)
+    -----------------------------------------------------
+    IN OUR POCKET ........................ $491,378.26
+
+  WHICH RULE STOPPED US
+    requests approved .................... 426
+    requests denied ...................... 629
+    withheld by our own cushion .......... 2,579  (we never asked)
+    denied by rule (a request may trip several):
+      minimum_payout            344   (first blocker 344)
+      profitable_days           285   (first blocker 86)
+      trading_days              199   (first blocker 199)
+    on approved payouts, the amount was capped by:
+      trailing_floor             20
+
+  CLOSING THE BOOK
+    mode ................................. firm_permitted
+    accounts alive at the horizon ........ 20
+    equity standing in them .............. $96,822.00
+    accounts that could take anything .... 20
+    extracted ............................ $94,821.80   (97.9% of it)
+    stranded in the accounts ............. $2,000.20
+
+  PAYOUT DETAIL
+    accounts that ever paid .............. 20 of 36   (never paid: 16)
+    first / last ......................... 2022-02-28 00:00:00  ->  2026-07-13 21:30:40
+    per paying account: mean    25,179.04  median    23,573.14
+                        min     21,088.34  max       35,029.94
+
+  EQUITY LEFT IN SURVIVING ACCOUNTS
+    combined balance ..................... $1,002,000.20
+    combined profit above start .......... $2,000.20
+    per account: mean       100.01  median       100.01
+                 min        100.01  max          100.01
+
+  BLOWN ACCOUNTS
+    lifetime days: median        63.50  min        11.00  max       207.00
+    intratrade_excursion         16
+
+  PER-ACCOUNT LEDGER
+    cohort     trades  status  died          lifetime      payouts    received      balance
+    ---------------------------------------------------------------------------------------
+    2020-01     383  dead   2020-03-18         77d             -           -             -
+    2020-02     222  dead   2020-03-18         46d             -           -             -
+    2020-03      69  dead   2020-03-18         17d             -           -             -
+    2020-03  12,271  ALIVE  -                    -            32   34,026.93     50,100.01
+    2022-02     407  dead   2022-05-12         73d             -           -             -
+    2022-02     407  dead   2022-05-12         73d             -           -             -
+    2022-05      68  dead   2022-05-12         11d             -           -             -
+    2022-05     184  dead   2022-06-14         32d             -           -             -
+    2022-05     184  dead   2022-06-14         32d             -           -             -
+    2022-05     184  dead   2022-06-14         32d             -           -             -
+    2022-06      75  dead   2022-06-14         13d             -           -             -
+    2022-06   7,964  ALIVE  -                    -            25   28,650.66     50,100.01
+    2022-06   7,964  ALIVE  -                    -            25   28,650.66     50,100.01
+    2022-06   7,964  ALIVE  -                    -            25   28,650.66     50,100.01
+    2022-06   7,964  ALIVE  -                    -            25   28,650.66     50,100.01
+    2022-07   7,876  ALIVE  -                    -            27   29,559.57     50,100.01
+    2022-11   7,240  ALIVE  -                    -            20   24,500.99     50,100.01
+    2022-12   7,082  ALIVE  -                    -            20   24,670.39     50,100.01
+    2023-01   6,932  ALIVE  -                    -            21   25,633.95     50,100.01
+    2023-03   6,660  ALIVE  -                    -            20   24,598.49     50,100.01
+    2023-04   1,152  dead   2023-10-25        207d             -           -             -
+    2023-05   1,002  dead   2023-10-25        177d             -           -             -
+    2023-06     810  dead   2023-10-25        146d             -           -             -
+    2023-07     646  dead   2023-10-25        116d             -           -             -
+    2023-08     495  dead   2023-10-25         85d             -           -             -
+    2023-09     305  dead   2023-10-25         54d             -           -             -
+    2023-10   5,473  ALIVE  -                    -            17   21,088.34     50,100.01
+    2023-10   5,335  ALIVE  -                    -            19   22,583.24     50,100.01
+    2023-10   5,335  ALIVE  -                    -            19   22,583.24     50,100.01
+    2023-10   5,335  ALIVE  -                    -            19   22,583.24     50,100.01
+    2023-10   5,335  ALIVE  -                    -            19   22,583.24     50,100.01
+    2023-10   5,335  ALIVE  -                    -            19   22,583.24     50,100.01
+    2023-10   5,335  ALIVE  -                    -            19   22,583.24     50,100.01
+    2023-11   5,304  ALIVE  -                    -            19   22,645.29     50,100.01
+    2023-12   5,140  ALIVE  -                    -            19   22,422.99     50,100.01
+    2024-01   4,985  ALIVE  -                    -            17   21,129.24     50,100.01
+==============================================================================

@@ -19,8 +19,19 @@ class TestStudyConfig(unittest.TestCase):
             self.assertTrue((study_path(p,name)/'study.json').is_file())
 
     def test_placeholder_rejected(self):
-        with self.assertRaisesRegex(ValueError,'placeholder, not runnable'):
-            load_study_profile('config/studies/legacy_50k.json')
+        with TemporaryDirectory() as root:
+            path=Path(root)/'placeholder.json'
+            path.write_text(json.dumps({'schema':'pa_milky.study_profile.v1','status':'placeholder'}))
+            with self.assertRaisesRegex(ValueError,'placeholder, not runnable'):
+                load_study_profile(path)
+
+    def test_50k_cannot_write_inside_25k_outputs(self):
+        p=load_study_profile('config/studies/legacy_50k.json')
+        p['outputs']['purchases']='results/study__full_rulebook__RR__account_purchases__cash_budgets/child'
+        with TemporaryDirectory() as root:
+            path=Path(root)/'bad.json';path.write_text(json.dumps(p))
+            with self.assertRaisesRegex(ValueError,'another product'):
+                load_study_profile(path)
 
     def test_distinct_outputs_required(self):
         p=copy.deepcopy(load_study_profile('config/studies/legacy_25k.json'))

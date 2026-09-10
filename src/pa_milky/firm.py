@@ -334,6 +334,10 @@ class Rulebook:
                 ctx.balance_usd - ctx.trailing_floor_balance_usd - TOUCH_MARGIN_USD
             )
         }
+        minimum = self.rules['minimum_balance']
+        post_from = minimum.params.get('retain_after_payout_from')
+        if minimum.enabled and post_from is not None and ctx.payout_number >= int(post_from):
+            caps['post_payout_minimum_balance'] = money(ctx.balance_usd-float(minimum.params['balance_usd']))
         for key in ("safety_net", "maximum_payout"):
             rule = self.rules[key]
             if rule.enabled and rule.applies(ctx):

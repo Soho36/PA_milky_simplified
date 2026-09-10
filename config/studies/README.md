@@ -25,9 +25,12 @@ this is not an arbitrary workflow language. Use separate output locations for a
 new product or changed experiment design. A ready profile must use distinct
 folders for its studies.
 
-`legacy_50k.json` is a placeholder and fails before loading data or writing
-results. It must not be enabled simply by changing `status`: all verified
-product/rulebook/scenario and experiment settings must first be supplied.
+`legacy_50k.json` is now ready for the focused account-product study. It uses
+separate product/rulebook files and output folders under `results/legacy_50k/`.
+The loader rejects output overlap across ready product profiles. See
+[50K source verification](../../research/legacy_50k/SOURCES.md) for model limits.
+Run `venv/Scripts/python.exe scripts/study_legacy_50k_operating.py` for the
+focused search and matched comparisons, rather than repeating every historical study.
 
 Reader-maintained REPORT.md and report_breakdown.txt are not replaced by runs.
 Current generated reports live in REPORT.generated.md. Budgeted cadence's
