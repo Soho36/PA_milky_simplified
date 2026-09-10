@@ -1,5 +1,9 @@
 # Legacy 25K versus 50K: best tested reserves by operating policy
 
+[Excel workbook — summary, budget comparisons and data](../Legacy_25K_vs_50K.xlsx)
+
+25K is shown on the left and 50K on the right. Each row shares the same comparison labels. “Bought / alive” means cumulative purchases / ending survivors. Reserve cells retain tie counts; † marks a tie at a tested range boundary. Cash pairs are ongoing / terminal-inclusive, in USD.
+
 5,196 simulations; 144 product/budget/policy families; 72 prior matched controls reproduced. Each paired family tests exactly the same floor-headroom values for both products.
 
 ## How to read this comparison
@@ -26,393 +30,241 @@ The frozen floors are $25,100 and $50,100: headroom $6,800 means reserves $31,90
 
 ### Best complete tested bundles
 
-| Objective | Product | Purchases | Withdraw / checks | Reserve | Accounts | Alive | Ongoing | Total |
-|---|---|---|---|---:|---:|---:|---:|---:|
-| ongoing | legacy_25k | monthly_one | minimum / daily | $29,100 | 61 | 2 | $266,650.00 | $266,650.00 |
-| ongoing | legacy_50k | monthly_current_slot_replacements | maximum / daily | $53,600 | 122 | 20 | $507,356.85 | $507,356.85 |
-| total | legacy_25k | monthly_one | minimum / calendar_month | $28,400 | 61 | 14 | $194,300.00 | $308,604.52 |
-| total | legacy_50k | monthly_current_slot_replacements | minimum / calendar_month | $53,200 | 38 | 20 | $332,000.00 | $530,385.53 |
+| Objective | **25K — Policy and reserve** | **25K — Ongoing / total** | **25K — Bought / alive** | **50K — Policy and reserve** | **50K — Ongoing / total** | **50K — Bought / alive** |
+| --- | --- | --- | --- | --- | --- | --- |
+| ongoing | Monthly; minimum / daily; reserve $29,100 | $266,650.00 / $266,650.00 | 61 / 2 | Monthly + replacements; maximum / daily; reserve $53,600 | $507,356.85 / $507,356.85 | 122 / 20 |
+| total | Monthly; minimum / monthly; reserve $28,400 | $194,300.00 / $308,604.52 | 61 / 14 | Monthly + replacements; minimum / monthly; reserve $53,200 | $332,000.00 / $530,385.53 | 38 / 20 |
 
 ### monthly_one: best reserve within each withdrawal policy
 
-| Product | Withdraw / checks | Objective | Best reserve | Score | Accounts | Alive | Equally best reserves | Boundary tie? |
-|---|---|---|---:|---:|---:|---:|---:|---|
-| legacy_25k | maximum / calendar_month | ongoing | $29,800 | $233,488.82 | 58 | 2 | 1 | no |
-| legacy_25k | maximum / calendar_month | total | $31,600 | $298,261.47 | 58 | 17 | 1 | no |
-| legacy_25k | maximum / daily | ongoing | $30,200 | $238,983.64 | 58 | 2 | 1 | no |
-| legacy_25k | maximum / daily | total | $32,300 | $298,093.58 | 57 | 17 | 1 | no |
-| legacy_25k | maximum / weekly | ongoing | $30,000 | $234,388.79 | 58 | 2 | 1 | no |
-| legacy_25k | maximum / weekly | total | $31,600 | $299,046.10 | 58 | 17 | 1 | no |
-| legacy_25k | minimum / calendar_month | ongoing | $28,400 | $194,300.00 | 61 | 14 | 2 | no |
-| legacy_25k | minimum / calendar_month | total | $28,400 | $308,604.52 | 61 | 14 | 3 | no |
-| legacy_25k | minimum / daily | ongoing | $29,100 | $266,650.00 | 61 | 2 | 1 | no |
-| legacy_25k | minimum / daily | total | $33,300 | $302,687.21 | 56 | 17 | 2 | no |
-| legacy_25k | minimum / weekly | ongoing | $28,800 | $258,150.00 | 60 | 2 | 1 | no |
-| legacy_25k | minimum / weekly | total | $32,300 | $302,687.21 | 56 | 17 | 7 | no |
-| legacy_50k | maximum / calendar_month | ongoing | $54,800 | $324,863.02 | 41 | 3 | 1 | no |
-| legacy_50k | maximum / calendar_month | total | $56,600 | $410,770.78 | 37 | 20 | 1 | no |
-| legacy_50k | maximum / daily | ongoing | $55,200 | $333,043.24 | 41 | 3 | 1 | no |
-| legacy_50k | maximum / daily | total | $58,300 | $418,322.27 | 35 | 20 | 1 | no |
-| legacy_50k | maximum / weekly | ongoing | $55,100 | $327,426.54 | 41 | 3 | 1 | no |
-| legacy_50k | maximum / weekly | total | $58,300 | $418,572.25 | 34 | 20 | 1 | no |
-| legacy_50k | minimum / calendar_month | ongoing | $53,400 | $262,250.00 | 41 | 20 | 2 | no |
-| legacy_50k | minimum / calendar_month | total | $53,400 | $427,272.41 | 41 | 20 | 3 | no |
-| legacy_50k | minimum / daily | ongoing | $54,100 | $368,100.00 | 43 | 3 | 1 | no |
-| legacy_50k | minimum / daily | total | $58,400 | $418,572.26 | 34 | 20 | 2 | no |
-| legacy_50k | minimum / weekly | ongoing | $53,800 | $351,650.00 | 42 | 3 | 1 | no |
-| legacy_50k | minimum / weekly | total | $57,300 | $418,322.26 | 35 | 20 | 9 | no |
+| Withdraw / checks | Objective | **25K — Reserve (ties)** | **25K — Score** | **25K — Bought / alive** | **50K — Reserve (ties)** | **50K — Score** | **50K — Bought / alive** |
+| --- | --- | --- | --- | --- | --- | --- | --- |
+| maximum / monthly | ongoing | $29,800 (1 tie) | $233,488.82 | 58 / 2 | $54,800 (1 tie) | $324,863.02 | 41 / 3 |
+| maximum / monthly | total | $31,600 (1 tie) | $298,261.47 | 58 / 17 | $56,600 (1 tie) | $410,770.78 | 37 / 20 |
+| maximum / daily | ongoing | $30,200 (1 tie) | $238,983.64 | 58 / 2 | $55,200 (1 tie) | $333,043.24 | 41 / 3 |
+| maximum / daily | total | $32,300 (1 tie) | $298,093.58 | 57 / 17 | $58,300 (1 tie) | $418,322.27 | 35 / 20 |
+| maximum / weekly | ongoing | $30,000 (1 tie) | $234,388.79 | 58 / 2 | $55,100 (1 tie) | $327,426.54 | 41 / 3 |
+| maximum / weekly | total | $31,600 (1 tie) | $299,046.10 | 58 / 17 | $58,300 (1 tie) | $418,572.25 | 34 / 20 |
+| minimum / monthly | ongoing | $28,400 (2 ties) | $194,300.00 | 61 / 14 | $53,400 (2 ties) | $262,250.00 | 41 / 20 |
+| minimum / monthly | total | $28,400 (3 ties) | $308,604.52 | 61 / 14 | $53,400 (3 ties) | $427,272.41 | 41 / 20 |
+| minimum / daily | ongoing | $29,100 (1 tie) | $266,650.00 | 61 / 2 | $54,100 (1 tie) | $368,100.00 | 43 / 3 |
+| minimum / daily | total | $33,300 (2 ties) | $302,687.21 | 56 / 17 | $58,400 (2 ties) | $418,572.26 | 34 / 20 |
+| minimum / weekly | ongoing | $28,800 (1 tie) | $258,150.00 | 60 / 2 | $53,800 (1 tie) | $351,650.00 | 42 / 3 |
+| minimum / weekly | total | $32,300 (7 ties) | $302,687.21 | 56 / 17 | $57,300 (9 ties) | $418,322.26 | 35 / 20 |
 
 ### weekly_one: best reserve within each withdrawal policy
 
-| Product | Withdraw / checks | Objective | Best reserve | Score | Accounts | Alive | Equally best reserves | Boundary tie? |
-|---|---|---|---:|---:|---:|---:|---:|---|
-| legacy_25k | maximum / calendar_month | ongoing | $25,100 | $-1,000.00 | 5 | 0 | 21 | yes |
-| legacy_25k | maximum / calendar_month | total | $25,100 | $-1,000.00 | 5 | 0 | 21 | yes |
-| legacy_25k | maximum / daily | ongoing | $25,100 | $-1,000.00 | 5 | 0 | 21 | yes |
-| legacy_25k | maximum / daily | total | $25,100 | $-1,000.00 | 5 | 0 | 21 | yes |
-| legacy_25k | maximum / weekly | ongoing | $25,100 | $-1,000.00 | 5 | 0 | 21 | yes |
-| legacy_25k | maximum / weekly | total | $25,100 | $-1,000.00 | 5 | 0 | 21 | yes |
-| legacy_25k | minimum / calendar_month | ongoing | $25,100 | $-1,000.00 | 5 | 0 | 21 | yes |
-| legacy_25k | minimum / calendar_month | total | $25,100 | $-1,000.00 | 5 | 0 | 21 | yes |
-| legacy_25k | minimum / daily | ongoing | $25,100 | $-1,000.00 | 5 | 0 | 21 | yes |
-| legacy_25k | minimum / daily | total | $25,100 | $-1,000.00 | 5 | 0 | 21 | yes |
-| legacy_25k | minimum / weekly | ongoing | $25,100 | $-1,000.00 | 5 | 0 | 21 | yes |
-| legacy_25k | minimum / weekly | total | $25,100 | $-1,000.00 | 5 | 0 | 21 | yes |
-| legacy_50k | maximum / calendar_month | ongoing | $50,100 | $-1,000.00 | 4 | 0 | 21 | yes |
-| legacy_50k | maximum / calendar_month | total | $50,100 | $-1,000.00 | 4 | 0 | 21 | yes |
-| legacy_50k | maximum / daily | ongoing | $50,100 | $-1,000.00 | 4 | 0 | 21 | yes |
-| legacy_50k | maximum / daily | total | $50,100 | $-1,000.00 | 4 | 0 | 21 | yes |
-| legacy_50k | maximum / weekly | ongoing | $50,100 | $-1,000.00 | 4 | 0 | 21 | yes |
-| legacy_50k | maximum / weekly | total | $50,100 | $-1,000.00 | 4 | 0 | 21 | yes |
-| legacy_50k | minimum / calendar_month | ongoing | $50,100 | $-1,000.00 | 4 | 0 | 21 | yes |
-| legacy_50k | minimum / calendar_month | total | $50,100 | $-1,000.00 | 4 | 0 | 21 | yes |
-| legacy_50k | minimum / daily | ongoing | $50,100 | $-1,000.00 | 4 | 0 | 21 | yes |
-| legacy_50k | minimum / daily | total | $50,100 | $-1,000.00 | 4 | 0 | 21 | yes |
-| legacy_50k | minimum / weekly | ongoing | $50,100 | $-1,000.00 | 4 | 0 | 21 | yes |
-| legacy_50k | minimum / weekly | total | $50,100 | $-1,000.00 | 4 | 0 | 21 | yes |
+| Withdraw / checks | Objective | **25K — Reserve (ties)** | **25K — Score** | **25K — Bought / alive** | **50K — Reserve (ties)** | **50K — Score** | **50K — Bought / alive** |
+| --- | --- | --- | --- | --- | --- | --- | --- |
+| maximum / monthly | ongoing | $25,100 (21 ties) † | $-1,000.00 | 5 / 0 | $50,100 (21 ties) † | $-1,000.00 | 4 / 0 |
+| maximum / monthly | total | $25,100 (21 ties) † | $-1,000.00 | 5 / 0 | $50,100 (21 ties) † | $-1,000.00 | 4 / 0 |
+| maximum / daily | ongoing | $25,100 (21 ties) † | $-1,000.00 | 5 / 0 | $50,100 (21 ties) † | $-1,000.00 | 4 / 0 |
+| maximum / daily | total | $25,100 (21 ties) † | $-1,000.00 | 5 / 0 | $50,100 (21 ties) † | $-1,000.00 | 4 / 0 |
+| maximum / weekly | ongoing | $25,100 (21 ties) † | $-1,000.00 | 5 / 0 | $50,100 (21 ties) † | $-1,000.00 | 4 / 0 |
+| maximum / weekly | total | $25,100 (21 ties) † | $-1,000.00 | 5 / 0 | $50,100 (21 ties) † | $-1,000.00 | 4 / 0 |
+| minimum / monthly | ongoing | $25,100 (21 ties) † | $-1,000.00 | 5 / 0 | $50,100 (21 ties) † | $-1,000.00 | 4 / 0 |
+| minimum / monthly | total | $25,100 (21 ties) † | $-1,000.00 | 5 / 0 | $50,100 (21 ties) † | $-1,000.00 | 4 / 0 |
+| minimum / daily | ongoing | $25,100 (21 ties) † | $-1,000.00 | 5 / 0 | $50,100 (21 ties) † | $-1,000.00 | 4 / 0 |
+| minimum / daily | total | $25,100 (21 ties) † | $-1,000.00 | 5 / 0 | $50,100 (21 ties) † | $-1,000.00 | 4 / 0 |
+| minimum / weekly | ongoing | $25,100 (21 ties) † | $-1,000.00 | 5 / 0 | $50,100 (21 ties) † | $-1,000.00 | 4 / 0 |
+| minimum / weekly | total | $25,100 (21 ties) † | $-1,000.00 | 5 / 0 | $50,100 (21 ties) † | $-1,000.00 | 4 / 0 |
 
 ### monthly_current_slot_replacements: best reserve within each withdrawal policy
 
-| Product | Withdraw / checks | Objective | Best reserve | Score | Accounts | Alive | Equally best reserves | Boundary tie? |
-|---|---|---|---:|---:|---:|---:|---:|---|
-| legacy_25k | maximum / calendar_month | ongoing | $25,100 | $-1,000.00 | 5 | 0 | 40 | yes |
-| legacy_25k | maximum / calendar_month | total | $25,100 | $-1,000.00 | 5 | 0 | 40 | yes |
-| legacy_25k | maximum / daily | ongoing | $25,100 | $-1,000.00 | 5 | 0 | 31 | yes |
-| legacy_25k | maximum / daily | total | $25,100 | $-1,000.00 | 5 | 0 | 31 | yes |
-| legacy_25k | maximum / weekly | ongoing | $25,100 | $-1,000.00 | 5 | 0 | 38 | yes |
-| legacy_25k | maximum / weekly | total | $25,100 | $-1,000.00 | 5 | 0 | 38 | yes |
-| legacy_25k | minimum / calendar_month | ongoing | $25,100 | $-1,000.00 | 5 | 0 | 31 | yes |
-| legacy_25k | minimum / calendar_month | total | $25,100 | $-1,000.00 | 5 | 0 | 31 | yes |
-| legacy_25k | minimum / daily | ongoing | $25,100 | $-1,000.00 | 5 | 0 | 31 | yes |
-| legacy_25k | minimum / daily | total | $25,100 | $-1,000.00 | 5 | 0 | 31 | yes |
-| legacy_25k | minimum / weekly | ongoing | $25,100 | $-1,000.00 | 5 | 0 | 40 | yes |
-| legacy_25k | minimum / weekly | total | $25,100 | $-1,000.00 | 5 | 0 | 40 | yes |
-| legacy_50k | maximum / calendar_month | ongoing | $52,600 | $483,267.10 | 124 | 20 | 1 | no |
-| legacy_50k | maximum / calendar_month | total | $52,600 | $483,267.10 | 124 | 20 | 1 | no |
-| legacy_50k | maximum / daily | ongoing | $53,600 | $507,356.85 | 122 | 20 | 1 | no |
-| legacy_50k | maximum / daily | total | $53,600 | $507,356.85 | 122 | 20 | 1 | no |
-| legacy_50k | maximum / weekly | ongoing | $53,800 | $489,877.80 | 99 | 20 | 1 | no |
-| legacy_50k | maximum / weekly | total | $56,600 | $491,378.26 | 36 | 20 | 1 | no |
-| legacy_50k | minimum / calendar_month | ongoing | $52,700 | $339,500.00 | 40 | 20 | 1 | no |
-| legacy_50k | minimum / calendar_month | total | $53,200 | $530,385.53 | 38 | 20 | 2 | no |
-| legacy_50k | minimum / daily | ongoing | $53,400 | $466,500.00 | 82 | 20 | 1 | no |
-| legacy_50k | minimum / daily | total | $53,400 | $466,500.00 | 82 | 20 | 1 | no |
-| legacy_50k | minimum / weekly | ongoing | $53,300 | $459,200.00 | 60 | 20 | 2 | no |
-| legacy_50k | minimum / weekly | total | $54,100 | $475,000.00 | 58 | 20 | 1 | no |
+| Withdraw / checks | Objective | **25K — Reserve (ties)** | **25K — Score** | **25K — Bought / alive** | **50K — Reserve (ties)** | **50K — Score** | **50K — Bought / alive** |
+| --- | --- | --- | --- | --- | --- | --- | --- |
+| maximum / monthly | ongoing | $25,100 (40 ties) † | $-1,000.00 | 5 / 0 | $52,600 (1 tie) | $483,267.10 | 124 / 20 |
+| maximum / monthly | total | $25,100 (40 ties) † | $-1,000.00 | 5 / 0 | $52,600 (1 tie) | $483,267.10 | 124 / 20 |
+| maximum / daily | ongoing | $25,100 (31 ties) † | $-1,000.00 | 5 / 0 | $53,600 (1 tie) | $507,356.85 | 122 / 20 |
+| maximum / daily | total | $25,100 (31 ties) † | $-1,000.00 | 5 / 0 | $53,600 (1 tie) | $507,356.85 | 122 / 20 |
+| maximum / weekly | ongoing | $25,100 (38 ties) † | $-1,000.00 | 5 / 0 | $53,800 (1 tie) | $489,877.80 | 99 / 20 |
+| maximum / weekly | total | $25,100 (38 ties) † | $-1,000.00 | 5 / 0 | $56,600 (1 tie) | $491,378.26 | 36 / 20 |
+| minimum / monthly | ongoing | $25,100 (31 ties) † | $-1,000.00 | 5 / 0 | $52,700 (1 tie) | $339,500.00 | 40 / 20 |
+| minimum / monthly | total | $25,100 (31 ties) † | $-1,000.00 | 5 / 0 | $53,200 (2 ties) | $530,385.53 | 38 / 20 |
+| minimum / daily | ongoing | $25,100 (31 ties) † | $-1,000.00 | 5 / 0 | $53,400 (1 tie) | $466,500.00 | 82 / 20 |
+| minimum / daily | total | $25,100 (31 ties) † | $-1,000.00 | 5 / 0 | $53,400 (1 tie) | $466,500.00 | 82 / 20 |
+| minimum / weekly | ongoing | $25,100 (40 ties) † | $-1,000.00 | 5 / 0 | $53,300 (2 ties) | $459,200.00 | 60 / 20 |
+| minimum / weekly | total | $25,100 (40 ties) † | $-1,000.00 | 5 / 0 | $54,100 (1 tie) | $475,000.00 | 58 / 20 |
 
 ## $1,000 initial; $200/month
 
 ### Best complete tested bundles
 
-| Objective | Product | Purchases | Withdraw / checks | Reserve | Accounts | Alive | Ongoing | Total |
-|---|---|---|---|---:|---:|---:|---:|---:|
-| ongoing | legacy_25k | monthly_current_slot_replacements | maximum / weekly | $25,100 | 611 | 20 | $749,859.45 | $749,859.45 |
-| ongoing | legacy_50k | monthly_current_slot_replacements | maximum / daily | $50,700 | 368 | 20 | $714,514.60 | $714,514.60 |
-| total | legacy_25k | monthly_current_slot_replacements | maximum / weekly | $25,100 | 611 | 20 | $749,859.45 | $749,859.45 |
-| total | legacy_50k | monthly_current_slot_replacements | maximum / daily | $50,700 | 368 | 20 | $714,514.60 | $714,514.60 |
+| Objective | **25K — Policy and reserve** | **25K — Ongoing / total** | **25K — Bought / alive** | **50K — Policy and reserve** | **50K — Ongoing / total** | **50K — Bought / alive** |
+| --- | --- | --- | --- | --- | --- | --- |
+| ongoing | Monthly + replacements; maximum / weekly; reserve $25,100 | $749,859.45 / $749,859.45 | 611 / 20 | Monthly + replacements; maximum / daily; reserve $50,700 | $714,514.60 / $714,514.60 | 368 / 20 |
+| total | Monthly + replacements; maximum / weekly; reserve $25,100 | $749,859.45 / $749,859.45 | 611 / 20 | Monthly + replacements; maximum / daily; reserve $50,700 | $714,514.60 / $714,514.60 | 368 / 20 |
 
 ### monthly_one: best reserve within each withdrawal policy
 
-| Product | Withdraw / checks | Objective | Best reserve | Score | Accounts | Alive | Equally best reserves | Boundary tie? |
-|---|---|---|---:|---:|---:|---:|---:|---|
-| legacy_25k | maximum / calendar_month | ongoing | $29,800 | $373,417.36 | 64 | 2 | 1 | no |
-| legacy_25k | maximum / calendar_month | total | $31,600 | $460,286.01 | 60 | 20 | 1 | no |
-| legacy_25k | maximum / daily | ongoing | $30,800 | $368,769.22 | 64 | 2 | 1 | no |
-| legacy_25k | maximum / daily | total | $32,600 | $459,618.13 | 60 | 20 | 1 | no |
-| legacy_25k | maximum / weekly | ongoing | $30,000 | $375,549.86 | 64 | 2 | 1 | no |
-| legacy_25k | maximum / weekly | total | $31,600 | $461,070.58 | 60 | 20 | 1 | no |
-| legacy_25k | minimum / calendar_month | ongoing | $28,400 | $285,200.00 | 69 | 18 | 2 | no |
-| legacy_25k | minimum / calendar_month | total | $30,000 | $464,311.75 | 60 | 20 | 7 | no |
-| legacy_25k | minimum / daily | ongoing | $29,200 | $387,000.00 | 69 | 2 | 1 | no |
-| legacy_25k | minimum / daily | total | $31,900 | $464,311.75 | 60 | 20 | 15 | no |
-| legacy_25k | minimum / weekly | ongoing | $28,600 | $374,650.00 | 69 | 2 | 1 | no |
-| legacy_25k | minimum / weekly | total | $31,200 | $464,311.75 | 60 | 20 | 13 | no |
-| legacy_50k | maximum / calendar_month | ongoing | $54,800 | $414,973.75 | 54 | 3 | 1 | no |
-| legacy_50k | maximum / calendar_month | total | $57,600 | $507,238.48 | 49 | 20 | 11 | no |
-| legacy_50k | maximum / daily | ongoing | $55,800 | $410,926.60 | 54 | 3 | 1 | no |
-| legacy_50k | maximum / daily | total | $57,600 | $507,238.49 | 49 | 20 | 11 | no |
-| legacy_50k | maximum / weekly | ongoing | $55,100 | $419,345.90 | 54 | 3 | 1 | no |
-| legacy_50k | maximum / weekly | total | $58,900 | $507,238.44 | 49 | 20 | 2 | no |
-| legacy_50k | minimum / calendar_month | ongoing | $52,900 | $317,750.00 | 53 | 20 | 2 | no |
-| legacy_50k | minimum / calendar_month | total | $57,600 | $507,238.48 | 49 | 20 | 11 | no |
-| legacy_50k | minimum / daily | ongoing | $53,700 | $439,600.00 | 57 | 3 | 1 | no |
-| legacy_50k | minimum / daily | total | $57,300 | $507,238.48 | 49 | 20 | 14 | no |
-| legacy_50k | minimum / weekly | ongoing | $53,600 | $428,950.00 | 56 | 3 | 1 | no |
-| legacy_50k | minimum / weekly | total | $56,900 | $507,238.48 | 49 | 20 | 8 | no |
+| Withdraw / checks | Objective | **25K — Reserve (ties)** | **25K — Score** | **25K — Bought / alive** | **50K — Reserve (ties)** | **50K — Score** | **50K — Bought / alive** |
+| --- | --- | --- | --- | --- | --- | --- | --- |
+| maximum / monthly | ongoing | $29,800 (1 tie) | $373,417.36 | 64 / 2 | $54,800 (1 tie) | $414,973.75 | 54 / 3 |
+| maximum / monthly | total | $31,600 (1 tie) | $460,286.01 | 60 / 20 | $57,600 (11 ties) | $507,238.48 | 49 / 20 |
+| maximum / daily | ongoing | $30,800 (1 tie) | $368,769.22 | 64 / 2 | $55,800 (1 tie) | $410,926.60 | 54 / 3 |
+| maximum / daily | total | $32,600 (1 tie) | $459,618.13 | 60 / 20 | $57,600 (11 ties) | $507,238.49 | 49 / 20 |
+| maximum / weekly | ongoing | $30,000 (1 tie) | $375,549.86 | 64 / 2 | $55,100 (1 tie) | $419,345.90 | 54 / 3 |
+| maximum / weekly | total | $31,600 (1 tie) | $461,070.58 | 60 / 20 | $58,900 (2 ties) | $507,238.44 | 49 / 20 |
+| minimum / monthly | ongoing | $28,400 (2 ties) | $285,200.00 | 69 / 18 | $52,900 (2 ties) | $317,750.00 | 53 / 20 |
+| minimum / monthly | total | $30,000 (7 ties) | $464,311.75 | 60 / 20 | $57,600 (11 ties) | $507,238.48 | 49 / 20 |
+| minimum / daily | ongoing | $29,200 (1 tie) | $387,000.00 | 69 / 2 | $53,700 (1 tie) | $439,600.00 | 57 / 3 |
+| minimum / daily | total | $31,900 (15 ties) | $464,311.75 | 60 / 20 | $57,300 (14 ties) | $507,238.48 | 49 / 20 |
+| minimum / weekly | ongoing | $28,600 (1 tie) | $374,650.00 | 69 / 2 | $53,600 (1 tie) | $428,950.00 | 56 / 3 |
+| minimum / weekly | total | $31,200 (13 ties) | $464,311.75 | 60 / 20 | $56,900 (8 ties) | $507,238.48 | 49 / 20 |
 
 ### weekly_one: best reserve within each withdrawal policy
 
-| Product | Withdraw / checks | Objective | Best reserve | Score | Accounts | Alive | Equally best reserves | Boundary tie? |
-|---|---|---|---:|---:|---:|---:|---:|---|
-| legacy_25k | maximum / calendar_month | ongoing | $29,800 | $460,486.42 | 91 | 8 | 1 | no |
-| legacy_25k | maximum / calendar_month | total | $32,600 | $552,685.57 | 69 | 20 | 1 | no |
-| legacy_25k | maximum / daily | ongoing | $30,800 | $455,592.01 | 94 | 8 | 1 | no |
-| legacy_25k | maximum / daily | total | $33,600 | $553,085.57 | 67 | 20 | 1 | no |
-| legacy_25k | maximum / weekly | ongoing | $30,100 | $466,344.32 | 95 | 8 | 1 | no |
-| legacy_25k | maximum / weekly | total | $32,200 | $551,281.78 | 72 | 20 | 1 | no |
-| legacy_25k | minimum / calendar_month | ongoing | $27,200 | $358,800.00 | 91 | 20 | 1 | no |
-| legacy_25k | minimum / calendar_month | total | $31,000 | $550,881.87 | 74 | 20 | 9 | no |
-| legacy_25k | minimum / daily | ongoing | $29,100 | $484,750.00 | 98 | 8 | 1 | no |
-| legacy_25k | minimum / daily | total | $32,800 | $551,281.87 | 72 | 20 | 4 | no |
-| legacy_25k | minimum / weekly | ongoing | $28,900 | $461,850.00 | 97 | 8 | 1 | no |
-| legacy_25k | minimum / weekly | total | $32,200 | $551,281.87 | 72 | 20 | 3 | no |
-| legacy_50k | maximum / calendar_month | ongoing | $54,800 | $472,865.20 | 72 | 9 | 1 | no |
-| legacy_50k | maximum / calendar_month | total | $57,200 | $563,498.69 | 51 | 20 | 1 | no |
-| legacy_50k | maximum / daily | ongoing | $55,800 | $467,570.79 | 74 | 9 | 1 | no |
-| legacy_50k | maximum / daily | total | $57,800 | $563,248.69 | 52 | 20 | 4 | no |
-| legacy_50k | maximum / weekly | ongoing | $55,100 | $479,549.21 | 75 | 10 | 1 | no |
-| legacy_50k | maximum / weekly | total | $57,200 | $563,248.60 | 52 | 20 | 1 | no |
-| legacy_50k | minimum / calendar_month | ongoing | $52,200 | $361,750.00 | 71 | 20 | 1 | no |
-| legacy_50k | minimum / calendar_month | total | $56,000 | $562,998.68 | 53 | 20 | 5 | no |
-| legacy_50k | minimum / daily | ongoing | $54,100 | $493,300.00 | 78 | 10 | 1 | no |
-| legacy_50k | minimum / daily | total | $56,900 | $562,498.68 | 55 | 20 | 2 | no |
-| legacy_50k | minimum / weekly | ongoing | $53,900 | $474,250.00 | 77 | 10 | 1 | no |
-| legacy_50k | minimum / weekly | total | $55,800 | $562,248.68 | 56 | 20 | 8 | no |
+| Withdraw / checks | Objective | **25K — Reserve (ties)** | **25K — Score** | **25K — Bought / alive** | **50K — Reserve (ties)** | **50K — Score** | **50K — Bought / alive** |
+| --- | --- | --- | --- | --- | --- | --- | --- |
+| maximum / monthly | ongoing | $29,800 (1 tie) | $460,486.42 | 91 / 8 | $54,800 (1 tie) | $472,865.20 | 72 / 9 |
+| maximum / monthly | total | $32,600 (1 tie) | $552,685.57 | 69 / 20 | $57,200 (1 tie) | $563,498.69 | 51 / 20 |
+| maximum / daily | ongoing | $30,800 (1 tie) | $455,592.01 | 94 / 8 | $55,800 (1 tie) | $467,570.79 | 74 / 9 |
+| maximum / daily | total | $33,600 (1 tie) | $553,085.57 | 67 / 20 | $57,800 (4 ties) | $563,248.69 | 52 / 20 |
+| maximum / weekly | ongoing | $30,100 (1 tie) | $466,344.32 | 95 / 8 | $55,100 (1 tie) | $479,549.21 | 75 / 10 |
+| maximum / weekly | total | $32,200 (1 tie) | $551,281.78 | 72 / 20 | $57,200 (1 tie) | $563,248.60 | 52 / 20 |
+| minimum / monthly | ongoing | $27,200 (1 tie) | $358,800.00 | 91 / 20 | $52,200 (1 tie) | $361,750.00 | 71 / 20 |
+| minimum / monthly | total | $31,000 (9 ties) | $550,881.87 | 74 / 20 | $56,000 (5 ties) | $562,998.68 | 53 / 20 |
+| minimum / daily | ongoing | $29,100 (1 tie) | $484,750.00 | 98 / 8 | $54,100 (1 tie) | $493,300.00 | 78 / 10 |
+| minimum / daily | total | $32,800 (4 ties) | $551,281.87 | 72 / 20 | $56,900 (2 ties) | $562,498.68 | 55 / 20 |
+| minimum / weekly | ongoing | $28,900 (1 tie) | $461,850.00 | 97 / 8 | $53,900 (1 tie) | $474,250.00 | 77 / 10 |
+| minimum / weekly | total | $32,200 (3 ties) | $551,281.87 | 72 / 20 | $55,800 (8 ties) | $562,248.68 | 56 / 20 |
 
 ### monthly_current_slot_replacements: best reserve within each withdrawal policy
 
-| Product | Withdraw / checks | Objective | Best reserve | Score | Accounts | Alive | Equally best reserves | Boundary tie? |
-|---|---|---|---:|---:|---:|---:|---:|---|
-| legacy_25k | maximum / calendar_month | ongoing | $25,500 | $613,545.95 | 401 | 20 | 1 | no |
-| legacy_25k | maximum / calendar_month | total | $25,500 | $613,545.95 | 401 | 20 | 1 | no |
-| legacy_25k | maximum / daily | ongoing | $26,200 | $720,480.70 | 564 | 20 | 1 | no |
-| legacy_25k | maximum / daily | total | $26,200 | $720,480.70 | 564 | 20 | 1 | no |
-| legacy_25k | maximum / weekly | ongoing | $25,100 | $749,859.45 | 611 | 20 | 1 | yes |
-| legacy_25k | maximum / weekly | total | $25,100 | $749,859.45 | 611 | 20 | 1 | yes |
-| legacy_25k | minimum / calendar_month | ongoing | $25,100 | $422,950.00 | 135 | 20 | 7 | yes |
-| legacy_25k | minimum / calendar_month | total | $25,100 | $589,359.07 | 135 | 20 | 7 | yes |
-| legacy_25k | minimum / daily | ongoing | $26,800 | $605,900.00 | 253 | 20 | 1 | no |
-| legacy_25k | minimum / daily | total | $26,800 | $605,900.00 | 253 | 20 | 1 | no |
-| legacy_25k | minimum / weekly | ongoing | $25,100 | $589,000.00 | 270 | 20 | 7 | yes |
-| legacy_25k | minimum / weekly | total | $25,100 | $589,000.00 | 270 | 20 | 7 | yes |
-| legacy_50k | maximum / calendar_month | ongoing | $52,600 | $566,749.25 | 164 | 20 | 1 | no |
-| legacy_50k | maximum / calendar_month | total | $56,100 | $584,473.63 | 49 | 20 | 1 | no |
-| legacy_50k | maximum / daily | ongoing | $50,700 | $714,514.60 | 368 | 20 | 1 | no |
-| legacy_50k | maximum / daily | total | $50,700 | $714,514.60 | 368 | 20 | 1 | no |
-| legacy_50k | maximum / weekly | ongoing | $51,900 | $675,727.30 | 243 | 20 | 1 | no |
-| legacy_50k | maximum / weekly | total | $51,900 | $675,727.30 | 243 | 20 | 1 | no |
-| legacy_50k | minimum / calendar_month | ongoing | $50,100 | $424,000.00 | 68 | 20 | 8 | yes |
-| legacy_50k | minimum / calendar_month | total | $53,000 | $606,322.70 | 55 | 20 | 2 | no |
-| legacy_50k | minimum / daily | ongoing | $52,500 | $599,250.00 | 129 | 20 | 1 | no |
-| legacy_50k | minimum / daily | total | $52,500 | $599,250.00 | 129 | 20 | 1 | no |
-| legacy_50k | minimum / weekly | ongoing | $50,100 | $564,000.00 | 140 | 20 | 8 | yes |
-| legacy_50k | minimum / weekly | total | $55,600 | $588,623.29 | 49 | 20 | 2 | no |
+| Withdraw / checks | Objective | **25K — Reserve (ties)** | **25K — Score** | **25K — Bought / alive** | **50K — Reserve (ties)** | **50K — Score** | **50K — Bought / alive** |
+| --- | --- | --- | --- | --- | --- | --- | --- |
+| maximum / monthly | ongoing | $25,500 (1 tie) | $613,545.95 | 401 / 20 | $52,600 (1 tie) | $566,749.25 | 164 / 20 |
+| maximum / monthly | total | $25,500 (1 tie) | $613,545.95 | 401 / 20 | $56,100 (1 tie) | $584,473.63 | 49 / 20 |
+| maximum / daily | ongoing | $26,200 (1 tie) | $720,480.70 | 564 / 20 | $50,700 (1 tie) | $714,514.60 | 368 / 20 |
+| maximum / daily | total | $26,200 (1 tie) | $720,480.70 | 564 / 20 | $50,700 (1 tie) | $714,514.60 | 368 / 20 |
+| maximum / weekly | ongoing | $25,100 (1 tie) † | $749,859.45 | 611 / 20 | $51,900 (1 tie) | $675,727.30 | 243 / 20 |
+| maximum / weekly | total | $25,100 (1 tie) † | $749,859.45 | 611 / 20 | $51,900 (1 tie) | $675,727.30 | 243 / 20 |
+| minimum / monthly | ongoing | $25,100 (7 ties) † | $422,950.00 | 135 / 20 | $50,100 (8 ties) † | $424,000.00 | 68 / 20 |
+| minimum / monthly | total | $25,100 (7 ties) † | $589,359.07 | 135 / 20 | $53,000 (2 ties) | $606,322.70 | 55 / 20 |
+| minimum / daily | ongoing | $26,800 (1 tie) | $605,900.00 | 253 / 20 | $52,500 (1 tie) | $599,250.00 | 129 / 20 |
+| minimum / daily | total | $26,800 (1 tie) | $605,900.00 | 253 / 20 | $52,500 (1 tie) | $599,250.00 | 129 / 20 |
+| minimum / weekly | ongoing | $25,100 (7 ties) † | $589,000.00 | 270 / 20 | $50,100 (8 ties) † | $564,000.00 | 140 / 20 |
+| minimum / weekly | total | $25,100 (7 ties) † | $589,000.00 | 270 / 20 | $55,600 (2 ties) | $588,623.29 | 49 / 20 |
 
 ## $5,000 initial; $0/month
 
 ### Best complete tested bundles
 
-| Objective | Product | Purchases | Withdraw / checks | Reserve | Accounts | Alive | Ongoing | Total |
-|---|---|---|---|---:|---:|---:|---:|---:|
-| ongoing | legacy_25k | monthly_current_slot_replacements | maximum / weekly | $25,100 | 674 | 20 | $810,670.40 | $810,670.40 |
-| ongoing | legacy_50k | monthly_current_slot_replacements | maximum / daily | $50,700 | 371 | 20 | $723,141.60 | $723,141.60 |
-| total | legacy_25k | monthly_current_slot_replacements | maximum / weekly | $25,100 | 674 | 20 | $810,670.40 | $810,670.40 |
-| total | legacy_50k | monthly_current_slot_replacements | maximum / daily | $50,700 | 371 | 20 | $723,141.60 | $723,141.60 |
+| Objective | **25K — Policy and reserve** | **25K — Ongoing / total** | **25K — Bought / alive** | **50K — Policy and reserve** | **50K — Ongoing / total** | **50K — Bought / alive** |
+| --- | --- | --- | --- | --- | --- | --- |
+| ongoing | Monthly + replacements; maximum / weekly; reserve $25,100 | $810,670.40 / $810,670.40 | 674 / 20 | Monthly + replacements; maximum / daily; reserve $50,700 | $723,141.60 / $723,141.60 | 371 / 20 |
+| total | Monthly + replacements; maximum / weekly; reserve $25,100 | $810,670.40 / $810,670.40 | 674 / 20 | Monthly + replacements; maximum / daily; reserve $50,700 | $723,141.60 / $723,141.60 | 371 / 20 |
 
 ### monthly_one: best reserve within each withdrawal policy
 
-| Product | Withdraw / checks | Objective | Best reserve | Score | Accounts | Alive | Equally best reserves | Boundary tie? |
-|---|---|---|---:|---:|---:|---:|---:|---|
-| legacy_25k | maximum / calendar_month | ongoing | $29,800 | $373,617.36 | 63 | 2 | 1 | no |
-| legacy_25k | maximum / calendar_month | total | $31,600 | $460,486.01 | 59 | 20 | 1 | no |
-| legacy_25k | maximum / daily | ongoing | $30,800 | $368,969.22 | 63 | 2 | 1 | no |
-| legacy_25k | maximum / daily | total | $32,600 | $460,018.13 | 58 | 20 | 1 | no |
-| legacy_25k | maximum / weekly | ongoing | $30,000 | $375,749.86 | 63 | 2 | 1 | no |
-| legacy_25k | maximum / weekly | total | $31,600 | $461,270.58 | 59 | 20 | 1 | no |
-| legacy_25k | minimum / calendar_month | ongoing | $28,400 | $285,200.00 | 69 | 18 | 2 | no |
-| legacy_25k | minimum / calendar_month | total | $30,000 | $464,511.75 | 59 | 20 | 7 | no |
-| legacy_25k | minimum / daily | ongoing | $29,200 | $387,000.00 | 69 | 2 | 1 | no |
-| legacy_25k | minimum / daily | total | $33,300 | $464,911.75 | 57 | 20 | 2 | no |
-| legacy_25k | minimum / weekly | ongoing | $28,600 | $374,650.00 | 69 | 2 | 1 | no |
-| legacy_25k | minimum / weekly | total | $32,300 | $464,911.75 | 57 | 20 | 7 | no |
-| legacy_50k | maximum / calendar_month | ongoing | $54,800 | $365,192.41 | 55 | 3 | 1 | no |
-| legacy_50k | maximum / calendar_month | total | $56,100 | $458,152.98 | 51 | 20 | 1 | no |
-| legacy_50k | maximum / daily | ongoing | $55,800 | $360,608.43 | 55 | 3 | 1 | no |
-| legacy_50k | maximum / daily | total | $58,300 | $458,652.98 | 49 | 20 | 4 | no |
-| legacy_50k | maximum / weekly | ongoing | $55,100 | $368,668.94 | 55 | 3 | 1 | no |
-| legacy_50k | maximum / weekly | total | $58,300 | $458,902.92 | 48 | 20 | 1 | no |
-| legacy_50k | minimum / calendar_month | ongoing | $52,900 | $318,000.00 | 52 | 20 | 2 | no |
-| legacy_50k | minimum / calendar_month | total | $52,900 | $500,170.67 | 52 | 20 | 5 | no |
-| legacy_50k | minimum / daily | ongoing | $53,700 | $437,350.00 | 54 | 3 | 1 | no |
-| legacy_50k | minimum / daily | total | $58,400 | $458,902.97 | 48 | 20 | 3 | no |
-| legacy_50k | minimum / weekly | ongoing | $53,600 | $415,700.00 | 54 | 3 | 1 | no |
-| legacy_50k | minimum / weekly | total | $57,300 | $458,652.97 | 49 | 20 | 9 | no |
+| Withdraw / checks | Objective | **25K — Reserve (ties)** | **25K — Score** | **25K — Bought / alive** | **50K — Reserve (ties)** | **50K — Score** | **50K — Bought / alive** |
+| --- | --- | --- | --- | --- | --- | --- | --- |
+| maximum / monthly | ongoing | $29,800 (1 tie) | $373,617.36 | 63 / 2 | $54,800 (1 tie) | $365,192.41 | 55 / 3 |
+| maximum / monthly | total | $31,600 (1 tie) | $460,486.01 | 59 / 20 | $56,100 (1 tie) | $458,152.98 | 51 / 20 |
+| maximum / daily | ongoing | $30,800 (1 tie) | $368,969.22 | 63 / 2 | $55,800 (1 tie) | $360,608.43 | 55 / 3 |
+| maximum / daily | total | $32,600 (1 tie) | $460,018.13 | 58 / 20 | $58,300 (4 ties) | $458,652.98 | 49 / 20 |
+| maximum / weekly | ongoing | $30,000 (1 tie) | $375,749.86 | 63 / 2 | $55,100 (1 tie) | $368,668.94 | 55 / 3 |
+| maximum / weekly | total | $31,600 (1 tie) | $461,270.58 | 59 / 20 | $58,300 (1 tie) | $458,902.92 | 48 / 20 |
+| minimum / monthly | ongoing | $28,400 (2 ties) | $285,200.00 | 69 / 18 | $52,900 (2 ties) | $318,000.00 | 52 / 20 |
+| minimum / monthly | total | $30,000 (7 ties) | $464,511.75 | 59 / 20 | $52,900 (5 ties) | $500,170.67 | 52 / 20 |
+| minimum / daily | ongoing | $29,200 (1 tie) | $387,000.00 | 69 / 2 | $53,700 (1 tie) | $437,350.00 | 54 / 3 |
+| minimum / daily | total | $33,300 (2 ties) | $464,911.75 | 57 / 20 | $58,400 (3 ties) | $458,902.97 | 48 / 20 |
+| minimum / weekly | ongoing | $28,600 (1 tie) | $374,650.00 | 69 / 2 | $53,600 (1 tie) | $415,700.00 | 54 / 3 |
+| minimum / weekly | total | $32,300 (7 ties) | $464,911.75 | 57 / 20 | $57,300 (9 ties) | $458,652.97 | 49 / 20 |
 
 ### weekly_one: best reserve within each withdrawal policy
 
-| Product | Withdraw / checks | Objective | Best reserve | Score | Accounts | Alive | Equally best reserves | Boundary tie? |
-|---|---|---|---:|---:|---:|---:|---:|---|
-| legacy_25k | maximum / calendar_month | ongoing | $29,800 | $452,905.13 | 94 | 8 | 1 | no |
-| legacy_25k | maximum / calendar_month | total | $33,600 | $546,326.54 | 66 | 20 | 1 | no |
-| legacy_25k | maximum / daily | ongoing | $30,400 | $452,350.09 | 97 | 8 | 1 | no |
-| legacy_25k | maximum / daily | total | $34,500 | $546,726.56 | 64 | 20 | 1 | no |
-| legacy_25k | maximum / weekly | ongoing | $30,000 | $461,537.84 | 96 | 8 | 1 | no |
-| legacy_25k | maximum / weekly | total | $34,100 | $546,526.46 | 65 | 20 | 1 | no |
-| legacy_25k | minimum / calendar_month | ongoing | $28,100 | $388,200.00 | 86 | 20 | 1 | no |
-| legacy_25k | minimum / calendar_month | total | $28,100 | $581,596.36 | 86 | 20 | 2 | no |
-| legacy_25k | minimum / daily | ongoing | $28,800 | $489,650.00 | 114 | 8 | 1 | no |
-| legacy_25k | minimum / daily | total | $33,500 | $545,526.53 | 70 | 20 | 2 | no |
-| legacy_25k | minimum / weekly | ongoing | $28,700 | $464,350.00 | 109 | 8 | 1 | no |
-| legacy_25k | minimum / weekly | total | $32,900 | $545,326.53 | 71 | 20 | 3 | no |
-| legacy_50k | maximum / calendar_month | ongoing | $54,800 | $463,472.23 | 76 | 9 | 1 | no |
-| legacy_50k | maximum / calendar_month | total | $58,600 | $556,802.21 | 48 | 20 | 1 | no |
-| legacy_50k | maximum / daily | ongoing | $55,000 | $466,309.11 | 84 | 10 | 1 | no |
-| legacy_50k | maximum / daily | total | $59,600 | $560,747.66 | 47 | 20 | 1 | no |
-| legacy_50k | maximum / weekly | ongoing | $55,100 | $470,441.04 | 78 | 10 | 1 | no |
-| legacy_50k | maximum / weekly | total | $58,600 | $556,052.13 | 51 | 20 | 2 | no |
-| legacy_50k | minimum / calendar_month | ongoing | $53,100 | $392,150.00 | 63 | 20 | 1 | no |
-| legacy_50k | minimum / calendar_month | total | $53,600 | $589,809.03 | 56 | 20 | 1 | no |
-| legacy_50k | minimum / daily | ongoing | $53,900 | $497,100.00 | 88 | 10 | 1 | no |
-| legacy_50k | minimum / daily | total | $58,500 | $555,802.20 | 52 | 20 | 2 | no |
-| legacy_50k | minimum / weekly | ongoing | $53,600 | $481,250.00 | 89 | 10 | 1 | no |
-| legacy_50k | minimum / weekly | total | $57,900 | $555,552.20 | 53 | 20 | 3 | no |
+| Withdraw / checks | Objective | **25K — Reserve (ties)** | **25K — Score** | **25K — Bought / alive** | **50K — Reserve (ties)** | **50K — Score** | **50K — Bought / alive** |
+| --- | --- | --- | --- | --- | --- | --- | --- |
+| maximum / monthly | ongoing | $29,800 (1 tie) | $452,905.13 | 94 / 8 | $54,800 (1 tie) | $463,472.23 | 76 / 9 |
+| maximum / monthly | total | $33,600 (1 tie) | $546,326.54 | 66 / 20 | $58,600 (1 tie) | $556,802.21 | 48 / 20 |
+| maximum / daily | ongoing | $30,400 (1 tie) | $452,350.09 | 97 / 8 | $55,000 (1 tie) | $466,309.11 | 84 / 10 |
+| maximum / daily | total | $34,500 (1 tie) | $546,726.56 | 64 / 20 | $59,600 (1 tie) | $560,747.66 | 47 / 20 |
+| maximum / weekly | ongoing | $30,000 (1 tie) | $461,537.84 | 96 / 8 | $55,100 (1 tie) | $470,441.04 | 78 / 10 |
+| maximum / weekly | total | $34,100 (1 tie) | $546,526.46 | 65 / 20 | $58,600 (2 ties) | $556,052.13 | 51 / 20 |
+| minimum / monthly | ongoing | $28,100 (1 tie) | $388,200.00 | 86 / 20 | $53,100 (1 tie) | $392,150.00 | 63 / 20 |
+| minimum / monthly | total | $28,100 (2 ties) | $581,596.36 | 86 / 20 | $53,600 (1 tie) | $589,809.03 | 56 / 20 |
+| minimum / daily | ongoing | $28,800 (1 tie) | $489,650.00 | 114 / 8 | $53,900 (1 tie) | $497,100.00 | 88 / 10 |
+| minimum / daily | total | $33,500 (2 ties) | $545,526.53 | 70 / 20 | $58,500 (2 ties) | $555,802.20 | 52 / 20 |
+| minimum / weekly | ongoing | $28,700 (1 tie) | $464,350.00 | 109 / 8 | $53,600 (1 tie) | $481,250.00 | 89 / 10 |
+| minimum / weekly | total | $32,900 (3 ties) | $545,326.53 | 71 / 20 | $57,900 (3 ties) | $555,552.20 | 53 / 20 |
 
 ### monthly_current_slot_replacements: best reserve within each withdrawal policy
 
-| Product | Withdraw / checks | Objective | Best reserve | Score | Accounts | Alive | Equally best reserves | Boundary tie? |
-|---|---|---|---:|---:|---:|---:|---:|---|
-| legacy_25k | maximum / calendar_month | ongoing | $26,800 | $678,255.90 | 357 | 20 | 1 | no |
-| legacy_25k | maximum / calendar_month | total | $26,800 | $678,255.90 | 357 | 20 | 1 | no |
-| legacy_25k | maximum / daily | ongoing | $26,200 | $794,134.10 | 605 | 20 | 1 | no |
-| legacy_25k | maximum / daily | total | $26,200 | $794,134.10 | 605 | 20 | 1 | no |
-| legacy_25k | maximum / weekly | ongoing | $25,100 | $810,670.40 | 674 | 20 | 1 | yes |
-| legacy_25k | maximum / weekly | total | $25,100 | $810,670.40 | 674 | 20 | 1 | yes |
-| legacy_25k | minimum / calendar_month | ongoing | $25,100 | $479,000.00 | 155 | 20 | 7 | yes |
-| legacy_25k | minimum / calendar_month | total | $25,100 | $646,827.80 | 155 | 20 | 7 | yes |
-| legacy_25k | minimum / daily | ongoing | $26,800 | $679,000.00 | 265 | 20 | 1 | no |
-| legacy_25k | minimum / daily | total | $26,800 | $679,000.00 | 265 | 20 | 1 | no |
-| legacy_25k | minimum / weekly | ongoing | $25,100 | $662,600.00 | 297 | 20 | 7 | yes |
-| legacy_25k | minimum / weekly | total | $25,100 | $662,600.00 | 297 | 20 | 7 | yes |
-| legacy_50k | maximum / calendar_month | ongoing | $52,300 | $586,061.40 | 189 | 20 | 1 | no |
-| legacy_50k | maximum / calendar_month | total | $52,300 | $586,061.40 | 189 | 20 | 1 | no |
-| legacy_50k | maximum / daily | ongoing | $50,700 | $723,141.60 | 371 | 20 | 1 | no |
-| legacy_50k | maximum / daily | total | $50,700 | $723,141.60 | 371 | 20 | 1 | no |
-| legacy_50k | maximum / weekly | ongoing | $51,900 | $679,116.75 | 248 | 20 | 1 | no |
-| legacy_50k | maximum / weekly | total | $51,900 | $679,116.75 | 248 | 20 | 1 | no |
-| legacy_50k | minimum / calendar_month | ongoing | $50,100 | $427,000.00 | 64 | 20 | 8 | yes |
-| legacy_50k | minimum / calendar_month | total | $53,000 | $599,587.90 | 61 | 20 | 2 | no |
-| legacy_50k | minimum / daily | ongoing | $52,500 | $609,250.00 | 129 | 20 | 1 | no |
-| legacy_50k | minimum / daily | total | $52,500 | $609,250.00 | 129 | 20 | 1 | no |
-| legacy_50k | minimum / weekly | ongoing | $50,100 | $572,250.00 | 143 | 20 | 8 | yes |
-| legacy_50k | minimum / weekly | total | $50,100 | $572,250.00 | 143 | 20 | 8 | yes |
+| Withdraw / checks | Objective | **25K — Reserve (ties)** | **25K — Score** | **25K — Bought / alive** | **50K — Reserve (ties)** | **50K — Score** | **50K — Bought / alive** |
+| --- | --- | --- | --- | --- | --- | --- | --- |
+| maximum / monthly | ongoing | $26,800 (1 tie) | $678,255.90 | 357 / 20 | $52,300 (1 tie) | $586,061.40 | 189 / 20 |
+| maximum / monthly | total | $26,800 (1 tie) | $678,255.90 | 357 / 20 | $52,300 (1 tie) | $586,061.40 | 189 / 20 |
+| maximum / daily | ongoing | $26,200 (1 tie) | $794,134.10 | 605 / 20 | $50,700 (1 tie) | $723,141.60 | 371 / 20 |
+| maximum / daily | total | $26,200 (1 tie) | $794,134.10 | 605 / 20 | $50,700 (1 tie) | $723,141.60 | 371 / 20 |
+| maximum / weekly | ongoing | $25,100 (1 tie) † | $810,670.40 | 674 / 20 | $51,900 (1 tie) | $679,116.75 | 248 / 20 |
+| maximum / weekly | total | $25,100 (1 tie) † | $810,670.40 | 674 / 20 | $51,900 (1 tie) | $679,116.75 | 248 / 20 |
+| minimum / monthly | ongoing | $25,100 (7 ties) † | $479,000.00 | 155 / 20 | $50,100 (8 ties) † | $427,000.00 | 64 / 20 |
+| minimum / monthly | total | $25,100 (7 ties) † | $646,827.80 | 155 / 20 | $53,000 (2 ties) | $599,587.90 | 61 / 20 |
+| minimum / daily | ongoing | $26,800 (1 tie) | $679,000.00 | 265 / 20 | $52,500 (1 tie) | $609,250.00 | 129 / 20 |
+| minimum / daily | total | $26,800 (1 tie) | $679,000.00 | 265 / 20 | $52,500 (1 tie) | $609,250.00 | 129 / 20 |
+| minimum / weekly | ongoing | $25,100 (7 ties) † | $662,600.00 | 297 / 20 | $50,100 (8 ties) † | $572,250.00 | 143 / 20 |
+| minimum / weekly | total | $25,100 (7 ties) † | $662,600.00 | 297 / 20 | $50,100 (8 ties) † | $572,250.00 | 143 / 20 |
 
 ## $5,000 initial; $200/month
 
 ### Best complete tested bundles
 
-| Objective | Product | Purchases | Withdraw / checks | Reserve | Accounts | Alive | Ongoing | Total |
-|---|---|---|---|---:|---:|---:|---:|---:|
-| ongoing | legacy_25k | monthly_current_slot_replacements | maximum / weekly | $25,100 | 674 | 20 | $810,670.40 | $810,670.40 |
-| ongoing | legacy_50k | monthly_current_slot_replacements | maximum / daily | $50,700 | 370 | 20 | $734,753.85 | $734,753.85 |
-| total | legacy_25k | monthly_current_slot_replacements | maximum / weekly | $25,100 | 674 | 20 | $810,670.40 | $810,670.40 |
-| total | legacy_50k | monthly_current_slot_replacements | maximum / daily | $50,700 | 370 | 20 | $734,753.85 | $734,753.85 |
+| Objective | **25K — Policy and reserve** | **25K — Ongoing / total** | **25K — Bought / alive** | **50K — Policy and reserve** | **50K — Ongoing / total** | **50K — Bought / alive** |
+| --- | --- | --- | --- | --- | --- | --- |
+| ongoing | Monthly + replacements; maximum / weekly; reserve $25,100 | $810,670.40 / $810,670.40 | 674 / 20 | Monthly + replacements; maximum / daily; reserve $50,700 | $734,753.85 / $734,753.85 | 370 / 20 |
+| total | Monthly + replacements; maximum / weekly; reserve $25,100 | $810,670.40 / $810,670.40 | 674 / 20 | Monthly + replacements; maximum / daily; reserve $50,700 | $734,753.85 / $734,753.85 | 370 / 20 |
 
 ### monthly_one: best reserve within each withdrawal policy
 
-| Product | Withdraw / checks | Objective | Best reserve | Score | Accounts | Alive | Equally best reserves | Boundary tie? |
-|---|---|---|---:|---:|---:|---:|---:|---|
-| legacy_25k | maximum / calendar_month | ongoing | $29,800 | $373,417.36 | 64 | 2 | 1 | no |
-| legacy_25k | maximum / calendar_month | total | $31,600 | $460,286.01 | 60 | 20 | 1 | no |
-| legacy_25k | maximum / daily | ongoing | $30,800 | $368,769.22 | 64 | 2 | 1 | no |
-| legacy_25k | maximum / daily | total | $32,200 | $460,018.16 | 60 | 20 | 1 | no |
-| legacy_25k | maximum / weekly | ongoing | $30,000 | $375,549.86 | 64 | 2 | 1 | no |
-| legacy_25k | maximum / weekly | total | $31,600 | $461,070.58 | 60 | 20 | 1 | no |
-| legacy_25k | minimum / calendar_month | ongoing | $28,400 | $285,200.00 | 69 | 18 | 2 | no |
-| legacy_25k | minimum / calendar_month | total | $30,000 | $464,311.75 | 60 | 20 | 7 | no |
-| legacy_25k | minimum / daily | ongoing | $29,200 | $387,000.00 | 69 | 2 | 1 | no |
-| legacy_25k | minimum / daily | total | $31,900 | $464,311.75 | 60 | 20 | 9 | no |
-| legacy_25k | minimum / weekly | ongoing | $28,600 | $374,650.00 | 69 | 2 | 1 | no |
-| legacy_25k | minimum / weekly | total | $31,200 | $464,311.75 | 60 | 20 | 10 | no |
-| legacy_50k | maximum / calendar_month | ongoing | $54,800 | $427,285.55 | 55 | 3 | 1 | no |
-| legacy_50k | maximum / calendar_month | total | $56,100 | $518,827.05 | 51 | 20 | 1 | no |
-| legacy_50k | maximum / daily | ongoing | $55,800 | $423,259.38 | 55 | 3 | 1 | no |
-| legacy_50k | maximum / daily | total | $56,900 | $518,827.09 | 51 | 20 | 4 | no |
-| legacy_50k | maximum / weekly | ongoing | $55,100 | $431,640.30 | 55 | 3 | 1 | no |
-| legacy_50k | maximum / weekly | total | $62,100 | $518,827.04 | 51 | 20 | 12 | yes |
-| legacy_50k | minimum / calendar_month | ongoing | $53,400 | $321,000.00 | 52 | 20 | 2 | no |
-| legacy_50k | minimum / calendar_month | total | $54,800 | $518,827.04 | 51 | 20 | 17 | yes |
-| legacy_50k | minimum / daily | ongoing | $54,100 | $442,800.00 | 56 | 3 | 1 | no |
-| legacy_50k | minimum / daily | total | $57,000 | $518,827.04 | 51 | 20 | 12 | yes |
-| legacy_50k | minimum / weekly | ongoing | $53,600 | $428,950.00 | 56 | 3 | 1 | no |
-| legacy_50k | minimum / weekly | total | $56,000 | $518,827.04 | 51 | 20 | 17 | yes |
+| Withdraw / checks | Objective | **25K — Reserve (ties)** | **25K — Score** | **25K — Bought / alive** | **50K — Reserve (ties)** | **50K — Score** | **50K — Bought / alive** |
+| --- | --- | --- | --- | --- | --- | --- | --- |
+| maximum / monthly | ongoing | $29,800 (1 tie) | $373,417.36 | 64 / 2 | $54,800 (1 tie) | $427,285.55 | 55 / 3 |
+| maximum / monthly | total | $31,600 (1 tie) | $460,286.01 | 60 / 20 | $56,100 (1 tie) | $518,827.05 | 51 / 20 |
+| maximum / daily | ongoing | $30,800 (1 tie) | $368,769.22 | 64 / 2 | $55,800 (1 tie) | $423,259.38 | 55 / 3 |
+| maximum / daily | total | $32,200 (1 tie) | $460,018.16 | 60 / 20 | $56,900 (4 ties) | $518,827.09 | 51 / 20 |
+| maximum / weekly | ongoing | $30,000 (1 tie) | $375,549.86 | 64 / 2 | $55,100 (1 tie) | $431,640.30 | 55 / 3 |
+| maximum / weekly | total | $31,600 (1 tie) | $461,070.58 | 60 / 20 | $62,100 (12 ties) † | $518,827.04 | 51 / 20 |
+| minimum / monthly | ongoing | $28,400 (2 ties) | $285,200.00 | 69 / 18 | $53,400 (2 ties) | $321,000.00 | 52 / 20 |
+| minimum / monthly | total | $30,000 (7 ties) | $464,311.75 | 60 / 20 | $54,800 (17 ties) † | $518,827.04 | 51 / 20 |
+| minimum / daily | ongoing | $29,200 (1 tie) | $387,000.00 | 69 / 2 | $54,100 (1 tie) | $442,800.00 | 56 / 3 |
+| minimum / daily | total | $31,900 (9 ties) | $464,311.75 | 60 / 20 | $57,000 (12 ties) † | $518,827.04 | 51 / 20 |
+| minimum / weekly | ongoing | $28,600 (1 tie) | $374,650.00 | 69 / 2 | $53,600 (1 tie) | $428,950.00 | 56 / 3 |
+| minimum / weekly | total | $31,200 (10 ties) | $464,311.75 | 60 / 20 | $56,000 (17 ties) † | $518,827.04 | 51 / 20 |
 
 ### weekly_one: best reserve within each withdrawal policy
 
-| Product | Withdraw / checks | Objective | Best reserve | Score | Accounts | Alive | Equally best reserves | Boundary tie? |
-|---|---|---|---:|---:|---:|---:|---:|---|
-| legacy_25k | maximum / calendar_month | ongoing | $29,800 | $500,637.63 | 101 | 8 | 1 | no |
-| legacy_25k | maximum / calendar_month | total | $33,600 | $590,540.14 | 77 | 20 | 1 | no |
-| legacy_25k | maximum / daily | ongoing | $30,800 | $496,427.16 | 101 | 8 | 1 | no |
-| legacy_25k | maximum / daily | total | $34,200 | $590,140.16 | 79 | 20 | 5 | no |
-| legacy_25k | maximum / weekly | ongoing | $30,100 | $507,025.97 | 102 | 8 | 1 | no |
-| legacy_25k | maximum / weekly | total | $34,000 | $589,940.01 | 80 | 20 | 2 | no |
-| legacy_25k | minimum / calendar_month | ongoing | $28,100 | $440,700.00 | 76 | 20 | 1 | no |
-| legacy_25k | minimum / calendar_month | total | $28,100 | $630,562.86 | 76 | 20 | 2 | no |
-| legacy_25k | minimum / daily | ongoing | $29,000 | $534,200.00 | 109 | 8 | 1 | no |
-| legacy_25k | minimum / daily | total | $34,200 | $590,140.13 | 79 | 20 | 3 | no |
-| legacy_25k | minimum / weekly | ongoing | $28,800 | $516,300.00 | 110 | 8 | 1 | no |
-| legacy_25k | minimum / weekly | total | $33,200 | $589,940.13 | 80 | 20 | 5 | no |
-| legacy_50k | maximum / calendar_month | ongoing | $54,800 | $511,619.46 | 78 | 9 | 1 | no |
-| legacy_50k | maximum / calendar_month | total | $58,600 | $600,371.08 | 57 | 20 | 1 | no |
-| legacy_50k | maximum / daily | ongoing | $55,800 | $506,908.99 | 78 | 9 | 1 | no |
-| legacy_50k | maximum / daily | total | $59,200 | $599,871.10 | 59 | 20 | 5 | no |
-| legacy_50k | maximum / weekly | ongoing | $55,100 | $518,733.91 | 79 | 10 | 1 | no |
-| legacy_50k | maximum / weekly | total | $58,800 | $599,620.96 | 60 | 20 | 4 | no |
-| legacy_50k | minimum / calendar_month | ongoing | $52,600 | $453,700.00 | 67 | 20 | 1 | no |
-| legacy_50k | minimum / calendar_month | total | $52,600 | $633,632.94 | 67 | 20 | 2 | no |
-| legacy_50k | minimum / daily | ongoing | $54,000 | $536,450.00 | 86 | 10 | 1 | no |
-| legacy_50k | minimum / daily | total | $58,700 | $599,621.07 | 60 | 20 | 3 | no |
-| legacy_50k | minimum / weekly | ongoing | $53,900 | $512,950.00 | 87 | 10 | 1 | no |
-| legacy_50k | minimum / weekly | total | $58,200 | $599,621.07 | 60 | 20 | 3 | no |
+| Withdraw / checks | Objective | **25K — Reserve (ties)** | **25K — Score** | **25K — Bought / alive** | **50K — Reserve (ties)** | **50K — Score** | **50K — Bought / alive** |
+| --- | --- | --- | --- | --- | --- | --- | --- |
+| maximum / monthly | ongoing | $29,800 (1 tie) | $500,637.63 | 101 / 8 | $54,800 (1 tie) | $511,619.46 | 78 / 9 |
+| maximum / monthly | total | $33,600 (1 tie) | $590,540.14 | 77 / 20 | $58,600 (1 tie) | $600,371.08 | 57 / 20 |
+| maximum / daily | ongoing | $30,800 (1 tie) | $496,427.16 | 101 / 8 | $55,800 (1 tie) | $506,908.99 | 78 / 9 |
+| maximum / daily | total | $34,200 (5 ties) | $590,140.16 | 79 / 20 | $59,200 (5 ties) | $599,871.10 | 59 / 20 |
+| maximum / weekly | ongoing | $30,100 (1 tie) | $507,025.97 | 102 / 8 | $55,100 (1 tie) | $518,733.91 | 79 / 10 |
+| maximum / weekly | total | $34,000 (2 ties) | $589,940.01 | 80 / 20 | $58,800 (4 ties) | $599,620.96 | 60 / 20 |
+| minimum / monthly | ongoing | $28,100 (1 tie) | $440,700.00 | 76 / 20 | $52,600 (1 tie) | $453,700.00 | 67 / 20 |
+| minimum / monthly | total | $28,100 (2 ties) | $630,562.86 | 76 / 20 | $52,600 (2 ties) | $633,632.94 | 67 / 20 |
+| minimum / daily | ongoing | $29,000 (1 tie) | $534,200.00 | 109 / 8 | $54,000 (1 tie) | $536,450.00 | 86 / 10 |
+| minimum / daily | total | $34,200 (3 ties) | $590,140.13 | 79 / 20 | $58,700 (3 ties) | $599,621.07 | 60 / 20 |
+| minimum / weekly | ongoing | $28,800 (1 tie) | $516,300.00 | 110 / 8 | $53,900 (1 tie) | $512,950.00 | 87 / 10 |
+| minimum / weekly | total | $33,200 (5 ties) | $589,940.13 | 80 / 20 | $58,200 (3 ties) | $599,621.07 | 60 / 20 |
 
 ### monthly_current_slot_replacements: best reserve within each withdrawal policy
 
-| Product | Withdraw / checks | Objective | Best reserve | Score | Accounts | Alive | Equally best reserves | Boundary tie? |
-|---|---|---|---:|---:|---:|---:|---:|---|
-| legacy_25k | maximum / calendar_month | ongoing | $26,800 | $686,630.15 | 361 | 20 | 1 | no |
-| legacy_25k | maximum / calendar_month | total | $26,800 | $686,630.15 | 361 | 20 | 1 | no |
-| legacy_25k | maximum / daily | ongoing | $26,200 | $794,134.10 | 605 | 20 | 1 | no |
-| legacy_25k | maximum / daily | total | $26,200 | $794,134.10 | 605 | 20 | 1 | no |
-| legacy_25k | maximum / weekly | ongoing | $25,100 | $810,670.40 | 674 | 20 | 1 | yes |
-| legacy_25k | maximum / weekly | total | $25,100 | $810,670.40 | 674 | 20 | 1 | yes |
-| legacy_25k | minimum / calendar_month | ongoing | $26,700 | $483,500.00 | 100 | 20 | 1 | no |
-| legacy_25k | minimum / calendar_month | total | $27,900 | $651,204.67 | 73 | 20 | 2 | no |
-| legacy_25k | minimum / daily | ongoing | $26,800 | $679,000.00 | 265 | 20 | 1 | no |
-| legacy_25k | minimum / daily | total | $26,800 | $679,000.00 | 265 | 20 | 1 | no |
-| legacy_25k | minimum / weekly | ongoing | $25,100 | $663,800.00 | 296 | 20 | 7 | yes |
-| legacy_25k | minimum / weekly | total | $25,100 | $663,800.00 | 296 | 20 | 7 | yes |
-| legacy_50k | maximum / calendar_month | ongoing | $52,200 | $623,893.55 | 189 | 20 | 1 | no |
-| legacy_50k | maximum / calendar_month | total | $52,200 | $623,893.55 | 189 | 20 | 1 | no |
-| legacy_50k | maximum / daily | ongoing | $50,700 | $734,753.85 | 370 | 20 | 1 | no |
-| legacy_50k | maximum / daily | total | $50,700 | $734,753.85 | 370 | 20 | 1 | no |
-| legacy_50k | maximum / weekly | ongoing | $51,900 | $681,721.90 | 250 | 20 | 1 | no |
-| legacy_50k | maximum / weekly | total | $51,900 | $681,721.90 | 250 | 20 | 1 | no |
-| legacy_50k | minimum / calendar_month | ongoing | $50,100 | $475,500.00 | 52 | 20 | 13 | yes |
-| legacy_50k | minimum / calendar_month | total | $52,700 | $645,449.62 | 47 | 20 | 2 | no |
-| legacy_50k | minimum / daily | ongoing | $52,500 | $613,250.00 | 129 | 20 | 2 | no |
-| legacy_50k | minimum / daily | total | $52,500 | $613,250.00 | 129 | 20 | 2 | no |
-| legacy_50k | minimum / weekly | ongoing | $53,100 | $590,500.00 | 81 | 20 | 1 | no |
-| legacy_50k | minimum / weekly | total | $57,100 | $612,663.28 | 58 | 20 | 6 | no |
+| Withdraw / checks | Objective | **25K — Reserve (ties)** | **25K — Score** | **25K — Bought / alive** | **50K — Reserve (ties)** | **50K — Score** | **50K — Bought / alive** |
+| --- | --- | --- | --- | --- | --- | --- | --- |
+| maximum / monthly | ongoing | $26,800 (1 tie) | $686,630.15 | 361 / 20 | $52,200 (1 tie) | $623,893.55 | 189 / 20 |
+| maximum / monthly | total | $26,800 (1 tie) | $686,630.15 | 361 / 20 | $52,200 (1 tie) | $623,893.55 | 189 / 20 |
+| maximum / daily | ongoing | $26,200 (1 tie) | $794,134.10 | 605 / 20 | $50,700 (1 tie) | $734,753.85 | 370 / 20 |
+| maximum / daily | total | $26,200 (1 tie) | $794,134.10 | 605 / 20 | $50,700 (1 tie) | $734,753.85 | 370 / 20 |
+| maximum / weekly | ongoing | $25,100 (1 tie) † | $810,670.40 | 674 / 20 | $51,900 (1 tie) | $681,721.90 | 250 / 20 |
+| maximum / weekly | total | $25,100 (1 tie) † | $810,670.40 | 674 / 20 | $51,900 (1 tie) | $681,721.90 | 250 / 20 |
+| minimum / monthly | ongoing | $26,700 (1 tie) | $483,500.00 | 100 / 20 | $50,100 (13 ties) † | $475,500.00 | 52 / 20 |
+| minimum / monthly | total | $27,900 (2 ties) | $651,204.67 | 73 / 20 | $52,700 (2 ties) | $645,449.62 | 47 / 20 |
+| minimum / daily | ongoing | $26,800 (1 tie) | $679,000.00 | 265 / 20 | $52,500 (2 ties) | $613,250.00 | 129 / 20 |
+| minimum / daily | total | $26,800 (1 tie) | $679,000.00 | 265 / 20 | $52,500 (2 ties) | $613,250.00 | 129 / 20 |
+| minimum / weekly | ongoing | $25,100 (7 ties) † | $663,800.00 | 296 / 20 | $53,100 (1 tie) | $590,500.00 | 81 / 20 |
+| minimum / weekly | total | $25,100 (7 ties) † | $663,800.00 | 296 / 20 | $57,100 (6 ties) | $612,663.28 | 58 / 20 |
 
 ## Limits on interpreting a winner
 

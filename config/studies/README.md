@@ -64,3 +64,10 @@ the headline winners and refresh the shorter `FINDINGS.generated.md`, including
 account turnover, purchase fees, owner-excluded account deficits and detailed
 winner ledgers. It also checks the selected winners under the stricter later-payout
 minimum, without re-optimizing them. Existing `FINDINGS.md` is kept as reader-maintained commentary.
+
+For side-by-side presentation, run `venv/Scripts/python.exe scripts/format_legacy_comparison_reports.py`
+after generating the reports. It pairs 25K on the left with 50K on the right,
+without rerunning simulations or changing saved evidence. An identical reader copy
+is refreshed; a reader copy with additional notes is preserved.
+The linked Excel workbook includes the same paired comparisons, four budget tabs,
+matched observations, reserve ties and all simulation settings.
