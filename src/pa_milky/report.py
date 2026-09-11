@@ -361,6 +361,12 @@ def render_text(result: BookResult) -> str:
         add(f"    ending owner cash (incl. principal) .. ${purchase_cash['ending_owner_cash_usd']:,.2f}")
         add(f"    net cash created (excl. principal) ... ${purchase_cash['net_cash_created_usd']:,.2f}")
         add(f"    modelled live-account cap ............ {result.acquisition.policy.max_live_accounts}")
+        if result.acquisition.shelved:
+            shelf = result.acquisition.policy
+            add(f"    spare shelf .......................... {shelf.spare_capacity} spares, "
+                f"{shelf.passes_per_month} passes/month (spares count toward the cap)")
+            add(f"    spares dormant at the end (sunk) ..... {purchase_cash['spares_unused_at_end']}")
+            add(f"    purchases short of supply ............ {purchase_cash['supply_limited_decisions']:,}")
     add(
         f"    alive at end of dataset .............. {book['accounts_alive_at_end']}"
         f"  ({book['survival_rate'] * 100:.1f}%)"
@@ -397,7 +403,7 @@ def render_text(result: BookResult) -> str:
         + (f"  ({withdrawals['events']:,} payouts)" if withdrawals else ""))
     add(f"    lost to the firm's split ............. ${-cash['lost_to_split_usd'] or 0.0:,.2f}")
     add(f"    spent buying accounts ................ ${-cash['spent_on_accounts_usd']:,.2f}"
-        f"  ({book['accounts_opened']} x ${run['purchase_fee_usd']:,.0f})")
+        f"  ({book['accounts_opened'] + result.unused_spares} x ${run['purchase_fee_usd']:,.0f})")
     add(f"    ---------------------------------------{'-' * 14}")
     add(f"    IN OUR POCKET ........................ ${cash['owner_cash_position_usd']:,.2f}")
     add("")

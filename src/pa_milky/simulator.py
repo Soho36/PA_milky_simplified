@@ -74,8 +74,14 @@ class BookResult:
         return [a for a in self.accounts if not a.alive]
 
     @property
+    def unused_spares(self) -> int:
+        """Funded accounts paid for but still dormant when the tape ends: sunk cost."""
+
+        return self.acquisition.spares if self.acquisition is not None else 0
+
+    @property
     def total_purchase_cost_usd(self) -> float:
-        return money(len(self.accounts) * self.config.purchase_fee_usd)
+        return money((len(self.accounts) + self.unused_spares) * self.config.purchase_fee_usd)
 
     @property
     def total_withdrawn_usd(self) -> float:

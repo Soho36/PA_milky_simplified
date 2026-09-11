@@ -215,10 +215,46 @@ month's new account opens. The owner is therefore never paid out of money that
 had not yet been realized, and a brand-new account cannot pay in its opening
 month.
 
+## Supply of funded accounts
+
+**Default: supply is instant and unlimited.** Every purchase is a funded account
+available at the next daily check for the flat seat fee ($200 25K / $250 50K).
+*Bias: favours any policy that replaces deaths quickly.* The fees are the
+user's measured all-in average: evaluation attempts ($33 / $40 a month, one
+attempt per month) plus $125 activation, which comes to about 2.3 attempts per
+funded 25K and 3.1 per funded 50K.
+
+**Optional spare shelf** (`spare_capacity`, `passes_per_month` on the
+acquisition policy). This follows how the user actually operates:
+
+- At most R funded accounts **pass per calendar month**, each paid in full when
+  it passes.
+- A pass goes live at once if an account is wanted. Otherwise it waits
+  **dormant on the shelf**, up to K spares.
+- Purchases and replacements draw on spares first, then on any passes left in
+  the month. The shelf is restocked afterwards within the same daily check.
+- **Spares count toward the 20-account cap.** Every spare held is a slot that
+  is not trading.
+- Spares never expire and cost nothing further while dormant. Spares still
+  dormant at the end of the tape are sunk cost.
+- There is no pass delay: evaluations traded at larger size can pass within
+  days, and the shelf, not a delay, is how lumpy supply is absorbed.
+- Because the fee is paid at pass time, a spare can go live when owner cash is
+  zero.
+
+The pass rate is **fixed and deterministic**. Real passes are lumpy, and they
+are likely correlated with the book: evaluations trade the same signals, and
+deaths cluster when the strategy loses. On the 25K replacement winner, 95% of
+deaths fall on days when five or more accounts die together, which is also
+when evaluations would be failing. *Bias: a fixed rate flatters replacement
+policies in exactly the months they need supply most.* The shelf limits the
+supply of funded accounts; it does not trade the evaluation itself.
+
 ## Not modelled
 
 Slippage and partial fills; contract caps and scaling plans; daily loss limits;
-the Evaluation phase and its $35/$125 fees; pending-order and broker fill
+trading of the Evaluation phase itself (the optional spare shelf limits supply
+of funded accounts, see above); pending-order and broker fill
 lifecycle; prop-firm rule change or failure; any capital constraint on buying
 the next account; transfer to a Live Prop account, which the supplied text names
 as an alternative end to the consistency rule.

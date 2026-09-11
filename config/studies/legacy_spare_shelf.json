@@ -1,0 +1,15 @@
+{
+  "products": ["legacy_25k", "legacy_50k"],
+  "budgets": [[1000, 0], [1000, 200], [5000, 0], [5000, 200]],
+  "spares": [0, 5, 10],
+  "passes": [1, 2, 3, 5, 10],
+  "amount_rules": ["minimum", "maximum"],
+  "cadences": ["calendar_month", "weekly", "daily"],
+  "headrooms": [0, 500, 1000, 1500, 2000, 3000, 4000, 5000, 6500, 8000, 10000],
+  "refinement_radius": 400,
+  "refinement_step": 100,
+  "ledger_passes": 3,
+  "workers": 7,
+  "output": "results/comparisons/legacy_25k_vs_50k/spare_shelf",
+  "note": "Limited supply of funded accounts: at most N passes per calendar month, each paid when it passes, spares dormant on a shelf that counts toward the 20-account cap. Replacement policy across every shelf; weekly-one and monthly-one without spares as comparators. Coarse headroom grid plus refinement around each product's best bundle, applied to both products."
+}

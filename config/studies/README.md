@@ -71,3 +71,24 @@ without rerunning simulations or changing saved evidence. An identical reader co
 is refreshed; a reader copy with additional notes is preserved.
 The linked Excel workbook includes the same paired comparisons, four budget tabs,
 matched observations, reserve ties and all simulation settings.
+
+## Limited supply of funded accounts (spare shelf)
+
+Run `venv/Scripts/python.exe scripts/study_legacy_spare_shelf.py`. The
+specification is `legacy_spare_shelf.json`; results go to
+`results/comparisons/legacy_25k_vs_50k/spare_shelf/`.
+
+The paired reserve search assumes every purchase becomes a funded account at
+once. This study limits that supply:
+
+- At most N accounts pass per calendar month, each paid when it passes.
+- Surplus passes wait dormant on a shelf of K spares.
+- Spares count toward the 20-account cap.
+
+It re-searches reserves for every (K, N) with the replacement policy, and
+weekly and monthly purchasing run without spares as comparators. The mechanism
+and its biases are in [ASSUMPTIONS.md](../../ASSUMPTIONS.md#supply-of-funded-accounts).
+With the shelf switched off, the engine reproduces the unlimited-supply study
+exactly, and the runner re-checks every row that supply cannot bind against
+that study's checkpoint. Checkpointing and contract rules are the same as
+above.

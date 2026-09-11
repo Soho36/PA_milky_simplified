@@ -1,0 +1,234 @@
+{
+  "schema_version": "pa_milky_simplified.result.v1",
+  "generated_utc": "2026-09-11T01:09:43+00:00",
+  "brick": null,
+  "brick_name": "full_rulebook_monthly_500",
+  "scenario": "full_rulebook_monthly_500",
+  "run": {
+    "strategy": "RR",
+    "risk_reward": "1.00",
+    "contracts_per_copy": 1,
+    "commission_usd_per_copy": 1.05,
+    "path_order": "mae_first",
+    "concurrency": "unlimited",
+    "trailing_drawdown_usd": 1500.0,
+    "frozen_floor_profit_usd": 100.0,
+    "purchase_fee_usd": 200.0
+  },
+  "tape": {
+    "trades_loaded": 12658,
+    "expected_trades": 12658,
+    "size_verified": true,
+    "strategy": "RR",
+    "first_entry": "2020-01-02 07:50:40",
+    "last_exit": "2026-07-13 21:30:40",
+    "copies_filled": 201164
+  },
+  "book": {
+    "months_in_dataset": 79,
+    "accounts_opened": 72,
+    "accounts_alive_at_end": 20,
+    "accounts_dead": 52,
+    "survival_rate": 0.2778
+  },
+  "cash": {
+    "spent_on_accounts_usd": 14400.0,
+    "withdrawn_usd": 640044.65,
+    "owner_cash_position_usd": 611890.24,
+    "received_usd": 626290.24,
+    "lost_to_split_usd": 13754.41
+  },
+  "economics": {
+    "booked_net_trading_usd": 618788.9,
+    "firm_split_usd": 13754.41,
+    "retained_profit_usd": 2000.2,
+    "failed_positive_ledger_usd": 1899.35,
+    "failed_negative_ledger_usd": 25155.3,
+    "purchase_fees_usd": 14400.0,
+    "pocket_usd": 611890.24,
+    "residual_usd": 0.0,
+    "firm_capital_consumed_usd": 25155.3,
+    "withdrawals_financed_by_firm_usd": 0.0,
+    "booked_deficits_not_funded_by_owner_usd": 25155.3,
+    "dead_account_booked_deficits_usd": 25155.3,
+    "live_account_booked_deficits_usd": 0.0,
+    "gross_withdrawals_exceeding_booked_earnings_usd": 0.0
+  },
+  "alive_equity": {
+    "profit_above_start": {
+      "count": 20,
+      "total": 2000.2,
+      "mean": 100.01,
+      "median": 100.01,
+      "min": 100.01,
+      "max": 100.01
+    },
+    "total_balance_usd": 502000.2,
+    "total_paper_profit_usd": 2000.2,
+    "paper_profit_minus_cost_usd": -12399.8
+  },
+  "dead_accounts": {
+    "count": 52,
+    "lifetime_days": {
+      "count": 52,
+      "total": 3014.0,
+      "mean": 57.96,
+      "median": 46.0,
+      "min": 2.0,
+      "max": 444.0
+    },
+    "trades_before_death": {
+      "count": 52,
+      "total": 16231.0,
+      "mean": 312.13,
+      "median": 241.0,
+      "min": 8.0,
+      "max": 2342.0
+    }
+  },
+  "trades_per_account": {
+    "count": 72,
+    "total": 201164.0,
+    "mean": 2793.94,
+    "median": 354.0,
+    "min": 8.0,
+    "max": 12203.0
+  },
+  "firm_rules": {
+    "active": [
+      "consistency",
+      "denial_on_shortfall",
+      "maximum_payout",
+      "minimum_balance",
+      "minimum_payout",
+      "profit_split",
+      "profitable_days",
+      "safety_net",
+      "trading_days"
+    ],
+    "rulebook": {
+      "consistency": {
+        "enabled": true,
+        "max_day_fraction": 0.3,
+        "applies_through_payout": 5
+      },
+      "denial_on_shortfall": {
+        "enabled": true
+      },
+      "maximum_payout": {
+        "enabled": true,
+        "amount_usd": 1500.0,
+        "applies_through_payout": 5
+      },
+      "minimum_balance": {
+        "enabled": true,
+        "balance_usd": 26600.0
+      },
+      "minimum_payout": {
+        "enabled": true,
+        "amount_usd": 500.0
+      },
+      "processing_delay": {
+        "enabled": false,
+        "days": 0
+      },
+      "profit_split": {
+        "enabled": true,
+        "mode": "cumulative_threshold",
+        "full_rate_threshold_usd": 25000.0,
+        "reduced_rate": 0.9,
+        "full_rate_from_payout": 6
+      },
+      "profitable_days": {
+        "enabled": true,
+        "required_days": 5,
+        "profit_threshold_usd": 50.0
+      },
+      "safety_net": {
+        "enabled": true,
+        "net_balance_usd": 26600.0,
+        "encroachment_allowance_usd": 500.0,
+        "applies_through_payout": 3
+      },
+      "trading_days": {
+        "enabled": true,
+        "required_days": 8
+      }
+    }
+  },
+  "terminal": {
+    "mode": "firm_permitted",
+    "at": "2026-07-13 21:30:40",
+    "accounts_alive_at_horizon": 20,
+    "equity_at_horizon_usd": 212544.85,
+    "accounts_paid": 20,
+    "gross_usd": 210544.65,
+    "received_usd": 196790.24,
+    "extracted_fraction_of_equity": 0.9906,
+    "stranded_usd": 2000.2
+  },
+  "withdrawals": {
+    "policy": "monthly_minimum",
+    "amount_usd": 0.0,
+    "eligibility_balance_usd": 26600.0,
+    "safety_net_balance_usd": 26100.0,
+    "shortfall": "skip",
+    "events": 879,
+    "first_withdrawal": "2021-12-01 00:00:00",
+    "last_withdrawal": "2026-07-13 21:30:40",
+    "accounts_that_ever_paid": 22,
+    "accounts_that_never_paid": 50,
+    "per_paying_account_usd": {
+      "count": 22,
+      "total": 640044.65,
+      "mean": 29092.94,
+      "median": 33478.64,
+      "min": 500.0,
+      "max": 35185.34
+    },
+    "entitlement_accrued_usd": 0.0,
+    "outstanding_on_live_accounts_usd": 0.0,
+    "outstanding_lost_to_deaths_usd": 0.0
+  },
+  "denials": {
+    "requests_denied": 88,
+    "requests_approved": 879,
+    "requests_withheld_by_policy": 267,
+    "requests_unpaid_at_horizon": 0,
+    "blocked_by_first": {
+      "minimum_payout": 50,
+      "profitable_days": 38
+    },
+    "blocked_by_any": {
+      "minimum_payout": 50,
+      "profitable_days": 38
+    },
+    "binding_cap_on_approved": {
+      "trailing_floor": 20
+    }
+  },
+  "acquisition": {
+    "policy": {
+      "name": "monthly_current_slot_replacements",
+      "initial_cash_usd": 5000,
+      "monthly_contribution_usd": 200,
+      "max_live_accounts": 20,
+      "replacement_target": 1,
+      "reinvest_fraction": 1,
+      "restart_when_empty": false,
+      "spare_capacity": 0,
+      "passes_per_month": 3
+    },
+    "owner_contributions_usd": 20600.0,
+    "payouts_received_usd": 626290.24,
+    "purchase_spend_usd": 14400.0,
+    "ending_owner_cash_usd": 632490.24,
+    "net_cash_created_usd": 611890.24,
+    "cash_limited_decisions": 43,
+    "capacity_limited_decisions": 45,
+    "cash_identity_residual_usd": 0.0,
+    "spares_shelved": 0,
+    "spares_unused_at_end": 0,
+    "supply_limited_decisions": 322
+  }
+}
