@@ -363,8 +363,20 @@ def render_text(result: BookResult) -> str:
         add(f"    modelled live-account cap ............ {result.acquisition.policy.max_live_accounts}")
         if result.acquisition.shelved:
             shelf = result.acquisition.policy
-            add(f"    spare shelf .......................... {shelf.spare_capacity} spares, "
-                f"{shelf.passes_per_month} passes/month (spares count toward the cap)")
+            if result.acquisition.evaluating:
+                spec = shelf.evaluation
+                add(f"    evaluation supply .................... up to {shelf.evaluations_at_once} at once, "
+                    f"{spec.contracts} MNQ, ${spec.profit_target_usd:,.0f} target / "
+                    f"${spec.trailing_drawdown_usd:,.0f} drawdown")
+                add(f"    evaluations started / months paid .... {purchase_cash['evaluations_started']:,} / "
+                    f"{purchase_cash['evaluation_months_paid']:,}")
+                add(f"    passed / activated / resets .......... {purchase_cash['evaluations_passed']:,} / "
+                    f"{purchase_cash['evaluations_activated']:,} / {purchase_cash['evaluation_resets']:,}")
+                add(f"    spare shelf .......................... {shelf.spare_capacity} spares "
+                    "(spares and evaluations count toward the cap)")
+            else:
+                add(f"    spare shelf .......................... {shelf.spare_capacity} spares, "
+                    f"{shelf.passes_per_month} passes/month (spares count toward the cap)")
             add(f"    spares dormant at the end (sunk) ..... {purchase_cash['spares_unused_at_end']}")
             add(f"    purchases short of supply ............ {purchase_cash['supply_limited_decisions']:,}")
     add(
@@ -402,8 +414,15 @@ def render_text(result: BookResult) -> str:
     add(f"    gross out of the accounts ............ ${cash['withdrawn_usd']:,.2f}"
         + (f"  ({withdrawals['events']:,} payouts)" if withdrawals else ""))
     add(f"    lost to the firm's split ............. ${-cash['lost_to_split_usd'] or 0.0:,.2f}")
-    add(f"    spent buying accounts ................ ${-cash['spent_on_accounts_usd']:,.2f}"
-        f"  ({book['accounts_opened'] + result.unused_spares} x ${run['purchase_fee_usd']:,.0f})")
+    if result.acquisition is not None and result.acquisition.evaluating:
+        supply = result.acquisition.summary()
+        add(f"    spent on evaluations ................. ${-supply['evaluation_fees_usd']:,.2f}"
+            f"  ({supply['evaluation_months_paid']:,} months)")
+        add(f"    spent on activations ................. ${-supply['activation_fees_usd']:,.2f}"
+            f"  ({supply['evaluations_activated']:,} accounts)")
+    else:
+        add(f"    spent buying accounts ................ ${-cash['spent_on_accounts_usd']:,.2f}"
+            f"  ({book['accounts_opened'] + result.unused_spares} x ${run['purchase_fee_usd']:,.0f})")
     add(f"    ---------------------------------------{'-' * 14}")
     add(f"    IN OUR POCKET ........................ ${cash['owner_cash_position_usd']:,.2f}")
     add("")

@@ -92,3 +92,24 @@ With the shelf switched off, the engine reproduces the unlimited-supply study
 exactly, and the runner re-checks every row that supply cannot bind against
 that study's checkpoint. Checkpointing and contract rules are the same as
 above.
+
+## Funded accounts from traded evaluations
+
+Run `venv/Scripts/python.exe scripts/study_legacy_eval_supply.py`. The
+specification is `legacy_eval_supply.json`; results go to
+`results/comparisons/legacy_25k_vs_50k/eval_supply/`.
+
+This replaces the fixed pass rate with evaluations traded on the same tape:
+
+- One position at a time: 25K at 3 MNQ ($1,500 target / $1,500 drawdown) and
+  50K at 5 MNQ ($3,000 / $2,500), the sizes the EODMAE study chose.
+- Monthly fees ($33 / $40) with a free reset at renewal, plus $125 activation.
+- Up to 5 evaluations at once, started only while the book is short. Each one
+  in flight holds one of the 20 seats.
+
+Before searching, the runner checks two things:
+
+- With evaluations switched off, the engine still reproduces the
+  unlimited-supply winners.
+- One evaluation started on every weekday reproduces EODMAE's pass rates and
+  days to pass (the reconciliation table in the report).

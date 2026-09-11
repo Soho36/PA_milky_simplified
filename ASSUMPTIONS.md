@@ -250,11 +250,58 @@ when evaluations would be failing. *Bias: a fixed rate flatters replacement
 policies in exactly the months they need supply most.* The shelf limits the
 supply of funded accounts; it does not trade the evaluation itself.
 
+**Optional evaluation supply** (`evaluation`, `evaluations_at_once`, with a
+spare shelf and no pass rate). This replaces the fixed pass rate with
+evaluations traded on the same tape. Lumpy months, and passes drying up while
+accounts die, then come from the trades rather than from an assumption.
+
+- **One position at a time**, as the owner trades evaluations: the next trade is
+  the first to enter at or after the previous exit. Funded accounts still take
+  every overlapping signal. Netting of concurrent positions therefore does not
+  arise for evaluations.
+- **Size and rules** follow the EODMAE study, which chose the sizes:
+  - 25K at 3 MNQ, with a $1,500 target and $1,500 drawdown (ratio 1.0);
+  - 50K at 5 MNQ, with $3,000 / $2,500 (ratio 1.2);
+  - the drawdown trails peak equity, open profit included, and **never
+    freezes**;
+  - an evaluation passes when a closed balance reaches the target;
+  - there are no other rules: no minimum days, no consistency rule.
+- **Fees**: $33 / $40 at the start and at each monthly renewal on the start
+  day. A blown evaluation is dormant until renewal, which resets it for free;
+  a live one carries on. $125 activation on passing.
+- **Only when needed**: up to 5 run at once, started only while the book is
+  short. Short means deaths not yet replaced, a scheduled purchase missed that
+  day, or spares below target. An evaluation no longer needed is cancelled at
+  its renewal.
+- **Seats**: each evaluation in flight holds one of the 20 seats. A pass is
+  activated at the next daily check and joins the shelf, and the purchase
+  policy deploys it from there. An order only counts as short on the day it is
+  missed, so a monthly order that an evaluation cannot fill in time lets that
+  evaluation lapse at renewal.
+- **Scheduled purchasing needs spares here.** Without a shelf, a monthly or
+  weekly order filled from a spare starts no evaluation for the next order,
+  so the book funds only about every other order. On 25K with $5,000 + $200 a
+  month, monthly purchasing funds 25 accounts with no spares and 74 with five.
+  The study therefore gives every purchase policy the same spare options.
+- **Evaluations started together are one draw.** Evaluations that start on the
+  same day at the same size trade identical paths and pass or blow together.
+  This is the lumpiness the owner reports (about 10 passes in a good month,
+  none in a bad one), and it makes outcomes sensitive to start dates.
+- **Same path order as the funded accounts** (worst point first). *Bias:
+  flatters evaluations.* EODMAE's favourable-first bound is 2–3 points lower
+  at these sizes.
+
+**Calibration.** One evaluation started on every weekday, with a 180-day
+horizon, passes 97.1% (25K × 3) and 93.3% (50K × 5). EODMAE's
+worst-point-first bounds are 97.3% and 93.7%, and the median days to pass
+(35.3 and 39.7) are within a day of EODMAE's. The implied cost per activation,
+$202 and $239, matches the owner's measured $200 / $250.
+
 ## Not modelled
 
 Slippage and partial fills; contract caps and scaling plans; daily loss limits;
-trading of the Evaluation phase itself (the optional spare shelf limits supply
-of funded accounts, see above); pending-order and broker fill
+evaluation rules beyond drawdown and target, and evaluations for any product
+other than Legacy (see the evaluation supply above); pending-order and broker fill
 lifecycle; prop-firm rule change or failure; any capital constraint on buying
 the next account; transfer to a Live Prop account, which the supplied text names
 as an alternative end to the consistency rule.

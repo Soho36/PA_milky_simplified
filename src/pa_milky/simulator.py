@@ -81,7 +81,11 @@ class BookResult:
 
     @property
     def total_purchase_cost_usd(self) -> float:
-        return money((len(self.accounts) + self.unused_spares) * self.config.purchase_fee_usd)
+        """Everything paid for accounts: seats and spares, or evaluations and activations."""
+
+        if self.acquisition is not None:
+            return self.acquisition.spent_usd
+        return money(len(self.accounts) * self.config.purchase_fee_usd)
 
     @property
     def total_withdrawn_usd(self) -> float:
@@ -121,6 +125,7 @@ def _advance(
     config: RunConfig,
     *,
     commission: float,
+    settle=None,
 ) -> tuple[int, int, list[PayoutEvent], list[DenialEvent]]:
     """Run the clock forward to ``horizon``, in true event order.
 
@@ -145,6 +150,9 @@ def _advance(
             copies += _apply_trade(
                 trades[index], accounts, commission=commission, path_order=config.path_order
             )
+            if settle is not None:
+                # Evaluations trade the same tape, one position at a time.
+                settle(index, trades[index])
             index += 1
             continue
         if due_at is not None:
@@ -190,6 +198,11 @@ def run_book(trades: list[Trade], config: RunConfig, *, acquisition: Acquisition
     copies = 0
 
     purchasing = AcquisitionLedger(acquisition) if acquisition is not None else None
+    settle = None
+    if purchasing is not None and purchasing.evaluating:
+        purchasing.attach_tape(trades, commission_per_mnq=config.commission_usd_per_mnq_round_turn,
+                               path_order=config.path_order)
+        settle = purchasing.settle
     opened = 0
     for boundary in decision_boundaries(first_entry, last_exit, "daily" if purchasing else config.policy.cadence):
         year, month = boundary.year, boundary.month
@@ -197,7 +210,7 @@ def run_book(trades: list[Trade], config: RunConfig, *, acquisition: Acquisition
         if monthly:
             opened += 1
         index, settled, paid, denied = _advance(
-            trades, index, boundary, accounts, pending, config, commission=commission
+            trades, index, boundary, accounts, pending, config, commission=commission, settle=settle
         )
         copies += settled
         payouts.extend(paid)
@@ -238,7 +251,7 @@ def run_book(trades: list[Trade], config: RunConfig, *, acquisition: Acquisition
     # The horizon is the last exit, not "no limit": a request whose delay runs
     # past the end of the tape must not be settled out of thin air.
     index, settled, paid, denied = _advance(
-        trades, index, last_exit, accounts, pending, config, commission=commission
+        trades, index, last_exit, accounts, pending, config, commission=commission, settle=settle
     )
     copies += settled
     payouts.extend(paid)
