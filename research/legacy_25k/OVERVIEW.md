@@ -1,5 +1,10 @@
 # Legacy 25K: current findings
 
+**Evaluation-capacity follow-up:** the [pipeline-capacity experiment](../../results/comparisons/legacy_25k_vs_50k/pipeline_capacity/FINDINGS.generated.md)
+tests whether persistent demand, staggered evaluations, greater concurrency
+and spare inventory support higher account turnover. Its main comparison uses
+$5,000 initially plus $200/month, and keeps ongoing and closing cash separate.
+
 **Broader reserve comparison:** start with the
 [paired 25K/50K findings](../../results/comparisons/legacy_25k_vs_50k/reserve_by_policy/FINDINGS.generated.md)
 for fresh reserve searches within each funded purchase/withdrawal/cadence family.

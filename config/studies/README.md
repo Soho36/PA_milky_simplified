@@ -113,3 +113,38 @@ Before searching, the runner checks two things:
   unlimited-supply winners.
 - One evaluation started on every weekday reproduces EODMAE's pass rates and
   days to pass (the reconciliation table in the report).
+
+## Evaluation pipeline capacity
+
+Run `venv/Scripts/python.exe scripts/study_legacy_pipeline_capacity.py`.
+The design is in `legacy_pipeline_capacity.json`; new evidence goes to
+`results/comparisons/legacy_25k_vs_50k/pipeline_capacity/`. Existing study
+outputs are hashed and checked for preservation, and 16 historical winners
+must reproduce before the new search starts.
+
+The main budget is $5,000 initial plus $200/month, matching the earlier 57/44
+funded-account winners. The full screening matrix varies persistent demand,
+2/5/10/20 concurrent subscriptions, batch/one-per-day/one-per-week launches,
+0/2/5/10 spare targets, and the evaluation seat-reservation assumption.
+Three preselected withdrawal anchors screen each pipeline. Pipeline leaders
+at each concurrency under both cash objectives nominate a common shortlist
+for both products. That shortlist receives the full configured reserve,
+withdrawal and cadence grid, followed by paired local refinement. This is a
+staged search, not an exhaustive joint optimum. Selected shared-seat winners
+are also replayed at the other three budgets without further optimization.
+
+`screening.csv` holds the frozen-policy experiment; `reserve_search.csv`
+holds the retuning; `frontier.csv` compares each concurrency at its own limit
+(it is not a monotone envelope). `all_settings.csv` includes service and
+financing diagnostics. Each of eight final winner folders contains daily
+pipeline states and FIFO replacement waits in addition to the account ledger.
+The runner's immutable contract and checkpoint rules are the same as above.
+
+After completion, run `venv/Scripts/python.exe scripts/explain_legacy_pipeline_capacity.py`
+for a compact interpretation, matched pipeline deltas and the observed 95%
+replacement-service check. `plot_legacy_pipeline_capacity.py` produces a
+standalone SVG chart using ReportLab; optional bundled Node/Sharp paths produce
+the matching PNG. See that script's docstring for optional dependency arguments.
+Run `venv/Scripts/python.exe scripts/audit_pipeline_capacity.py` after generating
+the report and chart to verify the completed rows, paired search, code/input
+contract and artifact hashes in `AUDIT.json`.

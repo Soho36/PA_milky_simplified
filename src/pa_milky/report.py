@@ -373,7 +373,12 @@ def render_text(result: BookResult) -> str:
                 add(f"    passed / activated / resets .......... {purchase_cash['evaluations_passed']:,} / "
                     f"{purchase_cash['evaluations_activated']:,} / {purchase_cash['evaluation_resets']:,}")
                 add(f"    spare shelf .......................... {shelf.spare_capacity} spares "
-                    "(spares and evaluations count toward the cap)")
+                    + ("(spares and evaluations count toward the cap)" if shelf.evaluations_reserve_seats
+                       else "(spares count toward cap; evaluations outside cap)"))
+                add(f"    persistent purchase demand ........... {shelf.persistent_demand}")
+                add(f"    new evaluation starts ................ "
+                    + (f"one per {shelf.evaluation_start_interval_days} calendar days"
+                       if shelf.evaluation_start_interval_days else "batch when needed"))
             else:
                 add(f"    spare shelf .......................... {shelf.spare_capacity} spares, "
                     f"{shelf.passes_per_month} passes/month (spares count toward the cap)")

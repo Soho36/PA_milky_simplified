@@ -297,6 +297,39 @@ worst-point-first bounds are 97.3% and 93.7%, and the median days to pass
 (35.3 and 39.7) are within a day of EODMAE's. The implied cost per activation,
 $202 and $239, matches the owner's measured $200 / $250.
 
+## Pipeline-capacity extension
+
+The separate `legacy_pipeline_capacity.json` experiment retains the evaluation
+trading rules and fees above, while varying its replenishment policy. Defaults
+still reproduce the original evaluation study.
+
+- `persistent_demand`: implemented for monthly current-slot replacements.
+  Missed monthly growth orders remain FIFO until filled. Death replacements
+  have priority and consume an unused **current** monthly slot; overdue older
+  growth orders remain outstanding. No new growth order is admitted when live
+  accounts plus outstanding replacements and growth orders already cover 20.
+- `evaluation_start_interval_days`: zero permits batch starts; a positive value
+  permits at most one new subscription per that many calendar days globally.
+  Renewals remain on each subscription's anniversary. Starts on non-trading
+  days route to the next available signal. Staggering therefore changes both
+  cohort timing and launch rate; it does not create independent returns.
+- `evaluations_reserve_seats`: true preserves the original total of live,
+  activated spares and in-flight evaluations <= 20. False is a separate capacity
+  sensitivity: evaluations can sit outside those 20 funded seats, while
+  live + activated spares remains capped at 20. Passed evaluations wait without
+  renewal fees for cash and funded capacity, as in the existing pass model.
+  No activation deadline is modelled. This option is not a verified firm rule.
+- Replenishment is still driven by outstanding demand and the spare target;
+  it is not an always-full evaluation factory or an optimized forecast of deaths.
+  No starting spares are granted, and failed evaluations still wait for renewal.
+- Replacement service is the observed share of actual deaths filled at the
+  next daily check, not a future probability. FIFO wait diagnostics include
+  unresolved deaths through the horizon as censored waits. Completed-wait
+  percentiles exclude those censored cases and are labelled accordingly.
+- Financing diagnostics distinguish unaffordable activations, renewals and
+  new starts. Cash and supply shortages may coexist; those counts are not an
+  additive decomposition of profit loss.
+
 ## Not modelled
 
 Slippage and partial fills; contract caps and scaling plans; daily loss limits;

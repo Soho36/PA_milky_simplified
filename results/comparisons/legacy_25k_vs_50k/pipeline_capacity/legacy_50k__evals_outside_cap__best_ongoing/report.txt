@@ -1,0 +1,177 @@
+==============================================================================
+  CONFIGURED PAYOUT RULEBOOK | DAILY MINIMUM
+  Request cadence: daily; account purchases: monthly_current_slot_replacements; fixed-target accrual: monthly
+  Retained balance: $53,800
+  Closing action: one firm-permitted terminal request
+  Scenario config ID: legacy_50k_full_rulebook
+==============================================================================
+  strategy RR @ RR 1.00  |  1 MNQ/copy  |  commission $1.05 round turn  |  path mae_first
+  tape 2020-01-02 07:50:40 -> 2026-07-13 21:30:40  |  12,658 trades -> 206,426 copies filled
+  policy: $500 per eligible check; no backlog
+
+  FIRM RULES
+    [ON ] consistency          max_day_fraction=0.3, applies_through_payout=5
+    [ON ] denial_on_shortfall  
+    [ON ] maximum_payout       amount_usd=2000, applies_through_payout=5
+    [ON ] minimum_balance      balance_usd=52600
+    [ON ] minimum_payout       amount_usd=500.0
+    [off] processing_delay     days=0
+    [ON ] profit_split         mode=cumulative_threshold, full_rate_threshold_usd=25000.0, reduced_rate=0.9, full_rate_from_payout=6
+    [ON ] profitable_days      required_days=5, profit_threshold_usd=50.0
+    [ON ] safety_net           net_balance_usd=52600, encroachment_allowance_usd=500.0, applies_through_payout=3
+    [ON ] trading_days         required_days=8
+
+  THE BOOK
+    months in dataset .................... 79
+    accounts opened ...................... 71
+    owner contributions .................. $20,600.00
+    ending owner cash (incl. principal) .. $606,345.00
+    net cash created (excl. principal) ... $585,745.00
+    modelled live-account cap ............ 20
+    evaluation supply .................... up to 20 at once, 5 MNQ, $3,000 target / $2,500 drawdown
+    evaluations started / months paid .... 82 / 172
+    passed / activated / resets .......... 71 / 71 / 81
+    spare shelf .......................... 2 spares (spares count toward cap; evaluations outside cap)
+    persistent purchase demand ........... True
+    new evaluation starts ................ one per 1 calendar days
+    spares dormant at the end (sunk) ..... 0
+    purchases short of supply ............ 427
+    alive at end of dataset .............. 12  (16.9%)
+    blown on the trailing drawdown ....... 59
+
+  WHERE THE POCKET CAME FROM
+    booked net trading earnings .......... $    607,707.15
+    less profit still in live accounts ... $    -39,245.75
+    less profit stranded in dead accounts  $     -3,430.20
+    plus failed-account booked deficits ... $     46,468.80
+    less the firm's profit split ......... $    -10,000.00
+    less account purchase fees ........... $    -15,755.00
+    ------------------------------------------------------
+    IN OUR POCKET ........................ $    585,745.00
+
+  BOOKED DEFICITS NOT FUNDED BY OWNER
+    total booked deficits ............... $     46,468.80
+      failed accounts ................... $     46,468.80
+      live accounts at endpoint ......... $          0.00
+    Booked balances, not actual firm losses or cash financing.
+    The unbooked killing excursion is excluded.
+    gross payouts exceeding own earnings $          0.00
+      per-account gross payouts above positive booked net trading earnings
+
+  CASH IN OUR POCKET
+    gross out of the accounts ............ $611,500.00  (1,223 payouts)
+    lost to the firm's split ............. $-10,000.00
+    spent on evaluations ................. $-6,880.00  (172 months)
+    spent on activations ................. $-8,875.00  (71 accounts)
+    -----------------------------------------------------
+    IN OUR POCKET ........................ $585,745.00
+
+  WHICH RULE STOPPED US
+    requests approved .................... 1,223
+    requests denied ...................... 17,037
+    withheld by our own cushion .......... 19,163  (we never asked)
+    denied by rule (a request may trip several):
+      profitable_days        14,971   (first blocker 4,811)
+      trading_days           10,420   (first blocker 10,420)
+      minimum_payout          1,591   (first blocker 1,591)
+      consistency               215   (first blocker 215)
+
+  CLOSING THE BOOK
+    mode ................................. firm_permitted
+    accounts alive at the horizon ........ 12
+    equity standing in them .............. $39,245.75
+    accounts that could take anything .... 0
+    extracted ............................ $0.00   (0.0% of it)
+    stranded in the accounts ............. $39,245.75
+
+  PAYOUT DETAIL
+    accounts that ever paid .............. 29 of 71   (never paid: 42)
+    first / last ......................... 2021-11-05 00:00:00  ->  2026-06-13 00:00:00
+    per paying account: mean    21,086.21  median    30,000.00
+                        min        500.00  max       32,000.00
+
+  EQUITY LEFT IN SURVIVING ACCOUNTS
+    combined balance ..................... $639,245.75
+    combined profit above start .......... $39,245.75
+    per account: mean     3,270.48  median     3,357.00
+                 min      2,765.55  max        3,569.50
+
+  BLOWN ACCOUNTS
+    lifetime days: median       126.00  min         6.00  max     2,178.00
+    intratrade_excursion         59
+
+  PER-ACCOUNT LEDGER
+    cohort     trades  status  died          lifetime      payouts    received      balance
+    ---------------------------------------------------------------------------------------
+    2020-03      59  dead   2020-03-18         15d             -           -             -
+    2020-03      59  dead   2020-03-18         15d             -           -             -
+    2020-03      59  dead   2020-03-18         15d             -           -             -
+    2020-03  11,579  dead   2026-03-06       2178d            64   31,300.00             -
+    2020-03  11,558  dead   2026-03-06       2173d            64   31,300.00             -
+    2020-05   1,617  dead   2021-03-08        305d             -           -             -
+    2020-05   1,617  dead   2021-03-08        305d             -           -             -
+    2020-06   1,488  dead   2021-03-04        276d             -           -             -
+    2020-07   1,318  dead   2021-03-04        246d             -           -             -
+    2020-08   1,097  dead   2021-03-04        203d             -           -             -
+    2020-09     992  dead   2021-03-04        184d             -           -             -
+    2020-10     841  dead   2021-03-04        154d             -           -             -
+    2020-11     640  dead   2021-03-04        119d             -           -             -
+    2020-12     510  dead   2021-03-04         93d             -           -             -
+    2021-01     341  dead   2021-03-04         62d             -           -             -
+    2021-02     672  dead   2021-06-07        126d             -           -             -
+    2021-03     512  dead   2021-06-07         98d             -           -             -
+    2021-03     465  dead   2021-06-07         88d             -           -             -
+    2021-03     437  dead   2021-06-07         82d             -           -             -
+    2021-03     437  dead   2021-06-07         82d             -           -             -
+    2021-03     437  dead   2021-06-07         82d             -           -             -
+    2021-03     432  dead   2021-06-07         81d             -           -             -
+    2021-03     427  dead   2021-06-07         80d             -           -             -
+    2021-03     427  dead   2021-06-07         80d             -           -             -
+    2021-07   9,067  dead   2026-03-06       1702d            60   29,500.00             -
+    2021-07   9,067  dead   2026-03-06       1702d            60   29,500.00             -
+    2021-07   1,869  dead   2022-07-01        356d             6    3,000.00             -
+    2021-07   9,043  dead   2026-03-06       1697d            60   29,500.00             -
+    2021-07   9,043  dead   2026-03-06       1697d            60   29,500.00             -
+    2021-07   9,043  dead   2026-03-06       1697d            60   29,500.00             -
+    2021-07   9,043  dead   2026-03-06       1697d            60   29,500.00             -
+    2021-07   9,043  dead   2026-03-06       1697d            60   29,500.00             -
+    2021-07   9,043  dead   2026-03-06       1697d            60   29,500.00             -
+    2021-07   9,043  dead   2026-03-06       1697d            60   29,500.00             -
+    2021-07   9,043  dead   2026-03-06       1697d            60   29,500.00             -
+    2021-07   9,043  dead   2026-03-06       1697d            60   29,500.00             -
+    2021-07   9,043  dead   2026-03-06       1697d            60   29,500.00             -
+    2021-07   9,043  dead   2026-03-06       1697d            60   29,500.00             -
+    2021-07   9,043  dead   2026-03-06       1697d            60   29,500.00             -
+    2021-09   1,561  dead   2022-07-01        294d             6    3,000.00             -
+    2021-10   8,629  dead   2026-03-06       1617d            62   30,400.00             -
+    2021-10   8,629  dead   2026-03-06       1617d            62   30,400.00             -
+    2022-07   7,177  dead   2026-03-06       1343d            54   26,800.00             -
+    2022-07   7,177  dead   2026-03-06       1343d            54   26,800.00             -
+    2026-03      62  dead   2026-03-18         11d             -           -             -
+    2026-03      62  dead   2026-03-18         11d             -           -             -
+    2026-03      52  dead   2026-03-18          8d             -           -             -
+    2026-03      52  dead   2026-03-18          8d             -           -             -
+    2026-03      52  dead   2026-03-18          8d             -           -             -
+    2026-04     570  ALIVE  -                    -             2    1,000.00     53,357.00
+    2026-04     570  ALIVE  -                    -             2    1,000.00     53,357.00
+    2026-04     570  ALIVE  -                    -             2    1,000.00     53,357.00
+    2026-04     498  ALIVE  -                    -             2    1,000.00     53,502.10
+    2026-04     490  ALIVE  -                    -             1      500.00     53,569.50
+    2026-04     490  ALIVE  -                    -             1      500.00     53,569.50
+    2026-04     490  ALIVE  -                    -             1      500.00     53,569.50
+    2026-04     433  ALIVE  -                    -             -           -     53,144.35
+    2026-04     433  ALIVE  -                    -             -           -     53,144.35
+    2026-04     433  ALIVE  -                    -             -           -     53,144.35
+    2026-05     399  ALIVE  -                    -             -           -     52,765.55
+    2026-05     399  ALIVE  -                    -             -           -     52,765.55
+    2026-05     102  dead   2026-06-05         17d             -           -             -
+    2026-05     102  dead   2026-06-05         17d             -           -             -
+    2026-05     102  dead   2026-06-05         17d             -           -             -
+    2026-06      60  dead   2026-06-18          9d             -           -             -
+    2026-06      60  dead   2026-06-18          9d             -           -             -
+    2026-06      60  dead   2026-06-18          9d             -           -             -
+    2026-06      43  dead   2026-06-29          6d             -           -             -
+    2026-06      43  dead   2026-06-29          6d             -           -             -
+    2026-06      43  dead   2026-06-29          6d             -           -             -
+    2026-06      43  dead   2026-06-29          6d             -           -             -
+==============================================================================

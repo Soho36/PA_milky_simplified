@@ -29,8 +29,19 @@ class AcquisitionPolicy:
     # started only while short. Each one in flight holds a seat for its pass.
     evaluation: EvaluationSpec | None = None
     evaluations_at_once: int = 0
+    persistent_demand: bool = False
+    evaluation_start_interval_days: int = 0  # 0 batches; otherwise one new subscription per interval
+    evaluations_reserve_seats: bool = True
 
     def __post_init__(self):
+        if (not isinstance(self.evaluation_start_interval_days, int)
+                or self.evaluation_start_interval_days < 0):
+            raise ValueError('Evaluation start interval must be a non-negative integer')
+        if self.persistent_demand and self.name != 'monthly_current_slot_replacements':
+            raise ValueError('Persistent demand currently supports current-slot replacements only')
+        if self.evaluation is None and (self.persistent_demand or self.evaluation_start_interval_days
+                                         or not self.evaluations_reserve_seats):
+            raise ValueError('Pipeline settings require evaluation supply')
         if self.name not in {'monthly_one','monthly_two','weekly_one','quarterly_one','quarterly_three','replace','reinvest'} | HYBRID:
             raise ValueError('Unknown acquisition policy')
         if any(not math.isfinite(v) or v < 0 for v in
@@ -86,6 +97,10 @@ class AcquisitionLedger:
     path_order: str = 'mae_first'
     evaluation_fees_usd: float = 0
     activation_fees_usd: float = 0
+    pending_month_orders: list = field(default_factory=list)
+    last_evaluation_start: datetime | None = None
+    pipeline_daily: list = field(default_factory=list)
+    financing_events: list = field(default_factory=list)
 
     @property
     def shelved(self):
@@ -138,7 +153,10 @@ class AcquisitionLedger:
         short=count<min(wanted,room)
         flags={'capacity_limited':min(wanted,room)<wanted,'cash_limited':short}
         if self.evaluating:
-            flags.update(cash_limited=False,supply_limited=short)
+            # A passed account awaiting an unaffordable activation is a cash blockage.
+            passed=sum(e.state=='passed' for e in self.active)
+            flags.update(cash_limited=short and passed>0,
+                         supply_limited=short and self.spares+passed<min(wanted,room))
         elif self.shelved:
             free=max(0,room-self.spares)
             flags['cash_limited']=short and self.spares+min(free,int(self.cash_usd//fee))<min(wanted,room)
@@ -188,11 +206,15 @@ class AcquisitionLedger:
                                 path_order=self.path_order)=='running':
                 self.route(evaluation,trade.exit_at)
 
-    def activate(self, at):
+    def activate(self, at, alive):
         """Activate evaluations that passed since the last check; they join the shelf."""
         fee=self.policy.evaluation.activation_fee_usd
         for e in self.active:
-            if e.state=='passed' and self.cash_usd>=fee:
+            if e.state!='passed': continue
+            if alive+self.spares>=self.policy.max_live_accounts: break
+            if self.cash_usd<fee:
+                self.financing_events.append({'at':at.isoformat(),'kind':'activation_blocked','eval_id':e.eval_id})
+            else:
                 self.pay(at,'activation_fee',fee)
                 self.activation_fees_usd=money(self.activation_fees_usd+fee)
                 e.state,e.ended_at='funded',at
@@ -218,12 +240,22 @@ class AcquisitionLedger:
                     e.resets+=1
                     self.route(e,at)
             else:
+                if keep>0:
+                    self.financing_events.append({'at':at.isoformat(),'kind':'renewal_unaffordable','eval_id':e.eval_id})
                 e.state,e.ended_at='cancelled',at
         self.active=[e for e in self.active if e.state in IN_FLIGHT]
         subscriptions=sum(e.state in ('running','blown') for e in self.active)
-        seats=p.max_live_accounts-alive-self.spares-len(self.active)
-        new=min(p.evaluations_at_once-subscriptions,need-len(self.active),seats,
-                int(self.cash_usd//spec.monthly_fee_usd))
+        seats=(p.max_live_accounts-alive-self.spares-len(self.active)
+               if p.evaluations_reserve_seats else p.evaluations_at_once)
+        new=min(p.evaluations_at_once-subscriptions,need-len(self.active),seats)
+        if p.evaluation_start_interval_days:
+            ready=(self.last_evaluation_start is None or
+                   (at-self.last_evaluation_start).days>=p.evaluation_start_interval_days)
+            new=min(new,int(ready))
+        affordable=int(self.cash_usd//spec.monthly_fee_usd)
+        if new>affordable:
+            self.financing_events.append({'at':at.isoformat(),'kind':'start_unaffordable','count':new-affordable})
+        new=min(new,affordable)
         for _ in range(max(0,new)):
             e=Evaluation(len(self.evaluations)+1,at,months_paid=1)
             e.reset(spec)
@@ -232,20 +264,68 @@ class AcquisitionLedger:
             self.evaluations.append(e)
             self.active.append(e)
             self.route(e,at)
-        if alive+self.spares+len(self.active)>p.max_live_accounts:
+            self.last_evaluation_start=at
+        occupied=alive+self.spares+(len(self.active) if p.evaluations_reserve_seats else 0)
+        if occupied>p.max_live_accounts:
             raise ValueError('Live accounts, spares and evaluations exceed the seat cap')
 
     # -------------------------------------------------------------- decisions
 
     def decide(self, at, month_index, alive, account_count, fee):
         if fee <= 0: raise ValueError('Cash purchase study requires a positive fee')
-        if self.evaluating: self.activate(at)
-        if self.policy.name in HYBRID:
+        if self.evaluating: self.activate(at,alive)
+        if self.policy.persistent_demand:
+            count=self.decide_persistent(at,alive,account_count,fee)
+        elif self.policy.name in HYBRID:
             count=self.decide_hybrid(at, alive, account_count, fee)
         else:
             count=self.decide_scheduled(at, month_index, alive, fee)
-        if self.evaluating: self.run_evaluations(at, alive+count)
+        if self.evaluating:
+            self.run_evaluations(at, alive+count)
+            self.pipeline_daily.append({'at':at.isoformat(),'alive':alive+count,'spares':self.spares,
+                'subscriptions':sum(e.state in ('running','blown') for e in self.active),
+                'awaiting_activation':sum(e.state=='passed' for e in self.active),
+                'in_flight':len(self.active),'shortfall':self.shortfall,
+                'pending_replacements':self.pending_replacements,'cash_usd':self.cash_usd})
         else: self.restock(at, alive+count, fee)
+        return count
+
+    def decide_persistent(self, at, alive, account_count, fee):
+        """FIFO monthly growth orders persist; deaths first, consuming the current slot.
+
+        Growth orders are admitted only while the live book plus outstanding orders
+        is below the live cap. No retrospective orders accumulate while full.
+        A replacement consumes this month's order, not an older overdue order.
+        """
+        deaths=account_count-alive
+        self.pending_replacements+=deaths-self.observed_deaths
+        self.observed_deaths=deaths
+        month=(at.year,at.month)
+        if (at.day==1 and month not in self.filled_month_slots
+                and alive+self.pending_replacements+len(self.pending_month_orders)<self.policy.max_live_accounts):
+            self.pending_month_orders.append(month)
+        available=self.obtainable(at,alive,fee)
+        replaced=min(self.pending_replacements,available)
+        self.pending_replacements-=replaced
+        consumed=replaced>0 and month not in self.filled_month_slots
+        if consumed:
+            self.filled_month_slots.add(month)
+            if month in self.pending_month_orders: self.pending_month_orders.remove(month)
+        scheduled=min(len(self.pending_month_orders),available-replaced)
+        for _ in range(scheduled):
+            self.filled_month_slots.add(self.pending_month_orders.pop(0))
+        count=replaced+scheduled
+        self.shortfall=min(self.pending_replacements+len(self.pending_month_orders),
+                           self.policy.max_live_accounts-alive-count)
+        self.replacement_events.append({'at':at.isoformat(),'replacements':replaced,
+            'scheduled_bought':scheduled,'consumed_current_month_slot':bool(consumed),
+            'scheduled_skipped_for_debt':False,'pending_replacements':self.pending_replacements,
+            'pending_month_orders':len(self.pending_month_orders),'future_slots_used':0})
+        wanted=count+self.shortfall
+        if wanted:
+            self.decisions.append({'at':at.isoformat(),'wanted':wanted,'bought':count,
+                **self.limits(at,alive,fee,wanted,count),'alive_before':alive})
+        if count: self.deploy(at,count,fee)
         return count
 
     def decide_scheduled(self, at, month_index, alive, fee):

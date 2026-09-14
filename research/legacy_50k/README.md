@@ -1,5 +1,10 @@
 # Legacy 50K research
 
+For the paired evaluation-supply follow-up, see the
+[pipeline-capacity findings](../../results/comparisons/legacy_25k_vs_50k/pipeline_capacity/FINDINGS.generated.md).
+The experiment varies persistent demand, evaluation start spacing, concurrency
+and spare inventory, then retunes reserves on a shared pipeline shortlist.
+
 The product is now configured, using the user's $250 seat fee and a separately
 verified Legacy rulebook. Start with [sources and model limits](SOURCES.md), then
 [current findings](OVERVIEW.md).
