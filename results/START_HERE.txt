@@ -1,0 +1,37 @@
+START HERE — Where should I start?
+
+Question answered
+Where should I start?
+
+What we learned
+This is the history of the account-management research, from simple withdrawal examples to
+evaluations and replacement risk. Start with comparisons/legacy_25k_vs_50k/march_failure_review
+for the latest explanation of synchronized failures, and reserve_frontier for the daily-maximum
+reserve curve. Daily-minimum has promising matched results but does not yet have its own
+complete reserve frontier.
+
+How to interpret it
+Earlier folders use different assumptions. Some have unlimited live accounts; some assume
+instantly available replacements. Later studies impose cash budgets and then model evaluations.
+Compare settings within a study before comparing totals across studies.
+
+Subfolders
+- comparisons (has its own START_HERE.txt)
+- full_rulebook__hold__terminal_request (has its own START_HERE.txt)
+- full_rulebook__monthly_500__no_cushion__no_terminal (has its own START_HERE.txt)
+- full_rulebook__monthly_500__no_cushion__no_terminal__adapted_search (has its own START_HERE.txt)
+- full_rulebook__monthly_500__retain_30000__terminal_request (has its own START_HERE.txt)
+- full_rulebook__monthly_maximum__no_cushion__no_terminal (has its own START_HERE.txt)
+- legacy_50k (has its own START_HERE.txt)
+- legacy_rules__monthly_100__no_cushion__no_terminal (has its own START_HERE.txt)
+- no_payout_rules__hold__no_terminal (has its own START_HERE.txt)
+- no_payout_rules__hold__terminal_idealized (has its own START_HERE.txt)
+- no_payout_rules__monthly_500__retain_26100__no_terminal (has its own START_HERE.txt)
+- study__full_rulebook__RR__account_purchases__cash_budgets (has its own START_HERE.txt)
+- study__full_rulebook__RR__monthly_amount_x_cushion__dual_terminal_scores (has its own START_HERE.txt)
+- study__full_rulebook__RR__monthly_replacements__cap_20__cash_budgets (has its own START_HERE.txt)
+- study__full_rulebook__RR__withdrawal_cadence__monthly_purchases (has its own START_HERE.txt)
+- study__full_rulebook__RR__withdrawal_cadence__monthly_purchases__cap_20__cash_budgets (has its own START_HERE.txt)
+- sweeps (has its own START_HERE.txt)
+
+Reading note: ongoing cash is received during trading, after costs. Total cash also includes any closing withdrawal. These are historical simulations, not forecasts.

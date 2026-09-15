@@ -1,0 +1,37 @@
+START HERE — Is replacement capacity limiting profit, and does a larger or staggered evaluation pipeline help?
+
+Question answered
+Is replacement capacity limiting profit, and does a larger or staggered evaluation pipeline
+help?
+
+What we learned
+More capacity helps, but the withdrawal policy still matters. In the main shared-seat
+comparison, daily minimum leads ongoing cash: about $597,317 for 25K and $582,835 for 50K.
+Monthly minimum leads total cash including the closing withdrawal. These are best tested
+bundles, including their different pipeline settings.
+
+How to interpret it
+shared_seats reserves one of 20 places for each live PA, activated spare, or in-flight
+evaluation. evals_outside_cap allows evaluations outside the PA cap and is a separate
+sensitivity. Older runs can wait for activation cash; the later reserve frontier uses first-
+check activation or forfeiture.
+
+Files to open first
+- REPORT.generated.md
+- REPORT.md
+- frontier.csv
+- all_settings.csv
+
+Subfolders
+- legacy_25k__evals_outside_cap__best_ongoing (has its own START_HERE.txt)
+- legacy_25k__evals_outside_cap__best_total (has its own START_HERE.txt)
+- legacy_25k__shared_seats__best_ongoing (has its own START_HERE.txt)
+- legacy_25k__shared_seats__best_total (has its own START_HERE.txt)
+- legacy_50k__evals_outside_cap__best_ongoing (has its own START_HERE.txt)
+- legacy_50k__evals_outside_cap__best_total (has its own START_HERE.txt)
+- legacy_50k__shared_seats__best_ongoing (has its own START_HERE.txt)
+- legacy_50k__shared_seats__best_total (has its own START_HERE.txt)
+
+For the surrounding study, open ../START_HERE.txt.
+
+Reading note: ongoing cash is received during trading, after costs. Total cash also includes any closing withdrawal. These are historical simulations, not forecasts.

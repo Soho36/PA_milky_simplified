@@ -1,0 +1,24 @@
+START HERE — What did the early retained-balance sweeps find?
+
+Question answered
+What did the early retained-balance sweeps find?
+
+What we learned
+These are historical reserve searches for fixed monthly withdrawals, with different trading
+tapes and grid resolutions. They show that the preferred balance depends on the tape and
+withdrawal rule; they are not the later evaluation-aware reserve frontier.
+
+How to interpret it
+File names identify RR or GG data, minimum/fixed or maximum withdrawals, and a coarse or fine
+grid. cushion_usd in these old files is the nominal retained balance; headroom_usd is the
+amount above the failure floor. No closing withdrawal is counted.
+
+Best ongoing result in each saved sweep (within its own grid):
+- full_rulebook__GG__monthly_500__cushion_grid.json: $156,700.00 net at $33,500.00 retained balance.
+- full_rulebook__RR__monthly_500__cushion_fine_grid.json: $358,000.00 net at $29,800.00 retained balance.
+- full_rulebook__RR__monthly_500__cushion_grid.json: $357,000.00 net at $30,000.00 retained balance.
+- full_rulebook__RR__monthly_maximum__cushion_grid.json: $366,557.36 net at $30,000.00 retained balance.
+
+For the surrounding study, open ../START_HERE.txt.
+
+Reading note: ongoing cash is received during trading, after costs. Total cash also includes any closing withdrawal. These are historical simulations, not forecasts.
