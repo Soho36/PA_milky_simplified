@@ -1,0 +1,23 @@
+{
+  "output": "results/comparisons/legacy_25k_vs_50k/reserve_frontier",
+  "budget": [5000, 200],
+  "pipelines": {
+    "legacy_25k": {"interval": 7, "concurrency": 20, "spares": 2},
+    "legacy_50k": {"interval": 1, "concurrency": 20, "spares": 2}
+  },
+  "reserve_grid": {"coarse": [0, 10000, 1000], "dense": [5500, 8000, 100]},
+  "full_tape_extra_reserves": [6710, 6720, 6730, 6740, 6750, 6760, 6770, 6780, 6790, 6780.10, 6780.11],
+  "windows": [
+    {"name": "full", "start": "2020-01-01", "end_exclusive": "2026-07-14"},
+    {"name": "start_2021", "start": "2021-01-01", "end_exclusive": "2026-07-14"},
+    {"name": "start_2022", "start": "2022-01-01", "end_exclusive": "2026-07-14"},
+    {"name": "start_2023", "start": "2023-01-01", "end_exclusive": "2026-07-14"},
+    {"name": "start_2024", "start": "2024-01-01", "end_exclusive": "2026-07-14"},
+    {"name": "two_years_2020", "start": "2020-07-01", "end_exclusive": "2022-07-01"},
+    {"name": "two_years_2022", "start": "2022-07-01", "end_exclusive": "2024-07-01"},
+    {"name": "two_years_2024", "start": "2024-07-01", "end_exclusive": "2026-07-01"}
+  ],
+  "post_startup_days": 365,
+  "workers": 7,
+  "design": "Daily maximum withdrawals, persistent demand, shared seat reservation, first-check activation or pass forfeiture. Frozen product-specific pipelines from prior shared-seat daily-maximum results. Every window starts empty with fresh owner funding. Post-startup deaths means all deaths after 365 elapsed days, including young replacements. All overlapping historical windows remain in-sample; none is a holdout. Full-tape cents around 6780.10 diagnose the known March 2026 event, not a recommended precision of reserve selection."
+}

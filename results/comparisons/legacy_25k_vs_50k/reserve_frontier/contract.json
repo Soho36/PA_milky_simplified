@@ -1,0 +1,1211 @@
+{
+  "schema": "pa_milky.reserve_frontier.v1",
+  "spec": {
+    "output": "results/comparisons/legacy_25k_vs_50k/reserve_frontier",
+    "budget": [
+      5000,
+      200
+    ],
+    "pipelines": {
+      "legacy_25k": {
+        "interval": 7,
+        "concurrency": 20,
+        "spares": 2
+      },
+      "legacy_50k": {
+        "interval": 1,
+        "concurrency": 20,
+        "spares": 2
+      }
+    },
+    "reserve_grid": {
+      "coarse": [
+        0,
+        10000,
+        1000
+      ],
+      "dense": [
+        5500,
+        8000,
+        100
+      ]
+    },
+    "full_tape_extra_reserves": [
+      6710,
+      6720,
+      6730,
+      6740,
+      6750,
+      6760,
+      6770,
+      6780,
+      6790,
+      6780.1,
+      6780.11
+    ],
+    "windows": [
+      {
+        "name": "full",
+        "start": "2020-01-01",
+        "end_exclusive": "2026-07-14"
+      },
+      {
+        "name": "start_2021",
+        "start": "2021-01-01",
+        "end_exclusive": "2026-07-14"
+      },
+      {
+        "name": "start_2022",
+        "start": "2022-01-01",
+        "end_exclusive": "2026-07-14"
+      },
+      {
+        "name": "start_2023",
+        "start": "2023-01-01",
+        "end_exclusive": "2026-07-14"
+      },
+      {
+        "name": "start_2024",
+        "start": "2024-01-01",
+        "end_exclusive": "2026-07-14"
+      },
+      {
+        "name": "two_years_2020",
+        "start": "2020-07-01",
+        "end_exclusive": "2022-07-01"
+      },
+      {
+        "name": "two_years_2022",
+        "start": "2022-07-01",
+        "end_exclusive": "2024-07-01"
+      },
+      {
+        "name": "two_years_2024",
+        "start": "2024-07-01",
+        "end_exclusive": "2026-07-01"
+      }
+    ],
+    "post_startup_days": 365,
+    "workers": 7,
+    "design": "Daily maximum withdrawals, persistent demand, shared seat reservation, first-check activation or pass forfeiture. Frozen product-specific pipelines from prior shared-seat daily-maximum results. Every window starts empty with fresh owner funding. Post-startup deaths means all deaths after 365 elapsed days, including young replacements. All overlapping historical windows remain in-sample; none is a holdout. Full-tape cents around 6780.10 diagnose the known March 2026 event, not a recommended precision of reserve selection."
+  },
+  "engine": {
+    "files": {
+      "__init__.py": {
+        "sha256": "708d97868064b3f2b9b1579a5aa7c65d8406931f1e655d27e40781e64ad163ea",
+        "bytes": 222
+      },
+      "__main__.py": {
+        "sha256": "e34737246c4338a78411d7cac39a3a03c13fae12bd7c5bfc01896677e9e0b5c2",
+        "bytes": 119
+      },
+      "ablation.py": {
+        "sha256": "84b62115c67e6505160050bff261816ac37468142c727e3f097a726fa87f01ff",
+        "bytes": 10620
+      },
+      "account.py": {
+        "sha256": "3b3a1111cf49501aae0ebf1ee4c4c63645ac4292b6e30dd0529557b33b1143ea",
+        "bytes": 9545
+      },
+      "acquisition.py": {
+        "sha256": "cda87ee356fbd756af2e2c1dd1c2f9d5a060a5fc37e25804f6511160c404d176",
+        "bytes": 22871
+      },
+      "cli.py": {
+        "sha256": "46a4ac9bfc589e1a54c6bb48ed597737d2426efcb6d1a69dc239965ab9940a88",
+        "bytes": 6658
+      },
+      "clock.py": {
+        "sha256": "4cc55b459f517b680d005214ab6e2a3cdc5a9fd09af2d633e2c0ed90336a9e21",
+        "bytes": 4320
+      },
+      "config.py": {
+        "sha256": "4731799f81b58ef9e5a7222fbd3f9283ff7a43439c16a761af427125ef24f9ec",
+        "bytes": 12447
+      },
+      "economics.py": {
+        "sha256": "1cea28f76ff21589b3a2e419e4f8bebe4694496162e2746a5db93259ed2c7606",
+        "bytes": 7309
+      },
+      "evaluation.py": {
+        "sha256": "e72abe2761b776be94f633d6e58b0664c175042832d050000f91656c8fb72591",
+        "bytes": 6039
+      },
+      "firm.py": {
+        "sha256": "32e22903cd1d48055b8bdb85372e11bcf04b839f01bd14ae65adc21edc0b6cae",
+        "bytes": 13722
+      },
+      "loader.py": {
+        "sha256": "2ea156ee26eae16a3e528f795a720517b9fdda653b99670d3b9a4fbb3b32c09f",
+        "bytes": 7728
+      },
+      "payouts.py": {
+        "sha256": "213f32082007f3196baaf034cc83c9445587b503fc8df39bce6c0143bcb10195",
+        "bytes": 9044
+      },
+      "pipeline_metrics.py": {
+        "sha256": "794cfbc5cdcd00be8ab9829a6ea570df3db99ae551d7a6d160ec877c020d8f47",
+        "bytes": 3570
+      },
+      "policy.py": {
+        "sha256": "5d317393ad4c749413ddc3c49cd74fb51dd3a998d290218252919a08dd4e89c8",
+        "bytes": 5093
+      },
+      "policy_study.py": {
+        "sha256": "d80da1117fcdbf31a13d4e87249dcd6857117b43722a501b1a3e97dd167a9a3f",
+        "bytes": 5502
+      },
+      "provenance.py": {
+        "sha256": "6a7a137472c4becb9a5740d9d8f8be05b3a246f6b9deaf9e3a25e23d36f9e0de",
+        "bytes": 10317
+      },
+      "report.py": {
+        "sha256": "5e80e679d452dd64a16b02852116ac4514d12bea0c8feeba56f826fdfca4f306",
+        "bytes": 26143
+      },
+      "reserve_metrics.py": {
+        "sha256": "b8387587558205c9d99e99f78e2dd61878396d6c7885705b5e7087eaefa96789",
+        "bytes": 3234
+      },
+      "simulator.py": {
+        "sha256": "a20e792f594d7037c9ee4774d7d30a0008c9f3000a72aab86cffcefca06d55c9",
+        "bytes": 11781
+      },
+      "study_config.py": {
+        "sha256": "210c1e8c215603c3b77b5e0ffb9893cdae08357773bcc0670dfee51722e058cd",
+        "bytes": 2678
+      },
+      "study_reports.py": {
+        "sha256": "7a6d6875348ce84eed6ac1f54fad86adc008c5d23cf26d7921c79f769362979c",
+        "bytes": 459
+      }
+    },
+    "combined_sha256": "11c750703f2d0e1aa0c662d0b255e26f4e20f500d8df344388ebdc3cd67db533",
+    "count": 22,
+    "bytes": 179421
+  },
+  "inputs": {
+    "files": {
+      "RR/1-2": {
+        "sha256": "41633d9fc0c8d1c6b3af629c1f40ae364892d576e290e9ef591f83bfe9271b5f",
+        "bytes": 64298
+      },
+      "RR/10-11": {
+        "sha256": "806df46a9d4a6140441805d266f2b91131ee469af7c4a2d7c42c721bbc97ff12",
+        "bytes": 83844
+      },
+      "RR/11-12": {
+        "sha256": "ca048710779a3862840f2c5d43492bf2c6fb31487ee46845150dd3ef24d2002e",
+        "bytes": 65032
+      },
+      "RR/12-13": {
+        "sha256": "f485ce347458732e9c391de3b268147864c2e10b4b6b7fb51d6587c40867cef4",
+        "bytes": 73176
+      },
+      "RR/13-14": {
+        "sha256": "22efb7b02000f7aafffcfb05e5ba6b4a86b7489dbc57c815107fdf3b1abded12",
+        "bytes": 81384
+      },
+      "RR/14-15": {
+        "sha256": "dc2fff2b3a9c4b814c4785f98e26c9da5a4e2d6ee3e073c61e45181dd10cfb0a",
+        "bytes": 76580
+      },
+      "RR/15-16": {
+        "sha256": "584ef37a815ad06d73127117ecad3c24016fe46e766a3af14d17b6e7678a3e4a",
+        "bytes": 96842
+      },
+      "RR/16-17": {
+        "sha256": "4af26c2753bb3bbae98d0d81584611c97db72f5b08d6af1afdd9914db8a1cc13",
+        "bytes": 123726
+      },
+      "RR/17-18": {
+        "sha256": "59a063ac8650dfdf2f3698f62cbb12cba5301c7bbf92db1ca0c5bb896b368b49",
+        "bytes": 54078
+      },
+      "RR/18-19": {
+        "sha256": "d8ef1874840cce38d08de2c7a01eb0cf5a992556ca60136a02e82433eb068aaf",
+        "bytes": 66514
+      },
+      "RR/19-20": {
+        "sha256": "fab4ddecad65cdb5f4a63a9b10bb4a37e3cdca7e1c3ffc9637bcb30debf2ac93",
+        "bytes": 68488
+      },
+      "RR/2-3": {
+        "sha256": "393a7930a0d2eec4038850daf34d01a619e0328001f0df5c88c1e15d3ee76a49",
+        "bytes": 78312
+      },
+      "RR/20-21": {
+        "sha256": "12afe56ccac6e78d766534f65b81cc981824582d462546bfc0818830efbf6b46",
+        "bytes": 74634
+      },
+      "RR/21-22": {
+        "sha256": "96227ec738fd119ed92fcb9c683bfae1674740fddebdfa8b08794302fd33d274",
+        "bytes": 75728
+      },
+      "RR/22-23": {
+        "sha256": "193fd4af0b9a56ddb6e47c266c3345e3c2e23559fdf54aa20f2167a3ca3cce83",
+        "bytes": 79702
+      },
+      "RR/23-24": {
+        "sha256": "732eacc917979ec3f85187df3dbc831cc4f67994035d9987b0e549c27b432553",
+        "bytes": 15850
+      },
+      "RR/3-4": {
+        "sha256": "f248f2d8f72c5fc1c28b3eaef918c6f08e19269122df853dcd414339ecc46aa0",
+        "bytes": 78856
+      },
+      "RR/4-5": {
+        "sha256": "4c74cf1ca20737b3b22022e0e0a5b13fb0daa37a58dd610dffa3b4f8a854ad74",
+        "bytes": 73942
+      },
+      "RR/5-6": {
+        "sha256": "6fb6ba95f3015305087d325e2e22a4e947a3ce291628155eb5f82fa0a8a79631",
+        "bytes": 59778
+      },
+      "RR/6-7": {
+        "sha256": "c5b88fbbc6b004f8019fe025db21dbda32eb28263072d855e17a9d8a0a618b08",
+        "bytes": 75850
+      },
+      "RR/7-8": {
+        "sha256": "d5e97c976371b8c89f9d762e76970663e32270e02d05badfa3c7fd001bd0e152",
+        "bytes": 82594
+      },
+      "RR/8-9": {
+        "sha256": "f138bb453cd2be8e303d621b63f303b11c1ff76dd50974c6eb97db0b3de26eab",
+        "bytes": 84698
+      },
+      "RR/9-10": {
+        "sha256": "22239e14a762a209a8dfb3744ec90d57fae2421f867a989dcfd9d40652324cf8",
+        "bytes": 79296
+      },
+      "RR_stats/1-2": {
+        "sha256": "8e01aa42db675d8feb12b820b35d3dd33806d3c6761a49318b661392c80d2993",
+        "bytes": 534
+      },
+      "RR_stats/10-11": {
+        "sha256": "6c0be088c9eb1b3a456f850dd4e942028e518af0af36304eddd38adee16801b8",
+        "bytes": 530
+      },
+      "RR_stats/11-12": {
+        "sha256": "170f45bdf78ff7318d1582f04cdb5de8e6351b558072d54888eb1d3320a4eb02",
+        "bytes": 532
+      },
+      "RR_stats/12-13": {
+        "sha256": "859e453be64ce084bfa05bc0bb0eef9dc39131a9c2cc8ba3d1301b12d06bd446",
+        "bytes": 538
+      },
+      "RR_stats/13-14": {
+        "sha256": "113e05afc6a5b2ea2c62ba02a7dba3105cfa8224a7faeebd6f5fab66c87144ee",
+        "bytes": 526
+      },
+      "RR_stats/14-15": {
+        "sha256": "a3640134b50bcf1de44200b7576f7fd8f5141b3ed9e63809effd262f094228d5",
+        "bytes": 530
+      },
+      "RR_stats/15-16": {
+        "sha256": "74215e67ca8dce4f5e0352389d3e2aaaf63a12390760d97f72226386f4fb090f",
+        "bytes": 540
+      },
+      "RR_stats/16-17": {
+        "sha256": "6d25a81cec21679f9745e4da26ad5b8ec7e83806da9fc88403319ee4660916ec",
+        "bytes": 542
+      },
+      "RR_stats/17-18": {
+        "sha256": "59c2f124006a50521d6fee1aefcbd3971db8d50a4ee9f3e632ecd2a3a4ab6380",
+        "bytes": 532
+      },
+      "RR_stats/18-19": {
+        "sha256": "dc68aefdab6390385f181f7979febf742e592012640c1b027e2505aa10ffa2cc",
+        "bytes": 530
+      },
+      "RR_stats/19-20": {
+        "sha256": "fba381474e8b68da5959bdffb3030489040844470bd77896b2d749867c6aa2d2",
+        "bytes": 530
+      },
+      "RR_stats/2-3": {
+        "sha256": "2258ca13c3450b9e070b3d0b731ec0c0016c843526531712ca74e3e22f072912",
+        "bytes": 522
+      },
+      "RR_stats/20-21": {
+        "sha256": "67538b23c601aea2e3b07c1af0c68bc40aee4f5cb9dfab25ecbb5b269af60dc3",
+        "bytes": 532
+      },
+      "RR_stats/21-22": {
+        "sha256": "5f46561ea4c81e4b04d8a78e809f0c12924c737a598fe09485227aefbd5e9dcd",
+        "bytes": 534
+      },
+      "RR_stats/22-23": {
+        "sha256": "4d0dc1e10a7d6228a387810c3f4100d6005dc6aeb34ea1ecb3edca578723536c",
+        "bytes": 532
+      },
+      "RR_stats/23-24": {
+        "sha256": "eb82880563b6d4e4eece4a63ab76954bb2e9f40385583f941c8b829db0a10065",
+        "bytes": 522
+      },
+      "RR_stats/3-4": {
+        "sha256": "96c5cebc42ccac519bf367daf716b8a708c560dd25c18dadd2e650ea9c7b1ab7",
+        "bytes": 526
+      },
+      "RR_stats/4-5": {
+        "sha256": "14d02993ec9929c308115c0cef11b1a3315fe7f7d31199a4cdc37408ac6ab5ed",
+        "bytes": 526
+      },
+      "RR_stats/5-6": {
+        "sha256": "14da92cbc51c5f51fa75f05f0d896825cb072a817496fd4b507c68c19d2f3893",
+        "bytes": 518
+      },
+      "RR_stats/6-7": {
+        "sha256": "cd68ebba92516a6edefd7f6dad8765fb7db5f97cb938821098e570a7a56220d6",
+        "bytes": 542
+      },
+      "RR_stats/7-8": {
+        "sha256": "ae09227a6bc6fc2b75325f770f2599f0e8888bac6d8cf5fd6dc26e5624267932",
+        "bytes": 518
+      },
+      "RR_stats/8-9": {
+        "sha256": "a822ef4284466dd8ea4c3245a375f42eb18b44f127153c54b28690cd82b384ee",
+        "bytes": 526
+      },
+      "RR_stats/9-10": {
+        "sha256": "0bc3e50966f2d869b92227c93ba392cee117d52418a2f0660e80eb21ee5cdbea",
+        "bytes": 524
+      }
+    },
+    "combined_sha256": "1ab293ed1e4ed016ee963861b5a6a2d11be9e04df1a273cc00c2cd41ad8880a2",
+    "count": 46,
+    "bytes": 1725388
+  },
+  "configs": {
+    "legacy_25k": {
+      "schema_version": "pa_milky_simplified.scenario.v1",
+      "scenario": "full_rulebook_monthly_500",
+      "brick": null,
+      "brick_name": "full_rulebook_monthly_500",
+      "description": "Headline. Every Apex payout rule switched on, and our own behaviour is to request $500 -- the firm's minimum -- from each account every calendar month, carrying unpayable months as a backlog.",
+      "data": {
+        "sweeps_root": "1_sweeps",
+        "strategy": "RR",
+        "risk_reward": "1.00",
+        "expected_windows": 23,
+        "expected_trades": 12658
+      },
+      "execution": {
+        "contracts_per_copy": 1,
+        "commission_usd_per_mnq_round_turn": 1.05,
+        "slippage_ticks": 0,
+        "concurrency": "unlimited",
+        "path_order": "mae_first",
+        "commission_applies_to_excursions": false
+      },
+      "product": {
+        "product": "Apex Legacy 25K PA",
+        "starting_balance_usd": 25000.0,
+        "trailing_drawdown_usd": 1500.0,
+        "frozen_floor_profit_usd": 100.0,
+        "threshold_touch_fails": true,
+        "purchase_fee_usd": 200.0
+      },
+      "book": {
+        "cadence": "one_new_pa_per_calendar_month",
+        "activation_moment": "first_instant_of_calendar_month",
+        "max_accounts": null,
+        "replace_on_death": false
+      },
+      "firm_rules": {
+        "consistency": {
+          "enabled": true,
+          "max_day_fraction": 0.3,
+          "applies_through_payout": 5
+        },
+        "denial_on_shortfall": {
+          "enabled": true
+        },
+        "maximum_payout": {
+          "enabled": true,
+          "amount_usd": 1500.0,
+          "applies_through_payout": 5
+        },
+        "minimum_balance": {
+          "enabled": true,
+          "balance_usd": 26600.0
+        },
+        "minimum_payout": {
+          "enabled": true,
+          "amount_usd": 500.0
+        },
+        "processing_delay": {
+          "enabled": false,
+          "days": 0
+        },
+        "profit_split": {
+          "enabled": true,
+          "mode": "cumulative_threshold",
+          "full_rate_threshold_usd": 25000.0,
+          "reduced_rate": 0.9,
+          "full_rate_from_payout": 6
+        },
+        "profitable_days": {
+          "enabled": true,
+          "required_days": 5,
+          "profit_threshold_usd": 50.0
+        },
+        "safety_net": {
+          "enabled": true,
+          "net_balance_usd": 26600.0,
+          "encroachment_allowance_usd": 500.0,
+          "applies_through_payout": 3
+        },
+        "trading_days": {
+          "enabled": true,
+          "required_days": 8
+        }
+      },
+      "policy": {
+        "name": "monthly_500",
+        "cadence": "calendar_month",
+        "amount_usd": 500.0,
+        "amount_rule": "fixed",
+        "shortfall": "accrue_backlog",
+        "quantize_to_amount": true,
+        "min_retained_balance_usd": null,
+        "terminal_withdrawal": "none"
+      }
+    },
+    "legacy_50k": {
+      "schema_version": "pa_milky_simplified.scenario.v1",
+      "scenario": "legacy_50k_full_rulebook",
+      "brick": null,
+      "brick_name": "legacy_50k_full_rulebook",
+      "description": "Legacy 50K under inherited payout interpretation; user-specified $250 seat cost; see research/legacy_50k/SOURCES.md",
+      "data": {
+        "sweeps_root": "1_sweeps",
+        "strategy": "RR",
+        "risk_reward": "1.00",
+        "expected_windows": 23,
+        "expected_trades": 12658
+      },
+      "execution": {
+        "contracts_per_copy": 1,
+        "commission_usd_per_mnq_round_turn": 1.05,
+        "slippage_ticks": 0,
+        "concurrency": "unlimited",
+        "path_order": "mae_first",
+        "commission_applies_to_excursions": false
+      },
+      "product": {
+        "product": "Apex Legacy 50K PA",
+        "starting_balance_usd": 50000.0,
+        "trailing_drawdown_usd": 2500.0,
+        "frozen_floor_profit_usd": 100.0,
+        "threshold_touch_fails": true,
+        "purchase_fee_usd": 250.0
+      },
+      "book": {
+        "cadence": "one_new_pa_per_calendar_month",
+        "activation_moment": "first_instant_of_calendar_month",
+        "max_accounts": null,
+        "replace_on_death": false
+      },
+      "firm_rules": {
+        "consistency": {
+          "enabled": true,
+          "max_day_fraction": 0.3,
+          "applies_through_payout": 5
+        },
+        "denial_on_shortfall": {
+          "enabled": true
+        },
+        "maximum_payout": {
+          "enabled": true,
+          "amount_usd": 2000,
+          "applies_through_payout": 5
+        },
+        "minimum_balance": {
+          "enabled": true,
+          "balance_usd": 52600
+        },
+        "minimum_payout": {
+          "enabled": true,
+          "amount_usd": 500.0
+        },
+        "processing_delay": {
+          "enabled": false,
+          "days": 0
+        },
+        "profit_split": {
+          "enabled": true,
+          "mode": "cumulative_threshold",
+          "full_rate_threshold_usd": 25000.0,
+          "reduced_rate": 0.9,
+          "full_rate_from_payout": 6
+        },
+        "profitable_days": {
+          "enabled": true,
+          "required_days": 5,
+          "profit_threshold_usd": 50.0
+        },
+        "safety_net": {
+          "enabled": true,
+          "net_balance_usd": 52600,
+          "encroachment_allowance_usd": 500.0,
+          "applies_through_payout": 3
+        },
+        "trading_days": {
+          "enabled": true,
+          "required_days": 8
+        }
+      },
+      "policy": {
+        "name": "monthly_500",
+        "cadence": "calendar_month",
+        "amount_usd": 500.0,
+        "amount_rule": "fixed",
+        "shortfall": "accrue_backlog",
+        "quantize_to_amount": true,
+        "min_retained_balance_usd": null,
+        "terminal_withdrawal": "none"
+      }
+    }
+  },
+  "evaluation_spec": {
+    "products": [
+      "legacy_25k",
+      "legacy_50k"
+    ],
+    "evaluations": {
+      "legacy_25k": {
+        "profit_target_usd": 1500,
+        "trailing_drawdown_usd": 1500,
+        "monthly_fee_usd": 33,
+        "activation_fee_usd": 125,
+        "contracts": 3
+      },
+      "legacy_50k": {
+        "profit_target_usd": 3000,
+        "trailing_drawdown_usd": 2500,
+        "monthly_fee_usd": 40,
+        "activation_fee_usd": 125,
+        "contracts": 5
+      }
+    },
+    "evaluations_at_once": 5,
+    "budgets": [
+      [
+        1000,
+        0
+      ],
+      [
+        1000,
+        200
+      ],
+      [
+        5000,
+        0
+      ],
+      [
+        5000,
+        200
+      ]
+    ],
+    "acquisitions": {
+      "monthly_current_slot_replacements": [
+        0,
+        5,
+        10
+      ],
+      "weekly_one": [
+        0,
+        5,
+        10
+      ],
+      "monthly_one": [
+        0,
+        5,
+        10
+      ]
+    },
+    "amount_rules": [
+      "minimum",
+      "maximum"
+    ],
+    "cadences": [
+      "calendar_month",
+      "weekly",
+      "daily"
+    ],
+    "headrooms": [
+      0,
+      500,
+      1000,
+      1500,
+      2000,
+      3000,
+      4000,
+      5000,
+      6500,
+      8000,
+      10000
+    ],
+    "refinement_radius": 400,
+    "refinement_step": 100,
+    "reconciliation": {
+      "horizon_days": 180,
+      "eodmae_source": "I:/PycharmProjects/EODMAE/outputs/account_type_study_product_rules_20260823/ranking.csv",
+      "eodmae": {
+        "legacy_25k": {
+          "contracts": 3,
+          "activation_rate_mae_first": 0.9730769230769231,
+          "activation_rate_resolved": 0.9615384615384616,
+          "median_days_resolved": 35.55208333333333,
+          "first_cycle_rate_resolved": 0.383974358974359
+        },
+        "legacy_50k": {
+          "contracts": 5,
+          "activation_rate_mae_first": 0.9371794871794872,
+          "activation_rate_resolved": 0.9224358974358975,
+          "median_days_resolved": 40.416666666666664,
+          "first_cycle_rate_resolved": 0.30705128205128207
+        }
+      }
+    },
+    "workers": 7,
+    "output": "results/comparisons/legacy_25k_vs_50k/eval_supply",
+    "note": "Funded accounts come only from evaluations traded on the same RR signals, one position at a time: 25K at 3 MNQ (1:1 target to drawdown), 50K at 5 MNQ (1.2:1). Up to 5 evaluations at once, started only while short of accounts; each holds one of the 20 seats. Passes land on the spare shelf and the purchase policy deploys them."
+  },
+  "runner_hashes": {
+    "scripts\\study_legacy_reserve_frontier.py": "7c3877251f9cea55c13712a738434a2641c6674d6e1fe146343c838c48e15fc8",
+    "scripts\\study_legacy_pipeline_capacity.py": "3155c4b9952ac653b4b11e9d98c6248da213ed2e8da0ca80ee4f4a9a1ddb16dd",
+    "scripts\\study_legacy_50k_operating.py": "5ca38ef0ec9b4d5ebf08bc4d233699298de66c3fa735cf73b51cef064e429af1",
+    "config\\studies\\legacy_reserve_frontier.json": "071559c726bcea0c50a280523fb16c5c23e3c35d57a06af6f68b4e742aa1bdc6"
+  },
+  "protected_results": {
+    "results\\CONSISTENCY_AUDIT.md": "979b2c59f5b2ad342dd52a8b96d1685754128bd448f6582f2803a9215329f3f8",
+    "results\\README.md": "4fa019d8375e0d9899c1cda1ba8b3952dd3874bca7c3c2ce0ebe1ccce5e0fb27",
+    "results\\comparisons\\interesting.txt": "33004855662cd3bf042ccea13c3b6b34e1088c27a70fecf2cd4bc59d52473568",
+    "results\\full_rulebook__hold__terminal_request\\accounts.csv": "6c4153becbd44903607c65504ab4eab1b875ae07a2e47b33310e6fe30c7413c6",
+    "results\\full_rulebook__hold__terminal_request\\denials.csv": "f3afd8f888300660b1a05d0bb1628a65b7504ced63b54050c5bc790c0a79ffde",
+    "results\\full_rulebook__hold__terminal_request\\report.txt": "15312a4779ff04d6a9de930eb94f76ff04028edd7e448fe568235aa7df680149",
+    "results\\full_rulebook__hold__terminal_request\\RUN.md": "fc25e4b08d245be6e69522037d5233bd97b146f66e3fa24aac38a36ccb3fa774",
+    "results\\full_rulebook__hold__terminal_request\\summary.json": "b488863d3afb21eb31d590f525bccd0df33006f485947211008b7a35a05d8f3a",
+    "results\\full_rulebook__hold__terminal_request\\withdrawals.csv": "3ceec58ee5caf6241d44595f61d21cfe4738e09ff8d41cf80edc5124abcfc196",
+    "results\\full_rulebook__monthly_500__no_cushion__no_terminal\\ablation.json": "2af458e6fc54e46a77d55fe49f18725e30e0801a98fbc925b60d6017b07ff78a",
+    "results\\full_rulebook__monthly_500__no_cushion__no_terminal\\accounts.csv": "7dc71661034710cad1db2d8bc2742ed1b5f7c1ee0d2fb87d1669c56b2aae673f",
+    "results\\full_rulebook__monthly_500__no_cushion__no_terminal\\denials.csv": "fb2df45818a740089dd3a212e9390e7d1033ace97a518780adacb6b8c2859551",
+    "results\\full_rulebook__monthly_500__no_cushion__no_terminal\\INTERPRETATION.md": "73756937841b64ff24174c9ea1973c96c62738bdf266d557a0ef855ab3e1b515",
+    "results\\full_rulebook__monthly_500__no_cushion__no_terminal\\report.txt": "7ac1cd5e511996c5e282cafab2f8ee1009b5ba624abb6c5234b2b8185ba11c83",
+    "results\\full_rulebook__monthly_500__no_cushion__no_terminal\\RUN.md": "acf82804cf09e039f46ecd0b1c56e4ced1daa9314c843d55f4427f292ef239dc",
+    "results\\full_rulebook__monthly_500__no_cushion__no_terminal\\summary.json": "76f382c191dd0b3ac7f28b33c2e6eb11dabe873b1372aa120436ab9b2e557037",
+    "results\\full_rulebook__monthly_500__no_cushion__no_terminal\\withdrawals.csv": "fcf2abe392ddf6f6edf0f0d9f7e1f0a29c9e966d649e22e5674ec423083ae26c",
+    "results\\full_rulebook__monthly_500__no_cushion__no_terminal__adapted_search\\ablation.json": "bb00ad578137b42a050bce5bf4cc957e4cff3d6bc3ca1956f3b744821c54fac3",
+    "results\\full_rulebook__monthly_500__no_cushion__no_terminal__adapted_search\\accounts.csv": "7dc71661034710cad1db2d8bc2742ed1b5f7c1ee0d2fb87d1669c56b2aae673f",
+    "results\\full_rulebook__monthly_500__no_cushion__no_terminal__adapted_search\\denials.csv": "fb2df45818a740089dd3a212e9390e7d1033ace97a518780adacb6b8c2859551",
+    "results\\full_rulebook__monthly_500__no_cushion__no_terminal__adapted_search\\report.txt": "e36f31ddc3dfc0b6744900fe24baa8b5dc9aea8781c60bd6f3e0d141b8fffdff",
+    "results\\full_rulebook__monthly_500__no_cushion__no_terminal__adapted_search\\RUN.md": "5e925f3da6fd14b5408258c7d7a9f3f419aad0e25dc1432a5cc4945908dab4d5",
+    "results\\full_rulebook__monthly_500__no_cushion__no_terminal__adapted_search\\summary.json": "3c99fb6aef0e4e3c147bfb2398ac16d833451e9689583cd5890ed3e6388a437e",
+    "results\\full_rulebook__monthly_500__no_cushion__no_terminal__adapted_search\\withdrawals.csv": "fcf2abe392ddf6f6edf0f0d9f7e1f0a29c9e966d649e22e5674ec423083ae26c",
+    "results\\full_rulebook__monthly_500__retain_30000__terminal_request\\ablation.json": "bc24ca886477c69420d30a875abf7e24966c54c2fc440dbc218fe31b9e001eae",
+    "results\\full_rulebook__monthly_500__retain_30000__terminal_request\\accounts.csv": "ee8855469ba7eaa9e28af241c5e37d5d9d2872a0783750c8b47b88c763f36db4",
+    "results\\full_rulebook__monthly_500__retain_30000__terminal_request\\denials.csv": "b782ddca6c47f0bd22c35f8549847d6a98596ecff88cafc8fde5defce84f881f",
+    "results\\full_rulebook__monthly_500__retain_30000__terminal_request\\report.txt": "4b21d191fd58c0f202b8bf19c18ac5c340cb604eaee431dd64fc635582f09c0f",
+    "results\\full_rulebook__monthly_500__retain_30000__terminal_request\\RUN.md": "9bb689c57dc8483ad41742b018d883caca21b6d9168c09726177d1d2c641bd8f",
+    "results\\full_rulebook__monthly_500__retain_30000__terminal_request\\summary.json": "afff8255f20a67c6f9c35db840803a47be88f4083009c53fddecb981239828e2",
+    "results\\full_rulebook__monthly_500__retain_30000__terminal_request\\withdrawals.csv": "005d1d5cec4d49b65989cd3d1c2c06d1dbdbdff2ed1b967324bbcf042617a020",
+    "results\\full_rulebook__monthly_maximum__no_cushion__no_terminal\\ablation.json": "284095a9bad0b26ecd35baa3075d7e198fda8cc7f0a8b233676bbd5c34d2be1b",
+    "results\\full_rulebook__monthly_maximum__no_cushion__no_terminal\\accounts.csv": "2d9a2b262447415a508294a27709edd0b0698ba0d71dff655ccfad5a8f7beed3",
+    "results\\full_rulebook__monthly_maximum__no_cushion__no_terminal\\denials.csv": "0a9b585d2addead95fab469303c8d67934b159bf3bb86c997a68c9acde725981",
+    "results\\full_rulebook__monthly_maximum__no_cushion__no_terminal\\report.txt": "105391cfee369eaa0e50a30835578b381a56ea4804b4b313fe9af78bc642c2f3",
+    "results\\full_rulebook__monthly_maximum__no_cushion__no_terminal\\RUN.md": "55f6975129b710de676214a9b7879dcb7c05211a620f0c3c96e40019a8149db4",
+    "results\\full_rulebook__monthly_maximum__no_cushion__no_terminal\\summary.json": "4dbcd0ec7bb1efd2494d7d86a0047114867a02ff783a6fcdff547368b7450ec7",
+    "results\\full_rulebook__monthly_maximum__no_cushion__no_terminal\\withdrawals.csv": "3b89c960bf98d2eb1c825aa3a02332570a7cf19b70e6e1298c1316cb342b3efd",
+    "results\\legacy_rules__monthly_100__no_cushion__no_terminal\\accounts.csv": "d5b502e6e56e9821f7229ebc67a2c424420ae7ef134e6fe25830909802f773ed",
+    "results\\legacy_rules__monthly_100__no_cushion__no_terminal\\report.txt": "c0efbd4578fe66416740af080f1f365ed513001db6b1017556b22994f33870a5",
+    "results\\legacy_rules__monthly_100__no_cushion__no_terminal\\RUN.md": "e44f8883561976bc5ede13a9329aba6d06cc7a6d015e2a3393beaab917a78139",
+    "results\\legacy_rules__monthly_100__no_cushion__no_terminal\\summary.json": "5c89498e80da278b18ae5b716aedadd666979692a47b5bb5d773646dd7d7ebbe",
+    "results\\legacy_rules__monthly_100__no_cushion__no_terminal\\withdrawals.csv": "df48258cdafd8b1c91315e75572ce6906535fced7a01a171fdc0a4f548f2cdd2",
+    "results\\no_payout_rules__hold__no_terminal\\accounts.csv": "73aecd7da01a51447a7c156d452bcd767075982b63827affbe8b8e826ef2c3aa",
+    "results\\no_payout_rules__hold__no_terminal\\report.txt": "c21a3a2be2827bbcee2703600e7c02c7e9160b9455cc949d09882b535433b125",
+    "results\\no_payout_rules__hold__no_terminal\\RUN.md": "548e93a60f43974abe2ac60f45408fa810963fe8fed39bfaa651427bdc886654",
+    "results\\no_payout_rules__hold__no_terminal\\summary.json": "a02781325b691ec4bc29841578d9c3f91d9677843e74de3fc9f8a986f49d681a",
+    "results\\no_payout_rules__hold__terminal_idealized\\accounts.csv": "0615481e74c8f63d5914e161ea603c55fc1eb71ec2e09d8b9701a568262679fb",
+    "results\\no_payout_rules__hold__terminal_idealized\\report.txt": "3200a3cfdbb7ce55a0a69403d2c2ee9baf0ab0db9223f33a601c642acdc5a2d9",
+    "results\\no_payout_rules__hold__terminal_idealized\\RUN.md": "43960e9d4f4173bbd32fde11ed019cbe820699b668b072c101ee91383c2daa18",
+    "results\\no_payout_rules__hold__terminal_idealized\\summary.json": "97c926ba05922b992dcc96efe057fd90c7c6ef4d175ae9a8d33ef8fdb3a0a2ca",
+    "results\\no_payout_rules__hold__terminal_idealized\\withdrawals.csv": "c541c85e1b0274828a98980541befcff9f23697ca5acc6c8f64e46fa3bb6dfb0",
+    "results\\no_payout_rules__monthly_500__retain_26100__no_terminal\\ablation.json": "5220704b424c5d94d08bc9ee78c53fe5bae6a44939f4c9fc7e0b42d50dd1fe54",
+    "results\\no_payout_rules__monthly_500__retain_26100__no_terminal\\accounts.csv": "b8c8c5ed106f7eddcfd2f7e8ef9a8c3032a3c586b3975d9d88a454d6d554ab11",
+    "results\\no_payout_rules__monthly_500__retain_26100__no_terminal\\denials.csv": "fc928867634ff520468e327c2938acffd9d949bce07fcac00a24773c787b01f2",
+    "results\\no_payout_rules__monthly_500__retain_26100__no_terminal\\report.txt": "27fd5baef4b01d382562bec08500ca61a1ce0c8445ad0507adfd599bb338fe14",
+    "results\\no_payout_rules__monthly_500__retain_26100__no_terminal\\RUN.md": "33ce401495f0c919444633926c671b65bc599d271ae09de6d0d9e86ac2e3c55b",
+    "results\\no_payout_rules__monthly_500__retain_26100__no_terminal\\summary.json": "a2c2861bf5b2180bc799e2f96078b10719460881ec209c75bf42c63f98739e26",
+    "results\\no_payout_rules__monthly_500__retain_26100__no_terminal\\withdrawals.csv": "8edfeafe5c98dced7769296414f42b53d82359ac8220af85030f96acdad9dcf4",
+    "results\\study__full_rulebook__RR__account_purchases__cash_budgets\\candidates.csv": "d7d9b8412db5f234bd2723ab5a69ed099af62aa1bf3ce24e8624ce095bf5fdcc",
+    "results\\study__full_rulebook__RR__account_purchases__cash_budgets\\HOW_THIS_STUDY_WORKS.md": "2d2d605e698d44d53189c7a37c0a914498a8b5d13a5784068a6786e6e9bffeaa",
+    "results\\study__full_rulebook__RR__account_purchases__cash_budgets\\PHASE_SENSITIVITY.md": "03f46144ba94e220fee09d712661d7e97a10e1a3b38df20ca1765cc9ded72e36",
+    "results\\study__full_rulebook__RR__account_purchases__cash_budgets\\REPORT.generated.md": "ffa07ac5494faf89e2231626039be1175a63a0dcd7cc78c7c71436e56cf0507b",
+    "results\\study__full_rulebook__RR__account_purchases__cash_budgets\\REPORT.md": "c2f768c1258c087ca9e862e200a9d84910f3052dd5340de0573481a432e6dba5",
+    "results\\study__full_rulebook__RR__account_purchases__cash_budgets\\report_breakdown.txt": "643a18ca357aee0949a1308ebdcf8605e44663d6ab68ae1de2bc89f076391bf7",
+    "results\\study__full_rulebook__RR__account_purchases__cash_budgets\\study.json": "80b0bd03749874b3cb726d6b52b4604c9f1e0a71f5bce08cefe953f69afada66",
+    "results\\study__full_rulebook__RR__monthly_amount_x_cushion__dual_terminal_scores\\candidates.csv": "3fae02171a0c3059300b9cb5154d6e17e0bc396ba946817e80653f30392da815",
+    "results\\study__full_rulebook__RR__monthly_amount_x_cushion__dual_terminal_scores\\HOW_THIS_STUDY_WORKS.md": "f03eeef55ed2a06d90a41a0c1fddcb2e73c860694b805a9d1bdfc6345aeb8e36",
+    "results\\study__full_rulebook__RR__monthly_amount_x_cushion__dual_terminal_scores\\REPORT.md": "ec6d10b20f86030e0bf2d8d63d5f2e7be5aa489248034bb5403017c666c3f51a",
+    "results\\study__full_rulebook__RR__monthly_amount_x_cushion__dual_terminal_scores\\study.json": "d251d3fe28a82442525ff2a1c3512eee5bbe628017fc7172d33b7258a2b4c77c",
+    "results\\study__full_rulebook__RR__monthly_replacements__cap_20__cash_budgets\\candidates.csv": "c5013b354dfc47a497ae64b0c300a76ce5023bce3c89a7a8a141c874fdcd578a",
+    "results\\study__full_rulebook__RR__monthly_replacements__cap_20__cash_budgets\\HOW_THIS_STUDY_WORKS.md": "733b726d82037e0d316e259c0f26e7e9553af5a9d329074acf47bba26c10942d",
+    "results\\study__full_rulebook__RR__monthly_replacements__cap_20__cash_budgets\\REPORT.generated.md": "fcf093624ffa749c397ee5157cabdbf4b2aebf5e3a04b19e70ea17612b92b752",
+    "results\\study__full_rulebook__RR__monthly_replacements__cap_20__cash_budgets\\REPORT.md": "315255662700fb8bf766d230a9a90874f61cc9a4fa31b9e16e6c78e9475ccb13",
+    "results\\study__full_rulebook__RR__monthly_replacements__cap_20__cash_budgets\\study.json": "44f490a63afec6211b506fd83bbbe17f0cf345f03f51a8941e8740e36b97df40",
+    "results\\study__full_rulebook__RR__withdrawal_cadence__monthly_purchases\\candidates.csv": "399ad7dd258a435586a2417b9d2c1fb4d95681d860c7dc74cf11358f652ae46a",
+    "results\\study__full_rulebook__RR__withdrawal_cadence__monthly_purchases\\HOW_THIS_STUDY_WORKS.md": "1692049dd8c0990f66517b898d53ce21ec54659fcdf9ebeba5b4b3088e062f09",
+    "results\\study__full_rulebook__RR__withdrawal_cadence__monthly_purchases\\REPORT.md": "5c811fbea3f6577b459e3d6b2254c1557956e3ce6d0a7f8e0d096638c69f1b0f",
+    "results\\study__full_rulebook__RR__withdrawal_cadence__monthly_purchases\\report_breakdown.txt": "e95d42f913e0f1ba2859cf5d13a6fbbcce95c53be1505c21149839e44f60295c",
+    "results\\study__full_rulebook__RR__withdrawal_cadence__monthly_purchases\\study.json": "35136b2c24c47aff5dbafec5980cce620ed87558f798af93b44aec67ee6ce9f3",
+    "results\\study__full_rulebook__RR__withdrawal_cadence__monthly_purchases__cap_20__cash_budgets\\candidates.csv": "622cda84955d33134b836bc456ea7fe54198c62262fee60d21279f487f85f62a",
+    "results\\study__full_rulebook__RR__withdrawal_cadence__monthly_purchases__cap_20__cash_budgets\\HOW_THIS_STUDY_WORKS.md": "7e6baf6c27337c0170d8925e1b668e92fc17ba44b00cb122f60c8a0f2a884216",
+    "results\\study__full_rulebook__RR__withdrawal_cadence__monthly_purchases__cap_20__cash_budgets\\REPORT.generated.md": "d37b0bf3046ab4df4690d833cd9427f41e4cf056af5afbf3b0bf2836caad0886",
+    "results\\study__full_rulebook__RR__withdrawal_cadence__monthly_purchases__cap_20__cash_budgets\\REPORT.md": "c6b9d697a3e7e59ba62014716ead47d73d5c60c10ab00c86e267fcb6009211a0",
+    "results\\study__full_rulebook__RR__withdrawal_cadence__monthly_purchases__cap_20__cash_budgets\\report_breakdown.txt": "34b0a40206f6bffccd3fe13da25a33b4a4d9afe250d01529347947877cef0543",
+    "results\\study__full_rulebook__RR__withdrawal_cadence__monthly_purchases__cap_20__cash_budgets\\study.json": "bd4c113653a8713cf353faf595a049b96ae325747ab0db83a11c029040419c6e",
+    "results\\sweeps\\full_rulebook__GG__monthly_500__cushion_grid.json": "3e33371f60d4e20f677bb83073c05e02c8a29d9081b874ed337c80ffea62a493",
+    "results\\sweeps\\full_rulebook__RR__monthly_500__cushion_fine_grid.json": "f748d6781111a2f0c35cd53c186a23bcca2863f72aaf5adce132b35b51047a3b",
+    "results\\sweeps\\full_rulebook__RR__monthly_500__cushion_grid.json": "658a6140ce3924690b72573a0d26a0880e05e7607956bd94f411dc6b3272b8d1",
+    "results\\sweeps\\full_rulebook__RR__monthly_maximum__cushion_grid.json": "d306753e3ecca4ff164eab65caffa9dfe72ff85c08536ba9e048cd7f751d46ab",
+    "results\\comparisons\\legacy_25k_vs_50k\\Legacy_25K_vs_50K.xlsx": "ae42eceec3682c1e82656d34c059f54559f1a9c975b64e96c1191c6601c31342",
+    "results\\comparisons\\legacy_25k_vs_50k\\eval_supply\\all_settings.csv": "819d22ae7fb0dc5edfca4fa1fc4586efbea65914ae036fe48ed363a28c49a459",
+    "results\\comparisons\\legacy_25k_vs_50k\\eval_supply\\Breakdown_evaluation_polices.md": "f4ea30cf2bec63c73fcd77645aa105e9acb8a12d08d965cee18ac4411af9af8b",
+    "results\\comparisons\\legacy_25k_vs_50k\\eval_supply\\checkpoint.jsonl": "068c040d4f14f118cdf86f4476fabd939f81d0de628666d9d7b57f1eaaeb0014",
+    "results\\comparisons\\legacy_25k_vs_50k\\eval_supply\\contract.json": "16e8b2faf7dedbbf038ac8879e0792b5b12df36281fe2f69d815a6de1c5a9ab8",
+    "results\\comparisons\\legacy_25k_vs_50k\\eval_supply\\matched_deltas.csv": "7245b4f085777bc748d457518ad8e55abb0f84f1598076f87f777ac9ef4b1c48",
+    "results\\comparisons\\legacy_25k_vs_50k\\eval_supply\\preservation_check.json": "f97ac0cf310c5066588cd8937fe794773247d10fbc29e7d5ba30485be95f3cac",
+    "results\\comparisons\\legacy_25k_vs_50k\\eval_supply\\reconciliation.json": "3a7e7db43fb753a279542903fb60228e4afd298fdbab3155308bfe416eec0a48",
+    "results\\comparisons\\legacy_25k_vs_50k\\eval_supply\\REPORT.generated.md": "09bf432a9d090dbbf59c3f8de591756df8b951f2bdf77fa14ef8c661684b3869",
+    "results\\comparisons\\legacy_25k_vs_50k\\eval_supply\\REPORT.md": "4c5cfcddff738961397a8f6223cc894dfb96f9720fb5e8b3a01edf1db09a9a3b",
+    "results\\comparisons\\legacy_25k_vs_50k\\eval_supply\\study.json": "66656536671f24d95d807b178e468169ab5ccc5c0b4f04a31bca459445a98648",
+    "results\\comparisons\\legacy_25k_vs_50k\\pipeline_capacity\\all_settings.csv": "53a5e00d2d56f8a1dcf780b0673639d14e76cf8e618fb1ce35b930e516716245",
+    "results\\comparisons\\legacy_25k_vs_50k\\pipeline_capacity\\AUDIT.json": "01e7f7dd1d388e5e6e36654ba65f04a80d07d2245dd9c52dd608faa482c86fca",
+    "results\\comparisons\\legacy_25k_vs_50k\\pipeline_capacity\\budget_sensitivity.csv": "53b8c065f17f62a17b354e71f16de6307ffb872909971e31563c15de7e8f57ff",
+    "results\\comparisons\\legacy_25k_vs_50k\\pipeline_capacity\\capacity_frontier.png": "6665db138589f739eeabf9c730b9664365b2b03977e741d61e889754405e7d35",
+    "results\\comparisons\\legacy_25k_vs_50k\\pipeline_capacity\\capacity_frontier.svg": "67c8a6dfc422f46559b800238590f500df9458a420ad22b2d11013c20b35c485",
+    "results\\comparisons\\legacy_25k_vs_50k\\pipeline_capacity\\checkpoint.jsonl": "0dba65a930fb1fa1d2b271cb9d7d6613260506b83a1b41a07e9545b08662f32a",
+    "results\\comparisons\\legacy_25k_vs_50k\\pipeline_capacity\\contract.json": "93292282c6c60ec9604bdead6653a485eeacea00c239653c75494144da92440c",
+    "results\\comparisons\\legacy_25k_vs_50k\\pipeline_capacity\\csv_header_fix_provenance.json": "4ba4307cf6c193fb11db720f4711551be9e93a5be76ed35111701a3165358b2a",
+    "results\\comparisons\\legacy_25k_vs_50k\\pipeline_capacity\\FINDINGS.generated.md": "7da9f086dcb831882b9bb64d63852309699f6560645160d3a1581cce27fc5d00",
+    "results\\comparisons\\legacy_25k_vs_50k\\pipeline_capacity\\frontier.csv": "d4c90f9bd34630187f7278998f54eb6b3d95029c9e0b66e4f3c551bc5c1bcaf9",
+    "results\\comparisons\\legacy_25k_vs_50k\\pipeline_capacity\\preservation_check.json": "b5a8de180d45479503517f3f1db285c92a1beb62ac4c02257fedf770c786dac1",
+    "results\\comparisons\\legacy_25k_vs_50k\\pipeline_capacity\\REPORT.generated.md": "f1aefbee141a09ac8c8c528f402b84e85385e17e6d1d4727c7f82de11518c3bb",
+    "results\\comparisons\\legacy_25k_vs_50k\\pipeline_capacity\\REPORT.md": "f1aefbee141a09ac8c8c528f402b84e85385e17e6d1d4727c7f82de11518c3bb",
+    "results\\comparisons\\legacy_25k_vs_50k\\pipeline_capacity\\reserve_near_ties.csv": "fed3e91d49c03e8538c028f7e86042e4fcd21342c6aa794bf6ce921c83ba7c54",
+    "results\\comparisons\\legacy_25k_vs_50k\\pipeline_capacity\\reserve_search.csv": "1efaf8afc04637220e348fa9d610813d655caf4452d0ec92b2c78716737a2f2a",
+    "results\\comparisons\\legacy_25k_vs_50k\\pipeline_capacity\\runner_before_csv_header_fix.py": "4435c1ba857c6a9606fa092a284886ed7e0effc5323170476f10f8171814bcc2",
+    "results\\comparisons\\legacy_25k_vs_50k\\pipeline_capacity\\screening.csv": "6570a557c660c605be8d4934a374832feb59522733cf871e6781285a485e4315",
+    "results\\comparisons\\legacy_25k_vs_50k\\pipeline_capacity\\selected_pipelines.json": "fb017590c6487ca81286cb5706fc4ad5b92074a925fc6428fac57be3a34f5d42",
+    "results\\comparisons\\legacy_25k_vs_50k\\pipeline_capacity\\study.json": "b40e106086b99acfb2d3fe9b45384235ecaf4856880b8ab03468f243d445e406",
+    "results\\comparisons\\legacy_25k_vs_50k\\pipeline_capacity\\transcript.md": "f81b28da9d5e4428b54d415b6dcc4955b443344ba29ca7c03fabd702ec582470",
+    "results\\comparisons\\legacy_25k_vs_50k\\reserve_by_policy\\all_settings.csv": "22c7d9f0c6af39d854d399879d3845377778ae83fd3b1d9f758acb1fc817e7ee",
+    "results\\comparisons\\legacy_25k_vs_50k\\reserve_by_policy\\best_by_policy.csv": "dd3a3eb216f3e9371a35d321b29859178363e8741a075e63c689e7f9c9c5b1a5",
+    "results\\comparisons\\legacy_25k_vs_50k\\reserve_by_policy\\checkpoint.jsonl": "7002efa0f65cede4ea19c98ccc52747a32743a67d99c253ea1d8c622ddcb7814",
+    "results\\comparisons\\legacy_25k_vs_50k\\reserve_by_policy\\contract.json": "d28d644f84f2ea617c56c47d301af241cb59681c691c9b5a68a830bbe0fb8960",
+    "results\\comparisons\\legacy_25k_vs_50k\\reserve_by_policy\\FINDINGS.generated.md": "d9d6e592d58719b42270f1e7eed239651e6a2771cf5c9f75b76c7112510a8e58",
+    "results\\comparisons\\legacy_25k_vs_50k\\reserve_by_policy\\FINDINGS.md": "d9d6e592d58719b42270f1e7eed239651e6a2771cf5c9f75b76c7112510a8e58",
+    "results\\comparisons\\legacy_25k_vs_50k\\reserve_by_policy\\HOW_THIS_STUDY_WORKS.md": "7591ab1bc11f760a0d5d7fa1e82eea6620e635ef34baffb0e701c7a7a2f1b41b",
+    "results\\comparisons\\legacy_25k_vs_50k\\reserve_by_policy\\matched_deltas.csv": "1a1ab82f0fe26465ff8cc8698b7d25030dc9d240dcea12dd656e8a1ee5c9ace4",
+    "results\\comparisons\\legacy_25k_vs_50k\\reserve_by_policy\\presentation.json": "67b9d3633545eaa941a48225f7a710c38666dca65f6b8036cbada5a9722604e9",
+    "results\\comparisons\\legacy_25k_vs_50k\\reserve_by_policy\\preservation_check.json": "7bf123698e4ccb0e0425a5ba7a078ff19a0b62eefeacd78344c287ced605c76d",
+    "results\\comparisons\\legacy_25k_vs_50k\\reserve_by_policy\\REPORT.generated.md": "698f881dfeafe6a1e28abb9f54ce3d16266b27f4def897c408de654f7c04254c",
+    "results\\comparisons\\legacy_25k_vs_50k\\reserve_by_policy\\REPORT.md": "698f881dfeafe6a1e28abb9f54ce3d16266b27f4def897c408de654f7c04254c",
+    "results\\comparisons\\legacy_25k_vs_50k\\reserve_by_policy\\study.json": "21fcdae0e5afcddb9321924c5c317c82e73ea4d5f8b6ac295f3fc20e832ed9d4",
+    "results\\comparisons\\legacy_25k_vs_50k\\reserve_by_policy\\winner_analysis.json": "2e13b6e2e6bc8294c65c8ee697434f059bed8cbcf6f48df2f51a368b128f297d",
+    "results\\comparisons\\legacy_25k_vs_50k\\spare_shelf\\all_settings.csv": "d4976b00cae1c0d499f2c9f9db3c04bda28c2efe09eca2940191ccbb35e7bc5f",
+    "results\\comparisons\\legacy_25k_vs_50k\\spare_shelf\\best_by_shelf.csv": "c1433f1453876824066b033919f1f8cedc4cd77161116f6f3732a132e107b635",
+    "results\\comparisons\\legacy_25k_vs_50k\\spare_shelf\\checkpoint.jsonl": "b51671e39a909212d24d7321d304c27c15e6354ddd140309361139d7ea9144d2",
+    "results\\comparisons\\legacy_25k_vs_50k\\spare_shelf\\contract.json": "69c97aa2092b0ef88ffd56b5c95c7d809fe4237569a4911671d4ff8372447b74",
+    "results\\comparisons\\legacy_25k_vs_50k\\spare_shelf\\matched_deltas.csv": "64ac30efa729a0757d76ae66b8f3079479c42907613a2bfc3017bfca712ecad3",
+    "results\\comparisons\\legacy_25k_vs_50k\\spare_shelf\\preservation_check.json": "4cae34dbbc028cc05b608cda8bd4fe5647d55e9124428773917618877f6337ea",
+    "results\\comparisons\\legacy_25k_vs_50k\\spare_shelf\\REPORT.generated.md": "fa76e1ff9badaee6b84edaeae2ecb93537bc032740af91ea349d39e72709b821",
+    "results\\comparisons\\legacy_25k_vs_50k\\spare_shelf\\REPORT.md": "fa76e1ff9badaee6b84edaeae2ecb93537bc032740af91ea349d39e72709b821",
+    "results\\comparisons\\legacy_25k_vs_50k\\spare_shelf\\study.json": "d4582b4e1ba52b594fc523c020701dab81d086faf4c8b6a0ffdb5ef56e038ef5",
+    "results\\comparisons\\legacy_25k_vs_50k\\eval_supply\\legacy_25k__budget_1000_0__best_total\\accounts.csv": "c64a785c79fb3112e865fcf80e117db31608c6cdb33a560f651a5c3d7cfe4095",
+    "results\\comparisons\\legacy_25k_vs_50k\\eval_supply\\legacy_25k__budget_1000_0__best_total\\denials.csv": "9f75e28c377993b3f7c37afbc3f51351f9b7788e2c15cda9c807fbf98a7365a6",
+    "results\\comparisons\\legacy_25k_vs_50k\\eval_supply\\legacy_25k__budget_1000_0__best_total\\evaluations.csv": "20462b208686ad32bb828deb23b3d5187296a6cd13a64b89f06615e5230a2431",
+    "results\\comparisons\\legacy_25k_vs_50k\\eval_supply\\legacy_25k__budget_1000_0__best_total\\experiment.json": "b9428a117d1514a493e7ac174dd44c42035aa0e1f949b8010a8785b03c79fd4f",
+    "results\\comparisons\\legacy_25k_vs_50k\\eval_supply\\legacy_25k__budget_1000_0__best_total\\report.txt": "37c035cf2324db762fa3b0d56535ce9125b3332a4f3e694b9484dbb86f465db1",
+    "results\\comparisons\\legacy_25k_vs_50k\\eval_supply\\legacy_25k__budget_1000_0__best_total\\summary.json": "4443be5861b36cd8944b228e6495f2a86b4a2764bb19f7f4d0be1bd5c473fe2c",
+    "results\\comparisons\\legacy_25k_vs_50k\\eval_supply\\legacy_25k__budget_1000_0__best_total\\withdrawals.csv": "18aae0b454337e9d3a7b8719b9a6a4195c709595f93c09b90af1f72841697961",
+    "results\\comparisons\\legacy_25k_vs_50k\\eval_supply\\legacy_25k__budget_1000_200__best_total\\accounts.csv": "2a121ab739d099326f0f12aa1acddf2530db32fd7f30cd51799f0d4452303845",
+    "results\\comparisons\\legacy_25k_vs_50k\\eval_supply\\legacy_25k__budget_1000_200__best_total\\denials.csv": "1c74f99231df657cc4358d97ede1f0cef3f800d7c8dd59c519494a4062e2a0de",
+    "results\\comparisons\\legacy_25k_vs_50k\\eval_supply\\legacy_25k__budget_1000_200__best_total\\evaluations.csv": "e27846c2bf1fe8e628da69bbbfb7069a9166d80668ed8ef56e8eda9c4be9fdfb",
+    "results\\comparisons\\legacy_25k_vs_50k\\eval_supply\\legacy_25k__budget_1000_200__best_total\\experiment.json": "d475562ff712a29866c690230088c6837245f6b997c5d8397fbab63ef8d7d39f",
+    "results\\comparisons\\legacy_25k_vs_50k\\eval_supply\\legacy_25k__budget_1000_200__best_total\\report.txt": "6f0546aba00e930c483d14468449c69ef0711a6dd4d20bf98ec8b7dd14033f51",
+    "results\\comparisons\\legacy_25k_vs_50k\\eval_supply\\legacy_25k__budget_1000_200__best_total\\summary.json": "66f44b9c3648d4ba64572017545dc0e2b3e7391aa23a65fb80bc62766fa9fc50",
+    "results\\comparisons\\legacy_25k_vs_50k\\eval_supply\\legacy_25k__budget_1000_200__best_total\\withdrawals.csv": "9eb87d29a9ffacbb0205ad0aec4f30500089c905b35d537dd847225e4e9c24f3",
+    "results\\comparisons\\legacy_25k_vs_50k\\eval_supply\\legacy_25k__budget_5000_0__best_total\\accounts.csv": "d671b22f8a0fc8e768ebff3903b273920a7525f061dda69d6bde63c490a20b41",
+    "results\\comparisons\\legacy_25k_vs_50k\\eval_supply\\legacy_25k__budget_5000_0__best_total\\denials.csv": "979bb78caeef4459c1154cc50a6b4502772fdd280ee6321532872c1265b46e14",
+    "results\\comparisons\\legacy_25k_vs_50k\\eval_supply\\legacy_25k__budget_5000_0__best_total\\evaluations.csv": "ba6329e702ed84941057fdb92917656bc67a9f2bbdc25c1f4723f1606a8e3ca0",
+    "results\\comparisons\\legacy_25k_vs_50k\\eval_supply\\legacy_25k__budget_5000_0__best_total\\experiment.json": "d6598dc692c9924278fe038ba8a4119c97664587b37a0cf95f52c674a62fa575",
+    "results\\comparisons\\legacy_25k_vs_50k\\eval_supply\\legacy_25k__budget_5000_0__best_total\\report.txt": "fa9105e46790df81ab9ce83e18afbe330944959173c011f7a7cc1e63301c20fc",
+    "results\\comparisons\\legacy_25k_vs_50k\\eval_supply\\legacy_25k__budget_5000_0__best_total\\summary.json": "823e96a823456abd32fa20eb3524192a548c9b2cd80d013bb76cc577eedafe1c",
+    "results\\comparisons\\legacy_25k_vs_50k\\eval_supply\\legacy_25k__budget_5000_0__best_total\\withdrawals.csv": "b8368f6c460991dcf1b75ac39f82ef972c72e370807da4e2604391e90889d270",
+    "results\\comparisons\\legacy_25k_vs_50k\\eval_supply\\legacy_25k__budget_5000_200__best_total\\accounts.csv": "1a10013a3739b1a95af94bb808e3c27a239fa1275636c99aa671580268dfa406",
+    "results\\comparisons\\legacy_25k_vs_50k\\eval_supply\\legacy_25k__budget_5000_200__best_total\\denials.csv": "157a6f56abc80d85fe3ef1d42e56afd2edab9adb6e7df4fada213731fdf35021",
+    "results\\comparisons\\legacy_25k_vs_50k\\eval_supply\\legacy_25k__budget_5000_200__best_total\\evaluations.csv": "681ada4ebb742b85d9167ea85515ebf18aa28690d0a84ab975f9987851d668d6",
+    "results\\comparisons\\legacy_25k_vs_50k\\eval_supply\\legacy_25k__budget_5000_200__best_total\\experiment.json": "637b1d880d7972841ff23864118b1d57d3a9ec4f3645be9198ae712d0e8a426e",
+    "results\\comparisons\\legacy_25k_vs_50k\\eval_supply\\legacy_25k__budget_5000_200__best_total\\report.txt": "8f29532b4675e66d5922ef88b9283dea85b8b23d96ce639641ddc066acdd11c3",
+    "results\\comparisons\\legacy_25k_vs_50k\\eval_supply\\legacy_25k__budget_5000_200__best_total\\summary.json": "284909f98606babd747b16adfb56fd19acfbf0c6c95b2b8e21219bb60d5c3993",
+    "results\\comparisons\\legacy_25k_vs_50k\\eval_supply\\legacy_25k__budget_5000_200__best_total\\withdrawals.csv": "ff70c0bbaeded046e6904bf6917e11d59de42275b34f41efe127cacfdfc2cf9d",
+    "results\\comparisons\\legacy_25k_vs_50k\\eval_supply\\legacy_50k__budget_1000_0__best_total\\accounts.csv": "ff0f671042eaca24b1dcc0719a1f06515f82f52d9f0b8e6ea53c186d39e32e3c",
+    "results\\comparisons\\legacy_25k_vs_50k\\eval_supply\\legacy_50k__budget_1000_0__best_total\\denials.csv": "6dbac6c524145a8b2b8a01f4cf9185d53712bdda409f469cdf85856f708de15a",
+    "results\\comparisons\\legacy_25k_vs_50k\\eval_supply\\legacy_50k__budget_1000_0__best_total\\evaluations.csv": "c38b8870dda074c5bd1ab64aea506d14c12aaf57152ffdc1b7b792f907bb9a3a",
+    "results\\comparisons\\legacy_25k_vs_50k\\eval_supply\\legacy_50k__budget_1000_0__best_total\\experiment.json": "f2d25c93e238672928753628dd7b8a21f847b424f6c1714c9819593b5ca6e4bf",
+    "results\\comparisons\\legacy_25k_vs_50k\\eval_supply\\legacy_50k__budget_1000_0__best_total\\report.txt": "0976f41731d991864c33f615640272a7d2c00329c1f9875e9bf185680e60964d",
+    "results\\comparisons\\legacy_25k_vs_50k\\eval_supply\\legacy_50k__budget_1000_0__best_total\\summary.json": "2defd4394d9142dfa76b70ee415423c860d86f2017ec70a75c4026a4bc848e4c",
+    "results\\comparisons\\legacy_25k_vs_50k\\eval_supply\\legacy_50k__budget_1000_0__best_total\\withdrawals.csv": "650938a2118033139fc124826966f96147a2fe3708252546e9a0981f70b346e8",
+    "results\\comparisons\\legacy_25k_vs_50k\\eval_supply\\legacy_50k__budget_1000_200__best_total\\accounts.csv": "d74d315fcd98732364788d34d3bf50f6b3946f375fba5a37de3c03f985a239a0",
+    "results\\comparisons\\legacy_25k_vs_50k\\eval_supply\\legacy_50k__budget_1000_200__best_total\\denials.csv": "ff413d7b62ee04e0273bddd17b2eea6eca9fe0c3f21d6188ab2121a32bbd19e0",
+    "results\\comparisons\\legacy_25k_vs_50k\\eval_supply\\legacy_50k__budget_1000_200__best_total\\evaluations.csv": "e04991d57995fab7b92c46869aa031f679308971e2c362625dad368c2f34efc5",
+    "results\\comparisons\\legacy_25k_vs_50k\\eval_supply\\legacy_50k__budget_1000_200__best_total\\experiment.json": "3f78b334358961e52baa69877b96ff64449a921ad65d3e99d19c78133b4f998b",
+    "results\\comparisons\\legacy_25k_vs_50k\\eval_supply\\legacy_50k__budget_1000_200__best_total\\report.txt": "90ad579e4147af3128b9f1511b8b96d5a36dc720b4622f090d7381a75eda9189",
+    "results\\comparisons\\legacy_25k_vs_50k\\eval_supply\\legacy_50k__budget_1000_200__best_total\\summary.json": "c5c09b0f604714f556eac5bfe55adf69522dc13af1dd3a870359a7e5ef6a669b",
+    "results\\comparisons\\legacy_25k_vs_50k\\eval_supply\\legacy_50k__budget_1000_200__best_total\\withdrawals.csv": "f935c041953db3d4b231b8f421b7e403e4660686d3922c7076b6a60f7a0eeb04",
+    "results\\comparisons\\legacy_25k_vs_50k\\eval_supply\\legacy_50k__budget_5000_0__best_total\\accounts.csv": "7b98ceb0d238c0c8c8ae6c0442f0fcb7b8a5cc4f160a483e2756df9376045ea0",
+    "results\\comparisons\\legacy_25k_vs_50k\\eval_supply\\legacy_50k__budget_5000_0__best_total\\denials.csv": "6d2daf1301af8cb4f60fa2bdf3527c69d9792d085692c542b1d8f2922c09a7fb",
+    "results\\comparisons\\legacy_25k_vs_50k\\eval_supply\\legacy_50k__budget_5000_0__best_total\\evaluations.csv": "b6b16977d06644ac6421bbf6794818a3ac188fe222412fe8f2de488422b5e7a7",
+    "results\\comparisons\\legacy_25k_vs_50k\\eval_supply\\legacy_50k__budget_5000_0__best_total\\experiment.json": "bc3b5a1ddee85028cc5e36f894e97a361962d322d5ba4c4d04b47f681c36ce6e",
+    "results\\comparisons\\legacy_25k_vs_50k\\eval_supply\\legacy_50k__budget_5000_0__best_total\\report.txt": "8febf66095a92cbc8268f93e6ff3e626fbc4f74c0184156ce7db166d643df605",
+    "results\\comparisons\\legacy_25k_vs_50k\\eval_supply\\legacy_50k__budget_5000_0__best_total\\summary.json": "181e5d24ad7b5f236137419f568e624201d77a527e969f320c293a997f3f63a6",
+    "results\\comparisons\\legacy_25k_vs_50k\\eval_supply\\legacy_50k__budget_5000_0__best_total\\withdrawals.csv": "c094d7d073ceb091fb4592a2a0b5797699bcd77312950daa2846e3d6ca6a2395",
+    "results\\comparisons\\legacy_25k_vs_50k\\eval_supply\\legacy_50k__budget_5000_200__best_total\\accounts.csv": "8357bc8fe1dc80ba9233a6cde3d77eb0c854d9452b340c6d7ac5da940a9b9873",
+    "results\\comparisons\\legacy_25k_vs_50k\\eval_supply\\legacy_50k__budget_5000_200__best_total\\denials.csv": "c70b7740993d5577e99cbcd3eb4c235af9f27ea7b0f2362065dda0c8a231a25f",
+    "results\\comparisons\\legacy_25k_vs_50k\\eval_supply\\legacy_50k__budget_5000_200__best_total\\evaluations.csv": "b982d752ef5b0a66b5ddb4736a0769c791c2a26ef3ec37f80985bfcdb36ff67b",
+    "results\\comparisons\\legacy_25k_vs_50k\\eval_supply\\legacy_50k__budget_5000_200__best_total\\experiment.json": "851c161a20eb07643d567e2407bdd85688c657201fb5feefbf659fde78e8ba6f",
+    "results\\comparisons\\legacy_25k_vs_50k\\eval_supply\\legacy_50k__budget_5000_200__best_total\\report.txt": "ab6e15fe8a1c31b80cf6fb97493e8fc2dda4c2728a4f3fc3374e83bd0fc5a36b",
+    "results\\comparisons\\legacy_25k_vs_50k\\eval_supply\\legacy_50k__budget_5000_200__best_total\\summary.json": "7f68a1a23b662b5b2ebe892bf281c7ff24a5dd3f03ec91ffe606f362797d6635",
+    "results\\comparisons\\legacy_25k_vs_50k\\eval_supply\\legacy_50k__budget_5000_200__best_total\\withdrawals.csv": "c0e65d691abd4d724db9b5e841377aad348290c3f12a4e868d1ae6d43f51da7e",
+    "results\\comparisons\\legacy_25k_vs_50k\\pipeline_capacity\\legacy_25k__evals_outside_cap__best_ongoing\\accounts.csv": "598bac1cdb116258ec0c1037e9661e7554b271e5532d7343bbbbae9c64c9feca",
+    "results\\comparisons\\legacy_25k_vs_50k\\pipeline_capacity\\legacy_25k__evals_outside_cap__best_ongoing\\denials.csv": "1356926eefbb60775f17cdc35e0e1732dc351effdc2612e5a3625243791a234f",
+    "results\\comparisons\\legacy_25k_vs_50k\\pipeline_capacity\\legacy_25k__evals_outside_cap__best_ongoing\\evaluations.csv": "1fa928dfdaeaa7f672d8fbfb224447e8ecbd01afdc538069fb84157ca4b9fea2",
+    "results\\comparisons\\legacy_25k_vs_50k\\pipeline_capacity\\legacy_25k__evals_outside_cap__best_ongoing\\experiment.json": "2678081f7f55bb7110181fd37b208c83c3434166be66819b593fe58272b38a51",
+    "results\\comparisons\\legacy_25k_vs_50k\\pipeline_capacity\\legacy_25k__evals_outside_cap__best_ongoing\\pipeline_daily.csv": "7fc40995396c973daa9cdd87123035eda5e92964fa816dc06e9d808183492aa7",
+    "results\\comparisons\\legacy_25k_vs_50k\\pipeline_capacity\\legacy_25k__evals_outside_cap__best_ongoing\\replacement_waits.csv": "cec8e38dce9456185e96c99eb61bdf96b4eff598ff48305f6bfa09ced23ec737",
+    "results\\comparisons\\legacy_25k_vs_50k\\pipeline_capacity\\legacy_25k__evals_outside_cap__best_ongoing\\report.txt": "db1b3161d89e457fce0aa2d4d383942e21dd3dcca776130cfa53367acb580219",
+    "results\\comparisons\\legacy_25k_vs_50k\\pipeline_capacity\\legacy_25k__evals_outside_cap__best_ongoing\\summary.json": "e1f4c2436b3a5bcb02953509a7712839f7e705fc8f44322a6d65560c5fcec0cc",
+    "results\\comparisons\\legacy_25k_vs_50k\\pipeline_capacity\\legacy_25k__evals_outside_cap__best_ongoing\\withdrawals.csv": "1124d248226b72c858d738ed6c74a8ae36a3acaa9a8e8a5f8304c8d7f8393e60",
+    "results\\comparisons\\legacy_25k_vs_50k\\pipeline_capacity\\legacy_25k__evals_outside_cap__best_total\\accounts.csv": "8c7a50cb63e28aff8926207413886b2667a61f7319953d2b077f51dedc25f129",
+    "results\\comparisons\\legacy_25k_vs_50k\\pipeline_capacity\\legacy_25k__evals_outside_cap__best_total\\denials.csv": "824f889d2b0bdc999ce43332ebdcba070197f3fae9ab0d31a4f826b969898a67",
+    "results\\comparisons\\legacy_25k_vs_50k\\pipeline_capacity\\legacy_25k__evals_outside_cap__best_total\\evaluations.csv": "eff30c57a84922af15dd6b9bc4befe9ce7bebe875e52b31f5494793090509107",
+    "results\\comparisons\\legacy_25k_vs_50k\\pipeline_capacity\\legacy_25k__evals_outside_cap__best_total\\experiment.json": "d58b3670d362804b338ef1f10ca757f4347eaaabe3e0a94a2bd3857bb21a1e66",
+    "results\\comparisons\\legacy_25k_vs_50k\\pipeline_capacity\\legacy_25k__evals_outside_cap__best_total\\pipeline_daily.csv": "9d70d02a3e87f010168d3a010ccbd17c64f0e0280dd30bfb409e57160ec21dd5",
+    "results\\comparisons\\legacy_25k_vs_50k\\pipeline_capacity\\legacy_25k__evals_outside_cap__best_total\\replacement_waits.csv": "48c4ef74584103b6385087c9a5435c616ffb251c1b9171eff2508f8b691fd911",
+    "results\\comparisons\\legacy_25k_vs_50k\\pipeline_capacity\\legacy_25k__evals_outside_cap__best_total\\report.txt": "7d8c46a2044eeb24cb05f5a8e2ee3337e3924263ae1aec2083be55da170ad52d",
+    "results\\comparisons\\legacy_25k_vs_50k\\pipeline_capacity\\legacy_25k__evals_outside_cap__best_total\\summary.json": "9d3432b6d6bd4da88641b7ab3a7ebf0055e234e11c248a0d9c4f1c0a190e5842",
+    "results\\comparisons\\legacy_25k_vs_50k\\pipeline_capacity\\legacy_25k__evals_outside_cap__best_total\\withdrawals.csv": "546a6dbb42052bcabdfb74a87ca49fd2745bbbb37656996d23716454495062a3",
+    "results\\comparisons\\legacy_25k_vs_50k\\pipeline_capacity\\legacy_25k__shared_seats__best_ongoing\\accounts.csv": "5f25bd04816646e6715782db3e0d265dd87bccf60e787002a846dc67cf930383",
+    "results\\comparisons\\legacy_25k_vs_50k\\pipeline_capacity\\legacy_25k__shared_seats__best_ongoing\\denials.csv": "7ffa15682c99734d503e148982530b480fe51f47565d512af0a4849cad9a5d56",
+    "results\\comparisons\\legacy_25k_vs_50k\\pipeline_capacity\\legacy_25k__shared_seats__best_ongoing\\evaluations.csv": "ce817e87a7fc05270d96ab049f9f9afcbfc7c2720d05a52a50fffdb0e437ea62",
+    "results\\comparisons\\legacy_25k_vs_50k\\pipeline_capacity\\legacy_25k__shared_seats__best_ongoing\\experiment.json": "77afa5d9e3d8a7afa03483755ad8bb0076fe965c49c124ce1bb1929293b01516",
+    "results\\comparisons\\legacy_25k_vs_50k\\pipeline_capacity\\legacy_25k__shared_seats__best_ongoing\\pipeline_daily.csv": "46d6f08e4abd6fb38b5a5cfee63fcaeb6a43b51dc9033fd7c174ebcaa9796c15",
+    "results\\comparisons\\legacy_25k_vs_50k\\pipeline_capacity\\legacy_25k__shared_seats__best_ongoing\\replacement_waits.csv": "bcded133015c36412901ba091cb4b57d0735b58228a7a946215076ecdfa770fe",
+    "results\\comparisons\\legacy_25k_vs_50k\\pipeline_capacity\\legacy_25k__shared_seats__best_ongoing\\report.txt": "9dac7526dfc5f9e33d48913e4b460a3aab6cb4c5fc9dcce56b1f2548340f4824",
+    "results\\comparisons\\legacy_25k_vs_50k\\pipeline_capacity\\legacy_25k__shared_seats__best_ongoing\\summary.json": "274a8b235a9de9628e054587ebde8748e3271e293774ed3bb269328d50757642",
+    "results\\comparisons\\legacy_25k_vs_50k\\pipeline_capacity\\legacy_25k__shared_seats__best_ongoing\\withdrawals.csv": "7fb9814e7fdb66b3b1bb2015d8d1ed34cae8bae9c7297a30fa5f2c13aed051ec",
+    "results\\comparisons\\legacy_25k_vs_50k\\pipeline_capacity\\legacy_25k__shared_seats__best_total\\accounts.csv": "cd7b855915fd03a7756922f22bed2833a805f0cb4507344a68f190249a216497",
+    "results\\comparisons\\legacy_25k_vs_50k\\pipeline_capacity\\legacy_25k__shared_seats__best_total\\denials.csv": "b346d8a68da3ad2c9b0d7eea0d47acb0e78e68e70c9ac33da4510052af4dc6b6",
+    "results\\comparisons\\legacy_25k_vs_50k\\pipeline_capacity\\legacy_25k__shared_seats__best_total\\evaluations.csv": "9cc3f369587df311f6b5642104d704527907209be9c931a86aed0aa8e048903b",
+    "results\\comparisons\\legacy_25k_vs_50k\\pipeline_capacity\\legacy_25k__shared_seats__best_total\\experiment.json": "a1617101a9201db686e8e6448c66d281a7aded8c7e1f104f06f486d92366ce28",
+    "results\\comparisons\\legacy_25k_vs_50k\\pipeline_capacity\\legacy_25k__shared_seats__best_total\\pipeline_daily.csv": "b28e1fc31685699a11b51375a7e446cd68b36d1c3f8e4ecc65274e47e1a9a114",
+    "results\\comparisons\\legacy_25k_vs_50k\\pipeline_capacity\\legacy_25k__shared_seats__best_total\\replacement_waits.csv": "f2a2ca756fd22a18ab6bff67f906bd9db39298e99d20e5668da40d2b005c8538",
+    "results\\comparisons\\legacy_25k_vs_50k\\pipeline_capacity\\legacy_25k__shared_seats__best_total\\report.txt": "5a70d1a1b9597bbf43b43131135fb4858e0a53f6b4da748f9235a49fa4b83034",
+    "results\\comparisons\\legacy_25k_vs_50k\\pipeline_capacity\\legacy_25k__shared_seats__best_total\\summary.json": "c84b84b984d51e79c63d9426da2988b6cb8dd21e927035abc135c4593d63a386",
+    "results\\comparisons\\legacy_25k_vs_50k\\pipeline_capacity\\legacy_25k__shared_seats__best_total\\withdrawals.csv": "e6803f804bb8dbbf51e9b6cfeb8cb0b9d16259055fcc0371a18e22a14939aab0",
+    "results\\comparisons\\legacy_25k_vs_50k\\pipeline_capacity\\legacy_50k__evals_outside_cap__best_ongoing\\accounts.csv": "3124d492460f444d84357adfe3440da4134cec4991f414f34a286bd676e73321",
+    "results\\comparisons\\legacy_25k_vs_50k\\pipeline_capacity\\legacy_50k__evals_outside_cap__best_ongoing\\denials.csv": "975e9db4d734b76cd61393ecb6c8a36cd7f07b0fb7493b8fc295c7a5d6688f92",
+    "results\\comparisons\\legacy_25k_vs_50k\\pipeline_capacity\\legacy_50k__evals_outside_cap__best_ongoing\\evaluations.csv": "467afcbbb7dbb82e161f5e90e0c0ab502cd1ec5d15456de5e038861c720f05a6",
+    "results\\comparisons\\legacy_25k_vs_50k\\pipeline_capacity\\legacy_50k__evals_outside_cap__best_ongoing\\experiment.json": "7acfc6dbd227291ead6239aa75cb376f505b015a44de8ece0c54226e6bbc62d6",
+    "results\\comparisons\\legacy_25k_vs_50k\\pipeline_capacity\\legacy_50k__evals_outside_cap__best_ongoing\\financing_events.csv": "302357cd1b2d0e7d2a76b8c55651596164822cb212ddd8f8c505561725159f35",
+    "results\\comparisons\\legacy_25k_vs_50k\\pipeline_capacity\\legacy_50k__evals_outside_cap__best_ongoing\\pipeline_daily.csv": "274ef6ebaba346c03abdc44041507714f9b6e4808cb9347c150b197e4afc5a06",
+    "results\\comparisons\\legacy_25k_vs_50k\\pipeline_capacity\\legacy_50k__evals_outside_cap__best_ongoing\\replacement_waits.csv": "d3490fea9f3a9e8832fd8bbafc72f42cb6e5137f9cd23fd1f10b9e609abd5561",
+    "results\\comparisons\\legacy_25k_vs_50k\\pipeline_capacity\\legacy_50k__evals_outside_cap__best_ongoing\\report.txt": "917d7d25eedb215513201024b15406d782ab3d98a04580f828ef507eb7e941eb",
+    "results\\comparisons\\legacy_25k_vs_50k\\pipeline_capacity\\legacy_50k__evals_outside_cap__best_ongoing\\summary.json": "f8f252f5506e72fde10c0d37df2f91a535f671e3aacfb91736fe41ebc0d43bb3",
+    "results\\comparisons\\legacy_25k_vs_50k\\pipeline_capacity\\legacy_50k__evals_outside_cap__best_ongoing\\withdrawals.csv": "b194d1aa8affa84370a52d96050d9afcfadb58c54eb77f38668ef83947f06e9e",
+    "results\\comparisons\\legacy_25k_vs_50k\\pipeline_capacity\\legacy_50k__evals_outside_cap__best_total\\accounts.csv": "3f71b05b1910cefbcb2d80e7e112e404ba46c754694815c9ef0ad47c28d76675",
+    "results\\comparisons\\legacy_25k_vs_50k\\pipeline_capacity\\legacy_50k__evals_outside_cap__best_total\\denials.csv": "9c5fbc80f38a931244cbe213b25dbaab6c633689af9eae501fdfa3e8223496a1",
+    "results\\comparisons\\legacy_25k_vs_50k\\pipeline_capacity\\legacy_50k__evals_outside_cap__best_total\\evaluations.csv": "ba838e9b136c6ad3e44b275435b585826b2c6790712b073e66f546dc97feacd7",
+    "results\\comparisons\\legacy_25k_vs_50k\\pipeline_capacity\\legacy_50k__evals_outside_cap__best_total\\experiment.json": "acf4c48da5990b715f153616fa4ab2bf1326241c89491ccffd8451a4335e495f",
+    "results\\comparisons\\legacy_25k_vs_50k\\pipeline_capacity\\legacy_50k__evals_outside_cap__best_total\\financing_events.csv": "302357cd1b2d0e7d2a76b8c55651596164822cb212ddd8f8c505561725159f35",
+    "results\\comparisons\\legacy_25k_vs_50k\\pipeline_capacity\\legacy_50k__evals_outside_cap__best_total\\pipeline_daily.csv": "a6311fda636aadb193e56f28307de6e75fb432cb25d92428a93d83726bf33d74",
+    "results\\comparisons\\legacy_25k_vs_50k\\pipeline_capacity\\legacy_50k__evals_outside_cap__best_total\\replacement_waits.csv": "d7417995be9ccd0a359db21aa9bd4f930354c93d18a2b82807e284284c278c9e",
+    "results\\comparisons\\legacy_25k_vs_50k\\pipeline_capacity\\legacy_50k__evals_outside_cap__best_total\\report.txt": "0b1f205cee28dfdd4bff16b849c101896126649b46db812665c4a846fe268200",
+    "results\\comparisons\\legacy_25k_vs_50k\\pipeline_capacity\\legacy_50k__evals_outside_cap__best_total\\summary.json": "e2bac4f951c8edd0bcaaf1d88ea7c071d34a9ff5f844458ec117feaae5fe647a",
+    "results\\comparisons\\legacy_25k_vs_50k\\pipeline_capacity\\legacy_50k__evals_outside_cap__best_total\\withdrawals.csv": "eef49ab211540121a4dc10996418001ad4dd53174c748e0fc59660fb71b4886c",
+    "results\\comparisons\\legacy_25k_vs_50k\\pipeline_capacity\\legacy_50k__shared_seats__best_ongoing\\accounts.csv": "8dee32862c48460344be3ed57cc5d261ae1fbecf4f9921b2d66771cf7fd904fb",
+    "results\\comparisons\\legacy_25k_vs_50k\\pipeline_capacity\\legacy_50k__shared_seats__best_ongoing\\denials.csv": "071e21dfeec1cef360a6fdc9fb50d31197592ae30e88a6bca12861f73e0c15c2",
+    "results\\comparisons\\legacy_25k_vs_50k\\pipeline_capacity\\legacy_50k__shared_seats__best_ongoing\\evaluations.csv": "f5b169ee46fec6237bdb45cc66e76395be754e3e5456b04b559f8774a63db19c",
+    "results\\comparisons\\legacy_25k_vs_50k\\pipeline_capacity\\legacy_50k__shared_seats__best_ongoing\\experiment.json": "3367fc7febcdac1458055c3750e1d4ba2d0bc42b571cab3a730d9848660b3415",
+    "results\\comparisons\\legacy_25k_vs_50k\\pipeline_capacity\\legacy_50k__shared_seats__best_ongoing\\financing_events.csv": "454f771c318da481063830ae12de4b00f40e5d07b9ac5ddf041df248a6a6abee",
+    "results\\comparisons\\legacy_25k_vs_50k\\pipeline_capacity\\legacy_50k__shared_seats__best_ongoing\\pipeline_daily.csv": "555cc4154bf66620b8b37d499dd5b132d90b7af3f61fb9c7c95a9ea17162c77d",
+    "results\\comparisons\\legacy_25k_vs_50k\\pipeline_capacity\\legacy_50k__shared_seats__best_ongoing\\replacement_waits.csv": "be2c51ccfd48d3a627a8ff07fc84e5b6c7c840782aa627ad10fd8ab843580cab",
+    "results\\comparisons\\legacy_25k_vs_50k\\pipeline_capacity\\legacy_50k__shared_seats__best_ongoing\\report.txt": "da013c4cfc7de2aea6a1cd26be9d622395bda50a7b25b9fb810d7e7a1e51e6dd",
+    "results\\comparisons\\legacy_25k_vs_50k\\pipeline_capacity\\legacy_50k__shared_seats__best_ongoing\\summary.json": "46ebc13bb4f1083202f06901c89477a9e2c10efcb3e2bfed6563c7180de52d5f",
+    "results\\comparisons\\legacy_25k_vs_50k\\pipeline_capacity\\legacy_50k__shared_seats__best_ongoing\\withdrawals.csv": "b81c8d73f7d9c098c524ddd5460502672dd2eb346211025647ff93e341517053",
+    "results\\comparisons\\legacy_25k_vs_50k\\pipeline_capacity\\legacy_50k__shared_seats__best_total\\accounts.csv": "9e5e848096dca109150dfc93318d885515f3976313bb8a5a62700d97ca1ff426",
+    "results\\comparisons\\legacy_25k_vs_50k\\pipeline_capacity\\legacy_50k__shared_seats__best_total\\denials.csv": "80a24c772f71260296fd8b13c41bd612c4f1536defa25dcfe2aec9cd6e69c0f3",
+    "results\\comparisons\\legacy_25k_vs_50k\\pipeline_capacity\\legacy_50k__shared_seats__best_total\\evaluations.csv": "f993f2ab6b6d3c46168cf206eb4899e4be2ddd5d63ac55b48f213c1341758017",
+    "results\\comparisons\\legacy_25k_vs_50k\\pipeline_capacity\\legacy_50k__shared_seats__best_total\\experiment.json": "77721903d6029bdb3fa8ef20fdf4a7357c27307b5127a74bd1d281ee6f35ea97",
+    "results\\comparisons\\legacy_25k_vs_50k\\pipeline_capacity\\legacy_50k__shared_seats__best_total\\pipeline_daily.csv": "09063be6f7cd32be8de68918093e9f5eb10c05d381456b4c236abab205475130",
+    "results\\comparisons\\legacy_25k_vs_50k\\pipeline_capacity\\legacy_50k__shared_seats__best_total\\replacement_waits.csv": "d87457b3da8bb29e3f7b85fb44393b80266ec87ebd62843539271c4a0c37d2ef",
+    "results\\comparisons\\legacy_25k_vs_50k\\pipeline_capacity\\legacy_50k__shared_seats__best_total\\report.txt": "8ff3f7a800d331440efa7cacfbda1d1cf9f01a3cb6dc9ecefe47f707d8e1001d",
+    "results\\comparisons\\legacy_25k_vs_50k\\pipeline_capacity\\legacy_50k__shared_seats__best_total\\summary.json": "d870b1fbbeed49edd73bc7357a4cdc51e1498519ce2d978fe2b1e3d5494f2a2b",
+    "results\\comparisons\\legacy_25k_vs_50k\\pipeline_capacity\\legacy_50k__shared_seats__best_total\\withdrawals.csv": "8d6ebfa7e6e9333a9867e2b9bcfad3c3094f38905a46988f2150e72f33eb0732",
+    "results\\comparisons\\legacy_25k_vs_50k\\reserve_by_policy\\legacy_25k__budget_1000_0__best_ongoing\\accounts.csv": "9ce4b0e2696b50bdb887d7c5e3e8be9c3eee7de6c480159766eac9e56cd42220",
+    "results\\comparisons\\legacy_25k_vs_50k\\reserve_by_policy\\legacy_25k__budget_1000_0__best_ongoing\\denials.csv": "e5ca051e2d398e03fc27328ea32aeecba9b425d453b3c0769ec7026545315fa9",
+    "results\\comparisons\\legacy_25k_vs_50k\\reserve_by_policy\\legacy_25k__budget_1000_0__best_ongoing\\experiment.json": "13066eac00ac7121469fb323df4c072d5d804c11cc1b3265854316a1f77b1453",
+    "results\\comparisons\\legacy_25k_vs_50k\\reserve_by_policy\\legacy_25k__budget_1000_0__best_ongoing\\report.txt": "633159a80667c3a857620a694689cb51c424f3772ee14a84516a7c59960907b8",
+    "results\\comparisons\\legacy_25k_vs_50k\\reserve_by_policy\\legacy_25k__budget_1000_0__best_ongoing\\summary.json": "4ef8da5cfbe0f53ab12cdfddc5cb8da6565c5f3f4b76c4542e77f30c85942410",
+    "results\\comparisons\\legacy_25k_vs_50k\\reserve_by_policy\\legacy_25k__budget_1000_0__best_ongoing\\withdrawals.csv": "ba8527b6297a5360ca6fc41d7659b4332ae058ace0aef565c20c3b441fbf4780",
+    "results\\comparisons\\legacy_25k_vs_50k\\reserve_by_policy\\legacy_25k__budget_1000_0__best_total\\accounts.csv": "43f10c7e724e92799087210ef76daf5218a7cbf7939969f3013f673271e634f3",
+    "results\\comparisons\\legacy_25k_vs_50k\\reserve_by_policy\\legacy_25k__budget_1000_0__best_total\\denials.csv": "0ad7af8c53bb228d7b79b5d454be82a272b0df886f6df62c97c98c93166d80e4",
+    "results\\comparisons\\legacy_25k_vs_50k\\reserve_by_policy\\legacy_25k__budget_1000_0__best_total\\experiment.json": "3febd9504c5c5435abb06bbde69432e4dfbe9ad1cca20e261f1939194ee5c1f8",
+    "results\\comparisons\\legacy_25k_vs_50k\\reserve_by_policy\\legacy_25k__budget_1000_0__best_total\\report.txt": "4674b4efdf68ba3453993480684136a91c318a06e42499df03559ac9f94cedc7",
+    "results\\comparisons\\legacy_25k_vs_50k\\reserve_by_policy\\legacy_25k__budget_1000_0__best_total\\summary.json": "28e90cd706ba2fa9b2caf2c09c1fd3bfdfe2ba9613a370ed25ab8325592844ee",
+    "results\\comparisons\\legacy_25k_vs_50k\\reserve_by_policy\\legacy_25k__budget_1000_0__best_total\\withdrawals.csv": "f69ad3099467a69cd93a202b3dbf12407af947759ef1d0cb5e9bd17439a9e8d9",
+    "results\\comparisons\\legacy_25k_vs_50k\\reserve_by_policy\\legacy_25k__budget_1000_200__best_ongoing\\accounts.csv": "d418caa25c8846db291559ac8efaffbb7de08d79e7b24e14ccf69e9922c55e5a",
+    "results\\comparisons\\legacy_25k_vs_50k\\reserve_by_policy\\legacy_25k__budget_1000_200__best_ongoing\\denials.csv": "051b4910973d144c352c1a16a00704a88dcdf458181b1a4fc3cc00b804b8285f",
+    "results\\comparisons\\legacy_25k_vs_50k\\reserve_by_policy\\legacy_25k__budget_1000_200__best_ongoing\\experiment.json": "0719b49c782c4a6493b732f145a787666c2915802ed51eb45c1154ea3a6e9e11",
+    "results\\comparisons\\legacy_25k_vs_50k\\reserve_by_policy\\legacy_25k__budget_1000_200__best_ongoing\\report.txt": "bf52cd081d65ac73dd25d7c70fef6aef804c378b98c95379fce8c8b7beac304c",
+    "results\\comparisons\\legacy_25k_vs_50k\\reserve_by_policy\\legacy_25k__budget_1000_200__best_ongoing\\summary.json": "07bff940ddff96085abd1a2d7d5bccf592417bb976df86a2aa58e9e7cf47cb37",
+    "results\\comparisons\\legacy_25k_vs_50k\\reserve_by_policy\\legacy_25k__budget_1000_200__best_ongoing\\withdrawals.csv": "c74cc85769d5831d93541128327ee43f46189a9102f1ad5dcd677c1f6561d1d5",
+    "results\\comparisons\\legacy_25k_vs_50k\\reserve_by_policy\\legacy_25k__budget_5000_0__best_ongoing\\accounts.csv": "ca88d70cad0c3e6b672a0f0e852edcb8664ff37523e23137297913177551f85d",
+    "results\\comparisons\\legacy_25k_vs_50k\\reserve_by_policy\\legacy_25k__budget_5000_0__best_ongoing\\denials.csv": "abbeee29b0b20275860851fd4b10bff995a54a3ff10e23b4a22d5ebb81b1523e",
+    "results\\comparisons\\legacy_25k_vs_50k\\reserve_by_policy\\legacy_25k__budget_5000_0__best_ongoing\\experiment.json": "2e896844346c27bb4eadad64055f8b9650ab4c42dfdf67ddd2191466be42241e",
+    "results\\comparisons\\legacy_25k_vs_50k\\reserve_by_policy\\legacy_25k__budget_5000_0__best_ongoing\\report.txt": "5ea78d6dae5497cd4bf8431c790d92265b8350df835352a95ea04f7445d1d5df",
+    "results\\comparisons\\legacy_25k_vs_50k\\reserve_by_policy\\legacy_25k__budget_5000_0__best_ongoing\\summary.json": "41bb91993f8f0b84dc1b0e140fca3480de607a3f16f4da9b0de80c96d4964781",
+    "results\\comparisons\\legacy_25k_vs_50k\\reserve_by_policy\\legacy_25k__budget_5000_0__best_ongoing\\withdrawals.csv": "689fcecff14a9f3a7ffa7a6d460cac68f68d31c35a634bc7ba36c43a1b36d956",
+    "results\\comparisons\\legacy_25k_vs_50k\\reserve_by_policy\\legacy_25k__budget_5000_200__best_ongoing\\accounts.csv": "ca88d70cad0c3e6b672a0f0e852edcb8664ff37523e23137297913177551f85d",
+    "results\\comparisons\\legacy_25k_vs_50k\\reserve_by_policy\\legacy_25k__budget_5000_200__best_ongoing\\denials.csv": "abbeee29b0b20275860851fd4b10bff995a54a3ff10e23b4a22d5ebb81b1523e",
+    "results\\comparisons\\legacy_25k_vs_50k\\reserve_by_policy\\legacy_25k__budget_5000_200__best_ongoing\\experiment.json": "2066e3de214b23092a9c4344bd83515fd85b8c3cd2f1ac0c199101911c02df68",
+    "results\\comparisons\\legacy_25k_vs_50k\\reserve_by_policy\\legacy_25k__budget_5000_200__best_ongoing\\report.txt": "f45bdea1392fa4c90e8c22f45419ed0cbce62b0da89c73f1b0b3a012a4679433",
+    "results\\comparisons\\legacy_25k_vs_50k\\reserve_by_policy\\legacy_25k__budget_5000_200__best_ongoing\\summary.json": "8673bf38ab435b526ead80505f2f864e85ba027c82a3a7655df5114dbdec6959",
+    "results\\comparisons\\legacy_25k_vs_50k\\reserve_by_policy\\legacy_25k__budget_5000_200__best_ongoing\\withdrawals.csv": "689fcecff14a9f3a7ffa7a6d460cac68f68d31c35a634bc7ba36c43a1b36d956",
+    "results\\comparisons\\legacy_25k_vs_50k\\reserve_by_policy\\legacy_50k__budget_1000_0__best_ongoing\\accounts.csv": "5ce1e9def4102067a2d8987f414b8ddee45320ddbec110a39c22588c3203177c",
+    "results\\comparisons\\legacy_25k_vs_50k\\reserve_by_policy\\legacy_50k__budget_1000_0__best_ongoing\\denials.csv": "e6454c87896e219ce396e11384c029cd827bf30e944a1d0b8bcbdc79e57ce126",
+    "results\\comparisons\\legacy_25k_vs_50k\\reserve_by_policy\\legacy_50k__budget_1000_0__best_ongoing\\experiment.json": "4663ba3073f43df507e5efa2750230e740413c7b10759f75c93bb9febbaa5cf7",
+    "results\\comparisons\\legacy_25k_vs_50k\\reserve_by_policy\\legacy_50k__budget_1000_0__best_ongoing\\report.txt": "b49f2bfb6be26b916ef294bc6033d6852ee09de6738fe7471d352b849eca171a",
+    "results\\comparisons\\legacy_25k_vs_50k\\reserve_by_policy\\legacy_50k__budget_1000_0__best_ongoing\\summary.json": "529c74da1709614b6d810ec30b23100b4eb6c874d0c45395629d86219ad6b58d",
+    "results\\comparisons\\legacy_25k_vs_50k\\reserve_by_policy\\legacy_50k__budget_1000_0__best_ongoing\\withdrawals.csv": "e85d538ad0afb4637329a69a64a792a7d5d18fb3186ebdb60407b603c292e736",
+    "results\\comparisons\\legacy_25k_vs_50k\\reserve_by_policy\\legacy_50k__budget_1000_0__best_total\\accounts.csv": "2038f713b75c21a4ee96de43dee79a592151d07421943ba6fb8f9ac9d4c65811",
+    "results\\comparisons\\legacy_25k_vs_50k\\reserve_by_policy\\legacy_50k__budget_1000_0__best_total\\denials.csv": "18facddf30369d7561759ed8002b939f2934d480354428fa045540b1ae2ac6c1",
+    "results\\comparisons\\legacy_25k_vs_50k\\reserve_by_policy\\legacy_50k__budget_1000_0__best_total\\experiment.json": "0be2823b57b82f504771cc6567223eed03b3df634b8ecd68d1f05686fec40733",
+    "results\\comparisons\\legacy_25k_vs_50k\\reserve_by_policy\\legacy_50k__budget_1000_0__best_total\\report.txt": "c9cec5fadc4b2fc4b9d9aae46f1c14f081f3eb3a7c64806e0ea1b868086d0c1a",
+    "results\\comparisons\\legacy_25k_vs_50k\\reserve_by_policy\\legacy_50k__budget_1000_0__best_total\\summary.json": "d9932edd83df6fcb00ba845a0920c30b87f2f66cc42d5979c0b256811e8f63fd",
+    "results\\comparisons\\legacy_25k_vs_50k\\reserve_by_policy\\legacy_50k__budget_1000_0__best_total\\withdrawals.csv": "baffec32f5a188c012e73e6cae1feec644a4636795d25f1b062b1358f8473bce",
+    "results\\comparisons\\legacy_25k_vs_50k\\reserve_by_policy\\legacy_50k__budget_1000_200__best_ongoing\\accounts.csv": "88d713ac5fc1c58bc59dea25e4bed09e945517ad59b8679fa9d335046ba411d8",
+    "results\\comparisons\\legacy_25k_vs_50k\\reserve_by_policy\\legacy_50k__budget_1000_200__best_ongoing\\denials.csv": "94075d6f8153d956eaaa3ae708bd8933f96dd976d9af3fc34c63abc1c3dad554",
+    "results\\comparisons\\legacy_25k_vs_50k\\reserve_by_policy\\legacy_50k__budget_1000_200__best_ongoing\\experiment.json": "419c8e2379f8293b0f4ee32d1873853abacf7d810c2603e2492128bbf87748fd",
+    "results\\comparisons\\legacy_25k_vs_50k\\reserve_by_policy\\legacy_50k__budget_1000_200__best_ongoing\\report.txt": "7c38a9bf029c70dc8f3af78841286150134aa63db960c194b439476c651c1f35",
+    "results\\comparisons\\legacy_25k_vs_50k\\reserve_by_policy\\legacy_50k__budget_1000_200__best_ongoing\\summary.json": "66f3580ad33d625ef9b9356ffd7d1304479681e3aea5585ad878f35446fea28d",
+    "results\\comparisons\\legacy_25k_vs_50k\\reserve_by_policy\\legacy_50k__budget_1000_200__best_ongoing\\withdrawals.csv": "0e9668a24cbaf4aa2ff78600e03b5b0d011b1de2b3ddcd3edae4f890253c9338",
+    "results\\comparisons\\legacy_25k_vs_50k\\reserve_by_policy\\legacy_50k__budget_5000_0__best_ongoing\\accounts.csv": "d64a5f6bb2b122085e1dfdf1e310f56d3f8aeb83be5ef62ef4a8a87e25192927",
+    "results\\comparisons\\legacy_25k_vs_50k\\reserve_by_policy\\legacy_50k__budget_5000_0__best_ongoing\\denials.csv": "048f3a74689d3ad29db877b8e54d27833d349fed65fe4232749f2110cd3cff73",
+    "results\\comparisons\\legacy_25k_vs_50k\\reserve_by_policy\\legacy_50k__budget_5000_0__best_ongoing\\experiment.json": "8146c7c8903022b2f38cb74fedbc8c2ac295303c7b092886b3294352c23672c2",
+    "results\\comparisons\\legacy_25k_vs_50k\\reserve_by_policy\\legacy_50k__budget_5000_0__best_ongoing\\report.txt": "3e4f14045ec290c3ee67952c56729fc67229a82bbdd4f255967de7b9e32833ec",
+    "results\\comparisons\\legacy_25k_vs_50k\\reserve_by_policy\\legacy_50k__budget_5000_0__best_ongoing\\summary.json": "789fd2f96f4cc52da27937363a2d533d41467e27b7177e87e50d293c6d746033",
+    "results\\comparisons\\legacy_25k_vs_50k\\reserve_by_policy\\legacy_50k__budget_5000_0__best_ongoing\\withdrawals.csv": "6aeb18a45fefcb725e92ee2d50a163b0556500f136a4e76050176eb010d0ea55",
+    "results\\comparisons\\legacy_25k_vs_50k\\reserve_by_policy\\legacy_50k__budget_5000_200__best_ongoing\\accounts.csv": "ec20e8ab363b86b6d0bf66403f738076cf8082323c91f5e0a3ba04ea91d85a04",
+    "results\\comparisons\\legacy_25k_vs_50k\\reserve_by_policy\\legacy_50k__budget_5000_200__best_ongoing\\denials.csv": "562361d12222266b3ab2fdbfaf91066f9d792a0b0279013fdadb7b002c3de089",
+    "results\\comparisons\\legacy_25k_vs_50k\\reserve_by_policy\\legacy_50k__budget_5000_200__best_ongoing\\experiment.json": "6a05ff88c03c72150020a24cd17924adf92e37801ec9e415c0e9327fb9ae560f",
+    "results\\comparisons\\legacy_25k_vs_50k\\reserve_by_policy\\legacy_50k__budget_5000_200__best_ongoing\\report.txt": "5fc14babe808b0f1caca765e178e7962fbb5a2fd67b5528770a294734a68ae47",
+    "results\\comparisons\\legacy_25k_vs_50k\\reserve_by_policy\\legacy_50k__budget_5000_200__best_ongoing\\summary.json": "0466424ae0728b4e43033f20f937f6e98cc47020a04ec64f09cfa396fef14571",
+    "results\\comparisons\\legacy_25k_vs_50k\\reserve_by_policy\\legacy_50k__budget_5000_200__best_ongoing\\withdrawals.csv": "6b923eb2519ed789669ddc05676614fa20f83a101d9a4c9a29506974e2cee82c",
+    "results\\comparisons\\legacy_25k_vs_50k\\spare_shelf\\legacy_25k__budget_1000_0__passes_3__best_total\\accounts.csv": "67e250654ed5be9cf28cf18c87a33b315954b345b2d659e684fb4bd67a2ec9a1",
+    "results\\comparisons\\legacy_25k_vs_50k\\spare_shelf\\legacy_25k__budget_1000_0__passes_3__best_total\\denials.csv": "cf16cafcb5c628c806b4d911eba12afce0732a1fc515c0aeb433c4f4d2525fad",
+    "results\\comparisons\\legacy_25k_vs_50k\\spare_shelf\\legacy_25k__budget_1000_0__passes_3__best_total\\experiment.json": "6eea97b8270f6c972a6ffedb78729262159f1970629b463d34dd8b3641db1c9a",
+    "results\\comparisons\\legacy_25k_vs_50k\\spare_shelf\\legacy_25k__budget_1000_0__passes_3__best_total\\report.txt": "7bb94f67a89c9f48a67b476aebd1c333654ad2e2accb71cfa6c6a0a9762ef3a9",
+    "results\\comparisons\\legacy_25k_vs_50k\\spare_shelf\\legacy_25k__budget_1000_0__passes_3__best_total\\summary.json": "bf47fd3e2c6dec464eed80b589708219a47466780cae6d717a07b68b679930cf",
+    "results\\comparisons\\legacy_25k_vs_50k\\spare_shelf\\legacy_25k__budget_1000_0__passes_3__best_total\\withdrawals.csv": "923db39fe31e14b2f25de5bb2ae95f7c65da5bb394a2a2304ded304794e410c9",
+    "results\\comparisons\\legacy_25k_vs_50k\\spare_shelf\\legacy_25k__budget_1000_200__passes_3__best_total\\accounts.csv": "132a1c518e0451b305d6e7f71ed31c7aaf721ac556b77bc12c0099a567c52219",
+    "results\\comparisons\\legacy_25k_vs_50k\\spare_shelf\\legacy_25k__budget_1000_200__passes_3__best_total\\denials.csv": "56076ff7f83f849198158c168a6c6be09c58b7c078a935a88e54f2e9af7b31e5",
+    "results\\comparisons\\legacy_25k_vs_50k\\spare_shelf\\legacy_25k__budget_1000_200__passes_3__best_total\\experiment.json": "89a0da92c63c9c3fe27df60ecdb8b1a63944666160a9744cdb51a15908be3496",
+    "results\\comparisons\\legacy_25k_vs_50k\\spare_shelf\\legacy_25k__budget_1000_200__passes_3__best_total\\report.txt": "810f6d0b81f4384da5247d8cf31fe0f531e2e7c33db11d3377050f2cc608b08c",
+    "results\\comparisons\\legacy_25k_vs_50k\\spare_shelf\\legacy_25k__budget_1000_200__passes_3__best_total\\summary.json": "9eb8fba6606800424e443c46334d914ec09241bcf92a8fabca3738c81d2c7cc4",
+    "results\\comparisons\\legacy_25k_vs_50k\\spare_shelf\\legacy_25k__budget_1000_200__passes_3__best_total\\withdrawals.csv": "862feaad76f8f3b04b68d67a59e1a1e7dd7e2a525f85a008a10e8afacedd2bd7",
+    "results\\comparisons\\legacy_25k_vs_50k\\spare_shelf\\legacy_25k__budget_5000_0__passes_3__best_total\\accounts.csv": "38c0ec2aa756031d83463551d3073a149731d25d9fe10b12c56088d3cf5ecfe7",
+    "results\\comparisons\\legacy_25k_vs_50k\\spare_shelf\\legacy_25k__budget_5000_0__passes_3__best_total\\denials.csv": "2727484a3c8d090ba7d9913950d0f6efed247fdd8690d498f9db05c9465e5e04",
+    "results\\comparisons\\legacy_25k_vs_50k\\spare_shelf\\legacy_25k__budget_5000_0__passes_3__best_total\\experiment.json": "1029dc09753ee4eaa3af881222eb549552bc317af2f0c93503bafdfff331d9b7",
+    "results\\comparisons\\legacy_25k_vs_50k\\spare_shelf\\legacy_25k__budget_5000_0__passes_3__best_total\\report.txt": "66c188be7ea3b7e61d9996be258f7b83d76cb945ab27614ae7108062aa2d3889",
+    "results\\comparisons\\legacy_25k_vs_50k\\spare_shelf\\legacy_25k__budget_5000_0__passes_3__best_total\\summary.json": "125227c11b86646e828145f43228a21552d693806e4756ab484c930550173251",
+    "results\\comparisons\\legacy_25k_vs_50k\\spare_shelf\\legacy_25k__budget_5000_0__passes_3__best_total\\withdrawals.csv": "1f818ed77e4baea3e5c450f508829fb9a6f65bd01e83a766c3ee052431e1c3ea",
+    "results\\comparisons\\legacy_25k_vs_50k\\spare_shelf\\legacy_25k__budget_5000_200__passes_3__best_total\\accounts.csv": "6d272771d2006218c47a8bdd558d0b65b78e75f87f1629be4e3e2b9e5ce9db29",
+    "results\\comparisons\\legacy_25k_vs_50k\\spare_shelf\\legacy_25k__budget_5000_200__passes_3__best_total\\denials.csv": "83164c8022d58b8d15a1a7b8e138a0ad316fd679fdc8af110e8bef9d446cb8ec",
+    "results\\comparisons\\legacy_25k_vs_50k\\spare_shelf\\legacy_25k__budget_5000_200__passes_3__best_total\\experiment.json": "8953e2600666fa9f608ded042424f8f165abd92171564d7cf3e6a6a05c8fa1c4",
+    "results\\comparisons\\legacy_25k_vs_50k\\spare_shelf\\legacy_25k__budget_5000_200__passes_3__best_total\\report.txt": "06c69148d0c0fd6c89b2ac06835146d38fd33368b8ea61ecdaab0fa5ed310410",
+    "results\\comparisons\\legacy_25k_vs_50k\\spare_shelf\\legacy_25k__budget_5000_200__passes_3__best_total\\summary.json": "5d76c23818ee15a068b4b9521302b0c6277532f34bc0ddd2e17da0b2ade36dae",
+    "results\\comparisons\\legacy_25k_vs_50k\\spare_shelf\\legacy_25k__budget_5000_200__passes_3__best_total\\withdrawals.csv": "ff343071f0da1f9caa0633288f68b903eccb36054c24292e7ac0fce5fab38a7a",
+    "results\\comparisons\\legacy_25k_vs_50k\\spare_shelf\\legacy_50k__budget_1000_0__passes_3__best_total\\accounts.csv": "04683ca0f7d8fc64f9c42f7003947b74de2021c7850acf2c53951c09cc345640",
+    "results\\comparisons\\legacy_25k_vs_50k\\spare_shelf\\legacy_50k__budget_1000_0__passes_3__best_total\\denials.csv": "a2bb9d246131c1df78bcfb4cecdebc56a945e7c9b7e4ea6b8fb9f28580914261",
+    "results\\comparisons\\legacy_25k_vs_50k\\spare_shelf\\legacy_50k__budget_1000_0__passes_3__best_total\\experiment.json": "bbb40b4ffb38418e044676836b4b9f214448ebafaddd138db6a34745050a7fe2",
+    "results\\comparisons\\legacy_25k_vs_50k\\spare_shelf\\legacy_50k__budget_1000_0__passes_3__best_total\\report.txt": "79b512500ebd5970227f53cf2f9d2f21fe11e54b9486c62b74278deac368d847",
+    "results\\comparisons\\legacy_25k_vs_50k\\spare_shelf\\legacy_50k__budget_1000_0__passes_3__best_total\\summary.json": "de7d8944383ad35c784a822d74232079c538ebe6cbcb826e096e9f8f5152856b",
+    "results\\comparisons\\legacy_25k_vs_50k\\spare_shelf\\legacy_50k__budget_1000_0__passes_3__best_total\\withdrawals.csv": "440bbbd016ba89b6794e02cc80f119663a91402a0bf59090f2c60cd7dd352c79",
+    "results\\comparisons\\legacy_25k_vs_50k\\spare_shelf\\legacy_50k__budget_1000_200__passes_3__best_total\\accounts.csv": "5f9c68564c097fa1418da191d27221f50c27ad7a016bf748e110288a2ecf2e2c",
+    "results\\comparisons\\legacy_25k_vs_50k\\spare_shelf\\legacy_50k__budget_1000_200__passes_3__best_total\\denials.csv": "8517f8b3a8ab661965d7612cef196f4c4811109c9d00c598222d123bde11b671",
+    "results\\comparisons\\legacy_25k_vs_50k\\spare_shelf\\legacy_50k__budget_1000_200__passes_3__best_total\\experiment.json": "e3e536d6a4de0649d58fe36424ab65320cce9d74aad3641642c3bbc291f80024",
+    "results\\comparisons\\legacy_25k_vs_50k\\spare_shelf\\legacy_50k__budget_1000_200__passes_3__best_total\\report.txt": "7510f00de37c33173acce417b1abaa3eb23017c8f22f6aeea8b08dc41fa3c9dc",
+    "results\\comparisons\\legacy_25k_vs_50k\\spare_shelf\\legacy_50k__budget_1000_200__passes_3__best_total\\summary.json": "27561df76669d05814146cefd5b9eba2c9837ee2edc732df52c07b1278830ed5",
+    "results\\comparisons\\legacy_25k_vs_50k\\spare_shelf\\legacy_50k__budget_1000_200__passes_3__best_total\\withdrawals.csv": "14fd102170ecdceba96b6ad77a972bf9d41aeecc8d366d3a4b66658453e53da0",
+    "results\\comparisons\\legacy_25k_vs_50k\\spare_shelf\\legacy_50k__budget_5000_0__passes_3__best_total\\accounts.csv": "90c15b354346d0745e4f309adb7454f494736a61929cce212efbf3523d1ed126",
+    "results\\comparisons\\legacy_25k_vs_50k\\spare_shelf\\legacy_50k__budget_5000_0__passes_3__best_total\\denials.csv": "3c09c266b28a8b946ccb21f4b38467f9e56a8b3f61920c1abbb22bb989c00017",
+    "results\\comparisons\\legacy_25k_vs_50k\\spare_shelf\\legacy_50k__budget_5000_0__passes_3__best_total\\experiment.json": "dfa0ea74ea1eb1848dafe25f7e8cf79cc31625c0e48c32f8aeca16c14c021591",
+    "results\\comparisons\\legacy_25k_vs_50k\\spare_shelf\\legacy_50k__budget_5000_0__passes_3__best_total\\report.txt": "64fbefa3aa1e63fd7fae0d9602cac2edb9c209cd729fc7f71f09299cfe8f6ee6",
+    "results\\comparisons\\legacy_25k_vs_50k\\spare_shelf\\legacy_50k__budget_5000_0__passes_3__best_total\\summary.json": "369ea7cc84eca62e0d591c5bc78905e64201c4fc6049b547c6c29dbee1cdff65",
+    "results\\comparisons\\legacy_25k_vs_50k\\spare_shelf\\legacy_50k__budget_5000_0__passes_3__best_total\\withdrawals.csv": "712a345e04762682cafb35d9545e8fd54d547f49dae1bf520b775a12b4dbc52e",
+    "results\\comparisons\\legacy_25k_vs_50k\\spare_shelf\\legacy_50k__budget_5000_200__passes_3__best_total\\accounts.csv": "3b8a0e17955f55117b53377a08b344776ced9a6fab532124ba016c0c0b48d77f",
+    "results\\comparisons\\legacy_25k_vs_50k\\spare_shelf\\legacy_50k__budget_5000_200__passes_3__best_total\\denials.csv": "70c02710e751fe220ffbe48facaff0c09c184b45ef60171375599ec2d9228017",
+    "results\\comparisons\\legacy_25k_vs_50k\\spare_shelf\\legacy_50k__budget_5000_200__passes_3__best_total\\experiment.json": "b1448255eb3cacbae0f88f3ba9dfa048de9efa1680194d4a870cd0fe12be7159",
+    "results\\comparisons\\legacy_25k_vs_50k\\spare_shelf\\legacy_50k__budget_5000_200__passes_3__best_total\\report.txt": "db891e4687e1d423a67296f2164b0a2aae7e7ba370719abf17ba8560e950bb0c",
+    "results\\comparisons\\legacy_25k_vs_50k\\spare_shelf\\legacy_50k__budget_5000_200__passes_3__best_total\\summary.json": "216cea577f5c65a23ae014a18b8cb66bdec7db9541631dfa99ee46da53cc1d75",
+    "results\\comparisons\\legacy_25k_vs_50k\\spare_shelf\\legacy_50k__budget_5000_200__passes_3__best_total\\withdrawals.csv": "71379fa4a887cb45b0a2736ffb996cc0b13a38a1a13fc2cbcb72097a2b6d4faa",
+    "results\\legacy_50k\\operating_policies\\HOW_THIS_STUDY_WORKS.md": "02d378fba0f574140396f6b8e5161cf7b9b7ef9cd1dc0b9b7ad5f19da23b7afd",
+    "results\\legacy_50k\\operating_policies\\matched_controls.csv": "f41fc3cb6182db3cffcd6617473567539f7fe3782cd00c01dff3845cae4b6c38",
+    "results\\legacy_50k\\operating_policies\\operating_policies.csv": "f19112d87566113be007b9da6d1f0cbd18e15e7ae7b7fc1125b412d4bda524c0",
+    "results\\legacy_50k\\operating_policies\\preservation_check.json": "f78bd78091cdc90be5b73936329f418df96be27db826db6642a33a5bf42d646f",
+    "results\\legacy_50k\\operating_policies\\REPORT.generated.md": "cfb09d1ec84b1fbacab8e1e1d5833e367542ce6d48e78bd7085e112caac35535",
+    "results\\legacy_50k\\operating_policies\\REPORT.md": "cfb09d1ec84b1fbacab8e1e1d5833e367542ce6d48e78bd7085e112caac35535",
+    "results\\legacy_50k\\operating_policies\\reserve_search.csv": "ea5847b9e729fb0cac5addc61eef10190a7d2062f393ca0b091419af95042f68",
+    "results\\legacy_50k\\operating_policies\\strict_sensitivity.csv": "900fbe554a977cbeaa4a1febb65a80f4a687adc786e7ecedadf84c566eb9e221",
+    "results\\legacy_50k\\operating_policies\\study.json": "94bd6ef61f644a41f411564396207d1c280a38fc9d6b0af4f7c849c75af200a3",
+    "results\\legacy_50k\\operating_policies\\budget_1000_0__best_ongoing\\accounts.csv": "9937102ceeaf7a21a5dc278fc7a3ae8d6484cc24adfdce1e1d0df236b4a77c65",
+    "results\\legacy_50k\\operating_policies\\budget_1000_0__best_ongoing\\denials.csv": "25d23081b13d67002dc07bb1821bba27fa817336bef72f7fba9276793a6f89c5",
+    "results\\legacy_50k\\operating_policies\\budget_1000_0__best_ongoing\\experiment.json": "cec4e781fceb54ed886638adacc2e3ddb3b19c79eb145e63b664995492d2c4d9",
+    "results\\legacy_50k\\operating_policies\\budget_1000_0__best_ongoing\\report.txt": "d6a96ac7cdbb97023dcc253b277d8b17ee816fba797d4f275e6517e8682289fc",
+    "results\\legacy_50k\\operating_policies\\budget_1000_0__best_ongoing\\summary.json": "08fe02dd37df46375446aab36a27885f6152be76606cf426c6f4458c3781f450",
+    "results\\legacy_50k\\operating_policies\\budget_1000_0__best_ongoing\\withdrawals.csv": "9018e27e07bf8365c586c46e1353bba717da064f06585bd3c860e621ebe6e8ee",
+    "results\\legacy_50k\\operating_policies\\budget_1000_0__best_total\\accounts.csv": "f6650251c7103af84974597dcc32aaa77e5e2ba7388e2fb0dae6a2496993c207",
+    "results\\legacy_50k\\operating_policies\\budget_1000_0__best_total\\denials.csv": "414b5822cbdfea192250751a15fc259e8a3ca13732c89d4bdec633ce0ec80506",
+    "results\\legacy_50k\\operating_policies\\budget_1000_0__best_total\\experiment.json": "d2eabe4c641da6ed5b3ac4865e58cea520efb920ffda075f8acae8b778dfa113",
+    "results\\legacy_50k\\operating_policies\\budget_1000_0__best_total\\report.txt": "719f01b932bb291061e80fd9b2aaa8176dabbb7a7110fa1bb82512d9c8b06ceb",
+    "results\\legacy_50k\\operating_policies\\budget_1000_0__best_total\\summary.json": "9f9d4eca545828b81323dbe13a55025f7942602c9cc7beb6b3c39b3826ca09b3",
+    "results\\legacy_50k\\operating_policies\\budget_1000_0__best_total\\withdrawals.csv": "6887ca1adb2987486d89d80d2176746a81ec2d56089097ec1d15ffd06d9c8e8c",
+    "results\\legacy_50k\\operating_policies\\budget_1000_200__best_ongoing\\accounts.csv": "b5fbe1bf0876be8f99e31395ac3dd04cbf384d0e666bf32649f7f03548110c4f",
+    "results\\legacy_50k\\operating_policies\\budget_1000_200__best_ongoing\\denials.csv": "6038850fe462b6edf22c6bce8a161b0635a6c71df0e126f68c97d1199f7be8ea",
+    "results\\legacy_50k\\operating_policies\\budget_1000_200__best_ongoing\\experiment.json": "9271a34a5c586e229b0acfda8f3f7f70eaef8750cdd17eef4ab9fe2cf4682c2a",
+    "results\\legacy_50k\\operating_policies\\budget_1000_200__best_ongoing\\report.txt": "4590980fbe2ef571898db70ef3aaa800ccd502eaa0b794eb0ba2f2834a3d08aa",
+    "results\\legacy_50k\\operating_policies\\budget_1000_200__best_ongoing\\summary.json": "eefe2957acfa10279718bdbce99eafe218406dde603ab391e98dd33d15764903",
+    "results\\legacy_50k\\operating_policies\\budget_1000_200__best_ongoing\\withdrawals.csv": "5fd1b7da0efbe5b099a7daac9e57c1235b3c0768f436b90b746a68ec48e68ea1",
+    "results\\legacy_50k\\operating_policies\\budget_1000_200__best_total\\accounts.csv": "c86178de15fdff69f4b6cf1e51d47ef5d49b3e2cc2f22dc91fe52118957680e3",
+    "results\\legacy_50k\\operating_policies\\budget_1000_200__best_total\\denials.csv": "d73b243cfa48deb5329a34fc2db5f6333020702ed43b39139b327bd214a60ba1",
+    "results\\legacy_50k\\operating_policies\\budget_1000_200__best_total\\experiment.json": "b6fa4feaf7d280b3fc007024ecdb38c68bd791505b4bac417f49a6180a766abd",
+    "results\\legacy_50k\\operating_policies\\budget_1000_200__best_total\\report.txt": "7b4ce174e96c9d87015f88f3eb111d5c0fca93e643ca570c989cc4e38e9945c0",
+    "results\\legacy_50k\\operating_policies\\budget_1000_200__best_total\\summary.json": "270f0bae8b5e02f3117bc5f7eef2f35d295e4e1c5366c46d51691032e9115b57",
+    "results\\legacy_50k\\operating_policies\\budget_1000_200__best_total\\withdrawals.csv": "5f739a8e7b36e5f84d777d48223da1b2d72543be4287c33b294abf004d2ac0f1",
+    "results\\legacy_50k\\operating_policies\\budget_5000_0__best_ongoing\\accounts.csv": "e32cacdb5d8bba306e537d3c4af4286ac35af5847c9ac93c1c2f7c295c50144f",
+    "results\\legacy_50k\\operating_policies\\budget_5000_0__best_ongoing\\denials.csv": "5c7df6bf1a4216f495ae5895feb2fd739fe5a614232c7348ef772ce3c89e069c",
+    "results\\legacy_50k\\operating_policies\\budget_5000_0__best_ongoing\\experiment.json": "4da243e6dc0ac64ee78b4b13b6548493bb4a05ecb4e0e95959d9bcdb0f7ae15b",
+    "results\\legacy_50k\\operating_policies\\budget_5000_0__best_ongoing\\report.txt": "b878b27603a97d1b5cc53091048fe5b9d3d38511a622cb3a4470f4b516c377fc",
+    "results\\legacy_50k\\operating_policies\\budget_5000_0__best_ongoing\\summary.json": "8e9f4bb52a621f795f5791b7cc912bfba5f3baad32930b6a1c5f20b93a820874",
+    "results\\legacy_50k\\operating_policies\\budget_5000_0__best_ongoing\\withdrawals.csv": "47975f9b8dad3bb320bc959841cdc319872438705f6b7b74bff9e2b2219a2cd9",
+    "results\\legacy_50k\\operating_policies\\budget_5000_0__best_total\\accounts.csv": "d5096a3392ca9b2557ec023ce441cc686c2f25627467baef675c6aeff9a86fba",
+    "results\\legacy_50k\\operating_policies\\budget_5000_0__best_total\\denials.csv": "f692e0ee82b28f5aba6c78d70d95c5588d16d2d0e91c5a878d823bfd88298902",
+    "results\\legacy_50k\\operating_policies\\budget_5000_0__best_total\\experiment.json": "a937fd4f2f552981d437af4965d4d32db40a45dd2b09b03c69fea1731dfefff6",
+    "results\\legacy_50k\\operating_policies\\budget_5000_0__best_total\\report.txt": "c4b54cc25a6ad47bc97a71d971b873724628fa8968bfd18c1e4555c04f93cc77",
+    "results\\legacy_50k\\operating_policies\\budget_5000_0__best_total\\summary.json": "08f4eaa292d2cc923f734923b214402ad90ddf46c15ad7da125282429c8cc3d6",
+    "results\\legacy_50k\\operating_policies\\budget_5000_0__best_total\\withdrawals.csv": "4b0d565b438c40c6ea6b4e3310ffdf9a6803ef1a402b535395d55345b60c725c",
+    "results\\legacy_50k\\operating_policies\\budget_5000_200__best_ongoing\\accounts.csv": "038777e8bdac54a69adbc925c7f06e7141ae323864359350ae7660db4972d75c",
+    "results\\legacy_50k\\operating_policies\\budget_5000_200__best_ongoing\\denials.csv": "d5561aadadd737c6d2f375aca35832fdfd2bdd8418bdbd45df1d37003d10ac33",
+    "results\\legacy_50k\\operating_policies\\budget_5000_200__best_ongoing\\experiment.json": "2f91353b42dae28d3599f82ba0543b2bccde519e4f4efa74ae31f71e89a229d1",
+    "results\\legacy_50k\\operating_policies\\budget_5000_200__best_ongoing\\report.txt": "f0203ef567a91bb85579be14bf6f7f3bf0a8ddd81d54194f7aff0628b23da3ca",
+    "results\\legacy_50k\\operating_policies\\budget_5000_200__best_ongoing\\summary.json": "0e0c02db6992919b2f81b363a211d3941b7e3beabe6173cd5417c24732bb15ab",
+    "results\\legacy_50k\\operating_policies\\budget_5000_200__best_ongoing\\withdrawals.csv": "5a2e32cdc2416745b74ba5f3a058331e5dfd323eb133521a7b55e754d95425cb",
+    "results\\legacy_50k\\operating_policies\\budget_5000_200__best_total\\accounts.csv": "6ee280e48b4fd238aeec65fb3766656d0a3be35198af51b601e70ff4493608f6",
+    "results\\legacy_50k\\operating_policies\\budget_5000_200__best_total\\denials.csv": "54c3334cb0ed9f928e1a7362f09d728221b99edafa4f1ff3c23a547b38da09a5",
+    "results\\legacy_50k\\operating_policies\\budget_5000_200__best_total\\experiment.json": "3416f22e1918f7d11e4b54464367eb301f2ac72ae56dd31e5ce315c1e89a2a5e",
+    "results\\legacy_50k\\operating_policies\\budget_5000_200__best_total\\report.txt": "18c9b9fe6c479f784245950b39f7be4a3dd7a5ba72157f7d2c1ec0a159a79b5a",
+    "results\\legacy_50k\\operating_policies\\budget_5000_200__best_total\\summary.json": "2943e4aa3c88112a5a80110a04bf4c03a828cbd38a8156f0d27decd4e1bc1550",
+    "results\\legacy_50k\\operating_policies\\budget_5000_200__best_total\\withdrawals.csv": "3d6b10ce0efec074eb8548d3c5e88b76eccfcdedf38a46e7d6082d58cfcd4ee6",
+    "results\\study__full_rulebook__RR__account_purchases__cash_budgets\\budget_1000_monthly_0__best_ongoing\\accounts.csv": "e5ec4720cea287dc52b1a1d356196df73ca273e5f58f34387b3e4dd01bc222f9",
+    "results\\study__full_rulebook__RR__account_purchases__cash_budgets\\budget_1000_monthly_0__best_ongoing\\denials.csv": "dda6c5981bb0885884705202eb2eafd42d284151b07c50d1fc8c13c5d3df2ffb",
+    "results\\study__full_rulebook__RR__account_purchases__cash_budgets\\budget_1000_monthly_0__best_ongoing\\experiment.json": "918ffc4b61790638c7332f0a50919c062a3fe3e1b2e67c0f83fe4d48d78c6b4f",
+    "results\\study__full_rulebook__RR__account_purchases__cash_budgets\\budget_1000_monthly_0__best_ongoing\\owner_cash.csv": "5397e927a5475200489cd878ce36b85bf6cd4fd81f71f1689446a25353efc037",
+    "results\\study__full_rulebook__RR__account_purchases__cash_budgets\\budget_1000_monthly_0__best_ongoing\\purchase_decisions.csv": "3679969d6876738f1555a9ac634b988c33ec88380f38774244889ee5ec306bbf",
+    "results\\study__full_rulebook__RR__account_purchases__cash_budgets\\budget_1000_monthly_0__best_ongoing\\report.txt": "b2266f57cea263f84812a2a9a11826d0b035d0786d68163cc0c2544683575104",
+    "results\\study__full_rulebook__RR__account_purchases__cash_budgets\\budget_1000_monthly_0__best_ongoing\\summary.json": "ae838edce2d262a427754f9af19701cfb9a3cc4e36034634182f81a751f41e9f",
+    "results\\study__full_rulebook__RR__account_purchases__cash_budgets\\budget_1000_monthly_0__best_ongoing\\withdrawals.csv": "16d97ead3786fda34aad740b13e2cc08e6c6dcbacb17f2448fc4f7e530765ccd",
+    "results\\study__full_rulebook__RR__account_purchases__cash_budgets\\budget_1000_monthly_0__best_terminal\\accounts.csv": "c16381a16f20d9afb08e778bfc9453f63c8f6d46d0dc068c53cd8c77826b7b4e",
+    "results\\study__full_rulebook__RR__account_purchases__cash_budgets\\budget_1000_monthly_0__best_terminal\\denials.csv": "ccf97001e0632beb212c2aeba258c9a1dca34fef2c07736dae74b61b0e1d3feb",
+    "results\\study__full_rulebook__RR__account_purchases__cash_budgets\\budget_1000_monthly_0__best_terminal\\experiment.json": "87d78850fbdf86a80c0c99fc2e6933a8ba72180a2c4091c67d6a88cc67af579a",
+    "results\\study__full_rulebook__RR__account_purchases__cash_budgets\\budget_1000_monthly_0__best_terminal\\owner_cash.csv": "c6a58a0524e56fd730ca7049cb8f5e8f6f4e0bf03f48ca2c23780a3aa301f119",
+    "results\\study__full_rulebook__RR__account_purchases__cash_budgets\\budget_1000_monthly_0__best_terminal\\purchase_decisions.csv": "6c5d124c92256d304f8c41532399ff3071d0ce56385184140034924b0b31af0a",
+    "results\\study__full_rulebook__RR__account_purchases__cash_budgets\\budget_1000_monthly_0__best_terminal\\report.txt": "2779a054c08cf2e01940d08cdbc0fc21515b2d429b5bfa90d5f83cc81c5d3b06",
+    "results\\study__full_rulebook__RR__account_purchases__cash_budgets\\budget_1000_monthly_0__best_terminal\\summary.json": "d8784c4708ab82a5855b0f32836195223ee25358288f7f85f9a1c1d40f738239",
+    "results\\study__full_rulebook__RR__account_purchases__cash_budgets\\budget_1000_monthly_0__best_terminal\\withdrawals.csv": "436938282e981162fd47dc2830cef0e0947fcff52dfbddcee629104f3fe02c35",
+    "results\\study__full_rulebook__RR__account_purchases__cash_budgets\\budget_1000_monthly_200__best_ongoing\\accounts.csv": "b9c2acaf34448a4d82c73c97ced68de327a2a6aca587f337abae4e8eafd44bff",
+    "results\\study__full_rulebook__RR__account_purchases__cash_budgets\\budget_1000_monthly_200__best_ongoing\\denials.csv": "dfbbdf37e4c2bbad16717660aca6b79b7e0bd49b038df5c4d176777d13123145",
+    "results\\study__full_rulebook__RR__account_purchases__cash_budgets\\budget_1000_monthly_200__best_ongoing\\experiment.json": "59432e53caaa12d59da8758ec6aa54093f675bf678e51d9c3ea7e2cb0c65029f",
+    "results\\study__full_rulebook__RR__account_purchases__cash_budgets\\budget_1000_monthly_200__best_ongoing\\owner_cash.csv": "bb937c9ad82d4bb14dd4a3bda4fc8fabc1533be39c248b0f3fcdfbe61121a4ba",
+    "results\\study__full_rulebook__RR__account_purchases__cash_budgets\\budget_1000_monthly_200__best_ongoing\\purchase_decisions.csv": "7ae6d030d443548b4b7f603b99a727dce1d1e6ca7f79cdb8b3bd87ddf50fb72b",
+    "results\\study__full_rulebook__RR__account_purchases__cash_budgets\\budget_1000_monthly_200__best_ongoing\\report.txt": "46ab76a7474ddbd226b18860af8458c305f565c93d0fc477982bbd0b080a7deb",
+    "results\\study__full_rulebook__RR__account_purchases__cash_budgets\\budget_1000_monthly_200__best_ongoing\\summary.json": "be191e6cd4990969a6a64dd712f834105be55d49cb76dae66e21015e44c58741",
+    "results\\study__full_rulebook__RR__account_purchases__cash_budgets\\budget_1000_monthly_200__best_ongoing\\withdrawals.csv": "8e6ea4e723d14ab206c1cb732897c9578a4b81db60bbc632e44ee5d24bca7c91",
+    "results\\study__full_rulebook__RR__account_purchases__cash_budgets\\budget_1000_monthly_200__best_terminal\\accounts.csv": "f83d9aca0826d4f40496019eccde2ba2383351735214fccf1fe0b80481fe223f",
+    "results\\study__full_rulebook__RR__account_purchases__cash_budgets\\budget_1000_monthly_200__best_terminal\\denials.csv": "5b34d48ada335d76a879f1611bc9121a5e90b25316b1daabacaa7fbc581e3504",
+    "results\\study__full_rulebook__RR__account_purchases__cash_budgets\\budget_1000_monthly_200__best_terminal\\experiment.json": "25efacace874e705bffc8409a8f8ef988631b28f127350cc5dd7b30789831e08",
+    "results\\study__full_rulebook__RR__account_purchases__cash_budgets\\budget_1000_monthly_200__best_terminal\\owner_cash.csv": "21db31bde43a17c4f559e62227ea9409409118d5da287a3467539191a5526f58",
+    "results\\study__full_rulebook__RR__account_purchases__cash_budgets\\budget_1000_monthly_200__best_terminal\\purchase_decisions.csv": "7ae6d030d443548b4b7f603b99a727dce1d1e6ca7f79cdb8b3bd87ddf50fb72b",
+    "results\\study__full_rulebook__RR__account_purchases__cash_budgets\\budget_1000_monthly_200__best_terminal\\report.txt": "b45ae3b8b514b7e75241bd8b9ece766e46d0db621f43e8eff06c300625ff5068",
+    "results\\study__full_rulebook__RR__account_purchases__cash_budgets\\budget_1000_monthly_200__best_terminal\\summary.json": "15778c18bf8d677e873d706b71f97c18dc22955812f15503691e0042d2177be8",
+    "results\\study__full_rulebook__RR__account_purchases__cash_budgets\\budget_1000_monthly_200__best_terminal\\withdrawals.csv": "67ec940b51dd4fcf251db22a1d47d06966ee92c64b3d4f6f2582072f694c27a0",
+    "results\\study__full_rulebook__RR__account_purchases__cash_budgets\\budget_5000_monthly_0__best_ongoing\\accounts.csv": "1b37520c85bab965d72f95d4a6b93a3484465d601105519c165dd3262fe1fde2",
+    "results\\study__full_rulebook__RR__account_purchases__cash_budgets\\budget_5000_monthly_0__best_ongoing\\denials.csv": "5f1554523099c45198cb4e10af3e81c2bca109b4cefcfb58c8831e5fa05c8922",
+    "results\\study__full_rulebook__RR__account_purchases__cash_budgets\\budget_5000_monthly_0__best_ongoing\\experiment.json": "4acb11618c7f51a29f861e7d85f816d2851a93df608bbeb02324fa34aff5f56d",
+    "results\\study__full_rulebook__RR__account_purchases__cash_budgets\\budget_5000_monthly_0__best_ongoing\\owner_cash.csv": "1c086e9601f5e11f7299fad9ff0d686c106afbcc79fdf6edf04ab1a8c175ba8e",
+    "results\\study__full_rulebook__RR__account_purchases__cash_budgets\\budget_5000_monthly_0__best_ongoing\\purchase_decisions.csv": "b9d8689b425c363ccabc40b7db20713f92e70982ad83510e02c552cb5c643628",
+    "results\\study__full_rulebook__RR__account_purchases__cash_budgets\\budget_5000_monthly_0__best_ongoing\\report.txt": "13e866cbc5ec228d41b1ff8b72b78b04eec4f9526604ed8551b6a06259f6e8a6",
+    "results\\study__full_rulebook__RR__account_purchases__cash_budgets\\budget_5000_monthly_0__best_ongoing\\summary.json": "1be6a3f2f1501d4fe8851c2b56726e6a43991f88241851b2eb02bc4811e0c7c1",
+    "results\\study__full_rulebook__RR__account_purchases__cash_budgets\\budget_5000_monthly_0__best_ongoing\\withdrawals.csv": "bf3d795ccf632017603c8e97cc9787d47b46336afb13d12ff5bdac7016ff2594",
+    "results\\study__full_rulebook__RR__account_purchases__cash_budgets\\budget_5000_monthly_0__best_terminal\\accounts.csv": "a266dbe135d59b7aa25ea4fdd4ae600266a8648644f262b65d391f68ea4d7247",
+    "results\\study__full_rulebook__RR__account_purchases__cash_budgets\\budget_5000_monthly_0__best_terminal\\denials.csv": "07dcb768eee94acfb612033e0958d1fd06a35de71a7f1b29a529d1d7cdd2376f",
+    "results\\study__full_rulebook__RR__account_purchases__cash_budgets\\budget_5000_monthly_0__best_terminal\\experiment.json": "5bc5e006c65143643de37a3b352eab8669f761e0c587b07cb3f2738bb869da76",
+    "results\\study__full_rulebook__RR__account_purchases__cash_budgets\\budget_5000_monthly_0__best_terminal\\owner_cash.csv": "d67c1d2e9870d0f90d402a513c229c8d3f0600e6c5addeb80941f34b524fa852",
+    "results\\study__full_rulebook__RR__account_purchases__cash_budgets\\budget_5000_monthly_0__best_terminal\\purchase_decisions.csv": "b9d8689b425c363ccabc40b7db20713f92e70982ad83510e02c552cb5c643628",
+    "results\\study__full_rulebook__RR__account_purchases__cash_budgets\\budget_5000_monthly_0__best_terminal\\report.txt": "0cb939ae2ca7322c8f4c0e23f4fc72ca0e2634a9d3987813a1d51428d9bc8ea1",
+    "results\\study__full_rulebook__RR__account_purchases__cash_budgets\\budget_5000_monthly_0__best_terminal\\summary.json": "9c2b2cbb43180fb7c66280c9216ac11ce1cabe23e75483e6a91433fb77a9067b",
+    "results\\study__full_rulebook__RR__account_purchases__cash_budgets\\budget_5000_monthly_0__best_terminal\\withdrawals.csv": "0f6cb52eb5c7beece1603a26b2c541c6d97e779625680c30a016a90ead6f7836",
+    "results\\study__full_rulebook__RR__account_purchases__cash_budgets\\budget_5000_monthly_200__best_ongoing\\accounts.csv": "b9c2acaf34448a4d82c73c97ced68de327a2a6aca587f337abae4e8eafd44bff",
+    "results\\study__full_rulebook__RR__account_purchases__cash_budgets\\budget_5000_monthly_200__best_ongoing\\denials.csv": "dfbbdf37e4c2bbad16717660aca6b79b7e0bd49b038df5c4d176777d13123145",
+    "results\\study__full_rulebook__RR__account_purchases__cash_budgets\\budget_5000_monthly_200__best_ongoing\\experiment.json": "60da6250cdcb9e1476a75e447de15a3c73cd1257985cb463e73a0b68963b7cc4",
+    "results\\study__full_rulebook__RR__account_purchases__cash_budgets\\budget_5000_monthly_200__best_ongoing\\owner_cash.csv": "a097060575b014164aa623a010bd17f5b3cd947ca1bcba0507ef4eae1515f96a",
+    "results\\study__full_rulebook__RR__account_purchases__cash_budgets\\budget_5000_monthly_200__best_ongoing\\purchase_decisions.csv": "7ae6d030d443548b4b7f603b99a727dce1d1e6ca7f79cdb8b3bd87ddf50fb72b",
+    "results\\study__full_rulebook__RR__account_purchases__cash_budgets\\budget_5000_monthly_200__best_ongoing\\report.txt": "4343df955abb5b72efbac873dfe3cf739c5aaf5fbcfbe2ea45cfe2dd8c044625",
+    "results\\study__full_rulebook__RR__account_purchases__cash_budgets\\budget_5000_monthly_200__best_ongoing\\summary.json": "aaf3499fdadedc42d3289e6891bbbdd27a354bfb51f3574cb4d0caa7ceeaeab1",
+    "results\\study__full_rulebook__RR__account_purchases__cash_budgets\\budget_5000_monthly_200__best_ongoing\\withdrawals.csv": "8e6ea4e723d14ab206c1cb732897c9578a4b81db60bbc632e44ee5d24bca7c91",
+    "results\\study__full_rulebook__RR__account_purchases__cash_budgets\\budget_5000_monthly_200__best_terminal\\accounts.csv": "f83d9aca0826d4f40496019eccde2ba2383351735214fccf1fe0b80481fe223f",
+    "results\\study__full_rulebook__RR__account_purchases__cash_budgets\\budget_5000_monthly_200__best_terminal\\denials.csv": "5b34d48ada335d76a879f1611bc9121a5e90b25316b1daabacaa7fbc581e3504",
+    "results\\study__full_rulebook__RR__account_purchases__cash_budgets\\budget_5000_monthly_200__best_terminal\\experiment.json": "03be13b91960df9bfd57a0870eb985fd9d8bd49d5a40091388857ec7941e1930",
+    "results\\study__full_rulebook__RR__account_purchases__cash_budgets\\budget_5000_monthly_200__best_terminal\\owner_cash.csv": "fddfc35c9cc82fd2c29ab28fe6531293415d90776bca271acab4a2e575d02022",
+    "results\\study__full_rulebook__RR__account_purchases__cash_budgets\\budget_5000_monthly_200__best_terminal\\purchase_decisions.csv": "7ae6d030d443548b4b7f603b99a727dce1d1e6ca7f79cdb8b3bd87ddf50fb72b",
+    "results\\study__full_rulebook__RR__account_purchases__cash_budgets\\budget_5000_monthly_200__best_terminal\\report.txt": "cb3094224c5cdca8cdebcabd8c8eaf5324e786a9d4d5f8c7233e2f409fc4d11a",
+    "results\\study__full_rulebook__RR__account_purchases__cash_budgets\\budget_5000_monthly_200__best_terminal\\summary.json": "98eef01f58f177ce71ea11d47a6c7bf198d8144065ee790e0cbe04a5669bccad",
+    "results\\study__full_rulebook__RR__account_purchases__cash_budgets\\budget_5000_monthly_200__best_terminal\\withdrawals.csv": "67ec940b51dd4fcf251db22a1d47d06966ee92c64b3d4f6f2582072f694c27a0",
+    "results\\study__full_rulebook__RR__monthly_amount_x_cushion__dual_terminal_scores\\best_ongoing\\accounts.csv": "757ce73b105f5598a4b1179dedf900c1222fda28fd35a0ff6b0f294c943f9a6c",
+    "results\\study__full_rulebook__RR__monthly_amount_x_cushion__dual_terminal_scores\\best_ongoing\\config.json": "22b42da078b61064577f1dbf02023a2497692331788142562c1283fbff8cfd38",
+    "results\\study__full_rulebook__RR__monthly_amount_x_cushion__dual_terminal_scores\\best_ongoing\\denials.csv": "5236302359fffcf5b86cc5a196ba1ab987744bffe5bc163ffb96d1c154a82ad5",
+    "results\\study__full_rulebook__RR__monthly_amount_x_cushion__dual_terminal_scores\\best_ongoing\\report.txt": "995b3b5603a88fa1dad3103f50f576dc1b961fe17750af979d4e94f61de56003",
+    "results\\study__full_rulebook__RR__monthly_amount_x_cushion__dual_terminal_scores\\best_ongoing\\summary.json": "0924e82718d5285f2b3729074568a194fd389f8825aec64fb705bc3d2f011d09",
+    "results\\study__full_rulebook__RR__monthly_amount_x_cushion__dual_terminal_scores\\best_ongoing\\withdrawals.csv": "3fbec432835610d2ad0c07caf7cb9d3f62cc31a9f9632b991e228710950e53dd",
+    "results\\study__full_rulebook__RR__monthly_amount_x_cushion__dual_terminal_scores\\best_terminal\\accounts.csv": "c36158b8fe98a7201ea85f5696c033b3c6ed30aede878a6e28f766b30e225e38",
+    "results\\study__full_rulebook__RR__monthly_amount_x_cushion__dual_terminal_scores\\best_terminal\\config.json": "f673945092088a7715bf940d7f9a5f1a39a6a9a7297b71f27f9151c06940339d",
+    "results\\study__full_rulebook__RR__monthly_amount_x_cushion__dual_terminal_scores\\best_terminal\\denials.csv": "5d95cb501ebcdf5a891b1ff189bf8c73f1ae9a5a8a031f5c593574a793c1b6f0",
+    "results\\study__full_rulebook__RR__monthly_amount_x_cushion__dual_terminal_scores\\best_terminal\\report.txt": "3d17fd54f52a0f4c570a5a8fcb5ce3cc13db686f3356cb7fdaf7d7c88535a4e2",
+    "results\\study__full_rulebook__RR__monthly_amount_x_cushion__dual_terminal_scores\\best_terminal\\summary.json": "65818cdc034aca089ee0f924b2f93692ae832e8dbf34cc518411675488a7f21d",
+    "results\\study__full_rulebook__RR__monthly_amount_x_cushion__dual_terminal_scores\\best_terminal\\withdrawals.csv": "4832c909dd6a41d30faf2e6af1e58d78bcddb668a8ccf556adc5d8b93385246b",
+    "results\\study__full_rulebook__RR__withdrawal_cadence__monthly_purchases\\best_ongoing\\accounts.csv": "204603ca2f96e1d9e7b9d60eb80fc57260a81aa8dd936e0f34b35f31daf734b5",
+    "results\\study__full_rulebook__RR__withdrawal_cadence__monthly_purchases\\best_ongoing\\config.json": "22af11b0885d2d95b04a0a1cf8ef3bb838d41f02ab69a2cdc1de98772466821b",
+    "results\\study__full_rulebook__RR__withdrawal_cadence__monthly_purchases\\best_ongoing\\denials.csv": "c7f6788d50fbbd308b773f72df48c030829f8b4dbfb9dec4467dc9baf18bc70f",
+    "results\\study__full_rulebook__RR__withdrawal_cadence__monthly_purchases\\best_ongoing\\report.txt": "7cb5b009bb6574c94713240230620f783160121b45e2ccd5449b1526008dfd46",
+    "results\\study__full_rulebook__RR__withdrawal_cadence__monthly_purchases\\best_ongoing\\summary.json": "81796983893d997a58a76c84a0569f03ce11e40132e7151762f61629f14eafdc",
+    "results\\study__full_rulebook__RR__withdrawal_cadence__monthly_purchases\\best_ongoing\\withdrawals.csv": "c0191a282bbdb713e90e47b2bc8263c0f05719817731b6b7a0d08303a3574bfb",
+    "results\\study__full_rulebook__RR__withdrawal_cadence__monthly_purchases\\best_terminal\\accounts.csv": "0ffd1affb3666bc62dba4ab57a9d5eec01c85fe848ad148da93b41d29dea69bb",
+    "results\\study__full_rulebook__RR__withdrawal_cadence__monthly_purchases\\best_terminal\\config.json": "19dea3cf55db20471a3da97b1448db7604f92ab2034726092cee7f6cd4292e33",
+    "results\\study__full_rulebook__RR__withdrawal_cadence__monthly_purchases\\best_terminal\\denials.csv": "fa0c2598042f58a4ce0420e6f0df910a23730dae0490d6c38ec9b8ba7a5e7bf5",
+    "results\\study__full_rulebook__RR__withdrawal_cadence__monthly_purchases\\best_terminal\\report.txt": "cdfa6874813b4997bec3d2b2ecc3dc97a2bc8b79dcb82ce91692dadc6a979f0c",
+    "results\\study__full_rulebook__RR__withdrawal_cadence__monthly_purchases\\best_terminal\\summary.json": "0fe681a66dc4a74f4e7253bbb13ddee51929c525172d6360bdc7f83dffc17347",
+    "results\\study__full_rulebook__RR__withdrawal_cadence__monthly_purchases\\best_terminal\\withdrawals.csv": "a7cb2ce617ff0736dd6b7cc1c131a6510e8613d6f8a8d8d7971d632f3950cbc3"
+  }
+}

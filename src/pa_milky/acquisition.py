@@ -32,6 +32,9 @@ class AcquisitionPolicy:
     persistent_demand: bool = False
     evaluation_start_interval_days: int = 0  # 0 batches; otherwise one new subscription per interval
     evaluations_reserve_seats: bool = True
+    # Operational sensitivity: pay at the first daily check after passing or
+    # abandon the pass. This is a chosen policy, not a firm's legal deadline.
+    activate_on_first_check: bool = False
 
     def __post_init__(self):
         if (not isinstance(self.evaluation_start_interval_days, int)
@@ -40,7 +43,7 @@ class AcquisitionPolicy:
         if self.persistent_demand and self.name != 'monthly_current_slot_replacements':
             raise ValueError('Persistent demand currently supports current-slot replacements only')
         if self.evaluation is None and (self.persistent_demand or self.evaluation_start_interval_days
-                                         or not self.evaluations_reserve_seats):
+                                         or not self.evaluations_reserve_seats or self.activate_on_first_check):
             raise ValueError('Pipeline settings require evaluation supply')
         if self.name not in {'monthly_one','monthly_two','weekly_one','quarterly_one','quarterly_three','replace','reinvest'} | HYBRID:
             raise ValueError('Unknown acquisition policy')
@@ -211,9 +214,17 @@ class AcquisitionLedger:
         fee=self.policy.evaluation.activation_fee_usd
         for e in self.active:
             if e.state!='passed': continue
-            if alive+self.spares>=self.policy.max_live_accounts: break
+            if alive+self.spares>=self.policy.max_live_accounts:
+                if self.policy.activate_on_first_check:
+                    e.state,e.ended_at='cancelled',at
+                    self.financing_events.append({'at':at.isoformat(),'kind':'pass_forfeited_capacity','eval_id':e.eval_id})
+                    continue
+                break
             if self.cash_usd<fee:
                 self.financing_events.append({'at':at.isoformat(),'kind':'activation_blocked','eval_id':e.eval_id})
+                if self.policy.activate_on_first_check:
+                    e.state,e.ended_at='cancelled',at
+                    self.financing_events.append({'at':at.isoformat(),'kind':'pass_forfeited_cash','eval_id':e.eval_id})
             else:
                 self.pay(at,'activation_fee',fee)
                 self.activation_fees_usd=money(self.activation_fees_usd+fee)

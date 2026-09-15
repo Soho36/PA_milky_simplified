@@ -126,6 +126,7 @@ def _advance(
     *,
     commission: float,
     settle=None,
+    observer=None,
 ) -> tuple[int, int, list[PayoutEvent], list[DenialEvent]]:
     """Run the clock forward to ``horizon``, in true event order.
 
@@ -147,18 +148,24 @@ def _advance(
                 due_at = None
 
         if trade_at is not None and (due_at is None or trade_at <= due_at):
+            if observer is not None:
+                observer(trade_at, accounts, 'before_trade', trades[index])
             copies += _apply_trade(
                 trades[index], accounts, commission=commission, path_order=config.path_order
             )
             if settle is not None:
                 # Evaluations trade the same tape, one position at a time.
                 settle(index, trades[index])
+            if observer is not None:
+                observer(trade_at, accounts, 'trade', trades[index])
             index += 1
             continue
         if due_at is not None:
             paid, denied = settle_pending(pending, due_at, config)
             payouts.extend(paid)
             denials.extend(denied)
+            if observer is not None:
+                observer(due_at, accounts, 'payout', None)
             continue
         break
 
@@ -177,7 +184,8 @@ def decision_boundaries(first: datetime, last: datetime, cadence: str):
     return sorted(dates)
 
 
-def run_book(trades: list[Trade], config: RunConfig, *, acquisition: AcquisitionPolicy | None = None) -> BookResult:
+def run_book(trades: list[Trade], config: RunConfig, *, acquisition: AcquisitionPolicy | None = None,
+             observer=None) -> BookResult:
     """Walk the tape, opening one account a month and asking the firm monthly."""
 
     if not trades:
@@ -210,7 +218,8 @@ def run_book(trades: list[Trade], config: RunConfig, *, acquisition: Acquisition
         if monthly:
             opened += 1
         index, settled, paid, denied = _advance(
-            trades, index, boundary, accounts, pending, config, commission=commission, settle=settle
+            trades, index, boundary, accounts, pending, config, commission=commission, settle=settle,
+            observer=observer
         )
         copies += settled
         payouts.extend(paid)
@@ -248,10 +257,14 @@ def run_book(trades: list[Trade], config: RunConfig, *, acquisition: Acquisition
                 )
             )
 
+        if observer is not None:
+            observer(boundary, accounts, 'decision', None)
+
     # The horizon is the last exit, not "no limit": a request whose delay runs
     # past the end of the tape must not be settled out of thin air.
     index, settled, paid, denied = _advance(
-        trades, index, last_exit, accounts, pending, config, commission=commission, settle=settle
+        trades, index, last_exit, accounts, pending, config, commission=commission, settle=settle,
+        observer=observer
     )
     copies += settled
     payouts.extend(paid)
@@ -264,6 +277,8 @@ def run_book(trades: list[Trade], config: RunConfig, *, acquisition: Acquisition
     # emptied at the horizon was alive, and its equity was real.
     alive_at_horizon = sum(1 for a in accounts if a.alive)
     equity_at_horizon = money(sum(a.equity_profit_usd for a in accounts if a.alive))
+    if observer is not None:
+        observer(last_exit, accounts, 'horizon', None)
     terminal_paid, terminal_denied = run_terminal_withdrawal(accounts, last_exit, config)
     payouts.extend(terminal_paid)
     denials.extend(terminal_denied)
