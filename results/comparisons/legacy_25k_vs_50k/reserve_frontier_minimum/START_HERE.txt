@@ -1,0 +1,51 @@
+START HERE — Does daily minimum improve the reserve cash/survival trade-off compared with daily maximum?
+
+Question answered
+Does daily minimum improve the reserve cash/survival trade-off compared with daily maximum?
+
+What we learned
+The 1,280 runs compare both mechanisms on the same pipelines and reserve grid. For 25k, the
+best tested ongoing minimum-policy reserve is $4,000.00, producing $563,891.00 net and ending
+with 6 live PAs. For 50k, the best tested ongoing minimum-policy reserve is $3,700.00,
+producing $580,680.00 net and ending with 12 live PAs. Minimum preserves more balance
+differences and can retain more actual capital at the same nominal reserve. The full-history
+cash plateau is around $4,000, while avoiding deaths of year-old PAs requires $6,800 for 25K
+and $6,700 for 50K. Some later starts need $7,000. Minimum does not win ongoing cash in every
+window. The cash winner and survival boundary are different choices.
+
+How to interpret it
+This extends the maximum frontier with a matched minimum comparison. Both use shared seats and
+first-check activation. The pipelines are fixed, including seven-day evaluation starts for 25K;
+this is not a repeat of the old minimum winner’s separately optimized pipeline. Similar-capital
+matches are descriptive and cannot isolate a causal benefit from desynchronization. Historical
+windows overlap.
+
+Files to open first
+- REPORT.md
+- frontier.csv
+
+Subfolders
+- legacy_25k__maximum__reserve_5700 (has its own START_HERE.txt)
+- legacy_25k__maximum__reserve_6700 (has its own START_HERE.txt)
+- legacy_25k__maximum__reserve_6800 (has its own START_HERE.txt)
+- legacy_25k__maximum__reserve_7100 (has its own START_HERE.txt)
+- legacy_25k__maximum__reserve_7500 (has its own START_HERE.txt)
+- legacy_25k__minimum__reserve_4000 (has its own START_HERE.txt)
+- legacy_25k__minimum__reserve_6700 (has its own START_HERE.txt)
+- legacy_25k__minimum__reserve_6800 (has its own START_HERE.txt)
+- legacy_25k__minimum__reserve_7100 (has its own START_HERE.txt)
+- legacy_25k__minimum__reserve_7500 (has its own START_HERE.txt)
+- legacy_50k__maximum__reserve_5700 (has its own START_HERE.txt)
+- legacy_50k__maximum__reserve_6700 (has its own START_HERE.txt)
+- legacy_50k__maximum__reserve_6800 (has its own START_HERE.txt)
+- legacy_50k__maximum__reserve_7100 (has its own START_HERE.txt)
+- legacy_50k__maximum__reserve_7500 (has its own START_HERE.txt)
+- legacy_50k__minimum__reserve_3700 (has its own START_HERE.txt)
+- legacy_50k__minimum__reserve_6700 (has its own START_HERE.txt)
+- legacy_50k__minimum__reserve_6800 (has its own START_HERE.txt)
+- legacy_50k__minimum__reserve_7100 (has its own START_HERE.txt)
+- legacy_50k__minimum__reserve_7500 (has its own START_HERE.txt)
+
+For the surrounding study, open ../START_HERE.txt.
+
+Reading note: ongoing cash is received during trading, after costs. Total cash also includes any closing withdrawal. These are historical simulations, not forecasts.

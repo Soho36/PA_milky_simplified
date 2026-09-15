@@ -12,14 +12,14 @@ COMPARE = 'comparisons/legacy_25k_vs_50k'
 # directly from the saved summaries, rather than from folder-name guesses.
 GUIDES = {
     '.': ('Where should I start?',
-        'This is the history of the account-management research, from simple withdrawal examples to evaluations and replacement risk. Start with comparisons/legacy_25k_vs_50k/march_failure_review for the latest explanation of synchronized failures, and reserve_frontier for the daily-maximum reserve curve. Daily-minimum has promising matched results but does not yet have its own complete reserve frontier.',
+        'This is the history of the account-management research, from simple withdrawal examples to evaluations and replacement risk. Start with comparisons/legacy_25k_vs_50k/reserve_frontier_minimum for the paired daily-minimum/maximum reserve curves, march_failure_review for the explanation of synchronized failures, and reserve_frontier for the earlier daily-maximum study.',
         'Earlier folders use different assumptions. Some have unlimited live accounts; some assume instantly available replacements. Later studies impose cash budgets and then model evaluations. Compare settings within a study before comparing totals across studies.'),
     'comparisons': ('How do products and operating assumptions compare?',
         'The legacy_25k_vs_50k folder follows the comparison from instant account purchases to limited replacement supply, actual evaluations, and reserve/recovery diagnostics. This folder is a navigation container, not a separate experiment.',
         'Product comparisons include account rules and costs as well as the nominal account size.'),
     COMPARE: ('Which account size and withdrawal/replacement approach works best in the model?',
         'The answer changes with replacement availability and the cash objective. Instant supply favors aggressive extraction. Evaluation constraints make survival and cash financing matter. Daily minimum led ongoing cash in the broad pipeline search; the later daily-maximum frontier was conditional on that fixed withdrawal mechanism.',
-        'Read march_failure_review for minimum versus maximum at matched reserves. Read pipeline_capacity for policy rankings, and reserve_frontier for the maximum-policy survival boundary. The historical studies reuse the same market data.'),
+        'Read reserve_frontier_minimum for the paired daily withdrawal frontiers, march_failure_review for the failure/recovery traces, pipeline_capacity for broader policy rankings, and reserve_frontier for the earlier maximum-policy study. The historical studies reuse the same market data.'),
     COMPARE+'/reserve_by_policy': ('What reserve works best for each withdrawal and purchase policy?',
         'This matched 25K/50K search finds that the preferred reserve depends on the withdrawal rule, purchase schedule, budget and whether closing cash is counted. Aggressive replacement policies can produce high cash when replacement accounts are immediately available.',
         'There is no evaluation delay here. This is the instant-supply reference for the later replacement studies; its winners do not prove that enough real replacements can be produced.'),
@@ -103,12 +103,18 @@ def saved_run(folder, relative):
     s = read(folder/'summary.json')
     if 'book' not in s:
         # Reserve-frontier trace summaries use a compact schema.
-        question = f"What happened with {s['product'].replace('legacy_', '')} daily maximum at a {dollars(s['headroom'])} reserve?"
+        rule = s.get('withdrawal', 'maximum')
+        question = f"What happened with {s['product'].replace('legacy_', '')} daily {rule} at a {dollars(s['headroom'])} reserve?"
         finding = (f"This full-history replay produced {dollars(s['ongoing'])} ongoing net cash and "
             f"{dollars(s['total'])} including closing. {s['alive']} PAs remained alive, with {s['deaths']} "
             f"deaths over the whole run. On March 30, {s['deaths_2026_03_30']} PAs failed.")
+        if 'march30_pretrade_alive' in s:
+            finding += f" There were {s['march30_pretrade_alive']} live PAs immediately before the March 30 event."
+            if s['march30_pretrade_alive'] == 0:
+                finding += ' Zero deaths that day therefore does not demonstrate survival: the book was already empty.'
         return question, finding, ('The reserve is above the frozen failure floor, not the nominal account balance. '
-            'This is a detailed boundary diagnostic, not a separately optimized strategy. Shared seats and first-check activation apply.')
+            'This is one detailed replay within the parent frontier; the pipeline stays fixed. Shared seats and first-check activation apply. '
+            'Read the parent study for cash rankings, account-age effects and comparisons at similar actual retained capital.')
     book, cash = s['book'], s['cash']
     terminal = s.get('terminal', {})
     total = cash['owner_cash_position_usd']
@@ -179,7 +185,22 @@ def march_run(folder):
 
 def build(folder):
     relative = folder.relative_to(ROOT).as_posix()
-    if relative in GUIDES:
+    if relative == COMPARE+'/reserve_frontier_minimum':
+        study = read(folder/'study.json')
+        summaries = [s for s in study['window_summaries'] if s['window'] == 'full' and s['withdrawal'] == 'minimum']
+        q = 'Does daily minimum improve the reserve cash/survival trade-off compared with daily maximum?'
+        finding = f"The {len(study['rows']):,} runs compare both mechanisms on the same pipelines and reserve grid. "
+        for s in summaries:
+            finding += (f"For {s['product'].replace('legacy_', '')}, the best tested ongoing minimum-policy reserve is "
+                f"{dollars(s['best_ongoing_headroom'])}, producing {dollars(s['best_ongoing'])} net and ending with "
+                f"{s['best_ongoing_alive']} live PAs. ")
+        finding += ('Minimum preserves more balance differences and can retain more actual capital at the same nominal reserve. '
+            'The full-history cash plateau is around $4,000, while avoiding deaths of year-old PAs requires $6,800 for 25K and $6,700 for 50K. '
+            'Some later starts need $7,000. Minimum does not win ongoing cash in every window. The cash winner and survival boundary are different choices.')
+        context = ('This extends the maximum frontier with a matched minimum comparison. Both use shared seats and first-check activation. '
+            'The pipelines are fixed, including seven-day evaluation starts for 25K; this is not a repeat of the old minimum winner’s separately optimized pipeline. '
+            'Similar-capital matches are descriptive and cannot isolate a causal benefit from desynchronization. Historical windows overlap.')
+    elif relative in GUIDES:
         q, finding, context = GUIDES[relative]
     elif folder.parent.name == 'march_failure_review':
         q, finding, context = march_run(folder)
