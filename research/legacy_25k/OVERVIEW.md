@@ -1,5 +1,11 @@
 # Legacy 25K: current findings
 
+**Corrected routing follow-up:** [capacity reuse and fixed-R pools](ROUTING_REUSE.md)
+replace five-per-purchase overbuying with purchases of only the free-slot
+shortfall. The matched replay preserves earlier exposure; the separate R=1–4
+pools start with K=5R and enforce 20 live accounts. Both attain full historical
+coverage, conditional on immediate funded-seat supply and sufficient funding.
+
 **Evaluation-capacity follow-up:** the [pipeline-capacity experiment](../../results/comparisons/legacy_25k_vs_50k/pipeline_capacity/FINDINGS.generated.md)
 tests whether persistent demand, staggered evaluations, greater concurrency
 and spare inventory support higher account turnover. Its main comparison uses

@@ -8,6 +8,7 @@ historical trade tapes; it does not establish future returns or a universal opti
 | Read / do | Entry point |
 |---|---|
 | Understand the current conclusions | [Legacy 25K overview](research/legacy_25k/OVERVIEW.md) |
+| Compare corrected routing and fixed-R pools | [Capacity-reuse findings](research/legacy_25k/ROUTING_REUSE.md) |
 | Find the evidence for a question | [Legacy 25K study guide](research/legacy_25k/STUDIES.md) |
 | Compare the next product | [Legacy 50K research](research/legacy_50k/README.md) |
 | Compare reserves for both account sizes | [Paired reserve findings](results/comparisons/legacy_25k_vs_50k/reserve_by_policy/FINDINGS.generated.md) |

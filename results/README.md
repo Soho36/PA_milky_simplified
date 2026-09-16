@@ -1,5 +1,11 @@
 # Results index
 
+Current routing: [capacity-reuse tables](legacy_25k/routing_capacity_reuse/REPORT.generated.md),
+[fixed-R pool tables](legacy_25k/routing_fixed_pool/REPORT.generated.md), and
+[interpretation](../research/legacy_25k/ROUTING_REUSE.md). These buy only the
+free-slot shortfall. The earlier five-per-purchase results remain preserved in
+`routing_matched_exposure`; their procurement assumption is superseded.
+
 For a shorter reading path, start with the
 [Legacy 25K current findings](../research/legacy_25k/OVERVIEW.md) and
 [study guide](../research/legacy_25k/STUDIES.md). This index retains the complete

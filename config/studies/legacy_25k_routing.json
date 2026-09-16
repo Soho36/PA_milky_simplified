@@ -1,0 +1,18 @@
+{
+  "schema": "pa_milky.routing_study.v1",
+  "scenario": "config/scenarios/full_rulebook_monthly_500.json",
+  "output": "results/legacy_25k/routing_matched_exposure",
+  "workers": 4,
+  "expected_capacity": 5,
+  "starts": [2020, 2023],
+  "budgets": [[1000, 0], [1000, 200], [5000, 0], [5000, 200]],
+  "acquisitions": ["monthly_one", "weekly_one"],
+  "reference_live_cap": 20,
+  "withdrawals": [
+    {"amount_rule": "minimum", "cadence": "daily", "retained_balance_usd": 31900},
+    {"amount_rule": "maximum", "cadence": "weekly", "retained_balance_usd": 31600},
+    {"amount_rule": "minimum", "cadence": "calendar_month", "retained_balance_usd": 30000}
+  ],
+  "allocations": ["max_headroom", "round_robin"],
+  "design": "Ex-post replay of reference accepted copies and purchase dates; five funded seats per original purchase; instant paid top-ups only when needed to prevent missed copies. Routed budget and physical seat cap are relaxed and reported, not asserted equal. Withdrawal settings stay fixed."
+}

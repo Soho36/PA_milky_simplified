@@ -1,0 +1,17 @@
+{
+  "schema": "pa_milky.fixed_pool_study.v1",
+  "scenario": "config/scenarios/full_rulebook_monthly_500.json",
+  "output": "results/legacy_25k/routing_fixed_pool",
+  "workers": 4,
+  "starts": [2020, 2023],
+  "copies": [1, 2, 3, 4],
+  "capacity_per_copy": 5,
+  "max_live_accounts": 20,
+  "allocations": ["max_headroom", "round_robin"],
+  "withdrawals": [
+    {"amount_rule": "minimum", "cadence": "daily", "retained_balance_usd": 31900},
+    {"amount_rule": "maximum", "cadence": "weekly", "retained_balance_usd": 31600},
+    {"amount_rule": "minimum", "cadence": "calendar_month", "retained_balance_usd": 30000}
+  ],
+  "design": "R copies of every exported trade, starting with K=5R seats in one shared pool. Reuse free seats and buy only the entry-time deficit, subject to 20 live accounts. Purchases cost $200 each and require instant funded-account availability. Initial seat funding and subsequent external cash needs are measured; no affordability gate or Evaluation lead time is imposed. No calendar purchases or inherited future reference survival demand."
+}

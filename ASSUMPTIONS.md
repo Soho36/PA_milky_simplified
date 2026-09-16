@@ -7,6 +7,12 @@ evidence than this file.
 
 ## The tape and execution — decided by the user
 
+The unlimited-concurrency assumptions below describe the existing studies.
+The separate [routing experiments](research/legacy_25k/ROUTING_REUSE.md)
+use entry-time allocation, one whole trade per physical account and purchases
+of only the free-slot shortfall. The matched replay and fixed-R pools have
+different demand and resource assumptions, documented separately.
+
 - **Tape: `RR` at RR = 1.00.** 12,658 trades. This is the exact tape the parent
   study pinned, so brick 1 can be differenced against it. `GG` (21,563 trades at
   RR = 1.00) is available behind `--strategy GG` but is unstudied.

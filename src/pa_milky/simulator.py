@@ -22,6 +22,7 @@ from .account import Account, money
 from .acquisition import AcquisitionPolicy, AcquisitionLedger
 from .config import RunConfig
 from .loader import Trade
+from .routing import RoutingPolicy, TradeRouter
 from .payouts import (
     DenialEvent,
     PayoutEvent,
@@ -64,6 +65,8 @@ class BookResult:
     tape_last_exit: datetime
     config: RunConfig
     acquisition: AcquisitionLedger | None = None
+    routing: dict | None = None
+    routing_fills: list | None = None
 
     @property
     def alive(self) -> list[Account]:
@@ -127,6 +130,8 @@ def _advance(
     commission: float,
     settle=None,
     observer=None,
+    router=None,
+    include_boundary_entries=False,
 ) -> tuple[int, int, list[PayoutEvent], list[DenialEvent]]:
     """Run the clock forward to ``horizon``, in true event order.
 
@@ -140,19 +145,35 @@ def _advance(
 
     while True:
         trade_at = trades[index].exit_at if index < len(trades) else None
+        if (router is not None and trade_at is not None and index not in router.assignments
+                and trades[index].entry_at == trades[index].exit_at):
+            trade_at = None  # an instantaneous trade must first be offered
         due_at = pending[0].due_at if pending else None
+        entry_at = router.next_entry if router is not None else None
         if horizon is not None:
             if trade_at is not None and trade_at > horizon:
                 trade_at = None
             if due_at is not None and due_at > horizon:
                 due_at = None
+            # Entries exactly at a decision boundary follow purchases/payouts.
+            if entry_at is not None and (entry_at > horizon or
+                                        (entry_at == horizon and not include_boundary_entries)):
+                entry_at = None
+
+        if entry_at is not None and (trade_at is None or entry_at < trade_at) and (due_at is None or entry_at < due_at):
+            router.enter(accounts)
+            continue
 
         if trade_at is not None and (due_at is None or trade_at <= due_at):
             if observer is not None:
                 observer(trade_at, accounts, 'before_trade', trades[index])
-            copies += _apply_trade(
-                trades[index], accounts, commission=commission, path_order=config.path_order
-            )
+            if router is None:
+                copies += _apply_trade(
+                    trades[index], accounts, commission=commission, path_order=config.path_order
+                )
+            else:
+                copies += router.exit(index, trades[index], commission=commission,
+                                      path_order=config.path_order)
             if settle is not None:
                 # Evaluations trade the same tape, one position at a time.
                 settle(index, trades[index])
@@ -185,11 +206,13 @@ def decision_boundaries(first: datetime, last: datetime, cadence: str):
 
 
 def run_book(trades: list[Trade], config: RunConfig, *, acquisition: AcquisitionPolicy | None = None,
-             observer=None) -> BookResult:
+             observer=None, routing: RoutingPolicy | None = None, replay=None) -> BookResult:
     """Walk the tape, opening one account a month and asking the firm monthly."""
 
     if not trades:
         raise ValueError("no trades to simulate")
+    if replay is not None and (acquisition is not None or routing is None):
+        raise ValueError("A matched replay requires routing and its own frozen purchase schedule")
 
     if acquisition is not None and config.max_accounts is not None:
         raise ValueError("Budgeted acquisition uses its own live-account cap; max_accounts must be unset")
@@ -205,6 +228,25 @@ def run_book(trades: list[Trade], config: RunConfig, *, acquisition: Acquisition
     index = 0
     copies = 0
 
+    def provision(at, count):
+        if replay is not None and replay.max_live_accounts is not None:
+            count = min(count, max(0, replay.max_live_accounts - sum(a.alive for a in accounts)))
+        for _ in range(count):
+            accounts.append(Account(
+                account_id=len(accounts) + 1, cohort_month=month_key(at), activated_at=at,
+                purchase_fee_usd=config.purchase_fee_usd,
+                trailing_drawdown_usd=config.trailing_drawdown_usd,
+                frozen_floor_profit_usd=config.frozen_floor_profit_usd,
+                threshold_touch_fails=config.threshold_touch_fails,
+                starting_balance_usd=config.starting_balance_usd))
+        if count and replay is not None:
+            replay.record_purchase(at, count, accounts, emergency=True)
+
+    router = (TradeRouter(trades, routing,
+                          demand=replay.demand if replay is not None else None,
+                          provision=provision if replay is not None else None)
+              if routing is not None else None)
+
     purchasing = AcquisitionLedger(acquisition) if acquisition is not None else None
     settle = None
     if purchasing is not None and purchasing.evaluating:
@@ -212,14 +254,14 @@ def run_book(trades: list[Trade], config: RunConfig, *, acquisition: Acquisition
                                path_order=config.path_order)
         settle = purchasing.settle
     opened = 0
-    for boundary in decision_boundaries(first_entry, last_exit, "daily" if purchasing else config.policy.cadence):
+    for boundary in decision_boundaries(first_entry, last_exit, "daily" if purchasing or replay is not None else config.policy.cadence):
         year, month = boundary.year, boundary.month
         monthly = boundary.day == 1
         if monthly:
             opened += 1
         index, settled, paid, denied = _advance(
             trades, index, boundary, accounts, pending, config, commission=commission, settle=settle,
-            observer=observer
+            observer=observer, router=router
         )
         copies += settled
         payouts.extend(paid)
@@ -235,7 +277,11 @@ def run_book(trades: list[Trade], config: RunConfig, *, acquisition: Acquisition
             denials.extend(denied)
             pending.sort(key=lambda item: item.due_at)
 
-        if purchasing:
+        if replay is not None:
+            count = replay.purchases.get(boundary, 0)
+            if replay.max_live_accounts is not None and count + sum(a.alive for a in accounts) > replay.max_live_accounts:
+                raise ValueError('Scheduled pool purchase exceeds the live-account cap')
+        elif purchasing:
             purchasing.receive(payouts)
             if monthly:
                 purchasing.fund(boundary)
@@ -246,7 +292,7 @@ def run_book(trades: list[Trade], config: RunConfig, *, acquisition: Acquisition
         for _ in range(count):
             accounts.append(
                 Account(
-                    account_id=len(accounts)+1 if purchasing else opened,
+                    account_id=len(accounts)+1 if purchasing or replay is not None else opened,
                     cohort_month=f"{year:04d}-{month:02d}",
                     activated_at=boundary,
                     purchase_fee_usd=config.purchase_fee_usd,
@@ -256,6 +302,8 @@ def run_book(trades: list[Trade], config: RunConfig, *, acquisition: Acquisition
                     starting_balance_usd=config.starting_balance_usd,
                 )
             )
+        if replay is not None and count:
+            replay.record_purchase(boundary, count, accounts, emergency=False)
 
         if observer is not None:
             observer(boundary, accounts, 'decision', None)
@@ -264,7 +312,7 @@ def run_book(trades: list[Trade], config: RunConfig, *, acquisition: Acquisition
     # past the end of the tape must not be settled out of thin air.
     index, settled, paid, denied = _advance(
         trades, index, last_exit, accounts, pending, config, commission=commission, settle=settle,
-        observer=observer
+        observer=observer, router=router, include_boundary_entries=True
     )
     copies += settled
     payouts.extend(paid)
@@ -304,4 +352,6 @@ def run_book(trades: list[Trade], config: RunConfig, *, acquisition: Acquisition
         tape_last_exit=last_exit,
         config=config,
         acquisition=purchasing,
+        routing=router.summary() if router is not None else None,
+        routing_fills=router.fills if router is not None else None,
     )

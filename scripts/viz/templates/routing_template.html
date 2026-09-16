@@ -1,0 +1,474 @@
+<meta charset="utf-8">
+<title>Matched-Exposure Routing</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500&family=IBM+Plex+Sans:wght@400;500;600&display=swap">
+<style>
+:root{
+  color-scheme:light;
+  --plane:#f9f9f7; --surface:#fcfcfb; --ink:#0b0b0b; --ink-2:#52514e; --muted:#898781;
+  --grid:#e1e0d9; --axis:#c3c2b7; --ring:rgba(11,11,11,.10);
+  --s1:#2a78d6; --s2:#eb6834; --s3:#1baf7a; --s4:#eda100;
+  --sel:rgba(42,120,214,.12); --shadow:0 8px 28px rgba(11,11,11,.12);
+  --mono:"IBM Plex Mono", ui-monospace, Consolas, monospace;
+  --sans:"IBM Plex Sans", system-ui, -apple-system, "Segoe UI", sans-serif;
+}
+@media (prefers-color-scheme: dark){
+  :root:not([data-theme="light"]){
+    color-scheme:dark;
+    --plane:#0d0d0d; --surface:#1a1a19; --ink:#ffffff; --ink-2:#c3c2b7; --muted:#898781;
+    --grid:#2c2c2a; --axis:#383835; --ring:rgba(255,255,255,.10);
+    --s1:#3987e5; --s2:#d95926; --s3:#199e70; --s4:#c98500;
+    --sel:rgba(57,135,229,.18); --shadow:0 8px 28px rgba(0,0,0,.55);
+  }
+}
+:root[data-theme="dark"]{
+  color-scheme:dark;
+  --plane:#0d0d0d; --surface:#1a1a19; --ink:#ffffff; --ink-2:#c3c2b7; --muted:#898781;
+  --grid:#2c2c2a; --axis:#383835; --ring:rgba(255,255,255,.10);
+  --s1:#3987e5; --s2:#d95926; --s3:#199e70; --s4:#c98500;
+  --sel:rgba(57,135,229,.18); --shadow:0 8px 28px rgba(0,0,0,.55);
+}
+*{box-sizing:border-box}
+[hidden]{display:none!important}
+body{margin:0;background:var(--plane);color:var(--ink);font:14px/1.5 var(--sans);padding-inline:20px}
+.wrap{max-width:1240px;margin:0 auto;padding-block:28px 64px}
+.eyebrow{font:500 11.5px/1.4 var(--mono);color:var(--muted);letter-spacing:.02em;margin:0 0 8px;overflow-wrap:anywhere}
+h1{font-weight:600;font-size:clamp(22px,3vw,30px);line-height:1.15;letter-spacing:-.012em;margin:0 0 10px;text-wrap:balance}
+.lede{color:var(--ink-2);max-width:86ch;margin:0 0 20px}
+.ledger{display:flex;flex-wrap:wrap;gap:1px;background:var(--ring);border:1px solid var(--ring);border-radius:12px;overflow:hidden;margin:0 0 18px}
+.ledger > div{flex:1 1 175px;background:var(--surface);padding:10px 14px 11px;display:grid;gap:1px;align-content:start}
+.ledger dt{font-size:12px;color:var(--ink-2)}
+.ledger dd{margin:0}
+.ledger .val{font:500 18px/1.3 var(--mono);font-variant-numeric:tabular-nums;color:var(--ink)}
+.ledger .sub{font-size:12px;color:var(--muted)}
+.controls{position:sticky;top:0;z-index:5;background:var(--plane);display:flex;flex-wrap:wrap;align-items:center;gap:8px 16px;padding-block:10px;border-bottom:1px solid var(--ring);margin-bottom:14px}
+.group{display:flex;align-items:center;gap:6px}
+.ctl-label{font-size:11px;color:var(--muted);letter-spacing:.04em;text-transform:uppercase}
+.chip{font:500 12.5px/1 var(--mono);padding:6px 10px;border-radius:999px;border:1px solid var(--ring);background:var(--surface);color:var(--ink-2);cursor:pointer}
+.chip:hover{border-color:var(--axis);color:var(--ink)}
+.chip[aria-pressed="true"]{background:var(--ink);border-color:var(--ink);color:var(--surface)}
+.chip:focus-visible,canvas:focus-visible,summary:focus-visible{outline:2px solid var(--s1);outline-offset:2px}
+.hint{font-size:12px;color:var(--muted);margin-left:auto}
+.instrument{background:var(--surface);border:1px solid var(--ring);border-radius:12px}
+.panel{padding:16px 16px 6px}
+.panel + .panel{border-top:1px solid var(--ring)}
+.panel-head{display:flex;flex-wrap:wrap;align-items:baseline;gap:4px 18px;margin-bottom:6px}
+.panel h2{font-size:15px;font-weight:600;margin:0}
+.legend{display:flex;flex-wrap:wrap;gap:4px 14px;font-size:12.5px;color:var(--ink-2);list-style:none;margin:0;padding:0}
+.legend li{display:inline-flex;align-items:center;gap:6px}
+.sw{display:inline-block;width:11px;height:11px;border-radius:3px;flex:none}
+.sw.line{height:2px;width:14px;border-radius:1px}
+.sw.dash{height:0;width:14px;border-top:2px dashed;background:none;border-radius:0}
+.note{font-size:12.5px;color:var(--ink-2);flex-basis:100%;margin:2px 0 0;max-width:100ch}
+.canvas-box{position:relative}
+canvas{display:block;width:100%;touch-action:pan-y;border-radius:4px}
+.tip{position:fixed;z-index:10;pointer-events:none;background:var(--surface);color:var(--ink);border:1px solid var(--ring);box-shadow:var(--shadow);border-radius:8px;padding:8px 11px 9px;font-size:12.5px;line-height:1.45;max-width:min(380px,calc(100vw - 16px))}
+.tip .d{font:500 12px var(--mono);color:var(--muted);margin-bottom:4px}
+.tip table{border-collapse:collapse}
+.tip td{padding:1px 0;vertical-align:baseline}
+.tip td.v{text-align:right;padding-left:16px;font-family:var(--mono);font-variant-numeric:tabular-nums}
+.tip .k{display:inline-flex;align-items:center;gap:6px;color:var(--ink-2)}
+details{margin-top:14px;background:var(--surface);border:1px solid var(--ring);border-radius:12px}
+summary{cursor:pointer;padding:12px 16px;font-weight:600;font-size:14px}
+summary span{font-weight:400;color:var(--muted);margin-left:8px;font-size:12.5px}
+.table-scroll{overflow:auto;max-height:560px;margin:0 16px 16px}
+table.data{border-collapse:collapse;font-size:12.5px;width:100%}
+table.data th{position:sticky;top:0;background:var(--surface);text-align:right;font-weight:500;color:var(--ink-2);padding:6px 10px;border-bottom:1px solid var(--axis);white-space:nowrap}
+table.data td{text-align:right;padding:4px 10px;border-bottom:1px solid var(--grid);font-family:var(--mono);font-variant-numeric:tabular-nums;white-space:nowrap}
+table.data th.t,table.data td.t{text-align:left}
+table.data tr.ref td{background:color-mix(in srgb, var(--s1) 8%, transparent)}
+.method{margin-top:24px;color:var(--ink-2);font-size:13px;max-width:92ch}
+.method h2{font-size:14px;color:var(--ink);margin:0 0 6px}
+.method ul{margin:0;padding-left:18px;display:grid;gap:6px}
+code{font-family:var(--mono);font-size:.92em}
+@media (max-width:640px){ body{padding-inline:16px} .panel{padding:12px 10px 2px} .hint{margin-left:0;flex-basis:100%} }
+</style>
+
+<div class="wrap">
+  <header>
+    <p class="eyebrow" id="eyebrow"></p>
+    <h1>What it costs to actually route the copies</h1>
+    <p class="lede" id="lede"></p>
+    <dl class="ledger" id="ledger"></dl>
+  </header>
+
+  <div class="controls">
+    <div class="group"><span class="ctl-label">Start</span><div class="chips" id="c_start_year" style="display:flex;gap:6px"></div></div>
+    <div class="group"><span class="ctl-label">Initial</span><div class="chips" id="c_initial_cash_usd" style="display:flex;gap:6px"></div></div>
+    <div class="group"><span class="ctl-label">Monthly</span><div class="chips" id="c_monthly_contribution_usd" style="display:flex;gap:6px"></div></div>
+    <span class="hint">Six bar groups: each purchase schedule and withdrawal rule, three allocations side by side</span>
+  </div>
+
+  <main class="instrument">
+    <section class="panel">
+      <div class="panel-head">
+        <h2>Net cash, including the closing request</h2>
+        <ul class="legend" id="legend1"></ul>
+        <p class="note">The reference book copies every signal into each live account. The routed arms spread the same copies across accounts and must fill 100% of them. Net cash excludes owner contributions.</p>
+      </div>
+      <div class="canvas-box" id="pTotal"><canvas role="img" aria-label="Total net cash by allocation"></canvas></div>
+    </section>
+
+    <section class="panel">
+      <div class="panel-head">
+        <h2>Ongoing cash, before the closing request</h2>
+        <ul class="legend" id="legend2"></ul>
+        <p class="note">Routing disperses profit across many accounts, so each one clears the firm's payout gates more slowly. Where this is negative, the arm only finishes positive on the final permitted request.</p>
+      </div>
+      <div class="canvas-box" id="pOngoing"><canvas role="img" aria-label="Ongoing net cash by allocation"></canvas></div>
+    </section>
+
+    <section class="panel">
+      <div class="panel-head">
+        <h2>What matching the exposure costs</h2>
+        <ul class="legend" id="legend3"></ul>
+        <p class="note">Extra seats bought beyond the reference schedule, plus the minimum extra cash needed on top of the original contributions. The reference arm is zero on both by definition.</p>
+      </div>
+      <div class="canvas-box" id="pCost"><canvas role="img" aria-label="Extra seat cost and extra funding by allocation"></canvas></div>
+    </section>
+
+    <section class="panel">
+      <div class="panel-head">
+        <h2>Accounts bought, and how many were live at the peak</h2>
+        <ul class="legend" id="legend4"></ul>
+        <p class="note" id="accountsNote"></p>
+      </div>
+      <div class="canvas-box" id="pAccounts"><canvas role="img" aria-label="Accounts bought and peak live accounts by allocation"></canvas></div>
+    </section>
+
+    <section class="panel">
+      <div class="panel-head">
+        <h2>Penalty against the reference</h2>
+        <ul class="legend" id="legend5"></ul>
+        <p class="note" id="deltaNote"></p>
+      </div>
+      <div class="canvas-box" id="pDelta"><canvas role="img" aria-label="Difference in total net cash against the reference"></canvas></div>
+    </section>
+  </main>
+
+  <details>
+    <summary>All runs <span id="tableCap"></span></summary>
+    <div class="table-scroll" id="tRows"></div>
+  </details>
+
+  <section class="method">
+    <h2>How to read this</h2>
+    <ul id="method"></ul>
+  </section>
+</div>
+
+<div class="tip" id="tip" hidden></div>
+
+<script id="routing-data" type="application/json">__ROUTING_JSON__</script>
+<script>
+(() => {
+'use strict';
+const D = JSON.parse(document.getElementById('routing-data').textContent);
+const ROWS = D.rows, DIMS = D.dims;
+const MINUS = '−';
+const MONO = '"IBM Plex Mono", ui-monospace, Consolas, monospace';
+const SANS = '"IBM Plex Sans", system-ui, -apple-system, "Segoe UI", sans-serif';
+const nf = new Intl.NumberFormat('en-US', {maximumFractionDigits: 0});
+const trim = (x, d) => x.toFixed(d).replace(/\.0$/, '');
+const usd = v => (v < 0 ? MINUS + '$' : '$') + nf.format(Math.abs(Math.round(v)));
+const usdK = v => {
+  const a = Math.abs(v), s = v < 0 ? MINUS + '$' : '$';
+  if (a >= 1e6) return s + trim(a / 1e6, 1) + 'M';
+  if (a >= 1e3) return s + trim(a / 1e3, a >= 1e4 ? 0 : 1) + 'k';
+  return s + Math.round(a);
+};
+const clamp = (v, a, b) => Math.max(a, Math.min(b, v));
+const ARMS = ['reference', 'max_headroom', 'round_robin'];
+const ARM_COLOR = {reference: 's1', max_headroom: 's3', round_robin: 's2'};
+const ARM_LABEL = {reference: 'reference book', max_headroom: 'max headroom routing', round_robin: 'round robin routing'};
+const WD_LABEL = {minimum_daily_31900: 'min daily $31.9k', maximum_weekly_31600: 'max weekly $31.6k', minimum_calendar_month_30000: 'min monthly $30k'};
+const PP_LABEL = {monthly_one: 'monthly buy', weekly_one: 'weekly buy'};
+
+const sel = {
+  start_year: DIMS.start_year[0],
+  initial_cash_usd: DIMS.initial_cash_usd[DIMS.initial_cash_usd.length - 1],
+  monthly_contribution_usd: DIMS.monthly_contribution_usd[DIMS.monthly_contribution_usd.length - 1],
+};
+const groups = [];
+for (const pp of DIMS.purchase_policy) for (const wd of DIMS.withdrawal) groups.push({pp, wd});
+
+const inView = r => r.start_year === sel.start_year && r.initial_cash_usd === sel.initial_cash_usd &&
+  r.monthly_contribution_usd === sel.monthly_contribution_usd;
+const cell = (g, arm) => ROWS.find(r => inView(r) && r.purchase_policy === g.pp && r.withdrawal === g.wd && r.arm === arm);
+
+const C = {};
+function readColors() {
+  const cs = getComputedStyle(document.documentElement);
+  for (const k of ['surface', 'ink', 'ink-2', 'muted', 'grid', 'axis', 's1', 's2', 's3', 's4', 'sel']) C[k] = cs.getPropertyValue('--' + k).trim();
+}
+function yScale(lo, hi, target) {
+  if (hi <= lo) hi = lo + 1;
+  const raw = (hi - lo) / Math.max(2, target);
+  const pow = 10 ** Math.floor(Math.log10(raw)), f = raw / pow;
+  const step = (f <= 1 ? 1 : f <= 2 ? 2 : f <= 2.5 ? 2.5 : f <= 5 ? 5 : 10) * pow;
+  const a = Math.floor(lo / step + 1e-9) * step, b = Math.ceil(hi / step - 1e-9) * step;
+  const ticks = [];
+  for (let v = a; v <= b + step / 2; v += step) ticks.push(Math.round(v * 1e6) / 1e6);
+  return {lo: a, hi: b, ticks};
+}
+
+const panels = [];
+const tip = document.getElementById('tip');
+function panel(id, cfg) {
+  const box = document.getElementById(id), cv = box.querySelector('canvas');
+  const p = {id, cfg, box, cv, ctx: cv.getContext('2d'), bars: []};
+  panels.push(p);
+  cv.addEventListener('pointermove', e => {
+    const r = cv.getBoundingClientRect(), px = e.clientX - r.left, py = e.clientY - r.top;
+    const hit = p.bars.find(b => px >= b.x - 1 && px <= b.x + b.w + 1 &&
+      py >= Math.min(b.y0, b.y1) - 4 && py <= Math.max(b.y0, b.y1) + 4);
+    if (!hit) { tip.hidden = true; return; }
+    showTip(hit.row, e.clientX, e.clientY);
+  });
+  cv.addEventListener('pointerleave', () => { tip.hidden = true; });
+  return p;
+}
+function layout(p) {
+  const w = p.box.clientWidth;
+  p.narrow = w < 620;
+  p.L = p.narrow ? 46 : 66; p.R = 12; p.Tp = 12; p.B = 46;
+  const h = p.narrow ? p.cfg.height[0] : p.cfg.height[1], dpr = window.devicePixelRatio || 1;
+  p.w = w; p.h = h; p.dpr = dpr;
+  p.cv.width = Math.round(w * dpr); p.cv.height = Math.round(h * dpr); p.cv.style.height = h + 'px';
+  p.pw = Math.max(10, w - p.L - p.R); p.ph = h - p.Tp - p.B;
+}
+const Y = (p, y, v) => p.Tp + (1 - (v - y.lo) / (y.hi - y.lo)) * p.ph;
+function frame(p, c, y, fmt) {
+  c.clearRect(0, 0, p.w, p.h);
+  c.lineWidth = 1; c.font = '11px ' + MONO; c.textAlign = 'right'; c.textBaseline = 'middle';
+  for (const v of y.ticks) {
+    const yy = Math.round(Y(p, y, v)) + 0.5;
+    c.strokeStyle = v === 0 ? C.axis : C.grid;
+    c.beginPath(); c.moveTo(p.L, yy); c.lineTo(p.L + p.pw, yy); c.stroke();
+    c.fillStyle = C.muted; c.fillText(fmt(v), p.L - 8, yy);
+  }
+  const gw = p.pw / groups.length;
+  c.textAlign = 'center'; c.textBaseline = 'top'; c.font = '11px ' + SANS;
+  groups.forEach((g, i) => {
+    const cx = p.L + gw * (i + 0.5);
+    c.fillStyle = C['ink-2']; c.fillText(PP_LABEL[g.pp] || g.pp, cx, p.Tp + p.ph + 8);
+    c.fillStyle = C.muted; c.fillText(WD_LABEL[g.wd] || g.wd, cx, p.Tp + p.ph + 23);
+  });
+}
+
+function barPanel(id, height, fields, opts) {
+  return panel(id, {
+    height,
+    draw(p, c) {
+      const vals = [0];
+      for (const g of groups) for (const arm of ARMS) {
+        const r = cell(g, arm);
+        if (!r) continue;
+        vals.push(opts.stack ? fields.reduce((s, f) => s + (r[f] || 0), 0) : (r[fields[0]] || 0));
+        if (opts.marker) vals.push(r[opts.marker] || 0);
+        if (opts.ghost && r[opts.ghost] != null) vals.push(r[opts.ghost]);
+      }
+      if (opts.refLine !== undefined) vals.push(opts.refLine);
+      const y = yScale(Math.min(...vals) * 1.05, Math.max(...vals) * 1.08, p.ph / 44);
+      frame(p, c, y, opts.fmt);
+      const gw = p.pw / groups.length, bw = Math.min(30, gw / (ARMS.length + 0.8));
+      const zero = Y(p, y, 0);
+      p.bars = [];
+      groups.forEach((g, gi) => {
+        ARMS.forEach((arm, ai) => {
+          const r = cell(g, arm);
+          if (!r) return;
+          const x = p.L + gw * gi + gw / 2 + (ai - 1) * (bw + 3) - bw / 2;
+          if (opts.stack) {
+            let base = 0;
+            fields.forEach((f, fi) => {
+              const v = r[f] || 0;
+              if (!v) return;
+              const y0 = Y(p, y, base), y1 = Y(p, y, base + v);
+              c.fillStyle = C[fi === 0 ? ARM_COLOR[arm] : 's4'];
+              const top = Math.min(y0, y1) + (fi ? 2 : 0);
+              c.fillRect(x, top, bw, Math.max(1, Math.abs(y1 - y0) - (fi ? 2 : 0)));
+              base += v;
+            });
+            p.bars.push({x, w: bw, y0: zero, y1: Y(p, y, base), row: r});
+          } else {
+            const v = r[fields[0]] || 0, yv = Y(p, y, v);
+            c.fillStyle = C[ARM_COLOR[arm]];
+            c.fillRect(x, Math.min(yv, zero), bw, Math.max(1, Math.abs(yv - zero)));
+            p.bars.push({x, w: bw, y0: zero, y1: yv, row: r});
+            if (opts.marker) {
+              const my = Math.round(Y(p, y, r[opts.marker] || 0)) + 0.5;
+              c.strokeStyle = C.ink; c.lineWidth = 2;
+              c.beginPath(); c.moveTo(x, my); c.lineTo(x + bw, my); c.stroke();
+            }
+            if (opts.ghost && r[opts.ghost] != null) {
+              const gy = Math.round(Y(p, y, r[opts.ghost])) + 0.5;
+              c.save(); c.strokeStyle = C.muted; c.setLineDash([3, 2]); c.lineWidth = 1.5;
+              c.beginPath(); c.moveTo(x - 1, gy); c.lineTo(x + bw + 1, gy); c.stroke(); c.restore();
+            }
+          }
+        });
+      });
+      if (opts.refLine !== undefined) {
+        const ry = Math.round(Y(p, y, opts.refLine)) + 0.5;
+        if (ry > p.Tp && ry < p.Tp + p.ph) {
+          c.save(); c.strokeStyle = C.muted; c.setLineDash([4, 4]); c.lineWidth = 1;
+          c.beginPath(); c.moveTo(p.L, ry); c.lineTo(p.L + p.pw, ry); c.stroke(); c.restore();
+          c.font = '10.5px ' + SANS; c.textAlign = 'left'; c.textBaseline = 'bottom';
+          c.save(); c.lineWidth = 3; c.lineJoin = 'round'; c.strokeStyle = C.surface;
+          c.strokeText(opts.refLabel, p.L + 6, ry - 3);
+          c.fillStyle = C['ink-2']; c.fillText(opts.refLabel, p.L + 6, ry - 3); c.restore();
+        }
+      }
+    }
+  });
+}
+
+barPanel('pTotal', [230, 280], ['total_net_usd'], {fmt: usdK});
+barPanel('pOngoing', [200, 240], ['ongoing_net_usd'], {fmt: usdK});
+barPanel('pCost', [190, 230], ['extra_purchase_cost_usd', 'additional_external_funding_usd'], {fmt: usdK, stack: true});
+barPanel('pAccounts', [200, 240], ['accounts'], {fmt: v => nf.format(v), marker: 'peak_live', ghost: 'previous_accounts', refLine: 20, refLabel: 'reference cap: 20 live accounts'});
+barPanel('pDelta', [180, 210], ['delta_total_usd'], {fmt: usdK});
+
+const swatch = arm => `<span class="sw" style="background:var(--${ARM_COLOR[arm]})"></span>`;
+function showTip(r, cx, cy) {
+  const rows = [
+    ['Copies filled', nf.format(r.copies) + (r.copies_matched ? ' (matched)' : ' (MISMATCH)')],
+    ['Accounts bought', nf.format(r.accounts)],
+    ['Peak live / alive at end', `${r.peak_live} / ${r.alive}`],
+    ['Deaths', nf.format(r.deaths)],
+    ['Ongoing net', usd(r.ongoing_net_usd)],
+    ['Closing receipt', usd(r.terminal_received_usd)],
+    ['Total net', usd(r.total_net_usd)],
+    ['Seat cost (extra)', `${usd(r.purchase_cost_usd)} (${usd(r.extra_purchase_cost_usd)})`],
+    ['Extra funding needed', usd(r.additional_external_funding_usd)],
+    ['Emergency seats', String(r.emergency_seats)],
+    ['Vs reference (total)', r.arm === 'reference' ? '—' : usd(r.delta_total_usd)],
+  ];
+  if (r.procurement) rows.splice(1, 0, ['Procurement', String(r.procurement)]);
+  if (r.shortfall_seats != null) rows.splice(2, 0, ['Seats bought on shortfall', nf.format(r.shortfall_seats)]);
+  if (r.previous_accounts != null) rows.push(['Superseded model bought', nf.format(r.previous_accounts) + ' accounts']);
+  if (r.delta_vs_previous_routed_usd != null) rows.push(['Gain from the fix', usd(r.delta_vs_previous_routed_usd)]);
+  tip.innerHTML = `<div class="d">${swatch(r.arm)} ${ARM_LABEL[r.arm]} · ${PP_LABEL[r.purchase_policy]} · ${WD_LABEL[r.withdrawal]}</div>` +
+    '<table>' + rows.map(([k, v]) => `<tr><td><span class="k">${k}</span></td><td class="v">${v}</td></tr>`).join('') + '</table>';
+  tip.hidden = false;
+  const box = tip.getBoundingClientRect();
+  tip.style.left = clamp(cx + 16, 8, Math.max(8, innerWidth - box.width - 8)) + 'px';
+  tip.style.top = clamp(cy + 16, 8, Math.max(8, innerHeight - box.height - 8)) + 'px';
+}
+addEventListener('scroll', () => { tip.hidden = true; }, {passive: true});
+
+function legends() {
+  const armItems = ARMS.map(a => `<li>${swatch(a)}${ARM_LABEL[a]}</li>`).join('');
+  document.getElementById('legend1').innerHTML = armItems;
+  document.getElementById('legend2').innerHTML = armItems;
+  document.getElementById('legend3').innerHTML = armItems + '<li><span class="sw" style="background:var(--s4)"></span>extra funding on top</li>';
+  document.getElementById('legend4').innerHTML = armItems +
+    '<li><span class="sw line" style="background:var(--ink)"></span>peak live</li>' +
+    (D.meta.has_previous ? '<li><span class="sw dash" style="border-color:var(--muted)"></span>accounts the superseded model bought</li>' : '') +
+    '<li><span class="sw dash" style="border-color:var(--muted)"></span>reference 20-seat cap</li>';
+  document.getElementById('legend5').innerHTML = ARMS.filter(a => a !== 'reference').map(a => `<li>${swatch(a)}${ARM_LABEL[a]}</li>`).join('');
+}
+
+function ledger() {
+  const view = ROWS.filter(inView);
+  const ref = view.filter(r => r.arm === 'reference');
+  const routed = view.filter(r => r.arm !== 'reference');
+  const bestRouted = routed.reduce((a, b) => (a && a.total_net_usd >= b.total_net_usd ? a : b), null);
+  const worst = routed.reduce((a, b) => (a && a.delta_total_usd <= b.delta_total_usd ? a : b), null);
+  const refTotal = ref.length ? ref.reduce((s, r) => s + r.total_net_usd, 0) / ref.length : 0;
+  const acctRatio = routed.length && ref.length
+    ? (routed.reduce((s, r) => s + r.accounts, 0) / routed.length) / (ref.reduce((s, r) => s + r.accounts, 0) / ref.length) : 0;
+  const facts = [
+    ['Reference net cash', usd(refTotal), 'average of the six policies shown'],
+    ['Best routed arm', bestRouted ? usd(bestRouted.total_net_usd) : '—',
+      bestRouted ? `${ARM_LABEL[bestRouted.arm]} · ${usd(bestRouted.delta_total_usd)} vs reference` : ''],
+    ['Worst penalty', worst ? usd(worst.delta_total_usd) : '—',
+      worst ? `${ARM_LABEL[worst.arm]} · ${PP_LABEL[worst.purchase_policy]}` : ''],
+    ['Accounts needed', acctRatio ? acctRatio.toFixed(1) + '×' : '—', 'routed arms against the reference book'],
+    ['Extra funding', usd(Math.max(0, ...routed.map(r => r.additional_external_funding_usd))), 'largest in this view, on top of contributions'],
+    ['Exposure', 'identical', 'every arm fills 100% of the reference copies'],
+  ];
+  if (D.meta.has_previous) {
+    const gains = routed.filter(r => r.delta_vs_previous_routed_usd != null);
+    const gain = gains.length ? gains.reduce((s, r) => s + r.delta_vs_previous_routed_usd, 0) / gains.length : 0;
+    const prev = routed.filter(r => r.previous_accounts != null);
+    const drop = prev.length ? prev.reduce((s, r) => s + r.accounts, 0) / prev.reduce((s, r) => s + r.previous_accounts, 0) : 0;
+    facts.splice(4, 0,
+      ['Gain from the fix', (gain >= 0 ? '+' : '') + usd(gain), 'average routed arm, against the superseded buying rule'],
+      ['Seats now bought', drop ? Math.round(drop * 100) + '%' : '—', 'of what the superseded model bought']);
+  }
+  document.getElementById('ledger').innerHTML = facts.map(([k, v, s]) =>
+    `<div><dt>${k}</dt><dd class="val">${v}</dd><dd class="sub">${s}</dd></div>`).join('');
+}
+
+function table() {
+  const view = ROWS.filter(inView);
+  const head = ['Purchases', 'Withdrawal', 'Allocation', 'Copies', 'Accounts', 'Peak live', 'Deaths', 'Ongoing', 'Closing', 'Total', 'Extra seats', 'Extra funding', 'Vs reference'];
+  const body = view.map(r => `<tr${r.arm === 'reference' ? ' class="ref"' : ''}>` + [
+    `<td class="t">${PP_LABEL[r.purchase_policy]}</td>`,
+    `<td class="t">${WD_LABEL[r.withdrawal]}</td>`,
+    `<td class="t">${ARM_LABEL[r.arm]}</td>`,
+    `<td>${nf.format(r.copies)}</td>`, `<td>${r.accounts}</td>`, `<td>${r.peak_live}</td>`, `<td>${r.deaths}</td>`,
+    `<td>${usd(r.ongoing_net_usd)}</td>`, `<td>${usd(r.terminal_received_usd)}</td>`, `<td>${usd(r.total_net_usd)}</td>`,
+    `<td>${usd(r.extra_purchase_cost_usd)}</td>`, `<td>${usd(r.additional_external_funding_usd)}</td>`,
+    `<td>${r.arm === 'reference' ? '—' : usd(r.delta_total_usd)}</td>`].join('') + '</tr>').join('');
+  document.getElementById('tRows').innerHTML =
+    `<table class="data"><thead><tr>${head.map((h, i) => `<th scope="col" class="${i < 3 ? 't' : ''}">${h}</th>`).join('')}</tr></thead><tbody>${body}</tbody></table>`;
+  document.getElementById('tableCap').textContent = `${view.length} of ${ROWS.length} runs · ${D.meta.cases} cases in the study`;
+}
+
+function chips() {
+  const defs = [['start_year', v => String(v)], ['initial_cash_usd', v => usdK(v)], ['monthly_contribution_usd', v => usdK(v) + '/mo']];
+  for (const [dim, label] of defs) {
+    const host = document.getElementById('c_' + dim);
+    host.innerHTML = '';
+    for (const v of DIMS[dim]) {
+      const b = document.createElement('button');
+      b.type = 'button'; b.className = 'chip'; b.textContent = label(v);
+      b.setAttribute('aria-pressed', String(sel[dim] === v));
+      b.addEventListener('click', () => { sel[dim] = v; render(); });
+      host.appendChild(b);
+    }
+  }
+}
+
+function render() {
+  readColors();
+  chips(); legends(); ledger(); table();
+  for (const p of panels) {
+    layout(p);
+    if (!p.w) continue;
+    const c = p.ctx;
+    c.setTransform(p.dpr, 0, 0, p.dpr, 0, 0);
+    p.cfg.draw(p, c);
+  }
+}
+
+document.getElementById('eyebrow').textContent = 'results / ' + D.meta.path;
+document.getElementById('lede').textContent = D.meta.paragraphs[1] || D.meta.paragraphs[0];
+document.getElementById('accountsNote').textContent = D.meta.has_previous
+  ? 'Each entry reuses every free seat and buys only the shortfall, so five usable seats plus a sixth overlapping trade adds one account, not five. The dashed tick is what the superseded buying rule purchased. The reference 20-live cap is relaxed for the routed arms.'
+  : 'Each reference purchase provisions five routed seats, because the tape peaks at five simultaneous positions. The reference 20-live cap is relaxed for the routed arms.';
+{
+  const routedAll = ROWS.filter(r => r.arm !== 'reference');
+  const ahead = routedAll.filter(r => r.delta_total_usd > 0).length;
+  document.getElementById('deltaNote').textContent =
+    "Total net cash minus the reference's, at the same exposure. " +
+    (ahead ? ahead + ' of ' + routedAll.length + ' routed runs in the whole study finish ahead; the rest trail.'
+           : 'No routed run in this study finishes ahead.');
+}
+const esc = s => s.replace(/&/g, '&amp;').replace(/</g, '&lt;');
+const md = s => esc(s).replace(/\*\*([^*]+)\*\*/g, '<strong>$1</strong>');
+document.getElementById('method').innerHTML = D.meta.paragraphs.map(t => `<li>${md(t)}</li>`).join('') +
+  `<li>${D.meta.rows} runs across ${D.meta.cases} cases; ${D.meta.verified_controls} saved controls reproduced exactly. Every routed arm filled exactly the reference copy count, re-checked when this page was built.</li>`;
+
+render();
+let rz = 0;
+new ResizeObserver(() => { cancelAnimationFrame(rz); rz = requestAnimationFrame(render); }).observe(document.querySelector('.instrument'));
+matchMedia('(prefers-color-scheme: dark)').addEventListener('change', render);
+new MutationObserver(render).observe(document.documentElement, {attributes: true, attributeFilter: ['data-theme']});
+if (document.fonts && document.fonts.ready) document.fonts.ready.then(render);
+})();
+</script>

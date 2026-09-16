@@ -1,5 +1,13 @@
 # Study profiles
 
+The dedicated `legacy_25k_routing_reuse.json` experiment uses
+`scripts/study_legacy_routing.py --profile PATH` (its own schema, not `--study`).
+It freezes reference trade-copy demand and buys only the entry-time free-slot
+shortfall. `legacy_25k_fixed_pool.json` uses `scripts/study_fixed_routing_pool.py`
+for R=1–4, initial K=5R and a 20-live-account cap. The older
+`legacy_25k_routing.json` retains the superseded five-per-purchase control. See
+[routing findings and limitations](../../research/legacy_25k/ROUTING_REUSE.md).
+
 The study runners accept `--study PATH`. Paths inside a profile resolve
 from the repository root. The default is `config/studies/legacy_25k.json`.
 Existing commands and output locations are retained.

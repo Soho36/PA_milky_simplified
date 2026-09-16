@@ -73,7 +73,7 @@ def summarize(result: BookResult) -> dict:
             "contracts_per_copy": config.contracts_per_copy,
             "commission_usd_per_copy": config.commission_per_copy_usd,
             "path_order": config.path_order,
-            "concurrency": config.concurrency,
+            "concurrency": result.routing["policy"]["mode"] if result.routing else config.concurrency,
             "trailing_drawdown_usd": config.trailing_drawdown_usd,
             "frozen_floor_profit_usd": config.frozen_floor_profit_usd,
             "purchase_fee_usd": config.purchase_fee_usd,
@@ -143,6 +143,9 @@ def summarize(result: BookResult) -> dict:
             ),
             "stranded_usd": money(result.equity_at_horizon_usd - terminal_gross),
         }
+
+    if result.routing is not None:
+        summary["routing"] = result.routing
 
     if policy.enabled or policy.liquidates:
         summary["withdrawals"] = {
