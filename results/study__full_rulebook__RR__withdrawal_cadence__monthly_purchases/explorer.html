@@ -1,0 +1,391 @@
+<meta charset="utf-8">
+<title>Withdrawal Cadence</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500&family=IBM+Plex+Sans:wght@400;500;600&display=swap">
+<style>
+:root{
+  color-scheme:light;
+  --plane:#f9f9f7; --surface:#fcfcfb; --ink:#0b0b0b; --ink-2:#52514e; --muted:#898781;
+  --grid:#e1e0d9; --axis:#c3c2b7; --ring:rgba(11,11,11,.10);
+  --s1:#2a78d6; --s2:#eb6834; --s3:#1baf7a; --s4:#eda100; --s5:#e87ba4; --s6:#008300; --s7:#4a3aa7; --s8:#e34948;
+  --sel:rgba(42,120,214,.12); --shadow:0 8px 28px rgba(11,11,11,.12);
+  --mono:"IBM Plex Mono", ui-monospace, Consolas, monospace;
+  --sans:"IBM Plex Sans", system-ui, -apple-system, "Segoe UI", sans-serif;
+}
+@media (prefers-color-scheme: dark){
+  :root:not([data-theme="light"]){
+    color-scheme:dark;
+    --plane:#0d0d0d; --surface:#1a1a19; --ink:#ffffff; --ink-2:#c3c2b7; --muted:#898781;
+    --grid:#2c2c2a; --axis:#383835; --ring:rgba(255,255,255,.10);
+    --s1:#3987e5; --s2:#d95926; --s3:#199e70; --s4:#c98500; --s5:#d55181; --s6:#008300; --s7:#9085e9; --s8:#e66767;
+    --sel:rgba(57,135,229,.18); --shadow:0 8px 28px rgba(0,0,0,.55);
+  }
+}
+:root[data-theme="dark"]{
+  color-scheme:dark;
+  --plane:#0d0d0d; --surface:#1a1a19; --ink:#ffffff; --ink-2:#c3c2b7; --muted:#898781;
+  --grid:#2c2c2a; --axis:#383835; --ring:rgba(255,255,255,.10);
+  --s1:#3987e5; --s2:#d95926; --s3:#199e70; --s4:#c98500; --s5:#d55181; --s6:#008300; --s7:#9085e9; --s8:#e66767;
+  --sel:rgba(57,135,229,.18); --shadow:0 8px 28px rgba(0,0,0,.55);
+}
+*{box-sizing:border-box}
+[hidden]{display:none!important}
+body{margin:0;background:var(--plane);color:var(--ink);font:14px/1.5 var(--sans);padding-inline:20px}
+.wrap{max-width:1240px;margin:0 auto;padding-block:28px 64px}
+.eyebrow{font:500 11.5px/1.4 var(--mono);color:var(--muted);letter-spacing:.02em;margin:0 0 8px;overflow-wrap:anywhere}
+h1{font-weight:600;font-size:clamp(22px,3vw,30px);line-height:1.15;letter-spacing:-.012em;margin:0 0 10px;text-wrap:balance}
+.lede{color:var(--ink-2);max-width:86ch;margin:0 0 20px}
+.ledger{display:flex;flex-wrap:wrap;gap:1px;background:var(--ring);border:1px solid var(--ring);border-radius:12px;overflow:hidden;margin:0 0 18px}
+.ledger > div{flex:1 1 180px;background:var(--surface);padding:10px 14px 11px;display:grid;gap:1px;align-content:start}
+.ledger dt{font-size:12px;color:var(--ink-2)}
+.ledger dd{margin:0}
+.ledger .val{font:500 17px/1.3 var(--mono);font-variant-numeric:tabular-nums;color:var(--ink)}
+.ledger .sub{font-size:12px;color:var(--muted);overflow-wrap:anywhere}
+.controls{position:sticky;top:0;z-index:5;background:var(--plane);display:flex;flex-wrap:wrap;align-items:end;gap:10px 14px;padding-block:10px;border-bottom:1px solid var(--ring);margin-bottom:14px}
+.field{display:grid;gap:3px}
+.field label{font-size:11px;color:var(--muted);letter-spacing:.04em;text-transform:uppercase}
+select{font:500 12.5px var(--mono);padding:5px 8px;border-radius:8px;border:1px solid var(--ring);background:var(--surface);color:var(--ink);max-width:220px}
+select:focus-visible,canvas:focus-visible,summary:focus-visible,button:focus-visible{outline:2px solid var(--s1);outline-offset:2px}
+.spacer{flex:1 1 auto}
+.count{font:12.5px var(--mono);color:var(--ink-2);font-variant-numeric:tabular-nums}
+.btn{font:500 12.5px var(--mono);padding:6px 10px;border-radius:999px;border:1px solid var(--ring);background:var(--surface);color:var(--ink-2);cursor:pointer}
+.btn:hover{border-color:var(--axis);color:var(--ink)}
+.btn[aria-pressed="true"]{background:var(--ink);border-color:var(--ink);color:var(--surface)}
+.instrument{background:var(--surface);border:1px solid var(--ring);border-radius:12px;padding:16px 16px 6px}
+.panel-head{display:flex;flex-wrap:wrap;align-items:baseline;gap:4px 18px;margin-bottom:6px}
+.panel-head h2{font-size:15px;font-weight:600;margin:0}
+.legend{display:flex;flex-wrap:wrap;gap:4px 14px;font-size:12.5px;color:var(--ink-2);list-style:none;margin:0;padding:0}
+.legend li{display:inline-flex;align-items:center;gap:6px}
+.sw{display:inline-block;width:10px;height:10px;border-radius:50%;flex:none}
+.note{font-size:12.5px;color:var(--ink-2);flex-basis:100%;margin:2px 0 0;max-width:100ch}
+.canvas-box{position:relative}
+canvas{display:block;width:100%;touch-action:pan-y;border-radius:4px}
+.tip{position:fixed;z-index:10;pointer-events:none;background:var(--surface);color:var(--ink);border:1px solid var(--ring);box-shadow:var(--shadow);border-radius:8px;padding:8px 11px 9px;font-size:12.5px;line-height:1.45;max-width:min(380px,calc(100vw - 16px))}
+.tip .d{font:500 12px var(--mono);color:var(--muted);margin-bottom:4px}
+.tip table{border-collapse:collapse}
+.tip td{padding:1px 0;vertical-align:baseline}
+.tip td.v{text-align:right;padding-left:16px;font-family:var(--mono);font-variant-numeric:tabular-nums}
+.tip .k{color:var(--ink-2)}
+details{margin-top:14px;background:var(--surface);border:1px solid var(--ring);border-radius:12px}
+summary{cursor:pointer;padding:12px 16px;font-weight:600;font-size:14px}
+summary span{font-weight:400;color:var(--muted);margin-left:8px;font-size:12.5px}
+.table-scroll{overflow:auto;max-height:560px;margin:0 16px 16px}
+table.data{border-collapse:collapse;font-size:12.5px;width:100%}
+table.data th{position:sticky;top:0;background:var(--surface);text-align:right;font-weight:500;color:var(--ink-2);padding:6px 10px;border-bottom:1px solid var(--axis);white-space:nowrap}
+table.data td{text-align:right;padding:4px 10px;border-bottom:1px solid var(--grid);font-family:var(--mono);font-variant-numeric:tabular-nums;white-space:nowrap}
+table.data th.t,table.data td.t{text-align:left}
+table.data tr.best td{background:color-mix(in srgb, var(--s1) 10%, transparent)}
+.method{margin-top:24px;color:var(--ink-2);font-size:13px;max-width:92ch}
+.method h2{font-size:14px;color:var(--ink);margin:0 0 6px}
+.method ul{margin:0;padding-left:18px;display:grid;gap:5px}
+code{font-family:var(--mono);font-size:.92em}
+@media (max-width:640px){ body{padding-inline:16px} .instrument{padding:12px 10px 2px} select{max-width:150px} }
+</style>
+
+<div class="wrap">
+  <header>
+    <p class="eyebrow" id="eyebrow"></p>
+    <h1 id="headline"></h1>
+    <p class="lede" id="lede"></p>
+    <dl class="ledger" id="ledger"></dl>
+  </header>
+
+  <div class="controls">
+    <div class="field"><label for="fx">X axis</label><select id="fx"></select></div>
+    <div class="field"><label for="fy">Y axis</label><select id="fy"></select></div>
+    <div class="field"><label for="fc">Colour</label><select id="fc"></select></div>
+    <div id="filters" style="display:flex;flex-wrap:wrap;gap:10px 14px"></div>
+    <div class="spacer"></div>
+    <button class="btn" id="connect" type="button" aria-pressed="true">Connect points</button>
+    <span class="count" id="count"></span>
+  </div>
+
+  <main class="instrument">
+    <div class="panel-head">
+      <h2 id="chartTitle"></h2>
+      <ul class="legend" id="legend"></ul>
+      <p class="note" id="chartNote"></p>
+    </div>
+    <div class="canvas-box" id="chart"><canvas role="img" aria-label="Study outcomes against the chosen setting"></canvas></div>
+  </main>
+
+  <details open>
+    <summary>Rows <span id="tableCap"></span></summary>
+    <div class="table-scroll" id="tRows"></div>
+  </details>
+
+  <section class="method">
+    <h2>How to read this</h2>
+    <ul id="method"></ul>
+  </section>
+</div>
+
+<div class="tip" id="tip" hidden></div>
+
+<script id="study-data" type="application/json">{"meta":{"key":"withdrawal_cadence","title":"Withdrawal Cadence","path":"study__full_rulebook__RR__withdrawal_cadence__monthly_purchases","source":"study.json (rows)","rows":93,"headline":"Checking frequency changes the result and interacts with the amount rule and retained balance. Minimum means $500 per eligible check, not a monthly spending budget. A daily check can pull out money sooner but can also reduce survival.","default":{"x":"headroom_usd","y":"ongoing_pocket_usd","color":"cadence"}},"cols":["policy","cadence","retained_balance_usd","headroom_usd","combined_pocket_usd","ongoing_pocket_usd","terminal_received_usd","alive_before_terminal","ongoing_payouts","terminal_payouts","ceiling_capture","unextracted_usd","earnings_vs_benchmark_usd","delta_ongoing_vs_monthly_usd","delta_combined_vs_monthly_usd"],"kinds":["param","param","param","param","metric","metric","metric","metric","metric","metric","metric","metric","metric","metric","metric"],"numeric":{"policy":false,"cadence":false,"retained_balance_usd":true,"headroom_usd":true,"combined_pocket_usd":true,"ongoing_pocket_usd":true,"terminal_received_usd":true,"alive_before_terminal":true,"ongoing_payouts":true,"terminal_payouts":true,"ceiling_capture":true,"unextracted_usd":true,"earnings_vs_benchmark_usd":true,"delta_ongoing_vs_monthly_usd":true,"delta_combined_vs_monthly_usd":true},"values":{"policy":["fixed_1000_backlog","fixed_1500_backlog","fixed_750_backlog","maximum_excess_monthly","minimum_monthly"],"cadence":["calendar_month","daily","weekly"],"retained_balance_usd":[30000,31600,31700,31800,31900,32000,32100],"headroom_usd":[4900.0,6500.0,6600.0,6700.0,6800.0,6900.0,7000.0],"combined_pocket_usd":[346381.62,347339.67,348321.63,349279.68,350261.63,351219.68,359982.84,373200.0,409464.98,437748.1,443343.43,446934.53,447234.53,447534.53,447834.53,448134.53,454478.91,454589.01,454689.01,454789.01,454978.91,456486.01,456770.58,456870.58,456970.57,457070.57,457170.58,457270.58,460511.75],"ongoing_pocket_usd":[235700.0,237700.0,238200.0,239200.0,241700.0,266200.0,339900.0,343250.0,344440.38,344650.0,345150.0,346380.38,346381.62,347150.0,347339.67,348320.38,348321.63,349279.68,349600.0,350260.38,350261.63,350654.02,351219.68,352200.38,352594.02,354075.72,354140.38,354350.0,354534.02,354850.0,355350.0,355450.0,357750.0,357800.0,359662.54,361602.54,363540.02,365470.02,367400.03,369330.03,373200.0],"terminal_received_usd":[0.0,4532.84,54114.98,79998.1,87940.55,89267.71,89770.55,91600.55,93430.55,95268.04,95934.15,97108.04,97574.15,99214.15,100254.99,100854.15,102094.99,102345.63,102494.15,102711.75,103934.99,105661.75,106161.75,110911.75,113361.75,115361.75,115861.75,117261.75,120611.75,194311.75,213278.91,215778.91,216778.91,217278.91,218778.91],"alive_before_terminal":[2,3,13,18,19,21,22],"ongoing_payouts":[235,237,387,390,392,393,394,438,440,441,443,451,453,503,507,508,510,515,564,714,721,724,725,729,734,744,745,746,751,783],"terminal_payouts":[0,1,11,16,17,19,20],"ceiling_capture":[0.7334,0.7354,0.7375,0.7395,0.7416,0.7436,0.7622,0.7902,0.867,0.9268,0.9387,0.9463,0.9469,0.9476,0.9482,0.9488,0.9623,0.9625,0.9627,0.9629,0.9633,0.9665,0.9671,0.9673,0.9675,0.9678,0.968,0.9682,0.975],"unextracted_usd":[5393.83,5453.82,5513.82,5632.36,6282.35,8841.12,10535.5,11487.27,11687.29,11787.35,15028.52,15128.52,15228.53,15328.53,15428.52,15528.52,15813.09,17320.19,17820.19,24164.57,24464.57,24764.57,25064.57,25364.57],"earnings_vs_benchmark_usd":[-118387.45,-117104.8,-114930.4,-114193.6,-112411.4,-111500.6,-102822.7,-88972.95,-52448.85,-23399.1,-16539.6,-5798.7,-5758.8,-5513.2,0.0],"delta_ongoing_vs_monthly_usd":[-3878.76,-3878.75,-2920.71,-2920.7,0.0,5755.34,6213.64,15189.65,15199.65,15209.64,15219.64,15222.16,89250.0,104200.0,105550.0,106950.0,107000.0,107900.0,107950.0,113650.0,116150.0,117150.0,118650.0,119550.0,120100.0],"delta_combined_vs_monthly_usd":[-106224.38,-105266.33,-101452.91,-100528.91,-100494.86,-99812.9,-98854.85,-87311.75,-45513.93,-17230.81,-4191.1,0.0,784.57,5532.84,6032.84,7254.48,7454.48,7654.48,9036.05,9236.04,9436.04,9636.05,9836.05]},"data":[["fixed_750_backlog","fixed_750_backlog","fixed_750_backlog","fixed_750_backlog","fixed_750_backlog","fixed_750_backlog","fixed_750_backlog","fixed_750_backlog","fixed_750_backlog","fixed_750_backlog","fixed_750_backlog","fixed_750_backlog","fixed_750_backlog","fixed_750_backlog","fixed_750_backlog","fixed_750_backlog","fixed_750_backlog","fixed_750_backlog","fixed_1000_backlog","fixed_1000_backlog","fixed_1000_backlog","fixed_1000_backlog","fixed_1000_backlog","fixed_1000_backlog","fixed_1000_backlog","fixed_1000_backlog","fixed_1000_backlog","fixed_1000_backlog","fixed_1000_backlog","fixed_1000_backlog","fixed_1000_backlog","fixed_1000_backlog","fixed_1000_backlog","fixed_1000_backlog","fixed_1000_backlog","fixed_1000_backlog","fixed_1500_backlog","fixed_1500_backlog","fixed_1500_backlog","fixed_1500_backlog","fixed_1500_backlog","fixed_1500_backlog","fixed_1500_backlog","fixed_1500_backlog","fixed_1500_backlog","fixed_1500_backlog","fixed_1500_backlog","fixed_1500_backlog","fixed_1500_backlog","fixed_1500_backlog","fixed_1500_backlog","fixed_1500_backlog","fixed_1500_backlog","fixed_1500_backlog","minimum_monthly","minimum_monthly","minimum_monthly","minimum_monthly","minimum_monthly","minimum_monthly","minimum_monthly","minimum_monthly","minimum_monthly","minimum_monthly","minimum_monthly","minimum_monthly","minimum_monthly","minimum_monthly","minimum_monthly","minimum_monthly","minimum_monthly","minimum_monthly","maximum_excess_monthly","maximum_excess_monthly","maximum_excess_monthly","maximum_excess_monthly","maximum_excess_monthly","maximum_excess_monthly","maximum_excess_monthly","maximum_excess_monthly","maximum_excess_monthly","maximum_excess_monthly","maximum_excess_monthly","maximum_excess_monthly","maximum_excess_monthly","maximum_excess_monthly","maximum_excess_monthly","maximum_excess_monthly","maximum_excess_monthly","maximum_excess_monthly","minimum_monthly","minimum_monthly","minimum_monthly"],["calendar_month","calendar_month","calendar_month","calendar_month","calendar_month","calendar_month","weekly","weekly","weekly","weekly","weekly","weekly","daily","daily","daily","daily","daily","daily","calendar_month","calendar_month","calendar_month","calendar_month","calendar_month","calendar_month","weekly","weekly","weekly","weekly","weekly","weekly","daily","daily","daily","daily","daily","daily","calendar_month","calendar_month","calendar_month","calendar_month","calendar_month","calendar_month","weekly","weekly","weekly","weekly","weekly","weekly","daily","daily","daily","daily","daily","daily","calendar_month","calendar_month","calendar_month","calendar_month","calendar_month","calendar_month","weekly","weekly","weekly","weekly","weekly","weekly","daily","daily","daily","daily","daily","daily","calendar_month","calendar_month","calendar_month","calendar_month","calendar_month","calendar_month","weekly","weekly","weekly","weekly","weekly","weekly","daily","daily","daily","daily","daily","daily","calendar_month","weekly","daily"],[31600,31700,31800,31900,32000,32100,31600,31700,31800,31900,32000,32100,31600,31700,31800,31900,32000,32100,31600,31700,31800,31900,32000,32100,31600,31700,31800,31900,32000,32100,31600,31700,31800,31900,32000,32100,31600,31700,31800,31900,32000,32100,31600,31700,31800,31900,32000,32100,31600,31700,31800,31900,32000,32100,31600,31700,31800,31900,32000,32100,31600,31700,31800,31900,32000,32100,31600,31700,31800,31900,32000,32100,31600,31700,31800,31900,32000,32100,31600,31700,31800,31900,32000,32100,31600,31700,31800,31900,32000,32100,30000,30000,30000],[6500.0,6600.0,6700.0,6800.0,6900.0,7000.0,6500.0,6600.0,6700.0,6800.0,6900.0,7000.0,6500.0,6600.0,6700.0,6800.0,6900.0,7000.0,6500.0,6600.0,6700.0,6800.0,6900.0,7000.0,6500.0,6600.0,6700.0,6800.0,6900.0,7000.0,6500.0,6600.0,6700.0,6800.0,6900.0,7000.0,6500.0,6600.0,6700.0,6800.0,6900.0,7000.0,6500.0,6600.0,6700.0,6800.0,6900.0,7000.0,6500.0,6600.0,6700.0,6800.0,6900.0,7000.0,6500.0,6600.0,6700.0,6800.0,6900.0,7000.0,6500.0,6600.0,6700.0,6800.0,6900.0,7000.0,6500.0,6600.0,6700.0,6800.0,6900.0,7000.0,6500.0,6600.0,6700.0,6800.0,6900.0,7000.0,6500.0,6600.0,6700.0,6800.0,6900.0,7000.0,6500.0,6600.0,6700.0,6800.0,6900.0,7000.0,4900.0,4900.0,4900.0],[456486.01,448134.53,447834.53,447534.53,447234.53,446934.53,457270.58,457170.58,457070.57,456970.57,456870.58,456770.58,351219.68,349279.68,347339.67,443343.43,454689.01,454589.01,456486.01,448134.53,447834.53,447534.53,447234.53,446934.53,457270.58,457170.58,457070.57,456970.57,456870.58,456770.58,350261.63,348321.63,346381.62,454789.01,454689.01,454589.01,456486.01,448134.53,447834.53,447534.53,447234.53,446934.53,457270.58,457170.58,457070.57,456970.57,456870.58,456770.58,350261.63,348321.63,346381.62,454789.01,454689.01,454589.01,454978.91,454978.91,454978.91,454978.91,454978.91,454478.91,460511.75,460511.75,460511.75,460511.75,460511.75,460511.75,409464.98,409464.98,437748.1,460511.75,460511.75,460511.75,456486.01,448134.53,447834.53,447534.53,447234.53,446934.53,457270.58,457170.58,457070.57,456970.57,456870.58,456770.58,350261.63,348321.63,346381.62,454789.01,454689.01,454589.01,460511.75,359982.84,373200.0],[354140.38,352200.38,350260.38,348320.38,346380.38,344440.38,369330.03,367400.03,365470.02,363540.02,361602.54,359662.54,351219.68,349279.68,347339.67,354075.72,352594.02,350654.02,354140.38,352200.38,350260.38,348320.38,346380.38,344440.38,369330.03,367400.03,365470.02,363540.02,361602.54,359662.54,350261.63,348321.63,346381.62,354534.02,352594.02,350654.02,354140.38,352200.38,350260.38,348320.38,346380.38,344440.38,369330.03,367400.03,365470.02,363540.02,361602.54,359662.54,350261.63,348321.63,346381.62,354534.02,352594.02,350654.02,241700.0,239200.0,238200.0,237700.0,237700.0,235700.0,349600.0,347150.0,345150.0,344650.0,343250.0,339900.0,355350.0,355350.0,357750.0,357800.0,354850.0,354350.0,354140.38,352200.38,350260.38,348320.38,346380.38,344440.38,369330.03,367400.03,365470.02,363540.02,361602.54,359662.54,350261.63,348321.63,346381.62,354534.02,352594.02,350654.02,266200.0,355450.0,373200.0],[102345.63,95934.15,97574.15,99214.15,100854.15,102494.15,87940.55,89770.55,91600.55,93430.55,95268.04,97108.04,0.0,0.0,0.0,89267.71,102094.99,103934.99,102345.63,95934.15,97574.15,99214.15,100854.15,102494.15,87940.55,89770.55,91600.55,93430.55,95268.04,97108.04,0.0,0.0,0.0,100254.99,102094.99,103934.99,102345.63,95934.15,97574.15,99214.15,100854.15,102494.15,87940.55,89770.55,91600.55,93430.55,95268.04,97108.04,0.0,0.0,0.0,100254.99,102094.99,103934.99,213278.91,215778.91,216778.91,217278.91,217278.91,218778.91,110911.75,113361.75,115361.75,115861.75,117261.75,120611.75,54114.98,54114.98,79998.1,102711.75,105661.75,106161.75,102345.63,95934.15,97574.15,99214.15,100854.15,102494.15,87940.55,89770.55,91600.55,93430.55,95268.04,97108.04,0.0,0.0,0.0,100254.99,102094.99,103934.99,194311.75,4532.84,0.0],[22,22,22,22,22,22,22,22,22,22,22,22,2,2,2,19,21,21,22,22,22,22,22,22,22,22,22,22,22,22,2,2,2,21,21,21,22,22,22,22,22,22,22,22,22,22,22,22,2,2,2,21,21,21,22,22,22,22,22,22,22,22,22,22,22,22,13,13,18,22,22,22,22,22,22,22,22,22,22,22,22,22,22,22,2,2,2,21,21,21,22,3,2],[237,235,235,235,235,235,394,393,392,394,392,387,443,443,441,453,451,451,237,235,235,235,235,235,394,393,392,392,390,387,440,440,438,453,451,451,237,235,235,235,235,235,394,393,392,392,390,387,440,440,438,453,451,451,515,510,508,507,507,503,734,729,725,724,721,714,746,746,751,751,745,744,237,235,235,235,235,235,394,393,392,392,390,387,440,440,438,453,451,451,564,746,783],[20,20,20,20,20,20,20,20,20,20,20,20,0,0,0,17,19,19,20,20,20,20,20,20,20,20,20,20,20,20,0,0,0,19,19,19,20,20,20,20,20,20,20,20,20,20,20,20,0,0,0,19,19,19,20,20,20,20,20,20,20,20,20,20,20,20,11,11,16,20,20,20,20,20,20,20,20,20,20,20,20,20,20,20,0,0,0,19,19,19,20,1,0],[0.9665,0.9488,0.9482,0.9476,0.9469,0.9463,0.9682,0.968,0.9678,0.9675,0.9673,0.9671,0.7436,0.7395,0.7354,0.9387,0.9627,0.9625,0.9665,0.9488,0.9482,0.9476,0.9469,0.9463,0.9682,0.968,0.9678,0.9675,0.9673,0.9671,0.7416,0.7375,0.7334,0.9629,0.9627,0.9625,0.9665,0.9488,0.9482,0.9476,0.9469,0.9463,0.9682,0.968,0.9678,0.9675,0.9673,0.9671,0.7416,0.7375,0.7334,0.9629,0.9627,0.9625,0.9633,0.9633,0.9633,0.9633,0.9633,0.9623,0.975,0.975,0.975,0.975,0.975,0.975,0.867,0.867,0.9268,0.975,0.975,0.975,0.9665,0.9488,0.9482,0.9476,0.9469,0.9463,0.9682,0.968,0.9678,0.9675,0.9673,0.9671,0.7416,0.7375,0.7334,0.9629,0.9627,0.9625,0.975,0.7622,0.7902],[15813.09,24164.57,24464.57,24764.57,25064.57,25364.57,15028.52,15128.52,15228.53,15328.53,15428.52,15528.52,5513.82,5453.82,5393.83,11487.27,11687.29,11687.29,15813.09,24164.57,24464.57,24764.57,25064.57,25364.57,15028.52,15128.52,15228.53,15328.53,15428.52,15528.52,5513.82,5453.82,5393.83,11687.29,11687.29,11687.29,15813.09,24164.57,24464.57,24764.57,25064.57,25364.57,15028.52,15128.52,15228.53,15328.53,15428.52,15528.52,5513.82,5453.82,5393.83,11687.29,11687.29,11687.29,17320.19,17320.19,17320.19,17320.19,17320.19,17820.19,11787.35,11787.35,11787.35,11787.35,11787.35,11787.35,8841.12,8841.12,10535.5,11787.35,11787.35,11787.35,15813.09,24164.57,24464.57,24764.57,25064.57,25364.57,15028.52,15128.52,15228.53,15328.53,15428.52,15528.52,5513.82,5453.82,5393.83,11687.29,11687.29,11687.29,11787.35,5632.36,6282.35],[0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,-111500.6,-114193.6,-117104.8,-16539.6,-5758.8,-5798.7,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,-112411.4,-114930.4,-118387.45,-5513.2,-5758.8,-5798.7,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,-112411.4,-114930.4,-118387.45,-5513.2,-5758.8,-5798.7,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,-52448.85,-52448.85,-23399.1,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,-112411.4,-114930.4,-118387.45,-5513.2,-5758.8,-5798.7,0.0,-102822.7,-88972.95],[0.0,0.0,0.0,0.0,0.0,0.0,15189.65,15199.65,15209.64,15219.64,15222.16,15222.16,-2920.7,-2920.7,-2920.71,5755.34,6213.64,6213.64,0.0,0.0,0.0,0.0,0.0,0.0,15189.65,15199.65,15209.64,15219.64,15222.16,15222.16,-3878.75,-3878.75,-3878.76,6213.64,6213.64,6213.64,0.0,0.0,0.0,0.0,0.0,0.0,15189.65,15199.65,15209.64,15219.64,15222.16,15222.16,-3878.75,-3878.75,-3878.76,6213.64,6213.64,6213.64,0.0,0.0,0.0,0.0,0.0,0.0,107900.0,107950.0,106950.0,106950.0,105550.0,104200.0,113650.0,116150.0,119550.0,120100.0,117150.0,118650.0,0.0,0.0,0.0,0.0,0.0,0.0,15189.65,15199.65,15209.64,15219.64,15222.16,15222.16,-3878.75,-3878.75,-3878.76,6213.64,6213.64,6213.64,0.0,89250.0,107000.0],[0.0,0.0,0.0,0.0,0.0,0.0,784.57,9036.05,9236.04,9436.04,9636.05,9836.05,-105266.33,-98854.85,-100494.86,-4191.1,7454.48,7654.48,0.0,0.0,0.0,0.0,0.0,0.0,784.57,9036.05,9236.04,9436.04,9636.05,9836.05,-106224.38,-99812.9,-101452.91,7254.48,7454.48,7654.48,0.0,0.0,0.0,0.0,0.0,0.0,784.57,9036.05,9236.04,9436.04,9636.05,9836.05,-106224.38,-99812.9,-101452.91,7254.48,7454.48,7654.48,0.0,0.0,0.0,0.0,0.0,0.0,5532.84,5532.84,5532.84,5532.84,5532.84,6032.84,-45513.93,-45513.93,-17230.81,5532.84,5532.84,6032.84,0.0,0.0,0.0,0.0,0.0,0.0,784.57,9036.05,9236.04,9436.04,9636.05,9836.05,-106224.38,-99812.9,-101452.91,7254.48,7454.48,7654.48,0.0,-100528.91,-87311.75]]}</script>
+<script>
+(() => {
+'use strict';
+const D = JSON.parse(document.getElementById('study-data').textContent);
+const COLS = D.cols, KINDS = D.kinds, NUMERIC = D.numeric, VALUES = D.values, DATA = D.data;
+const N = DATA.length ? DATA[0].length : 0;
+const MINUS = '−';
+const MONO = '"IBM Plex Mono", ui-monospace, Consolas, monospace';
+const SANS = '"IBM Plex Sans", system-ui, -apple-system, "Segoe UI", sans-serif';
+const SERIES = ['s1', 's2', 's3', 's4', 's5', 's6', 's7', 's8'];
+const nf = new Intl.NumberFormat('en-US', {maximumFractionDigits: 0});
+const nf2 = new Intl.NumberFormat('en-US', {maximumFractionDigits: 2});
+const clamp = (v, a, b) => Math.max(a, Math.min(b, v));
+const isMoney = c => /usd|cash|total|ongoing|terminal|spend|fees|reserve|pocket|balance|headroom|cost/i.test(c);
+const trim = (x, d) => x.toFixed(d).replace(/\.0$/, '');
+function fmt(col, v) {
+  if (v === null || v === undefined) return '—';
+  if (typeof v === 'string') return v;
+  if (isMoney(col)) return (v < 0 ? MINUS + '$' : '$') + nf.format(Math.abs(Math.round(v)));
+  return Math.abs(v) >= 1000 ? nf.format(v) : nf2.format(v);
+}
+function fmtShort(col, v) {
+  if (v === null || v === undefined) return '—';
+  if (typeof v === 'string') return v;
+  if (isMoney(col)) {
+    const a = Math.abs(v), s = v < 0 ? MINUS + '$' : '$';
+    if (a >= 1e6) return s + trim(a / 1e6, 1) + 'M';
+    if (a >= 1e3) return s + trim(a / 1e3, a >= 1e4 ? 0 : 1) + 'k';
+    return s + Math.round(a);
+  }
+  return Math.abs(v) >= 1e4 ? nf.format(Math.round(v)) : nf2.format(v);
+}
+const col = name => DATA[COLS.indexOf(name)];
+const params = COLS.filter((c, i) => KINDS[i] === 'param');
+const metrics = COLS.filter((c, i) => KINDS[i] === 'metric');
+
+let X = D.meta.default.x, Y = D.meta.default.y, CBY = D.meta.default.color, connect = true;
+if (!COLS.includes(X)) X = params[0];
+if (!COLS.includes(Y)) Y = metrics[0];
+if (!COLS.includes(CBY)) CBY = params.find(p => p !== X) || params[0];
+const filters = {};
+
+function option(sel, list, chosen) {
+  sel.innerHTML = list.map(v => `<option value="${v}"${v === chosen ? ' selected' : ''}>${v}</option>`).join('');
+}
+const fx = document.getElementById('fx'), fy = document.getElementById('fy'), fc = document.getElementById('fc');
+option(fx, COLS, X); option(fy, metrics, Y); option(fc, ['(none)'].concat(params), CBY);
+
+function buildFilters() {
+  const host = document.getElementById('filters');
+  host.innerHTML = '';
+  for (const p of params) {
+    if (p === X || p === CBY) continue;
+    const vals = VALUES[p];
+    if (!vals || vals.length < 2 || vals.length > 30) continue;
+    const id = 'flt_' + p;
+    const wrap = document.createElement('div');
+    wrap.className = 'field';
+    wrap.innerHTML = `<label for="${id}">${p}</label><select id="${id}"><option value="">all</option>` +
+      vals.map(v => `<option value="${v}"${String(filters[p]) === String(v) ? ' selected' : ''}>${fmtShort(p, v)}</option>`).join('') + '</select>';
+    const sel = wrap.querySelector('select');
+    sel.addEventListener('change', () => { filters[p] = sel.value === '' ? undefined : vals[sel.selectedIndex - 1]; draw(); });
+    host.appendChild(wrap);
+  }
+}
+
+function visibleRows() {
+  const out = [];
+  const cx = col(X), cy = col(Y);
+  for (let i = 0; i < N; i++) {
+    if (cx[i] === null || cy[i] === null) continue;
+    let keep = true;
+    for (const p in filters) {
+      if (filters[p] === undefined) continue;
+      if (col(p)[i] !== filters[p]) { keep = false; break; }
+    }
+    if (keep) out.push(i);
+  }
+  return out;
+}
+
+// ------------------------------------------------------------------ chart
+const box = document.getElementById('chart'), cv = box.querySelector('canvas');
+const ctx = cv.getContext('2d');
+const C = {};
+function readColors() {
+  const cs = getComputedStyle(document.documentElement);
+  for (const k of ['surface', 'ink', 'ink-2', 'muted', 'grid', 'axis', 'sel'].concat(SERIES)) C[k] = cs.getPropertyValue('--' + k).trim();
+}
+function yScale(lo, hi, target) {
+  if (hi <= lo) { hi = lo + 1; }
+  const raw = (hi - lo) / Math.max(2, target);
+  const pow = 10 ** Math.floor(Math.log10(raw)), f = raw / pow;
+  const step = (f <= 1 ? 1 : f <= 2 ? 2 : f <= 2.5 ? 2.5 : f <= 5 ? 5 : 10) * pow;
+  const a = Math.floor(lo / step + 1e-9) * step, b = Math.ceil(hi / step - 1e-9) * step;
+  const ticks = [];
+  for (let v = a; v <= b + step / 2; v += step) ticks.push(Math.round(v * 1e6) / 1e6);
+  return {lo: a, hi: b, ticks};
+}
+let geo = null, points = [], groups = [];
+function draw() {
+  readColors();
+  const rows = visibleRows();
+  const xNum = NUMERIC[X], cx = col(X), cy = col(Y), cc = CBY === '(none)' ? null : col(CBY);
+
+  const xCats = xNum ? null : Array.from(new Set(rows.map(i => cx[i]))).sort((a, b) => (a > b ? 1 : a < b ? -1 : 0));
+  const keys = cc ? Array.from(new Set(rows.map(i => cc[i]))).sort((a, b) => (typeof a === 'number' && typeof b === 'number') ? a - b : String(a) > String(b) ? 1 : -1) : ['all'];
+  groups = keys.slice(0, 8).map((k, i) => ({key: k, color: C[SERIES[i % SERIES.length]]}));
+  const extra = keys.length - groups.length;
+
+  const w = box.clientWidth, narrow = w < 620;
+  const h = narrow ? 320 : 400, dpr = window.devicePixelRatio || 1;
+  cv.width = Math.round(w * dpr); cv.height = Math.round(h * dpr); cv.style.height = h + 'px';
+  ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+  ctx.clearRect(0, 0, w, h);
+  if (!rows.length) { ctx.fillStyle = C.muted; ctx.font = '13px ' + SANS; ctx.fillText('No rows match these filters', 20, 40); points = []; return; }
+
+  const L = narrow ? 52 : 74, R = 16, T = 14, B = xNum ? 34 : 64;
+  const pw = Math.max(10, w - L - R), ph = h - T - B;
+  let ylo = Infinity, yhi = -Infinity;
+  for (const i of rows) { const v = cy[i]; if (v < ylo) ylo = v; if (v > yhi) yhi = v; }
+  const pad = (yhi - ylo) * 0.06 || Math.abs(yhi || 1) * 0.1;
+  const y = yScale(Math.min(ylo - pad, yhi >= 0 ? 0 : ylo - pad), yhi + pad, ph / 46);
+  let xlo = 0, xhi = 1;
+  if (xNum) { xlo = Infinity; xhi = -Infinity; for (const i of rows) { const v = cx[i]; if (v < xlo) xlo = v; if (v > xhi) xhi = v; } if (xhi === xlo) { xhi = xlo + 1; } }
+  const X2 = v => xNum ? L + (v - xlo) / (xhi - xlo) * pw : L + (xCats.indexOf(v) + 0.5) / xCats.length * pw;
+  const Y2 = v => T + (1 - (v - y.lo) / (y.hi - y.lo)) * ph;
+  geo = {L, R, T, B, pw, ph, xNum, xCats, X2, Y2, y};
+
+  ctx.lineWidth = 1; ctx.font = '11px ' + MONO; ctx.textAlign = 'right'; ctx.textBaseline = 'middle';
+  for (const v of y.ticks) {
+    const yy = Math.round(Y2(v)) + 0.5;
+    ctx.strokeStyle = v === 0 ? C.axis : C.grid;
+    ctx.beginPath(); ctx.moveTo(L, yy); ctx.lineTo(L + pw, yy); ctx.stroke();
+    ctx.fillStyle = C.muted; ctx.fillText(fmtShort(Y, v), L - 8, yy);
+  }
+  ctx.textAlign = 'center'; ctx.textBaseline = 'top';
+  if (xNum) {
+    const xs = yScale(xlo, xhi, pw / 90);
+    for (const v of xs.ticks) {
+      if (v < xlo - 1e-9 || v > xhi + 1e-9) continue;
+      const xx = Math.round(X2(v)) + 0.5;
+      ctx.strokeStyle = C.grid; ctx.beginPath(); ctx.moveTo(xx, T); ctx.lineTo(xx, T + ph); ctx.stroke();
+      ctx.fillStyle = C.muted; ctx.fillText(fmtShort(X, v), xx, T + ph + 8);
+    }
+  } else {
+    ctx.save();
+    xCats.forEach(v => {
+      const xx = X2(v);
+      ctx.strokeStyle = C.grid; ctx.beginPath(); ctx.moveTo(xx, T); ctx.lineTo(xx, T + ph); ctx.stroke();
+      ctx.save(); ctx.translate(xx, T + ph + 8); ctx.rotate(-Math.PI / 5);
+      ctx.fillStyle = C.muted; ctx.textAlign = 'right'; ctx.textBaseline = 'middle';
+      const label = String(v); ctx.fillText(label.length > 22 ? label.slice(0, 21) + '…' : label, 0, 0); ctx.restore();
+    });
+    ctx.restore();
+  }
+  ctx.strokeStyle = C.axis; const by = Math.round(T + ph) + 0.5;
+  ctx.beginPath(); ctx.moveTo(L, by); ctx.lineTo(L + pw, by); ctx.stroke();
+
+  points = [];
+  ctx.save(); ctx.beginPath(); ctx.rect(L, T - 8, pw, ph + 16); ctx.clip();
+  for (const g of groups) {
+    const idx = rows.filter(i => (cc ? cc[i] : 'all') === g.key);
+    if (connect && xNum) {
+      const sorted = idx.slice().sort((a, b) => cx[a] - cx[b]);
+      ctx.strokeStyle = g.color; ctx.lineWidth = 1.75; ctx.globalAlpha = 0.85; ctx.lineJoin = 'round';
+      ctx.beginPath();
+      sorted.forEach((i, k) => { const px = X2(cx[i]), py = Y2(cy[i]); k ? ctx.lineTo(px, py) : ctx.moveTo(px, py); });
+      ctx.stroke(); ctx.globalAlpha = 1;
+    }
+    for (const i of idx) {
+      const px = X2(cx[i]), py = Y2(cy[i]);
+      ctx.beginPath(); ctx.arc(px, py, 3, 0, 7); ctx.fillStyle = g.color; ctx.globalAlpha = 0.85; ctx.fill(); ctx.globalAlpha = 1;
+      points.push({i, px, py, color: g.color});
+    }
+  }
+  ctx.restore();
+
+  document.getElementById('legend').innerHTML = (cc ? groups : []).map(g =>
+    `<li><span class="sw" style="background:${g.color}"></span>${CBY}: ${fmtShort(CBY, g.key)}</li>`).join('') +
+    (extra > 0 ? `<li>${extra} more ${CBY} values not shown</li>` : '');
+  document.getElementById('chartTitle').textContent = `${Y} by ${X}`;
+  document.getElementById('chartNote').textContent =
+    `${rows.length.toLocaleString()} of ${N.toLocaleString()} rows shown.` +
+    (connect && xNum ? ' Lines join tested points within a colour; nothing between them was simulated.' : '') +
+    (extra > 0 ? ` Only the first 8 ${CBY} values are drawn; filter to see the rest.` : '');
+  document.getElementById('count').textContent = `${rows.length.toLocaleString()} rows`;
+  buildTable(rows);
+  buildLedger(rows);
+}
+
+// ------------------------------------------------------------------ tooltip
+const tip = document.getElementById('tip');
+function showTip(i, cxp, cyp) {
+  const rowsHtml = COLS.map(c => `<tr><td class="k">${c}</td><td class="v">${fmt(c, col(c)[i])}</td></tr>`).join('');
+  tip.innerHTML = `<div class="d">row ${i + 1}</div><table>${rowsHtml}</table>`;
+  tip.hidden = false;
+  const r = tip.getBoundingClientRect();
+  tip.style.left = clamp(cxp + 16, 8, Math.max(8, innerWidth - r.width - 8)) + 'px';
+  tip.style.top = clamp(cyp + 16, 8, Math.max(8, innerHeight - r.height - 8)) + 'px';
+}
+cv.addEventListener('pointermove', e => {
+  const r = cv.getBoundingClientRect(), px = e.clientX - r.left, py = e.clientY - r.top;
+  let best = null, bd = 14;
+  for (const p of points) { const d = Math.hypot(p.px - px, p.py - py); if (d < bd) { bd = d; best = p; } }
+  if (!best) { tip.hidden = true; return; }
+  showTip(best.i, e.clientX, e.clientY);
+});
+cv.addEventListener('pointerleave', () => { tip.hidden = true; });
+addEventListener('scroll', () => { tip.hidden = true; }, {passive: true});
+
+// ------------------------------------------------------------------ table + ledger
+function buildTable(rows) {
+  const cy = col(Y);
+  const sorted = rows.slice().sort((a, b) => cy[b] - cy[a]).slice(0, 300);
+  const head = COLS.map(c => `<th scope="col" class="${NUMERIC[c] ? '' : 't'}">${c}</th>`).join('');
+  const body = sorted.map((i, k) => '<tr' + (k === 0 ? ' class="best"' : '') + '>' +
+    COLS.map(c => `<td class="${NUMERIC[c] ? '' : 't'}">${fmt(c, col(c)[i])}</td>`).join('') + '</tr>').join('');
+  document.getElementById('tRows').innerHTML = `<table class="data"><thead><tr>${head}</tr></thead><tbody>${body}</tbody></table>`;
+  document.getElementById('tableCap').textContent = `top ${sorted.length.toLocaleString()} of ${rows.length.toLocaleString()} shown, sorted by ${Y}`;
+}
+function buildLedger(rows) {
+  const cy = col(Y);
+  let best = rows[0];
+  for (const i of rows) if (cy[i] > cy[best]) best = i;
+  const settings = params.filter(p => VALUES[p] && VALUES[p].length > 1)
+    .map(p => `${p} ${fmtShort(p, col(p)[best])}`).join(' · ');
+  const facts = [
+    [`Best ${Y}`, fmt(Y, cy[best]), settings || 'single setting'],
+    ['Rows in view', rows.length.toLocaleString(), `${N.toLocaleString()} in the study`],
+    ['Settings varied', String(params.filter(p => VALUES[p] && VALUES[p].length > 1).length), params.join(', ')],
+    ['Outcomes recorded', String(metrics.length), metrics.slice(0, 6).join(', ') + (metrics.length > 6 ? ' …' : '')],
+  ];
+  document.getElementById('ledger').innerHTML = facts.map(([k, v, s]) =>
+    `<div><dt>${k}</dt><dd class="val">${v}</dd><dd class="sub">${s}</dd></div>`).join('');
+}
+
+// ------------------------------------------------------------------ text
+document.getElementById('eyebrow').textContent = `results / ${D.meta.path}`;
+document.getElementById('headline').textContent = D.meta.title;
+document.getElementById('lede').textContent = D.meta.headline ||
+  `${D.meta.rows.toLocaleString()} saved settings from this study, plotted straight from ${D.meta.source}.`;
+document.getElementById('method').innerHTML = [
+  `Every point is one saved simulation from <code>${D.meta.source}</code>: ${D.meta.rows.toLocaleString()} rows, ${params.length} settings and ${metrics.length} recorded outcomes.`,
+  `Pick any setting for the X axis, any outcome for Y, and colour by a second setting. The filters narrow the rest; with several settings free, many points share an X position.`,
+  `Nothing here is re-simulated. The numbers are the study's own saved values, and the table lists the highest-scoring rows in view.`,
+  `All runs share one historical tape, so these are in-sample comparisons, not forecasts, and settings were not independently re-optimised for every combination.`,
+].map(x => `<li>${x}</li>`).join('');
+
+fx.addEventListener('change', () => { X = fx.value; buildFilters(); draw(); });
+fy.addEventListener('change', () => { Y = fy.value; draw(); });
+fc.addEventListener('change', () => { CBY = fc.value; buildFilters(); draw(); });
+document.getElementById('connect').addEventListener('click', e => {
+  connect = !connect; e.currentTarget.setAttribute('aria-pressed', String(connect)); draw();
+});
+
+buildFilters();
+draw();
+let rz = 0;
+new ResizeObserver(() => { cancelAnimationFrame(rz); rz = requestAnimationFrame(draw); }).observe(box);
+matchMedia('(prefers-color-scheme: dark)').addEventListener('change', draw);
+new MutationObserver(draw).observe(document.documentElement, {attributes: true, attributeFilter: ['data-theme']});
+if (document.fonts && document.fonts.ready) document.fonts.ready.then(draw);
+})();
+</script>

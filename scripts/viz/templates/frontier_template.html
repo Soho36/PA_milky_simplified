@@ -1,0 +1,733 @@
+<meta charset="utf-8">
+<title>Legacy Reserve Frontier</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500&family=IBM+Plex+Sans:wght@400;500;600&display=swap">
+<style>
+:root{
+  color-scheme:light;
+  --plane:#f9f9f7; --surface:#fcfcfb; --ink:#0b0b0b; --ink-2:#52514e; --muted:#898781;
+  --grid:#e1e0d9; --axis:#c3c2b7; --ring:rgba(11,11,11,.10);
+  --s1:#2a78d6; --s2:#eb6834; --s3:#1baf7a; --s4:#eda100;
+  --sel:rgba(42,120,214,.12); --shadow:0 8px 28px rgba(11,11,11,.12);
+  --mono:"IBM Plex Mono", ui-monospace, Consolas, monospace;
+  --sans:"IBM Plex Sans", system-ui, -apple-system, "Segoe UI", sans-serif;
+}
+@media (prefers-color-scheme: dark){
+  :root:not([data-theme="light"]){
+    color-scheme:dark;
+    --plane:#0d0d0d; --surface:#1a1a19; --ink:#ffffff; --ink-2:#c3c2b7; --muted:#898781;
+    --grid:#2c2c2a; --axis:#383835; --ring:rgba(255,255,255,.10);
+    --s1:#3987e5; --s2:#d95926; --s3:#199e70; --s4:#c98500;
+    --sel:rgba(57,135,229,.18); --shadow:0 8px 28px rgba(0,0,0,.55);
+  }
+}
+:root[data-theme="dark"]{
+  color-scheme:dark;
+  --plane:#0d0d0d; --surface:#1a1a19; --ink:#ffffff; --ink-2:#c3c2b7; --muted:#898781;
+  --grid:#2c2c2a; --axis:#383835; --ring:rgba(255,255,255,.10);
+  --s1:#3987e5; --s2:#d95926; --s3:#199e70; --s4:#c98500;
+  --sel:rgba(57,135,229,.18); --shadow:0 8px 28px rgba(0,0,0,.55);
+}
+*{box-sizing:border-box}
+[hidden]{display:none!important}
+body{margin:0;background:var(--plane);color:var(--ink);font:14px/1.5 var(--sans);padding-inline:20px}
+.wrap{max-width:1240px;margin:0 auto;padding-block:28px 64px}
+.eyebrow{font:500 11.5px/1.4 var(--mono);color:var(--muted);letter-spacing:.02em;margin:0 0 8px;overflow-wrap:anywhere}
+h1{font-weight:600;font-size:clamp(22px,3vw,30px);line-height:1.15;letter-spacing:-.012em;margin:0 0 10px;text-wrap:balance}
+.lede{color:var(--ink-2);max-width:84ch;margin:0 0 20px}
+.ledger{display:flex;flex-wrap:wrap;gap:1px;background:var(--ring);border:1px solid var(--ring);border-radius:12px;overflow:hidden;margin:0 0 18px}
+.ledger > div{flex:1 1 170px;background:var(--surface);padding:10px 14px 11px;display:grid;gap:1px;align-content:start}
+.ledger dt{font-size:12px;color:var(--ink-2)}
+.ledger dd{margin:0}
+.ledger .val{font:500 18px/1.3 var(--mono);font-variant-numeric:tabular-nums;color:var(--ink)}
+.ledger .sub{font-size:12px;color:var(--muted)}
+.controls{position:sticky;top:0;z-index:5;background:var(--plane);display:flex;flex-wrap:wrap;align-items:center;gap:8px 14px;padding-block:10px;border-bottom:1px solid var(--ring);margin-bottom:14px}
+.ctl-label{font-size:12px;color:var(--ink-2);letter-spacing:.04em;text-transform:uppercase}
+.chips{display:flex;flex-wrap:wrap;gap:6px}
+.chip{font:500 12.5px/1 var(--mono);padding:6px 10px;border-radius:999px;border:1px solid var(--ring);background:var(--surface);color:var(--ink-2);cursor:pointer}
+.chip:hover{border-color:var(--axis);color:var(--ink)}
+.chip[aria-pressed="true"]{background:var(--ink);border-color:var(--ink);color:var(--surface)}
+.chip:focus-visible,canvas:focus-visible,summary:focus-visible{outline:2px solid var(--s1);outline-offset:2px}
+.hint{font-size:12px;color:var(--muted);margin-left:auto}
+.instrument{background:var(--surface);border:1px solid var(--ring);border-radius:12px}
+.panel{padding:16px 16px 4px}
+.panel + .panel{border-top:1px solid var(--ring)}
+.panel-head{display:flex;flex-wrap:wrap;align-items:baseline;gap:4px 18px;margin-bottom:6px}
+.panel h2{font-size:15px;font-weight:600;margin:0}
+.legend{display:flex;flex-wrap:wrap;gap:4px 14px;font-size:12.5px;color:var(--ink-2);list-style:none;margin:0;padding:0}
+.legend li{display:inline-flex;align-items:center;gap:6px}
+.sw{display:inline-block;width:14px;height:2px;border-radius:1px;flex:none}
+.sw.dash{height:0;border-top:2px dashed;background:none;border-radius:0}
+.sw.box{height:10px;width:10px;border-radius:2px}
+.note{font-size:12.5px;color:var(--ink-2);flex-basis:100%;margin:2px 0 0;max-width:100ch}
+.canvas-box{position:relative}
+canvas{display:block;width:100%;touch-action:pan-y;border-radius:4px}
+.small-multiples{display:grid;grid-template-columns:repeat(5,1fr);gap:10px;padding:4px 16px 16px}
+.sm{border:1px solid var(--ring);border-radius:8px;padding:8px 8px 6px;background:var(--surface);display:grid;gap:4px}
+.sm h3{margin:0;font:500 12.5px var(--mono);color:var(--ink)}
+.sm .cap{font-size:11.5px;color:var(--muted);font-variant-numeric:tabular-nums}
+.sm canvas{height:78px}
+.tip{position:fixed;z-index:10;pointer-events:none;background:var(--surface);color:var(--ink);border:1px solid var(--ring);box-shadow:var(--shadow);border-radius:8px;padding:8px 11px 9px;font-size:12.5px;line-height:1.45;max-width:min(380px,calc(100vw - 16px))}
+.tip .d{font:500 12px var(--mono);color:var(--muted);margin-bottom:4px}
+.tip table{border-collapse:collapse}
+.tip td{padding:1px 0;vertical-align:baseline}
+.tip td.v{text-align:right;padding-left:16px;font-family:var(--mono);font-variant-numeric:tabular-nums}
+.tip .k{display:inline-flex;align-items:center;gap:6px;color:var(--ink-2)}
+.tip .sub{color:var(--muted);font-size:12px;margin-top:4px}
+details{margin-top:14px;background:var(--surface);border:1px solid var(--ring);border-radius:12px}
+summary{cursor:pointer;padding:12px 16px;font-weight:600;font-size:14px}
+summary span{font-weight:400;color:var(--muted);margin-left:8px;font-size:12.5px}
+.table-scroll{overflow:auto;max-height:540px;margin:0 16px 16px}
+table.data{border-collapse:collapse;font-size:12.5px;width:100%}
+table.data th{position:sticky;top:0;background:var(--surface);text-align:right;font-weight:500;color:var(--ink-2);padding:6px 10px;border-bottom:1px solid var(--axis);white-space:nowrap}
+table.data td{text-align:right;padding:4px 10px;border-bottom:1px solid var(--grid);font-family:var(--mono);font-variant-numeric:tabular-nums;white-space:nowrap}
+table.data th:first-child,table.data td:first-child{text-align:left}
+table.data tr.mark td{background:color-mix(in srgb, var(--s1) 8%, transparent)}
+.method{margin-top:24px;color:var(--ink-2);font-size:13px;max-width:92ch}
+.method h2{font-size:14px;color:var(--ink);margin:0 0 6px}
+.method ul{margin:0;padding-left:18px;display:grid;gap:5px}
+code{font-family:var(--mono);font-size:.92em}
+@media (max-width:860px){ .small-multiples{grid-template-columns:repeat(2,1fr)} }
+@media (max-width:640px){
+  body{padding-inline:16px}
+  .panel{padding:12px 10px 2px}
+  .hint{margin-left:0;flex-basis:100%}
+  .small-multiples{grid-template-columns:1fr;padding-inline:10px}
+}
+</style>
+
+<div class="wrap">
+  <header>
+    <p class="eyebrow">legacy_25k_vs_50k / reserve_frontier_minimum</p>
+    <h1>How much cushion pays, and how much protects</h1>
+    <p class="lede">1,280 replays compare a daily <strong>minimum</strong> payout request against a daily <strong>maximum</strong> one, across the same reserve grid ($0–$10,000 above the frozen failure floor, in $100 steps through $3,000–$4,500 and $6,000–$7,500), two products and eight historical windows. Pipelines and funding are frozen: $5,000 plus $200 a month, 20 shared seats, a 2-spare shelf, and a pass must activate at the next daily check or be forfeited. The cash-best reserve and the reserve that keeps the book alive are not the same number.</p>
+    <dl class="ledger" id="ledger"></dl>
+  </header>
+
+  <div class="controls">
+    <span class="ctl-label">Product</span>
+    <div class="chips" id="products" role="group" aria-label="Product"></div>
+    <span class="ctl-label">Window</span>
+    <div class="chips" id="windows" role="group" aria-label="Historical window"></div>
+    <span class="hint">Hover a chart to compare both rules at that reserve</span>
+  </div>
+
+  <main class="instrument">
+    <section class="panel">
+      <div class="panel-head">
+        <h2>Ongoing net cash</h2>
+        <ul class="legend">
+          <li><span class="sw" style="background:var(--s1)"></span>Daily minimum</li>
+          <li><span class="sw" style="background:var(--s2)"></span>Daily maximum</li>
+          <li><span class="sw dash" style="border-color:var(--muted)"></span>Aged-PA survival boundary</li>
+        </ul>
+        <p class="note">Cash received while trading, after the firm's split and after every evaluation and activation fee. Owner contributions are excluded. Dots are tested reserves; the grid is discrete.</p>
+      </div>
+      <div class="canvas-box" id="pOngoing"><canvas role="img" aria-label="Ongoing net cash against reserve, for daily minimum and daily maximum"></canvas></div>
+    </section>
+
+    <section class="panel">
+      <div class="panel-head">
+        <h2>Net cash including the closing withdrawal</h2>
+        <ul class="legend">
+          <li><span class="sw" style="background:var(--s1)"></span>Daily minimum</li>
+          <li><span class="sw" style="background:var(--s2)"></span>Daily maximum</li>
+        </ul>
+        <p class="note" id="totalNote"></p>
+      </div>
+      <div class="canvas-box" id="pTotal"><canvas role="img" aria-label="Total net cash including closing withdrawal against reserve"></canvas></div>
+    </section>
+
+    <section class="panel">
+      <div class="panel-head">
+        <h2>Minimum minus maximum, ongoing cash</h2>
+        <ul class="legend">
+          <li><span class="sw box" style="background:var(--s1)"></span>Minimum ahead</li>
+          <li><span class="sw box" style="background:var(--s2)"></span>Maximum ahead</li>
+        </ul>
+        <p class="note">The same reserve under both rules. This is a like-for-like difference, unlike comparing each rule at its own best reserve.</p>
+      </div>
+      <div class="canvas-box" id="pDelta"><canvas role="img" aria-label="Difference in ongoing cash between minimum and maximum at each reserve"></canvas></div>
+    </section>
+
+    <section class="panel">
+      <div class="panel-head">
+        <h2>PAs alive at the horizon</h2>
+        <ul class="legend">
+          <li><span class="sw" style="background:var(--s1)"></span>Daily minimum</li>
+          <li><span class="sw" style="background:var(--s2)"></span>Daily maximum</li>
+        </ul>
+        <p class="note">Out of 20 seats. A book can finish nearly empty at a reserve that produced good cash.</p>
+      </div>
+      <div class="canvas-box" id="pAlive"><canvas role="img" aria-label="PAs alive at the horizon against reserve"></canvas></div>
+    </section>
+
+    <section class="panel">
+      <div class="panel-head">
+        <h2>Deaths of PAs at least a year old</h2>
+        <ul class="legend">
+          <li><span class="sw" style="background:var(--s1)"></span>Daily minimum</li>
+          <li><span class="sw" style="background:var(--s2)"></span>Daily maximum</li>
+        </ul>
+        <p class="note">Established accounts lost. The survival boundary is the lowest tested reserve where this stays at zero for that reserve and every higher tested one.</p>
+      </div>
+      <div class="canvas-box" id="pAged"><canvas role="img" aria-label="Deaths of PAs at least one year old against reserve"></canvas></div>
+    </section>
+
+    <section class="panel">
+      <div class="panel-head">
+        <h2>What the book did, run by run</h2>
+        <p class="note" id="smNote"></p>
+      </div>
+      <div class="small-multiples" id="smallMultiples"></div>
+    </section>
+  </main>
+
+  <details>
+    <summary>Reserve table <span id="frontierTableCap"></span></summary>
+    <div class="table-scroll" id="tFrontier"></div>
+  </details>
+  <details>
+    <summary>Window summaries <span>best reserve and survival boundary in all eight windows</span></summary>
+    <div class="table-scroll" id="tWindows"></div>
+  </details>
+  <details>
+    <summary>Similar retained capital <span>descriptive matches, full history</span></summary>
+    <div class="table-scroll" id="tSimilar"></div>
+  </details>
+
+  <section class="method">
+    <h2>How to read this</h2>
+    <ul id="method"></ul>
+  </section>
+</div>
+
+<div class="tip" id="tip" hidden></div>
+
+<script id="frontier-data" type="application/json">__FRONTIER_JSON__</script>
+<script>
+(() => {
+'use strict';
+const D = JSON.parse(document.getElementById('frontier-data').textContent);
+const F = D.frontier, WS = D.windows, SIM = D.similar_capital, DET = D.detail, DAYS = D.days;
+const MINUS = '−';
+const MONO = '"IBM Plex Mono", ui-monospace, Consolas, monospace';
+const SANS = '"IBM Plex Sans", system-ui, -apple-system, "Segoe UI", sans-serif';
+const nf = new Intl.NumberFormat('en-US', {maximumFractionDigits: 0});
+const trim = (x, d) => x.toFixed(d).replace(/\.0$/, '');
+const usd = v => v === null || v === undefined ? '—' : (v < 0 ? MINUS + '$' : '$') + nf.format(Math.abs(Math.round(v)));
+const usdK = v => {
+  const a = Math.abs(v), s = v < 0 ? MINUS + '$' : '$';
+  if (a >= 1e6) return s + trim(a / 1e6, a >= 1e7 ? 0 : 1) + 'M';
+  if (a >= 1e3) return s + trim(a / 1e3, a >= 1e4 ? 0 : 1) + 'k';
+  return s + Math.round(a);
+};
+const signed = v => (v > 0 ? '+' : '') + usd(v);
+const clamp = (v, a, b) => Math.max(a, Math.min(b, v));
+const PRODUCT_LABEL = {legacy_25k: 'Legacy 25K', legacy_50k: 'Legacy 50K'};
+const WINDOW_LABEL = {full: 'Full 2020–26', start_2021: 'From 2021', start_2022: 'From 2022', start_2023: 'From 2023',
+                      start_2024: 'From 2024', two_years_2020: '2020–22', two_years_2022: '2022–24', two_years_2024: '2024–26'};
+const RULES = ['minimum', 'maximum'];
+const RULE_COLOR = {minimum: 's1', maximum: 's2'};
+
+let product = D.meta.products[0], win = 'full';
+
+const byKey = new Map();
+for (const r of F) {
+  const k = r.product + '|' + r.window + '|' + r.withdrawal;
+  if (!byKey.has(k)) byKey.set(k, []);
+  byKey.get(k).push(r);
+}
+for (const arr of byKey.values()) arr.sort((a, b) => a.headroom - b.headroom);
+const rows = rule => byKey.get(product + '|' + win + '|' + rule) || [];
+const wsRow = rule => WS.find(w => w.product === product && w.window === win && w.withdrawal === rule);
+const at = (rule, h) => rows(rule).find(r => r.headroom === h);
+const grid = () => rows('minimum').map(r => r.headroom);
+const xDomain = () => { const g = grid(); return [0, g.length ? g[g.length - 1] : 10000]; };
+
+const C = {};
+function readColors() {
+  const cs = getComputedStyle(document.documentElement);
+  for (const k of ['surface', 'ink', 'ink-2', 'muted', 'grid', 'axis', 's1', 's2', 's3', 's4', 'sel']) C[k] = cs.getPropertyValue('--' + k).trim();
+}
+function yScale(lo, hi, target) {
+  if (hi <= lo) hi = lo + 1;
+  const raw = (hi - lo) / Math.max(2, target);
+  const pow = 10 ** Math.floor(Math.log10(raw)), f = raw / pow;
+  const step = (f <= 1 ? 1 : f <= 2 ? 2 : f <= 2.5 ? 2.5 : f <= 5 ? 5 : 10) * pow;
+  const a = Math.floor(lo / step + 1e-9) * step, b = Math.ceil(hi / step - 1e-9) * step;
+  const ticks = [];
+  for (let v = a; v <= b + step / 2; v += step) ticks.push(Math.round(v * 1e6) / 1e6);
+  return {lo: a, hi: b, ticks};
+}
+
+// ------------------------------------------------------------------ panels
+const panels = [];
+const X = (p, v) => p.L + (v - p.x[0]) / (p.x[1] - p.x[0]) * p.pw;
+const Xi = (p, px) => p.x[0] + (px - p.L) / p.pw * (p.x[1] - p.x[0]);
+const Y = (p, v) => p.Tp + (1 - (v - p.y.lo) / (p.y.hi - p.y.lo)) * p.ph;
+
+function panel(id, cfg) {
+  const box = document.getElementById(id), cv = box.querySelector('canvas');
+  const base = document.createElement('canvas');
+  const p = {id, cfg, box, cv, ctx: cv.getContext('2d'), base, bctx: base.getContext('2d')};
+  panels.push(p);
+  bind(p);
+  return p;
+}
+function layout(p) {
+  const w = p.box.clientWidth;
+  p.narrow = w < 620;
+  p.L = p.narrow ? 46 : 64;
+  p.R = p.narrow ? 10 : 126;
+  p.Tp = 14; p.B = 28;
+  const h = p.narrow ? p.cfg.height[0] : p.cfg.height[1], dpr = window.devicePixelRatio || 1;
+  p.w = w; p.h = h; p.dpr = dpr;
+  for (const c of [p.cv, p.base]) { c.width = Math.round(w * dpr); c.height = Math.round(h * dpr); }
+  p.cv.style.height = h + 'px';
+  p.pw = Math.max(10, w - p.L - p.R);
+  p.ph = h - p.Tp - p.B;
+  p.x = xDomain();
+}
+function frame(p, c, fmt) {
+  c.clearRect(0, 0, p.w, p.h);
+  c.lineWidth = 1;
+  c.font = '11px ' + MONO; c.textAlign = 'right'; c.textBaseline = 'middle';
+  for (const v of p.y.ticks) {
+    if (v < p.y.lo - 1e-9 || v > p.y.hi + 1e-9) continue;
+    const yy = Math.round(Y(p, v)) + 0.5;
+    c.strokeStyle = v === 0 ? C.axis : C.grid;
+    c.beginPath(); c.moveTo(p.L, yy); c.lineTo(p.L + p.pw, yy); c.stroke();
+    c.fillStyle = C.muted; c.fillText(fmt(v), p.L - 8, yy);
+  }
+  const step = p.narrow ? 2000 : 1000;
+  c.textAlign = 'center'; c.textBaseline = 'top';
+  for (let v = 0; v <= p.x[1] + 1; v += step) {
+    const xx = Math.round(X(p, v)) + 0.5;
+    c.strokeStyle = C.grid;
+    c.beginPath(); c.moveTo(xx, p.Tp); c.lineTo(xx, p.Tp + p.ph); c.stroke();
+    c.fillStyle = C.muted; c.fillText(usdK(v), xx, p.Tp + p.ph + 8);
+  }
+  const by = Math.round(p.Tp + p.ph) + 0.5;
+  c.strokeStyle = C.axis; c.beginPath(); c.moveTo(p.L, by); c.lineTo(p.L + p.pw, by); c.stroke();
+  c.fillStyle = C.muted; c.textAlign = 'left';
+  c.font = '10.5px ' + SANS;
+  c.fillText('reserve above the frozen floor', p.L, p.Tp + p.ph + 8 + 13);
+}
+function clip(p, c, pad = 8) { c.save(); c.beginPath(); c.rect(p.L, p.Tp - pad, p.pw, p.ph + pad * 2); c.clip(); }
+function haloText(c, text, x, y, color) {
+  c.save(); c.lineWidth = 3; c.lineJoin = 'round'; c.strokeStyle = C.surface; c.strokeText(text, x, y);
+  c.fillStyle = color; c.fillText(text, x, y); c.restore();
+}
+function vline(p, c, v, label, color) {
+  const x = Math.round(X(p, v)) + 0.5;
+  if (x < p.L || x > p.L + p.pw) return;
+  c.save(); c.strokeStyle = color; c.setLineDash([4, 4]); c.lineWidth = 1;
+  c.beginPath(); c.moveTo(x, p.Tp); c.lineTo(x, p.Tp + p.ph); c.stroke(); c.restore();
+  if (!label) return;
+  c.font = '10.5px ' + SANS; c.textAlign = 'left'; c.textBaseline = 'top';
+  const w = c.measureText(label).width;
+  haloText(c, label, Math.min(x + 4, p.L + p.pw - w - 2), p.Tp + 2, C['ink-2']);
+}
+function dot(c, x, y, color, r) {
+  c.beginPath(); c.arc(x, y, r + 1.5, 0, 7); c.fillStyle = C.surface; c.fill();
+  c.beginPath(); c.arc(x, y, r, 0, 7); c.fillStyle = color; c.fill();
+}
+function endLabels(p, c, items) {
+  if (p.narrow) return;
+  items = items.filter(it => isFinite(it.y)).sort((a, b) => a.y - b.y);
+  if (!items.length) return;
+  const gap = 15, top = p.Tp + 2, bot = p.Tp + p.ph;
+  for (let k = 0; k < items.length; k++) items[k].y = Math.max(items[k].y, k ? items[k - 1].y + gap : top);
+  for (let k = items.length - 1; k >= 0; k--) items[k].y = Math.min(items[k].y, k < items.length - 1 ? items[k + 1].y - gap : bot);
+  c.font = '11.5px ' + SANS; c.textAlign = 'left'; c.textBaseline = 'middle';
+  const x0 = p.L + p.pw + 8;
+  for (const it of items) {
+    c.strokeStyle = it.color; c.lineWidth = 2; c.lineCap = 'round';
+    c.beginPath(); c.moveTo(x0, it.y); c.lineTo(x0 + 9, it.y); c.stroke();
+    c.fillStyle = C['ink-2']; c.fillText(it.text, x0 + 14, it.y);
+  }
+}
+function crosshair(p, c) {
+  if (hoverH === null) return;
+  const x = Math.round(X(p, hoverH)) + 0.5;
+  if (x < p.L - 1 || x > p.L + p.pw + 1) return;
+  c.save(); c.strokeStyle = C['ink-2']; c.globalAlpha = 0.5; c.lineWidth = 1; c.setLineDash([3, 3]);
+  c.beginPath(); c.moveTo(x, p.Tp - 6); c.lineTo(x, p.Tp + p.ph); c.stroke(); c.restore();
+}
+function lineSeries(p, c, rule, field) {
+  const data = rows(rule).filter(r => r[field] !== null && r[field] !== undefined);
+  if (!data.length) return null;
+  c.strokeStyle = C[RULE_COLOR[rule]]; c.lineWidth = 2; c.lineJoin = 'round'; c.lineCap = 'round';
+  c.beginPath();
+  data.forEach((r, i) => { const x = X(p, r.headroom), y = Y(p, r[field]); i ? c.lineTo(x, y) : c.moveTo(x, y); });
+  c.stroke();
+  for (const r of data) dot(c, X(p, r.headroom), Y(p, r[field]), C[RULE_COLOR[rule]], 2.4);
+  const last = data[data.length - 1];
+  return {y: Y(p, last[field]), value: last[field]};
+}
+function boundaries(p, c) {
+  const seen = new Map();
+  for (const rule of RULES) {
+    const w = wsRow(rule);
+    if (!w || w.aged_pa_survival_boundary === null) continue;
+    seen.set(w.aged_pa_survival_boundary, (seen.get(w.aged_pa_survival_boundary) || []).concat(rule));
+  }
+  for (const [v, rs] of seen) vline(p, c, v, `survival ${rs.length === 2 ? '' : rs[0] + ' '}${usdK(v)}`, C.muted);
+}
+
+function cashPanel(id, field, height, withBoundary) {
+  return panel(id, {
+    height,
+    base(p, c) {
+      let lo = 0, hi = 1;
+      for (const rule of RULES) for (const r of rows(rule)) { lo = Math.min(lo, r[field]); hi = Math.max(hi, r[field]); }
+      p.y = yScale(lo, hi * 1.02, p.ph / 46);
+      frame(p, c, usdK);
+      clip(p, c);
+      if (withBoundary) boundaries(p, c);
+      const ends = [];
+      for (const rule of RULES) {
+        const e = lineSeries(p, c, rule, field);
+        if (e) ends.push({y: e.y, text: rule === 'minimum' ? 'minimum' : 'maximum', color: C[RULE_COLOR[rule]]});
+        const w = wsRow(rule);
+        const bestH = w ? (field === 'ongoing' ? w.best_ongoing_headroom : w.best_total_headroom) : null;
+        const best = bestH === null ? null : at(rule, bestH);
+        if (best) {
+          const x = X(p, best.headroom), y = Y(p, best[field]);
+          c.save(); c.strokeStyle = C[RULE_COLOR[rule]]; c.lineWidth = 2;
+          c.beginPath(); c.arc(x, y, 5.5, 0, 7); c.stroke(); c.restore();
+        }
+      }
+      c.restore();
+      endLabels(p, c, ends);
+    },
+    overlay(p, c) { crosshair(p, c); if (hoverH === null) return;
+      for (const rule of RULES) { const r = at(rule, hoverH); if (r) dot(c, X(p, hoverH), Y(p, r[field]), C[RULE_COLOR[rule]], 3.5); } },
+    tip: () => tipCash(field)
+  });
+}
+
+cashPanel('pOngoing', 'ongoing', [220, 260], true);
+cashPanel('pTotal', 'total', [190, 220], false);
+
+panel('pDelta', {
+  height: [150, 170],
+  base(p, c) {
+    const g = grid();
+    const deltas = g.map(h => { const a = at('minimum', h), b = at('maximum', h); return a && b ? a.ongoing - b.ongoing : null; });
+    const lo = Math.min(0, ...deltas.filter(v => v !== null)), hi = Math.max(0, ...deltas.filter(v => v !== null));
+    p.y = yScale(lo * 1.06, hi * 1.06, p.ph / 40);
+    frame(p, c, usdK);
+    clip(p, c);
+    const bw = Math.max(3, Math.min(11, p.pw / Math.max(12, g.length) * 0.8));
+    const zero = Y(p, 0);
+    g.forEach((h, i) => {
+      const v = deltas[i];
+      if (v === null) return;
+      const x = X(p, h), y = Y(p, v);
+      c.fillStyle = C[v >= 0 ? 's1' : 's2'];
+      c.fillRect(x - bw / 2, Math.min(y, zero), bw, Math.max(1, Math.abs(y - zero)));
+    });
+    c.restore();
+  },
+  overlay(p, c) { crosshair(p, c); },
+  tip: () => tipCash('ongoing')
+});
+
+function countPanel(id, field, height, note) {
+  return panel(id, {
+    height,
+    base(p, c) {
+      let hi = 1;
+      for (const rule of RULES) for (const r of rows(rule)) hi = Math.max(hi, r[field]);
+      p.y = yScale(0, Math.max(hi, field === 'alive' ? 20 : 4) * 1.08, p.ph / 34);
+      frame(p, c, v => String(v));
+      clip(p, c);
+      const ends = [];
+      for (const rule of RULES) {
+        const e = lineSeries(p, c, rule, field);
+        if (e) ends.push({y: e.y, text: rule, color: C[RULE_COLOR[rule]]});
+      }
+      c.restore();
+      endLabels(p, c, ends);
+    },
+    overlay(p, c) { crosshair(p, c); if (hoverH === null) return;
+      for (const rule of RULES) { const r = at(rule, hoverH); if (r) dot(c, X(p, hoverH), Y(p, r[field]), C[RULE_COLOR[rule]], 3.5); } },
+    tip: () => tipCounts(field)
+  });
+}
+countPanel('pAlive', 'alive', [160, 190]);
+countPanel('pAged', 'deaths_of_pas_at_least_one_year_old', [150, 175]);
+
+// ------------------------------------------------------------------ tooltips
+const swatch = rule => `<span class="sw" style="background:var(--${RULE_COLOR[rule]})"></span>`;
+const tipTable = list => '<table>' + list.map(r =>
+  `<tr><td><span class="k">${r.sw ? swatch(r.sw) : ''}${r.label}</span></td><td class="v">${r.value}</td></tr>`).join('') + '</table>';
+function head() {
+  return `<div class="d">${PRODUCT_LABEL[product]} · ${WINDOW_LABEL[win]} · reserve ${usd(hoverH)}</div>`;
+}
+function tipCash(field) {
+  if (hoverH === null) return null;
+  const mn = at('minimum', hoverH), mx = at('maximum', hoverH);
+  if (!mn || !mx) return null;
+  return head() + tipTable([
+    {sw: 'minimum', label: field === 'ongoing' ? 'Minimum, ongoing' : 'Minimum, total', value: usd(mn[field])},
+    {sw: 'maximum', label: field === 'ongoing' ? 'Maximum, ongoing' : 'Maximum, total', value: usd(mx[field])},
+    {label: 'Difference', value: signed(mn[field] - mx[field])},
+    {label: 'Closing withdrawal', value: `${usd(mn.terminal)} / ${usd(mx.terminal)}`},
+    {label: 'PAs alive at horizon', value: `${mn.alive} / ${mx.alive}`},
+    {label: 'Deaths (all / aged)', value: `${mn.deaths}/${mn.deaths_of_pas_at_least_one_year_old} · ${mx.deaths}/${mx.deaths_of_pas_at_least_one_year_old}`},
+  ]) + '<div class="sub">minimum / maximum</div>';
+}
+function tipCounts(field) {
+  if (hoverH === null) return null;
+  const mn = at('minimum', hoverH), mx = at('maximum', hoverH);
+  if (!mn || !mx) return null;
+  return head() + tipTable([
+    {sw: 'minimum', label: 'Minimum', value: String(mn[field])},
+    {sw: 'maximum', label: 'Maximum', value: String(mx[field])},
+    {label: 'Died on 30 Mar 2026', value: `${mn.deaths_2026_03_30} / ${mx.deaths_2026_03_30}`},
+    {label: 'Live before that trade', value: `${mn.march30_pretrade_alive} / ${mx.march30_pretrade_alive}`},
+    {label: 'Largest same-day loss', value: `${mn.largest_simultaneous_deaths} / ${mx.largest_simultaneous_deaths}`},
+    {label: 'Ongoing cash', value: `${usdK(mn.ongoing)} / ${usdK(mx.ongoing)}`},
+  ]) + '<div class="sub">minimum / maximum</div>';
+}
+
+// ------------------------------------------------------------------ interaction
+let hoverH = null, hoverPanel = null, hoverXY = [0, 0];
+const tipEl = document.getElementById('tip');
+function nearestH(p, px) {
+  const g = grid();
+  if (!g.length) return null;
+  const v = Xi(p, px);
+  let best = g[0];
+  for (const h of g) if (Math.abs(h - v) < Math.abs(best - v)) best = h;
+  return Math.abs(X(p, best) - px) <= 44 ? best : null;
+}
+function updateTip() {
+  const html = hoverPanel && hoverPanel.cfg.tip ? hoverPanel.cfg.tip() : null;
+  if (!html) { tipEl.hidden = true; return; }
+  tipEl.innerHTML = html; tipEl.hidden = false;
+  const r = tipEl.getBoundingClientRect(), vw = innerWidth, vh = innerHeight;
+  let x = hoverXY[0] + 16, y = hoverXY[1] + 16;
+  if (x + r.width > vw - 8) x = hoverXY[0] - r.width - 16;
+  if (y + r.height > vh - 8) y = hoverXY[1] - r.height - 16;
+  tipEl.style.left = clamp(x, 8, Math.max(8, vw - r.width - 8)) + 'px';
+  tipEl.style.top = clamp(y, 8, Math.max(8, vh - r.height - 8)) + 'px';
+}
+let raf = 0;
+function schedule() { if (!raf) raf = requestAnimationFrame(() => { raf = 0; panels.forEach(renderOverlay); updateTip(); }); }
+function bind(p) {
+  const cv = p.cv;
+  cv.tabIndex = 0;
+  const move = e => {
+    const r = cv.getBoundingClientRect(), px = e.clientX - r.left;
+    hoverH = nearestH(p, px); hoverPanel = hoverH === null ? null : p; hoverXY = [e.clientX, e.clientY];
+    schedule();
+  };
+  cv.addEventListener('pointermove', move);
+  cv.addEventListener('pointerdown', move);
+  cv.addEventListener('pointerleave', () => { hoverH = null; hoverPanel = null; schedule(); });
+  cv.addEventListener('keydown', e => {
+    const g = grid();
+    if (e.key !== 'ArrowLeft' && e.key !== 'ArrowRight') { if (e.key === 'Escape') { hoverH = null; hoverPanel = null; schedule(); } return; }
+    e.preventDefault();
+    const i = g.indexOf(hoverH);
+    const next = g[clamp((i < 0 ? 0 : i) + (e.key === 'ArrowRight' ? 1 : -1), 0, g.length - 1)];
+    hoverH = next; hoverPanel = p;
+    const r = cv.getBoundingClientRect();
+    hoverXY = [r.left + X(p, next), r.top + p.Tp + p.ph / 2];
+    schedule();
+  });
+}
+addEventListener('scroll', () => { if (hoverH !== null) { hoverH = null; hoverPanel = null; schedule(); } }, {passive: true});
+
+function renderBase(p) {
+  layout(p);
+  if (!p.w || !p.base.width || !p.base.height) return;
+  const c = p.bctx; c.setTransform(p.dpr, 0, 0, p.dpr, 0, 0); p.cfg.base(p, c);
+}
+function renderOverlay(p) {
+  if (!p.w || !p.base.width || !p.base.height) return;
+  const c = p.ctx;
+  c.setTransform(1, 0, 0, 1, 0, 0); c.clearRect(0, 0, p.cv.width, p.cv.height); c.drawImage(p.base, 0, 0);
+  c.setTransform(p.dpr, 0, 0, p.dpr, 0, 0);
+  p.cfg.overlay(p, c);
+}
+
+// ------------------------------------------------------------------ small multiples
+const MAR30 = DAYS.findIndex(d => d === '2026-03-30');
+function drawSmall(run, cv) {
+  const w = cv.parentElement.clientWidth, h = 78, dpr = window.devicePixelRatio || 1;
+  if (!w) return;
+  cv.width = Math.round(w * dpr); cv.height = Math.round(h * dpr);
+  cv.style.height = h + 'px';
+  const c = cv.getContext('2d');
+  c.setTransform(dpr, 0, 0, dpr, 0, 0);
+  c.clearRect(0, 0, w, h);
+  const pad = 4, ph = h - pad * 2, n = run.sample_idx.length;
+  const x = i => pad + (run.sample_idx[i] / (DAYS.length - 1)) * (w - pad * 2);
+  const y = v => pad + (1 - v / 20) * ph;
+  c.strokeStyle = C.grid; c.lineWidth = 1;
+  c.beginPath(); c.moveTo(pad, Math.round(y(20)) + 0.5); c.lineTo(w - pad, Math.round(y(20)) + 0.5); c.stroke();
+  c.beginPath(); c.moveTo(pad, Math.round(y(0)) + 0.5); c.lineTo(w - pad, Math.round(y(0)) + 0.5); c.stroke();
+  if (MAR30 >= 0) {
+    const mx = pad + (MAR30 / (DAYS.length - 1)) * (w - pad * 2);
+    c.save(); c.strokeStyle = C.axis; c.setLineDash([3, 3]);
+    c.beginPath(); c.moveTo(mx, pad); c.lineTo(mx, h - pad); c.stroke(); c.restore();
+  }
+  const color = C[RULE_COLOR[run.rule]];
+  c.beginPath();
+  for (let i = 0; i < n; i++) { const xx = x(i), yy = y(run.alive_series[i]); i ? c.lineTo(xx, yy) : c.moveTo(xx, yy); }
+  c.lineTo(x(n - 1), y(0)); c.lineTo(x(0), y(0)); c.closePath();
+  c.fillStyle = color; c.globalAlpha = 0.14; c.fill(); c.globalAlpha = 1;
+  c.beginPath();
+  for (let i = 0; i < n; i++) { const xx = x(i), yy = y(run.alive_series[i]); i ? c.lineTo(xx, yy) : c.moveTo(xx, yy); }
+  c.strokeStyle = color; c.lineWidth = 1.5; c.lineJoin = 'round'; c.stroke();
+}
+function buildSmallMultiples() {
+  const host = document.getElementById('smallMultiples');
+  host.innerHTML = '';
+  const runs = DET.filter(r => r.product === product)
+    .sort((a, b) => (a.rule < b.rule ? -1 : a.rule > b.rule ? 1 : 0) || a.headroom - b.headroom);
+  for (const run of runs) {
+    const fig = document.createElement('figure');
+    fig.className = 'sm';
+    fig.innerHTML = `<h3>${usd(run.headroom)} · ${run.rule}</h3>` +
+      `<div class="cap">${run.alive} alive · ${run.deaths} deaths · ${run.aged_deaths} aged</div>` +
+      `<canvas role="img" aria-label="Live PAs over time at ${usd(run.headroom)} reserve, daily ${run.rule}"></canvas>` +
+      `<div class="cap">${usdK(run.ongoing)} ongoing · ${usdK(run.total)} total</div>`;
+    const cv = fig.querySelector('canvas');
+    fig.addEventListener('pointermove', e => {
+      hoverH = null; hoverPanel = null;
+      hoverXY = [e.clientX, e.clientY];
+      tipEl.innerHTML = `<div class="d">${PRODUCT_LABEL[run.product]} · ${usd(run.headroom)} reserve · daily ${run.rule}</div>` + tipTable([
+        {label: 'Ongoing / total cash', value: `${usd(run.ongoing)} / ${usd(run.total)}`},
+        {label: 'PAs alive at horizon', value: String(run.alive)},
+        {label: 'Deaths (all / aged)', value: `${run.deaths} / ${run.aged_deaths}`},
+        {label: 'Live before 30 Mar 2026', value: String(run.march30_pretrade_alive)},
+        {label: 'Died 30 Mar 2026', value: String(run.deaths_2026_03_30)},
+        {label: 'Days with an empty book', value: `${Math.round(run.zero_live_days)} d`},
+        {label: 'Average live PAs', value: run.average_live_accounts.toFixed(2)},
+        {label: 'Evaluations bought', value: String(run.evaluations)},
+      ]);
+      tipEl.hidden = false;
+      const r = tipEl.getBoundingClientRect();
+      tipEl.style.left = clamp(e.clientX + 16, 8, Math.max(8, innerWidth - r.width - 8)) + 'px';
+      tipEl.style.top = clamp(e.clientY + 16, 8, Math.max(8, innerHeight - r.height - 8)) + 'px';
+      panels.forEach(renderOverlay);
+    });
+    fig.addEventListener('pointerleave', () => { tipEl.hidden = true; });
+    host.appendChild(fig);
+    requestAnimationFrame(() => drawSmall(run, cv));
+    fig._run = run; fig._cv = cv;
+  }
+  host._runs = runs;
+}
+function redrawSmallMultiples() {
+  const host = document.getElementById('smallMultiples');
+  for (const fig of host.children) if (fig._run) drawSmall(fig._run, fig._cv);
+}
+
+// ------------------------------------------------------------------ text, tables
+function table(id, head, body) {
+  document.getElementById(id).innerHTML = '<table class="data"><thead><tr>' + head.map(h => `<th scope="col">${h}</th>`).join('') +
+    '</tr></thead><tbody>' + body.map(r => `<tr${r.mark ? ' class="mark"' : ''}>` + r.cells.map(v => `<td>${v}</td>`).join('') + '</tr>').join('') + '</tbody></table>';
+}
+function refresh() {
+  const wmin = wsRow('minimum'), wmax = wsRow('maximum');
+  const edge = wmin && wmax ? wmin.best_ongoing - wmax.best_ongoing : null;
+  const bTotalMin = wmin ? at('minimum', wmin.best_total_headroom) : null;
+  const facts = [
+    ['Best ongoing, minimum', usd(wmin && wmin.best_ongoing), wmin ? `at ${usd(wmin.best_ongoing_headroom)} · ${wmin.best_ongoing_alive} PAs alive` : ''],
+    ['Best ongoing, maximum', usd(wmax && wmax.best_ongoing), wmax ? `at ${usd(wmax.best_ongoing_headroom)} · ${wmax.best_ongoing_alive} PAs alive` : ''],
+    ['Minimum’s edge', edge === null ? '—' : signed(edge), 'each rule at its own best reserve'],
+    ['Survival boundary', wmin && wmin.aged_pa_survival_boundary !== null ? usd(wmin.aged_pa_survival_boundary) : 'not reached',
+      wmax && wmax.aged_pa_survival_boundary !== null ? `maximum needs ${usd(wmax.aged_pa_survival_boundary)}` : 'on the tested grid'],
+    ['Best total, minimum', usd(wmin && wmin.best_total), wmin ? `at ${usd(wmin.best_total_headroom)}${bTotalMin ? ` · ${bTotalMin.alive} PAs alive` : ''}` : ''],
+    ['Cash plateau', wmin && wmin.reserves_within_one_pct_best_ongoing.length ? `${usdK(wmin.reserves_within_one_pct_best_ongoing[0])}–${usdK(wmin.reserves_within_one_pct_best_ongoing[wmin.reserves_within_one_pct_best_ongoing.length - 1])}` : '—',
+      'minimum, within 1% of its best'],
+  ];
+  document.getElementById('ledger').innerHTML = facts.map(([k, v, s]) =>
+    `<div><dt>${k}</dt><dd class="val">${v}</dd><dd class="sub">${s}</dd></div>`).join('');
+
+  // The step is where the closing withdrawal first materialises, not the low-reserve cash ramp.
+  const jump = [];
+  for (const rule of RULES) {
+    const rs = rows(rule);
+    for (let i = 1; i < rs.length; i++) if (rs[i].terminal > 0 && rs[i - 1].terminal === 0) { jump.push(`${rule} at ${usd(rs[i].headroom)}`); break; }
+  }
+  document.getElementById('totalNote').textContent =
+    'Adds the single closing withdrawal the firm permits at the horizon, which only materialises when PAs are still alive to empty. ' +
+    (jump.length ? 'It first appears for ' + jump.join(', and for ') + '.' : '');
+  document.getElementById('smNote').textContent =
+    `Live PAs over time in the ${DET.filter(r => r.product === product).length} detailed replays saved for ${PRODUCT_LABEL[product]} (full history, sampled weekly). ` +
+    'The dashed line is 30 March 2026. These replays exist only for the full window.';
+  document.getElementById('frontierTableCap').textContent = `${PRODUCT_LABEL[product]} · ${WINDOW_LABEL[win]} · ${grid().length} tested reserves`;
+
+  table('tFrontier',
+    ['Reserve', 'Min ongoing', 'Max ongoing', 'Difference', 'Min total', 'Max total', 'Min alive', 'Max alive', 'Min deaths', 'Max deaths', 'Min aged', 'Max aged'],
+    grid().map(h => {
+      const a = at('minimum', h), b = at('maximum', h);
+      return {mark: wmin && h === wmin.best_ongoing_headroom,
+        cells: [usd(h), usd(a.ongoing), usd(b.ongoing), signed(a.ongoing - b.ongoing), usd(a.total), usd(b.total),
+                a.alive, b.alive, a.deaths, b.deaths, a.deaths_of_pas_at_least_one_year_old, b.deaths_of_pas_at_least_one_year_old]};
+    }));
+  refreshChips();
+  readColors();
+  panels.forEach(renderBase);
+  panels.forEach(renderOverlay);
+  buildSmallMultiples();
+}
+
+table('tWindows',
+  ['Product', 'Window', 'Rule', 'Best ongoing reserve', 'Best ongoing', 'Alive', 'Deaths', 'Best total reserve', 'Best total', 'Survival boundary', 'Within 1% of best'],
+  WS.map(w => ({cells: [PRODUCT_LABEL[w.product], WINDOW_LABEL[w.window] || w.window, w.withdrawal, usd(w.best_ongoing_headroom), usd(w.best_ongoing),
+    w.best_ongoing_alive, w.best_ongoing_deaths, usd(w.best_total_headroom), usd(w.best_total),
+    w.aged_pa_survival_boundary === null ? 'not reached' : usd(w.aged_pa_survival_boundary),
+    w.reserves_within_one_pct_best_ongoing.map(usdK).join(', ')]})));
+
+table('tSimilar',
+  ['Product', 'Minimum reserve', 'Nearest maximum reserve', 'Per-PA gap', 'Book gap', 'Within 5%', 'Minimum ongoing', 'Maximum ongoing', 'Min alive', 'Max alive'],
+  SIM.map(s => ({cells: [PRODUCT_LABEL[s.product], usd(s.minimum_reserve), usd(s.maximum_reserve),
+    s.per_pa_capital_gap_pct.toFixed(2) + '%', s.book_capital_gap_pct.toFixed(2) + '%', s.within_tolerance === 'True' ? 'yes' : 'no',
+    usd(s.minimum_ongoing), usd(s.maximum_ongoing), s.minimum_alive, s.maximum_alive]})));
+
+document.getElementById('method').innerHTML = [
+  `<strong>Reserve</strong> is the voluntary cushion above the frozen failure floor, not the account balance. A PA only asks for a payout above it.`,
+  `<strong>Ongoing</strong> cash is received while trading, after the split and after all evaluation and activation fees; <strong>total</strong> adds the one closing withdrawal the firm permits at the horizon. Both come from the same run.`,
+  `The <strong>survival boundary</strong> is the lowest tested reserve where that reserve and every higher tested one lose no PA aged a year or more. It is not a no-failure guarantee: new PAs must still earn their cushion.`,
+  `${nf.format(D.meta.runs)} runs on a 40-point grid, ${D.meta.windows.length} windows, both products. Lines join tested points; nothing between them was simulated.`,
+  `All PAs trade the same tape, so different balances are not independent outcomes, and the overlapping windows reuse the history that informed earlier choices. These are historical replays, not forecasts.`,
+].map(x => `<li>${x}</li>`).join('');
+
+// ------------------------------------------------------------------ chips
+const chipDefs = [];
+function makeChips(hostId, values, label, onPick) {
+  const host = document.getElementById(hostId);
+  for (const v of values) {
+    const b = document.createElement('button');
+    b.type = 'button'; b.className = 'chip'; b.textContent = label(v);
+    b.addEventListener('click', () => { onPick(v); refresh(); });
+    host.appendChild(b);
+    chipDefs.push({el: b, value: v, kind: hostId});
+  }
+}
+makeChips('products', D.meta.products, v => PRODUCT_LABEL[v], v => { product = v; });
+makeChips('windows', D.meta.windows, v => WINDOW_LABEL[v] || v, v => { win = v; });
+function refreshChips() {
+  for (const c of chipDefs) c.el.setAttribute('aria-pressed', String(c.kind === 'products' ? c.value === product : c.value === win));
+}
+
+// ------------------------------------------------------------------ boot
+refresh();
+let rz = 0;
+new ResizeObserver(() => { cancelAnimationFrame(rz); rz = requestAnimationFrame(() => { readColors(); panels.forEach(renderBase); panels.forEach(renderOverlay); redrawSmallMultiples(); }); })
+  .observe(document.querySelector('.instrument'));
+matchMedia('(prefers-color-scheme: dark)').addEventListener('change', refresh);
+new MutationObserver(refresh).observe(document.documentElement, {attributes: true, attributeFilter: ['data-theme']});
+if (document.fonts && document.fonts.ready) document.fonts.ready.then(() => { panels.forEach(renderBase); panels.forEach(renderOverlay); redrawSmallMultiples(); });
+})();
+</script>

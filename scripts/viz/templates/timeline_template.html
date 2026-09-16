@@ -1,0 +1,922 @@
+<meta charset="utf-8">
+<title>__TITLE__</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500&family=IBM+Plex+Sans:wght@400;500;600&display=swap">
+<style>
+:root{
+  color-scheme:light;
+  --plane:#f9f9f7; --surface:#fcfcfb; --ink:#0b0b0b; --ink-2:#52514e; --muted:#898781;
+  --grid:#e1e0d9; --axis:#c3c2b7; --ring:rgba(11,11,11,.10);
+  --s1:#2a78d6; --s2:#eb6834; --s3:#1baf7a; --s4:#eda100;
+  --sel:rgba(42,120,214,.12); --shadow:0 8px 28px rgba(11,11,11,.12);
+  --mono:"IBM Plex Mono", ui-monospace, Consolas, monospace;
+  --sans:"IBM Plex Sans", system-ui, -apple-system, "Segoe UI", sans-serif;
+}
+@media (prefers-color-scheme: dark){
+  :root:not([data-theme="light"]){
+    color-scheme:dark;
+    --plane:#0d0d0d; --surface:#1a1a19; --ink:#ffffff; --ink-2:#c3c2b7; --muted:#898781;
+    --grid:#2c2c2a; --axis:#383835; --ring:rgba(255,255,255,.10);
+    --s1:#3987e5; --s2:#d95926; --s3:#199e70; --s4:#c98500;
+    --sel:rgba(57,135,229,.18); --shadow:0 8px 28px rgba(0,0,0,.55);
+  }
+}
+:root[data-theme="dark"]{
+  color-scheme:dark;
+  --plane:#0d0d0d; --surface:#1a1a19; --ink:#ffffff; --ink-2:#c3c2b7; --muted:#898781;
+  --grid:#2c2c2a; --axis:#383835; --ring:rgba(255,255,255,.10);
+  --s1:#3987e5; --s2:#d95926; --s3:#199e70; --s4:#c98500;
+  --sel:rgba(57,135,229,.18); --shadow:0 8px 28px rgba(0,0,0,.55);
+}
+*{box-sizing:border-box}
+[hidden]{display:none!important}
+body{margin:0;background:var(--plane);color:var(--ink);font:14px/1.5 var(--sans);padding-inline:20px}
+.wrap{max-width:1240px;margin:0 auto;padding-block:28px 64px}
+.eyebrow{font:500 11.5px/1.4 var(--mono);color:var(--muted);letter-spacing:.02em;margin:0 0 8px;overflow-wrap:anywhere}
+h1{font-weight:600;font-size:clamp(22px,3vw,30px);line-height:1.15;letter-spacing:-.012em;margin:0 0 10px;text-wrap:balance}
+.lede{color:var(--ink-2);max-width:84ch;margin:0 0 20px}
+.ledger{display:flex;flex-wrap:wrap;gap:1px;background:var(--ring);border:1px solid var(--ring);border-radius:12px;overflow:hidden;margin:0 0 18px}
+.ledger > div{flex:1 1 160px;background:var(--surface);padding:10px 14px 11px;display:grid;gap:1px;align-content:start}
+.ledger dt{font-size:12px;color:var(--ink-2);letter-spacing:.01em}
+.ledger dd{margin:0}
+.ledger .val{font:500 18px/1.3 var(--mono);font-variant-numeric:tabular-nums;color:var(--ink)}
+.ledger .lead .val{font-size:22px;line-height:1.2}
+.ledger .sub{font-size:12px;color:var(--muted)}
+.controls{position:sticky;top:0;z-index:5;background:var(--plane);display:flex;flex-wrap:wrap;align-items:center;gap:8px 14px;padding-block:10px;border-bottom:1px solid var(--ring);margin-bottom:14px}
+.ctl-label{font-size:12px;color:var(--ink-2);letter-spacing:.04em;text-transform:uppercase}
+.chips{display:flex;flex-wrap:wrap;gap:6px}
+.chip{font:500 12.5px/1 var(--mono);padding:6px 10px;border-radius:999px;border:1px solid var(--ring);background:var(--surface);color:var(--ink-2);cursor:pointer}
+.chip:hover{border-color:var(--axis);color:var(--ink)}
+.chip[aria-pressed="true"]{background:var(--ink);border-color:var(--ink);color:var(--surface)}
+.chip:focus-visible,canvas:focus-visible,summary:focus-visible{outline:2px solid var(--s1);outline-offset:2px}
+.range{font:12.5px var(--mono);color:var(--ink-2);font-variant-numeric:tabular-nums}
+.hint{font-size:12px;color:var(--muted);margin-left:auto}
+.instrument{background:var(--surface);border:1px solid var(--ring);border-radius:12px}
+.panel{padding:16px 16px 4px}
+.panel + .panel{border-top:1px solid var(--ring)}
+.panel-head{display:flex;flex-wrap:wrap;align-items:baseline;gap:4px 18px;margin-bottom:6px}
+.panel h2{font-size:15px;font-weight:600;margin:0}
+.legend{display:flex;flex-wrap:wrap;gap:4px 14px;font-size:12.5px;color:var(--ink-2);list-style:none;margin:0;padding:0}
+.legend li{display:inline-flex;align-items:center;gap:6px}
+.legend svg{flex:none}
+.sw{display:inline-block;width:14px;height:2px;border-radius:1px;flex:none}
+.sw.dash{height:0;border-top:2px dashed;background:none;border-radius:0}
+.sw.faint{opacity:.5}
+.note{font-size:12.5px;color:var(--ink-2);flex-basis:100%;margin:2px 0 0;max-width:100ch}
+.canvas-box{position:relative}
+canvas{display:block;width:100%;touch-action:pan-y;border-radius:4px}
+.tip{position:fixed;z-index:10;pointer-events:none;background:var(--surface);color:var(--ink);border:1px solid var(--ring);box-shadow:var(--shadow);border-radius:8px;padding:8px 11px 9px;font-size:12.5px;line-height:1.45;max-width:min(360px,calc(100vw - 16px))}
+.tip .d{font:500 12px var(--mono);color:var(--muted);margin-bottom:4px}
+.tip table{border-collapse:collapse}
+.tip td{padding:1px 0;vertical-align:baseline}
+.tip td.v{text-align:right;padding-left:16px;font-family:var(--mono);font-variant-numeric:tabular-nums}
+.tip .k{display:inline-flex;align-items:center;gap:6px;color:var(--ink-2)}
+.tip .foot{margin-top:5px;padding-top:5px;border-top:1px solid var(--grid);color:var(--ink-2);font:12px/1.5 var(--mono)}
+.tip .sub{color:var(--muted);font-size:12px;margin-top:4px}
+details{margin-top:14px;background:var(--surface);border:1px solid var(--ring);border-radius:12px}
+summary{cursor:pointer;padding:12px 16px;font-weight:600;font-size:14px}
+summary span{font-weight:400;color:var(--muted);margin-left:8px;font-size:12.5px}
+.table-scroll{overflow:auto;max-height:540px;margin:0 16px 16px}
+table.data{border-collapse:collapse;font-size:12.5px;width:100%}
+table.data th{position:sticky;top:0;background:var(--surface);text-align:right;font-weight:500;color:var(--ink-2);padding:6px 10px;border-bottom:1px solid var(--axis);white-space:nowrap}
+table.data td{text-align:right;padding:4px 10px;border-bottom:1px solid var(--grid);font-family:var(--mono);font-variant-numeric:tabular-nums;white-space:nowrap}
+table.data th:first-child,table.data td:first-child{text-align:left}
+.method{margin-top:24px;color:var(--ink-2);font-size:13px;max-width:92ch}
+.method h2{font-size:14px;color:var(--ink);margin:0 0 6px}
+.method ul{margin:0;padding-left:18px;display:grid;gap:5px}
+code{font-family:var(--mono);font-size:.92em}
+@media (max-width:640px){
+  body{padding-inline:16px}
+  .panel{padding:12px 10px 2px}
+  .hint{margin-left:0;flex-basis:100%}
+  .ledger .lead .val{font-size:20px}
+}
+</style>
+
+<div class="wrap">
+  <header>
+    <p class="eyebrow">pipeline_capacity / __FOLDER__</p>
+    <h1>__HEADLINE__</h1>
+    <p class="lede" id="lede"></p>
+    <dl class="ledger" id="ledger"></dl>
+  </header>
+
+  <div class="controls">
+    <span class="ctl-label">Range</span>
+    <div class="chips" id="chips" role="group" aria-label="Date range"></div>
+    <span class="range" id="range"></span>
+    <span class="hint">Drag across a chart to zoom · double-click resets · focus a chart and use ← → to step days</span>
+  </div>
+
+  <main class="instrument">
+    <section class="panel">
+      <div class="panel-head">
+        <h2>Portfolio</h2>
+        <ul class="legend">
+          <li><span class="sw" style="background:var(--s1)"></span>Portfolio (cash + open PA profit)</li>
+          <li><span class="sw" style="background:var(--s2)"></span>Owner cash</li>
+          <li><span class="sw" style="background:var(--s3)"></span>Open profit in live PAs</li>
+        </ul>
+        <p class="note">Owner cash is contributions plus payouts received, minus evaluation and activation fees. Portfolio adds the profit still inside live PAs, which the firm's rules do not let you withdraw in full.</p>
+      </div>
+      <div class="canvas-box" id="pA"><canvas role="img" aria-label="Portfolio value, owner cash and open profit in live PAs over time"></canvas></div>
+    </section>
+
+    <section class="panel">
+      <div class="panel-head">
+        <h2>PA equity</h2>
+        <ul class="legend">
+          <li><span class="sw" style="background:var(--s1)"></span>Alive at tape end</li>
+          <li><span class="sw faint" style="background:var(--s2)"></span>Blown</li>
+          <li><svg width="12" height="12" aria-hidden="true"><path d="M2 2 L10 10 M10 2 L2 10" style="stroke:var(--s2);stroke-width:1.75;stroke-linecap:round"/></svg>Where it was blown</li>
+          <li><span class="sw dash" style="border-color:var(--muted)"></span>Reference balances</li>
+        </ul>
+        <p class="note">Profit above the $25,000 start, sampled at every daily check. PAs activated at the same moment trade the same tape, so <span id="pathsNote">the accounts</span>. Point at a line to see how many accounts it stands for. Each $500 step down is a payout.</p>
+      </div>
+      <div class="canvas-box" id="pB"><canvas role="img" aria-label="Equity paths of every performance account, alive and blown"></canvas></div>
+    </section>
+
+    <section class="panel">
+      <div class="panel-head">
+        <h2>Seats, spares and evaluations in flight</h2>
+        <ul class="legend">
+          <li><span class="sw" style="background:var(--s1)"></span>Live PAs</li>
+          <li><span class="sw" style="background:var(--s2)"></span>Spare shelf</li>
+          <li><span class="sw" style="background:var(--s3)"></span>Evaluations in flight</li>
+          <li><span class="sw" style="background:var(--s4)"></span>Shortfall</li>
+        </ul>
+        <p class="note" id="seatsNote"></p>
+      </div>
+      <div class="canvas-box" id="pC"><canvas role="img" aria-label="Counts of live PAs, spares, evaluations in flight and shortfall over time"></canvas></div>
+    </section>
+
+    <section class="panel">
+      <div class="panel-head">
+        <h2>Evaluations</h2>
+        <ul class="legend">
+          <li><svg width="14" height="12" aria-hidden="true"><circle cx="7" cy="6" r="3.5" style="fill:var(--surface);stroke:var(--ink-2);stroke-width:1.5"/></svg>Started</li>
+          <li><span class="sw" style="background:var(--s1)"></span>Trading</li>
+          <li><svg width="12" height="12" aria-hidden="true"><path d="M2 2 L10 10 M10 2 L2 10" style="stroke:var(--s2);stroke-width:1.75;stroke-linecap:round"/></svg>Blown</li>
+          <li><span class="sw dash" style="border-color:var(--s2)"></span>Dormant until renewal</li>
+          <li><svg width="8" height="12" aria-hidden="true"><line x1="4" y1="1.5" x2="4" y2="10.5" style="stroke:var(--s1);stroke-width:2"/></svg>Reset at renewal</li>
+          <li><svg width="12" height="12" aria-hidden="true"><circle cx="6" cy="6" r="3.5" style="fill:var(--s3)"/></svg>Passed</li>
+          <li><span class="sw" style="background:var(--s3)"></span>Waiting for activation</li>
+          <li><svg width="12" height="12" aria-hidden="true"><path d="M6 1 L11 6 L6 11 L1 6 Z" style="fill:var(--ink)"/></svg>Activated to spare shelf</li>
+          <li><svg width="12" height="12" aria-hidden="true"><rect x="2.5" y="2.5" width="7" height="7" style="fill:none;stroke:var(--muted);stroke-width:1.5"/></svg>Cancelled</li>
+        </ul>
+        <p class="note"><span id="lanesNote">One row per evaluation.</span> Identical batches share a row, marked ×n. A blown evaluation sits dormant, still billed, until its monthly renewal resets it.</p>
+      </div>
+      <div class="canvas-box" id="pD"><canvas role="img" aria-label="Timeline of every evaluation: starts, blows, resets, passes and activations"></canvas></div>
+    </section>
+
+    <section class="panel">
+      <div class="panel-head">
+        <h2>Owner contributions and pipeline spend</h2>
+        <ul class="legend">
+          <li><span class="sw" style="background:var(--s1)"></span>Owner contributions</li>
+          <li><span class="sw" style="background:var(--s2)"></span>Pipeline spend</li>
+          <li><span class="sw" style="background:var(--s3)"></span>Evaluation fees</li>
+          <li><span class="sw" style="background:var(--s4)"></span>Activation fees</li>
+        </ul>
+        <p class="note">Cumulative money in from the owner against cumulative spend on evaluations and activations. Pipeline spend is the sum of the two fee lines.</p>
+      </div>
+      <div class="canvas-box" id="pE"><canvas role="img" aria-label="Cumulative owner contributions against evaluation and activation fees"></canvas></div>
+    </section>
+  </main>
+
+  <details>
+    <summary>Month-end table <span>values at the last daily check of each month</span></summary>
+    <div class="table-scroll" id="tMonths"></div>
+  </details>
+  <details>
+    <summary>PA ledger <span>identical accounts grouped</span></summary>
+    <div class="table-scroll" id="tAccounts"></div>
+  </details>
+  <details>
+    <summary>Evaluation ledger <span>identical batches grouped</span></summary>
+    <div class="table-scroll" id="tEvals"></div>
+  </details>
+
+  <section class="method">
+    <h2>How this was built</h2>
+    <ul id="method"></ul>
+  </section>
+</div>
+
+<div class="tip" id="tip" hidden></div>
+
+<script id="timeline-data" type="application/json">__TIMELINE_JSON__</script>
+<script>
+(() => {
+'use strict';
+const D = JSON.parse(document.getElementById('timeline-data').textContent);
+const DAY = 864e5, MINUS = '−';
+const MON = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
+const MONO = '"IBM Plex Mono", ui-monospace, Consolas, monospace';
+const SANS = '"IBM Plex Sans", system-ui, -apple-system, "Segoe UI", sans-serif';
+const ts = s => Date.parse(s.length === 10 ? s + 'T00:00:00Z' : s + 'Z');
+const nf = new Intl.NumberFormat('en-US', {maximumFractionDigits: 0});
+const trim = (x, d) => x.toFixed(d).replace(/\.0$/, '');
+const usd = v => (v < 0 ? MINUS + '$' : '$') + nf.format(Math.abs(Math.round(v)));
+const usdK = v => {
+  const a = Math.abs(v), s = v < 0 ? MINUS + '$' : '$';
+  if (a >= 1e6) return s + trim(a / 1e6, a >= 1e7 ? 0 : 1) + 'M';
+  if (a >= 1e3) return s + trim(a / 1e3, a >= 1e4 ? 0 : 1) + 'k';
+  return s + Math.round(a);
+};
+const dISO = tm => new Date(tm).toISOString().slice(0, 10);
+const dLong = tm => { const d = new Date(tm); return d.getUTCDate() + ' ' + MON[d.getUTCMonth()] + ' ' + d.getUTCFullYear(); };
+const clamp = (v, a, b) => Math.max(a, Math.min(b, v));
+
+// ------------------------------------------------------------------ data
+const T = D.days.map(ts), N = T.length, END = ts(D.meta.tape_last), FULL = [T[0], END];
+let dom = FULL.slice();
+const S = D.daily;
+const portfolio = S.cash.map((c, i) => c + S.live_profit[i]);
+const spend = S.eval_fees.map((v, i) => v + S.act_fees[i]);
+const sm = D.meta.summary;
+const EVAL_FEE = sm.acquisition.policy.evaluation.monthly_fee_usd;
+const POL = sm.acquisition.policy, RC = D.meta.run_config;
+const START = RC.product.starting_balance_usd, TRAIL = RC.product.trailing_drawdown_usd, FROZEN = RC.product.frozen_floor_profit_usd;
+const RETAINED = RC.policy.min_retained_balance_usd, CAP = POL.max_live_accounts, SHARED = POL.evaluations_reserve_seats;
+const CAP_LABEL = SHARED ? `${CAP}-seat cap: live PAs + spares + evaluations in flight` : `${CAP}-seat cap: live PAs + spares`;
+
+function idxAt(tm) {
+  if (tm <= T[0]) return 0;
+  if (tm >= T[N - 1]) return N - 1;
+  let lo = 0, hi = N - 1;
+  while (hi - lo > 1) { const m = (lo + hi) >> 1; if (T[m] <= tm) lo = m; else hi = m; }
+  return lo;
+}
+function bisect(arr, v) { // last index with arr[k] <= v, or -1
+  let lo = -1, hi = arr.length;
+  while (hi - lo > 1) { const m = (lo + hi) >> 1; if (arr[m] <= v) lo = m; else hi = m; }
+  return lo;
+}
+function ranges(ids) {
+  const out = []; let a = ids[0], b = ids[0];
+  for (let k = 1; k <= ids.length; k++) {
+    const v = ids[k];
+    if (v === b + 1) { b = v; continue; }
+    out.push(a === b ? '#' + a : '#' + a + '–' + b);
+    a = b = v;
+  }
+  return out.join(', ');
+}
+
+const groups = D.groups.map(g => {
+  const act = ts(g.activated), pt = [act], pv = [0];
+  if (g.start !== null) g.values.forEach((v, k) => { pt.push(T[g.start + k]); pv.push(v); });
+  const died = g.died ? ts(g.died) : null;
+  if (died !== null) { pt.push(died); pv.push(g.death_equity); }
+  else if (pt[pt.length - 1] < END) { pt.push(END); pv.push(g.end_profit); }
+  return Object.assign({}, g, {n: g.ids.length, act, died, pt, pv});
+});
+const accountCount = groups.reduce((s, g) => s + g.n, 0);
+function valueAt(g, tm) {
+  const pt = g.pt;
+  if (tm < pt[0] || tm > pt[pt.length - 1]) return null;
+  const k = bisect(pt, tm);
+  if (k >= pt.length - 1) return g.pv[pt.length - 1];
+  const f = (tm - pt[k]) / ((pt[k + 1] - pt[k]) || 1);
+  return g.pv[k] + (g.pv[k + 1] - g.pv[k]) * f;
+}
+const deaths = groups.filter(g => g.died !== null).map(g => ({t: g.died, n: g.n})).sort((a, b) => a.t - b.t);
+const clusters = [];
+for (const d of deaths) {
+  const c = clusters[clusters.length - 1];
+  if (c && d.t - c.t1 <= 14 * DAY) { c.t1 = d.t; c.n += d.n; } else clusters.push({t0: d.t, t1: d.t, n: d.n});
+}
+const blownBy = tm => deaths.reduce((s, d) => s + (d.t <= tm ? d.n : 0), 0);
+
+const laneMap = new Map();
+for (const e of D.evaluations) {
+  const key = JSON.stringify([e.started, e.ended, e.state, e.passed, e.months_paid, e.resets, e.events]);
+  if (!laneMap.has(key)) laneMap.set(key, {evs: [], e});
+  laneMap.get(key).evs.push(e);
+}
+const lanes = [...laneMap.values()].map(({evs, e}) => {
+  const start = ts(e.started), end = e.ended ? ts(e.ended) : END;
+  const segs = [], marks = [{t: start, kind: 'start'}];
+  let cur = start, mode = 'running';
+  for (const ev of e.events) {
+    const t = ts(ev.at);
+    if (ev.kind === 'blown') { segs.push({t0: cur, t1: t, mode}); cur = t; mode = 'dormant'; marks.push({t, kind: 'blown'}); }
+    else if (ev.kind === 'reset') { segs.push({t0: cur, t1: t, mode}); cur = t; mode = 'running'; marks.push({t, kind: 'reset'}); }
+    else if (ev.kind === 'passed') { segs.push({t0: cur, t1: t, mode}); cur = t; mode = 'awaiting'; marks.push({t, kind: 'passed'}); }
+  }
+  segs.push({t0: cur, t1: end, mode});
+  if (e.state === 'funded') marks.push({t: end, kind: 'funded'});
+  if (e.state === 'cancelled') marks.push({t: end, kind: 'cancelled'});
+  const order = {start: 0, reset: 1, blown: 2, passed: 3, funded: 4, cancelled: 5};
+  marks.sort((a, b) => order[a.kind] - order[b.kind]);
+  return {evs, e, n: evs.length, ids: evs.map(x => x.id), start, end, segs, marks,
+          blows: e.events.filter(x => x.kind === 'blown').length};
+}).sort((a, b) => a.start - b.start || a.ids[0] - b.ids[0]);
+
+function outcome(ln, long) {
+  const e = ln.e;
+  if (e.state === 'funded') return long ? `passed ${dISO(ts(e.passed))}, activated ${dISO(ln.end)}` : `activated ${dISO(ln.end)}`;
+  if (e.state === 'passed') return long ? `passed ${dISO(ts(e.passed))}, no free seat by tape end` : `passed ${dISO(ts(e.passed))}, waiting`;
+  if (e.state === 'cancelled') return `cancelled ${dISO(ln.end)}`;
+  return 'running at tape end';
+}
+
+// ------------------------------------------------------------------ colours & scales
+const C = {};
+function readColors() {
+  const cs = getComputedStyle(document.documentElement);
+  for (const k of ['surface', 'ink', 'ink-2', 'muted', 'grid', 'axis', 's1', 's2', 's3', 's4', 'sel']) C[k] = cs.getPropertyValue('--' + k).trim();
+}
+function yScale(lo, hi, target) {
+  if (hi <= lo) hi = lo + 1;
+  const raw = (hi - lo) / Math.max(2, target);
+  const pow = 10 ** Math.floor(Math.log10(raw)), f = raw / pow;
+  const step = (f <= 1 ? 1 : f <= 2 ? 2 : f <= 2.5 ? 2.5 : f <= 5 ? 5 : 10) * pow;
+  const a = Math.floor(lo / step + 1e-9) * step, b = Math.ceil(hi / step - 1e-9) * step;
+  const ticks = [];
+  for (let v = a; v <= b + step / 2; v += step) ticks.push(Math.round(v * 1e6) / 1e6);
+  return {lo: a, hi: b, ticks};
+}
+function yScaleFromZero(mn, mx, target) {
+  const s = yScale(0, Math.max(mx, 1), target);
+  if (mn < 0) s.lo = mn - (s.hi - mn) * 0.03;
+  return s;
+}
+function xTicks(width) {
+  const span = dom[1] - dom[0], maxN = Math.max(2, Math.floor(width / 84));
+  const units = [['d', 1, DAY], ['d', 7, 7 * DAY], ['m', 1, 30.44 * DAY], ['m', 3, 91.3 * DAY], ['m', 6, 182.6 * DAY], ['y', 1, 365.25 * DAY]];
+  let u = units[units.length - 1];
+  for (const cand of units) if (span / cand[2] <= maxN) { u = cand; break; }
+  const [kind, n] = u, out = [], s = new Date(dom[0]);
+  let cur = kind === 'y' ? Date.UTC(s.getUTCFullYear(), 0, 1)
+          : kind === 'm' ? Date.UTC(s.getUTCFullYear(), s.getUTCMonth() - (s.getUTCMonth() % n), 1)
+          : Date.UTC(s.getUTCFullYear(), s.getUTCMonth(), s.getUTCDate());
+  for (let guard = 0; cur <= dom[1] && guard < 600; guard++) {
+    const c = new Date(cur);
+    if (cur >= dom[0]) {
+      const label = kind === 'y' ? String(c.getUTCFullYear())
+                  : kind === 'm' ? (c.getUTCMonth() === 0 ? String(c.getUTCFullYear()) : MON[c.getUTCMonth()])
+                  : c.getUTCDate() + ' ' + MON[c.getUTCMonth()];
+      out.push({t: cur, label, major: kind !== 'y' && c.getUTCMonth() === 0 && c.getUTCDate() === 1});
+    }
+    cur = kind === 'y' ? Date.UTC(c.getUTCFullYear() + 1, 0, 1)
+        : kind === 'm' ? Date.UTC(c.getUTCFullYear(), c.getUTCMonth() + n, 1)
+        : cur + n * DAY;
+  }
+  return out;
+}
+
+// ------------------------------------------------------------------ panel machinery
+const panels = [];
+const X = (p, tm) => p.L + (tm - dom[0]) / (dom[1] - dom[0]) * p.pw;
+const Xi = (p, px) => dom[0] + (px - p.L) / p.pw * (dom[1] - dom[0]);
+const Y = (p, v) => p.Tp + (1 - (v - p.y.lo) / (p.y.hi - p.y.lo)) * p.ph;
+
+function panel(id, cfg) {
+  const box = document.getElementById(id), cv = box.querySelector('canvas');
+  const base = document.createElement('canvas');
+  const p = {id, cfg, box, cv, ctx: cv.getContext('2d'), base, bctx: base.getContext('2d')};
+  panels.push(p);
+  bind(p);
+  return p;
+}
+function layout(p) {
+  const w = p.box.clientWidth;
+  p.narrow = w < 620;
+  p.L = p.narrow ? 44 : 60;
+  p.R = p.narrow ? 8 : 132;
+  p.Tp = 14; p.B = 26;
+  const h = p.cfg.height(p), dpr = window.devicePixelRatio || 1;
+  p.w = w; p.h = h; p.dpr = dpr;
+  for (const c of [p.cv, p.base]) { c.width = Math.round(w * dpr); c.height = Math.round(h * dpr); }
+  p.cv.style.height = h + 'px';
+  p.pw = Math.max(10, w - p.L - p.R);
+  p.ph = h - p.Tp - p.B;
+}
+function frame(p, c, fmt) {
+  c.clearRect(0, 0, p.w, p.h);
+  c.lineWidth = 1;
+  if (p.y && fmt) {
+    c.font = '11px ' + MONO; c.textAlign = 'right'; c.textBaseline = 'middle';
+    for (const v of p.y.ticks) {
+      if (v < p.y.lo || v > p.y.hi) continue;
+      const yy = Math.round(Y(p, v)) + 0.5;
+      c.strokeStyle = v === 0 ? C.axis : C.grid;
+      c.beginPath(); c.moveTo(p.L, yy); c.lineTo(p.L + p.pw, yy); c.stroke();
+      c.fillStyle = C.muted; c.fillText(fmt(v), p.L - 8, yy);
+    }
+  }
+  c.font = '11px ' + MONO; c.textAlign = 'center'; c.textBaseline = 'top';
+  let lastR = -Infinity;
+  for (const k of xTicks(p.pw)) {
+    const xx = Math.round(X(p, k.t)) + 0.5;
+    c.strokeStyle = k.major ? C.axis : C.grid;
+    c.beginPath(); c.moveTo(xx, p.Tp); c.lineTo(xx, p.Tp + p.ph); c.stroke();
+    const tw = c.measureText(k.label).width, lx = clamp(xx, p.L + tw / 2, p.L + p.pw - tw / 2);
+    if (lx - tw / 2 > lastR + 10) { c.fillStyle = C.muted; c.fillText(k.label, lx, p.Tp + p.ph + 8); lastR = lx + tw / 2; }
+  }
+  const by = Math.round(p.Tp + p.ph) + 0.5;
+  c.strokeStyle = C.axis; c.beginPath(); c.moveTo(p.L, by); c.lineTo(p.L + p.pw, by); c.stroke();
+}
+function clip(p, c, pad = 6) { c.save(); c.beginPath(); c.rect(p.L, p.Tp - pad, p.pw, p.ph + pad * 2); c.clip(); }
+function haloText(c, text, x, y, color) {
+  c.save(); c.lineWidth = 3; c.lineJoin = 'round'; c.strokeStyle = C.surface; c.strokeText(text, x, y);
+  c.fillStyle = color; c.fillText(text, x, y); c.restore();
+}
+function refLine(p, c, v, label, below) {
+  const y = Math.round(Y(p, v)) + 0.5;
+  if (y < p.Tp - 1 || y > p.Tp + p.ph + 1) return;
+  c.save(); c.strokeStyle = C.muted; c.setLineDash([4, 4]); c.lineWidth = 1;
+  c.beginPath(); c.moveTo(p.L, y); c.lineTo(p.L + p.pw, y); c.stroke(); c.restore();
+  c.font = '11px ' + SANS; c.textAlign = 'left'; c.textBaseline = below ? 'top' : 'bottom';
+  haloText(c, label, p.L + 6, below ? y + 3 : y - 3, C['ink-2']);
+}
+function dot(c, x, y, color, r) {
+  c.beginPath(); c.arc(x, y, r + 1.75, 0, 7); c.fillStyle = C.surface; c.fill();
+  c.beginPath(); c.arc(x, y, r, 0, 7); c.fillStyle = color; c.fill();
+}
+function cross(c, x, y, color, r) {
+  c.save(); c.lineCap = 'round';
+  const path = () => { c.beginPath(); c.moveTo(x - r, y - r); c.lineTo(x + r, y + r); c.moveTo(x + r, y - r); c.lineTo(x - r, y + r); };
+  path(); c.strokeStyle = C.surface; c.lineWidth = 4; c.stroke();
+  path(); c.strokeStyle = color; c.lineWidth = 1.75; c.stroke();
+  c.restore();
+}
+function endLabels(p, c, items) {
+  if (p.narrow) return;
+  items = items.filter(it => isFinite(it.y)).sort((a, b) => a.y - b.y);
+  if (!items.length) return;
+  const gap = 15, top = p.Tp + 2, bot = p.Tp + p.ph;
+  for (let k = 0; k < items.length; k++) items[k].y = Math.max(items[k].y, k ? items[k - 1].y + gap : top);
+  for (let k = items.length - 1; k >= 0; k--) items[k].y = Math.min(items[k].y, k < items.length - 1 ? items[k + 1].y - gap : bot);
+  c.font = '11.5px ' + SANS; c.textAlign = 'left'; c.textBaseline = 'middle';
+  const x0 = p.L + p.pw + 8;
+  for (const it of items) {
+    c.strokeStyle = it.color; c.lineWidth = 2; c.lineCap = 'round';
+    c.beginPath(); c.moveTo(x0, it.y); c.lineTo(x0 + 9, it.y); c.stroke();
+    c.fillStyle = C['ink-2']; c.fillText(it.text, x0 + 14, it.y);
+  }
+}
+function crosshair(p, c) {
+  if (!hover) return null;
+  const i = idxAt(hover.t), x = X(p, T[i]);
+  if (x < p.L - 1 || x > p.L + p.pw + 1) return null;
+  const xx = Math.round(x) + 0.5;
+  c.save(); c.strokeStyle = C['ink-2']; c.globalAlpha = 0.5; c.lineWidth = 1; c.setLineDash([3, 3]);
+  c.beginPath(); c.moveTo(xx, p.Tp - 6); c.lineTo(xx, p.Tp + p.ph); c.stroke(); c.restore();
+  return i;
+}
+function band(p, c) {
+  if (!drag) return;
+  const a = Xi(drag.p, Math.min(drag.x0, drag.x1)), b = Xi(drag.p, Math.max(drag.x0, drag.x1));
+  c.fillStyle = C.sel; c.fillRect(X(p, a), p.Tp, X(p, b) - X(p, a), p.ph);
+}
+function renderBase(p) {
+  layout(p);
+  if (!p.w || !p.base.width || !p.base.height) return; // hidden or zero-width: the ResizeObserver redraws later
+  const c = p.bctx; c.setTransform(p.dpr, 0, 0, p.dpr, 0, 0); p.cfg.base(p, c);
+}
+function renderOverlay(p) {
+  if (!p.w || !p.base.width || !p.base.height) return;
+  const c = p.ctx;
+  c.setTransform(1, 0, 0, 1, 0, 0); c.clearRect(0, 0, p.cv.width, p.cv.height); c.drawImage(p.base, 0, 0);
+  c.setTransform(p.dpr, 0, 0, p.dpr, 0, 0);
+  band(p, c);
+  p.cfg.overlay(p, c);
+}
+function renderAll() { readColors(); panels.forEach(renderBase); panels.forEach(renderOverlay); updateTip(); }
+let raf = 0;
+function schedule() { if (!raf) raf = requestAnimationFrame(() => { raf = 0; panels.forEach(renderOverlay); updateTip(); }); }
+
+const sw = color => `<span class="sw" style="background:var(--${color})"></span>`;
+const tipTable = rows => '<table>' + rows.map(r =>
+  `<tr><td><span class="k">${r.color ? sw(r.color) : ''}${r.label}</span></td><td class="v">${r.value}</td></tr>`).join('') + '</table>';
+
+// ------------------------------------------------------------------ line panels
+function linePanel(id, o) {
+  return panel(id, {
+    height: p => p.narrow ? o.height[0] : o.height[1],
+    base(p, c) {
+      const j0 = idxAt(dom[0]), j1 = idxAt(dom[1]);
+      p.y = o.yRange(j0, j1, p);
+      frame(p, c, o.fmt);
+      clip(p, c);
+      if (o.refs) o.refs(p, c);
+      const i0 = j0, i1 = Math.min(N - 1, j1 + 1);
+      for (const s of o.series) {
+        c.strokeStyle = C[s.color]; c.lineWidth = 2; c.lineJoin = 'round'; c.lineCap = 'round';
+        c.beginPath();
+        let py = 0;
+        for (let i = i0; i <= i1; i++) {
+          const x = X(p, T[i]), y = Y(p, s.arr[i]);
+          if (i === i0) c.moveTo(x, y); else { if (o.step) c.lineTo(x, py); c.lineTo(x, y); }
+          py = y;
+        }
+        c.stroke();
+      }
+      c.restore();
+      endLabels(p, c, o.series.map(s => ({y: Y(p, s.arr[j1]), text: s.short + ' ' + o.fmt(s.arr[j1]), color: C[s.color]})));
+    },
+    overlay(p, c) {
+      const i = crosshair(p, c);
+      if (i === null) return;
+      for (const s of o.series) dot(c, X(p, T[i]), Y(p, s.arr[i]), C[s.color], 3.5);
+    },
+    tip(h) {
+      const i = idxAt(h.t);
+      return `<div class="d">${dLong(T[i])}</div>` + tipTable([
+        ...o.series.map(s => ({color: s.color, label: s.label, value: o.tipFmt(s.arr[i])})),
+        ...(o.extra ? o.extra(i) : [])]);
+    }
+  });
+}
+
+linePanel('pA', {
+  height: [210, 250], fmt: usdK, tipFmt: usd,
+  series: [
+    {arr: portfolio, color: 's1', label: 'Portfolio', short: 'Portfolio'},
+    {arr: S.cash, color: 's2', label: 'Owner cash', short: 'Owner cash'},
+    {arr: S.live_profit, color: 's3', label: 'Open profit in live PAs', short: 'In live PAs'}],
+  yRange(j0, j1, p) {
+    let mx = 0, mn = 0;
+    for (let i = j0; i <= j1; i++) { mx = Math.max(mx, portfolio[i], S.cash[i]); mn = Math.min(mn, S.live_profit[i], portfolio[i]); }
+    return yScaleFromZero(mn, mx * 1.02, p.ph / 44);
+  },
+  extra: i => [
+    {label: 'Payouts received to date', value: usd(S.received[i])},
+    {label: 'Live PAs', value: S.alive[i]}]
+});
+
+// ------------------------------------------------------------------ PA equity paths
+function pathGroup(p, c, g, alpha, width) {
+  const pt = g.pt;
+  const k0 = Math.max(0, bisect(pt, dom[0])), k1 = Math.min(pt.length - 1, bisect(pt, dom[1]) + 1);
+  if (pt[k1] < dom[0] || pt[k0] > dom[1]) return;
+  c.save(); c.globalAlpha = alpha; c.strokeStyle = g.alive ? C.s1 : C.s2; c.lineWidth = width; c.lineJoin = 'round';
+  c.beginPath();
+  for (let k = k0; k <= k1; k++) { const x = X(p, pt[k]), y = Y(p, g.pv[k]); if (k === k0) c.moveTo(x, y); else c.lineTo(x, y); }
+  c.stroke(); c.restore();
+}
+function pickGroup(p, h) {
+  let best = null, bd = 12;
+  for (const g of groups) {
+    if (g.died !== null) {
+      const d = Math.hypot(X(p, g.died) - h.px, Y(p, g.death_equity) - h.py);
+      if (d < bd) { bd = d; best = g; }
+    }
+    const v = valueAt(g, h.t);
+    if (v === null) continue;
+    const d = Math.abs(Y(p, v) - h.py);
+    if (d < bd) { bd = d; best = g; }
+  }
+  return best;
+}
+panel('pB', {
+  height: p => p.narrow ? 300 : 360,
+  base(p, c) {
+    let mn = -TRAIL - 100, mx = RETAINED - START + 300;
+    for (const g of groups) for (let k = 0; k < g.pt.length; k++) {
+      if (g.pt[k] >= dom[0] && g.pt[k] <= dom[1]) { mn = Math.min(mn, g.pv[k]); mx = Math.max(mx, g.pv[k]); }
+    }
+    p.y = yScale(mn, mx * 1.02, p.ph / 44);
+    frame(p, c, usdK);
+    clip(p, c);
+    const refs = [
+      [RETAINED - START, `Payout requests only above +${usd(RETAINED - START)} (balance ${usd(RETAINED)})`, false],
+      [FROZEN, `Frozen floor +${usd(FROZEN)} (balance ${usd(START + FROZEN)})`, true],
+      [-TRAIL, `Starting trailing threshold ${usd(-TRAIL)} (balance ${usd(START - TRAIL)})`, true]];
+    for (const [v] of refs) refLine(p, c, v, '');
+    for (const g of groups) if (!g.alive) pathGroup(p, c, g, 0.5, 1.25);
+    for (const g of groups) if (g.alive) pathGroup(p, c, g, 1, 1.75);
+    for (const g of groups) if (g.died !== null) cross(c, X(p, g.died), Y(p, g.death_equity), C.s2, 4);
+    for (const g of groups) if (g.alive) dot(c, X(p, g.pt[g.pt.length - 1]), Y(p, g.pv[g.pv.length - 1]), C.s1, 3);
+    // Reference labels go on top of the paths so they stay legible.
+    c.font = '11px ' + SANS; c.textAlign = 'left';
+    for (const [v, label, below] of refs) {
+      const y = Math.round(Y(p, v)) + 0.5;
+      if (y < p.Tp - 1 || y > p.Tp + p.ph + 1) continue;
+      c.textBaseline = below ? 'top' : 'bottom';
+      haloText(c, label, p.L + 6, below ? y + 3 : y - 3, C['ink-2']);
+    }
+    c.restore();
+    c.font = '11px ' + SANS; c.textAlign = 'center'; c.textBaseline = 'top';
+    let lastR = -Infinity;
+    for (const cl of clusters) {
+      if (cl.n < 5) continue;
+      const xm = X(p, (cl.t0 + cl.t1) / 2);
+      if (xm < p.L || xm > p.L + p.pw) continue;
+      const text = `${cl.n} PAs blown`, tw = c.measureText(text).width;
+      const lx = clamp(xm, p.L + tw / 2, p.L + p.pw - tw / 2);
+      if (lx - tw / 2 < lastR + 8) continue;
+      haloText(c, text, lx, p.Tp - 10, C.ink);
+      lastR = lx + tw / 2;
+    }
+    endLabels(p, c, groups.filter(g => g.alive && g.pt[g.pt.length - 1] <= dom[1] + DAY)
+      .map(g => ({y: Y(p, g.pv[g.pv.length - 1]), text: `${g.n} alive ${usdK(g.pv[g.pv.length - 1])}`, color: C.s1})));
+  },
+  overlay(p, c) {
+    crosshair(p, c);
+    p.hl = hover && hover.p === p ? pickGroup(p, hover) : null;
+    if (!p.hl) return;
+    clip(p, c);
+    pathGroup(p, c, p.hl, 1, 2.75);
+    if (p.hl.died !== null) cross(c, X(p, p.hl.died), Y(p, p.hl.death_equity), C.s2, 5);
+    c.restore();
+  },
+  tip(h) {
+    const g = h.p.hl, i = idxAt(h.t);
+    if (!g) return `<div class="d">${dLong(T[i])}</div>` + tipTable([
+      {label: 'Live PAs', value: S.alive[i]},
+      {label: 'Open profit in live PAs', value: usd(S.live_profit[i])},
+      {label: 'PAs blown to date', value: blownBy(T[i])}]) + '<div class="sub">Point at a line to inspect that account.</div>';
+    const v = valueAt(g, h.t);
+    const rows = [
+      {label: g.n > 1 ? `${g.n} identical accounts` : 'Account', value: ranges(g.ids)},
+      {label: 'Activated', value: dISO(g.act)},
+      g.died !== null ? {label: 'Blown', value: `${dISO(g.died)} · ${Math.floor((g.died - g.act) / DAY)} d`} : {label: 'Status', value: 'alive at tape end'},
+      {label: `Profit on ${dISO(h.t)}`, value: v === null ? '—' : usd(v)},
+      g.died !== null ? {label: 'Equity at the killing excursion', value: usd(g.death_equity)} : {label: 'Profit at tape end', value: usd(g.end_profit)},
+      {label: 'Payouts, each account', value: g.payouts ? `${g.payouts} · ${usd(g.received)}` : 'none'},
+      {label: 'Trades taken', value: nf.format(g.trades)}];
+    return `<div class="d">${g.alive ? 'Alive PA' : 'Blown PA'}${g.n > 1 ? ' group' : ''}</div>` + tipTable(rows);
+  }
+});
+
+// ------------------------------------------------------------------ seats
+linePanel('pC', {
+  height: [170, 200], fmt: v => String(v), tipFmt: v => String(v), step: true,
+  series: [
+    {arr: S.alive, color: 's1', label: 'Live PAs', short: 'Live'},
+    {arr: S.spares, color: 's2', label: 'Spare shelf', short: 'Spares'},
+    {arr: S.in_flight, color: 's3', label: 'Evaluations in flight', short: 'Evals'},
+    {arr: S.shortfall, color: 's4', label: 'Shortfall', short: 'Short'}],
+  yRange: () => ({lo: 0, hi: 22, ticks: [0, 5, 10, 15, 20]}),
+  refs: (p, c) => refLine(p, c, CAP, CAP_LABEL),
+  extra: i => [
+    {label: '· of which subscribed', value: S.subscriptions[i]},
+    {label: '· of which passed, awaiting activation', value: S.awaiting[i]},
+    {label: 'Pending death replacements', value: S.pending[i]},
+    {label: `Seats occupied (cap ${CAP})`, value: S.alive[i] + S.spares[i] + (SHARED ? S.in_flight[i] : 0)}]
+});
+
+// ------------------------------------------------------------------ evaluations
+const laneH = p => p.narrow ? 9 : 11;
+function glyph(c, kind, x, y, r) {
+  c.save();
+  if (kind === 'start') {
+    c.beginPath(); c.arc(x, y, r, 0, 7); c.fillStyle = C.surface; c.fill();
+    c.strokeStyle = C['ink-2']; c.lineWidth = 1.5; c.stroke();
+  } else if (kind === 'reset') {
+    c.strokeStyle = C.s1; c.lineWidth = 2; c.beginPath(); c.moveTo(x, y - r - 0.5); c.lineTo(x, y + r + 0.5); c.stroke();
+  } else if (kind === 'blown') {
+    cross(c, x, y, C.s2, r - 0.5);
+  } else if (kind === 'passed') {
+    dot(c, x, y, C.s3, r - 0.25);
+  } else if (kind === 'funded') {
+    const q = r + 0.75;
+    c.beginPath(); c.moveTo(x, y - q); c.lineTo(x + q, y); c.lineTo(x, y + q); c.lineTo(x - q, y); c.closePath();
+    c.strokeStyle = C.surface; c.lineWidth = 2; c.stroke(); c.fillStyle = C.ink; c.fill();
+  } else if (kind === 'cancelled') {
+    c.strokeStyle = C.muted; c.lineWidth = 1.5; c.strokeRect(x - r + 0.75, y - r + 0.75, 2 * r - 1.5, 2 * r - 1.5);
+  }
+  c.restore();
+}
+panel('pD', {
+  height: p => lanes.length * laneH(p) + p.Tp + p.B,
+  base(p, c) {
+    p.y = null;
+    frame(p, c, null);
+    const lh = laneH(p), r = p.narrow ? 3.5 : 4;
+    clip(p, c, 2);
+    lanes.forEach((ln, row) => {
+      const yc = p.Tp + row * lh + lh / 2;
+      for (const s of ln.segs) {
+        const xa = X(p, s.t0), xb = X(p, s.t1);
+        if (xb < p.L || xa > p.L + p.pw) continue;
+        c.save();
+        if (s.mode === 'running') { c.strokeStyle = C.s1; c.lineWidth = 2; }
+        else if (s.mode === 'dormant') { c.strokeStyle = C.s2; c.lineWidth = 1.5; c.setLineDash([2, 3]); }
+        else { c.strokeStyle = C.s3; c.lineWidth = 2; }
+        c.beginPath(); c.moveTo(xa, yc); c.lineTo(Math.max(xb, xa + 1), yc); c.stroke(); c.restore();
+      }
+    });
+    lanes.forEach((ln, row) => {
+      const yc = p.Tp + row * lh + lh / 2;
+      for (const m of ln.marks) glyph(c, m.kind, X(p, m.t), yc, r);
+    });
+    c.restore();
+    c.font = '10px ' + MONO; c.textBaseline = 'middle'; c.fillStyle = C.muted;
+    lanes.forEach((ln, row) => {
+      if (ln.n < 2) return;
+      const yc = p.Tp + row * lh + lh / 2, text = '×' + ln.n, tw = c.measureText(text).width;
+      const xs = X(p, ln.start) - r - 5;
+      if (xs - tw >= p.L && xs <= p.L + p.pw) { c.textAlign = 'right'; c.fillText(text, xs, yc); return; }
+      const xe = X(p, ln.end) + r + 5;
+      if (xe >= p.L && xe + tw <= p.w - 2) { c.textAlign = 'left'; c.fillText(text, xe, yc); }
+    });
+  },
+  overlay(p, c) {
+    crosshair(p, c);
+    p.hlLane = -1;
+    if (!hover || hover.p !== p) return;
+    const lh = laneH(p), row = Math.floor((hover.py - p.Tp) / lh);
+    if (row < 0 || row >= lanes.length) return;
+    p.hlLane = row;
+    c.fillStyle = C.sel; c.fillRect(p.L, p.Tp + row * lh, p.pw, lh);
+  },
+  tip(h) {
+    const ln = lanes[h.p.hlLane];
+    if (!ln) return null;
+    const e = ln.e;
+    const evs = e.events.filter(x => x.kind === 'blown' || x.kind === 'reset').map(x => `${x.kind} ${dISO(ts(x.at))}`);
+    const list = evs.length > 8 ? evs.slice(0, 8).join('<br>') + `<br>… ${evs.length - 8} more` : evs.join('<br>');
+    return `<div class="d">${ln.n > 1 ? ln.n + ' identical evaluations' : 'Evaluation'}</div>` + tipTable([
+      {label: 'IDs', value: ranges(ln.ids)},
+      {label: 'Started', value: dISO(ln.start)},
+      {label: 'Months paid, each', value: `${e.months_paid} · ${usd(e.months_paid * EVAL_FEE)}`},
+      {label: 'Blown / reset', value: `${ln.blows} / ${e.resets}`}]) +
+      `<div class="sub">Outcome: ${outcome(ln, true)}</div>` + (list ? `<div class="foot">${list}</div>` : '');
+  }
+});
+
+// ------------------------------------------------------------------ contributions & spend
+linePanel('pE', {
+  height: [180, 210], fmt: usdK, tipFmt: usd,
+  series: [
+    {arr: S.contrib, color: 's1', label: 'Owner contributions', short: 'Contributed'},
+    {arr: spend, color: 's2', label: 'Pipeline spend', short: 'Spend'},
+    {arr: S.eval_fees, color: 's3', label: `Evaluation fees ($${EVAL_FEE}/month)`, short: 'Eval fees'},
+    {arr: S.act_fees, color: 's4', label: 'Activation fees', short: 'Activation'}],
+  yRange(j0, j1, p) {
+    let mx = 0;
+    for (let i = j0; i <= j1; i++) mx = Math.max(mx, S.contrib[i], spend[i]);
+    return yScale(0, mx * 1.03, p.ph / 44);
+  },
+  extra: i => [{label: 'Contributions − spend', value: usd(S.contrib[i] - spend[i])}]
+});
+
+// ------------------------------------------------------------------ interaction
+let hover = null, drag = null;
+const tipEl = document.getElementById('tip');
+function updateTip() {
+  if (!hover || drag) { tipEl.hidden = true; return; }
+  const html = hover.p.cfg.tip(hover);
+  if (!html) { tipEl.hidden = true; return; }
+  tipEl.innerHTML = html; tipEl.hidden = false;
+  const r = tipEl.getBoundingClientRect(), vw = innerWidth, vh = innerHeight;
+  let x = hover.cx + 16, y = hover.cy + 16;
+  if (x + r.width > vw - 8) x = hover.cx - r.width - 16;
+  if (y + r.height > vh - 8) y = hover.cy - r.height - 16;
+  tipEl.style.left = clamp(x, 8, Math.max(8, vw - r.width - 8)) + 'px';
+  tipEl.style.top = clamp(y, 8, Math.max(8, vh - r.height - 8)) + 'px';
+}
+function local(p, e) { const r = p.cv.getBoundingClientRect(); return [e.clientX - r.left, e.clientY - r.top]; }
+function setHover(p, px, py, cx, cy) {
+  if (px < p.L || px > p.L + p.pw || py < 0 || py > p.h) { if (!drag) hover = null; }
+  else hover = {p, t: Xi(p, px), px, py, cx, cy};
+  schedule();
+}
+function bind(p) {
+  const cv = p.cv;
+  cv.tabIndex = 0;
+  cv.addEventListener('pointerdown', e => {
+    const [px, py] = local(p, e);
+    if (e.pointerType === 'mouse' && e.button === 0 && px >= p.L && px <= p.L + p.pw) {
+      drag = {p, x0: px, x1: px};
+      cv.setPointerCapture(e.pointerId);
+    }
+    setHover(p, px, py, e.clientX, e.clientY);
+  });
+  cv.addEventListener('pointermove', e => {
+    const [px, py] = local(p, e);
+    if (drag && drag.p === p) drag.x1 = clamp(px, p.L, p.L + p.pw);
+    setHover(p, px, py, e.clientX, e.clientY);
+  });
+  cv.addEventListener('pointerup', () => {
+    if (!drag || drag.p !== p) return;
+    const a = Math.min(drag.x0, drag.x1), b = Math.max(drag.x0, drag.x1);
+    drag = null;
+    if (b - a > 8) setDomain([Xi(p, a), Xi(p, b)]); else schedule();
+  });
+  cv.addEventListener('pointercancel', () => { drag = null; schedule(); });
+  cv.addEventListener('pointerleave', () => { if (!drag) { hover = null; schedule(); } });
+  cv.addEventListener('dblclick', () => setDomain(FULL));
+  cv.addEventListener('keydown', e => {
+    if (e.key === 'ArrowLeft' || e.key === 'ArrowRight') {
+      e.preventDefault();
+      const from = hover && hover.p === p ? idxAt(hover.t) : idxAt((dom[0] + dom[1]) / 2);
+      const i = clamp(from + (e.key === 'ArrowRight' ? 1 : -1) * (e.shiftKey ? 30 : 1), 0, N - 1);
+      const t = clamp(T[i], dom[0], dom[1]), r = cv.getBoundingClientRect(), px = X(p, t);
+      const py = hover && hover.p === p ? hover.py : p.Tp + p.ph / 2;
+      hover = {p, t, px, py, cx: r.left + px, cy: r.top + py};
+      schedule();
+    } else if (e.key === 'Escape') { hover = null; schedule(); }
+  });
+  cv.addEventListener('blur', () => { if (hover && hover.p === p && !cv.matches(':hover')) { hover = null; schedule(); } });
+}
+addEventListener('scroll', () => { if (hover && !drag) { hover = null; schedule(); } }, {passive: true});
+
+const presets = [{label: 'All', d: FULL}];
+for (let y = new Date(FULL[0]).getUTCFullYear(); y <= new Date(FULL[1]).getUTCFullYear(); y++) presets.push({label: String(y), d: [Date.UTC(y, 0, 1), Date.UTC(y + 1, 0, 1)]});
+const chipBox = document.getElementById('chips');
+for (const pr of presets) {
+  const b = document.createElement('button');
+  b.type = 'button'; b.className = 'chip'; b.id = 'range-' + pr.label.toLowerCase(); b.textContent = pr.label;
+  b.addEventListener('click', () => setDomain(pr.d));
+  pr.el = b; chipBox.appendChild(b);
+}
+function fmtSpan(ms) {
+  const d = ms / DAY;
+  if (d >= 365) { const y = trim(d / 365.25, 1); return y === '1' ? '1 year' : y + ' years'; }
+  return d >= 60 ? Math.round(d / 30.44) + ' months' : Math.round(d) + ' days';
+}
+function syncChips() {
+  for (const pr of presets) {
+    const a = Math.max(FULL[0], pr.d[0]), b = Math.min(FULL[1], pr.d[1]);
+    pr.el.setAttribute('aria-pressed', String(Math.abs(a - dom[0]) < DAY && Math.abs(b - dom[1]) < DAY));
+  }
+  document.getElementById('range').textContent = `${dLong(dom[0])} – ${dLong(dom[1])} · ${fmtSpan(dom[1] - dom[0])}`;
+}
+function setDomain(d) {
+  let a = Math.max(FULL[0], d[0]), b = Math.min(FULL[1], d[1]);
+  if (b - a < 10 * DAY) { const m = (a + b) / 2; a = Math.max(FULL[0], m - 5 * DAY); b = Math.min(FULL[1], a + 10 * DAY); }
+  dom = [a, b];
+  syncChips();
+  renderAll();
+}
+
+// ------------------------------------------------------------------ text, tables, method
+const facts = [
+  ['In our pocket', usd(sm.cash.owner_cash_position_usd), 'net of all fees, excluding contributions', true],
+  ['Owner contributions', usd(sm.acquisition.owner_contributions_usd), `$${nf.format(sm.acquisition.policy.initial_cash_usd)} + $${sm.acquisition.policy.monthly_contribution_usd}/month`],
+  ['PAs opened', String(sm.book.accounts_opened), `${sm.book.accounts_alive_at_end} alive · ${sm.book.accounts_dead} blown`],
+  ['Payouts', nf.format(sm.withdrawals.events), `${usd(sm.cash.received_usd)} received`],
+  ['Evaluations', String(sm.acquisition.evaluations_started), `${sm.acquisition.evaluations_passed} passed · ${sm.acquisition.evaluation_resets} resets`],
+  ['Pipeline spend', usd(sm.cash.spent_on_accounts_usd), `${sm.acquisition.evaluation_months_paid} eval months · ${sm.acquisition.evaluations_activated} activations`],
+  ['Stranded at tape end', usd(sm.terminal.stranded_usd), `in ${sm.terminal.accounts_alive_at_horizon} live PAs, ${usd(sm.terminal.gross_usd)} extracted`]];
+document.getElementById('ledger').innerHTML = facts.map(([k, v, s, lead]) =>
+  `<div class="${lead ? 'lead' : ''}"><dt>${k}</dt><dd class="val">${v}</dd><dd class="sub">${s}</dd></div>`).join('');
+document.getElementById('pathsNote').textContent = `${accountCount} accounts draw only ${groups.length} distinct lines`;
+document.getElementById('lanesNote').textContent = `${D.evaluations.length} evaluations on ${lanes.length} rows.`;
+{
+  const E = POL.evaluation, every = POL.evaluation_start_interval_days;
+  const timing = every ? `at most one new start every ${every} day${every > 1 ? 's' : ''}` : 'started in batches';
+  const cadence = {daily: 'daily', weekly: 'weekly', calendar_month: 'monthly'}[RC.policy.cadence] || RC.policy.cadence;
+  document.getElementById('lede').textContent =
+    `The best ${D.meta.objective}-cash setting from the capacity study, replayed day by day over the RR 1.00 tape. ` +
+    `${usd(POL.initial_cash_usd)} up front and ${usd(POL.monthly_contribution_usd)} a month buy evaluations ` +
+    `(${usd(E.monthly_fee_usd)}/month, ${E.contracts} MNQ, ${usd(E.profit_target_usd)} target, ` +
+    `${usd(E.trailing_drawdown_usd)} drawdown, ${usd(E.activation_fee_usd)} activation). ` +
+    `Up to ${CAP} live PAs, a ${POL.spare_capacity}-spare shelf and ${POL.evaluations_at_once} evaluations at once, ${timing}` +
+    (SHARED ? `, all sharing the ${CAP} seats. ` : `; evaluations sit outside the seat cap. `) +
+    `Every PA asks ${cadence} for the ${RC.policy.amount_rule} payout once its balance sits above ${usd(RETAINED)}.`;
+  document.getElementById('seatsNote').textContent = SHARED
+    ? `Live PAs, spares and evaluations in flight all share the ${CAP}-seat cap, with up to ${POL.evaluations_at_once} evaluations at once. Shortfall counts seats the book wanted filled with no spare ready.`
+    : `Live PAs and spares share the ${CAP}-seat cap. In this run evaluations sit outside it, up to ${POL.evaluations_at_once} at once. Shortfall counts seats the book wanted filled with no spare ready.`;
+}
+
+function table(id, head, rows) {
+  document.getElementById(id).innerHTML = '<table class="data"><thead><tr>' + head.map(h => `<th scope="col">${h}</th>`).join('') +
+    '</tr></thead><tbody>' + rows.map(r => '<tr>' + r.map(v => `<td>${v}</td>`).join('') + '</tr>').join('') + '</tbody></table>';
+}
+const tally = (arr, key, weight) => arr.reduce((m, x) => { const k = key(x); m[k] = (m[k] || 0) + weight(x); return m; }, {});
+const evStarts = tally(D.evaluations, e => e.started.slice(0, 7), () => 1);
+const blownM = tally(groups.filter(g => g.died !== null), g => dISO(g.died).slice(0, 7), g => g.n);
+const monthIdx = [];
+for (let i = 0; i < N; i++) if (i === N - 1 || D.days[i + 1].slice(0, 7) !== D.days[i].slice(0, 7)) monthIdx.push(i);
+let prevRec = 0;
+table('tMonths', ['Month', 'Portfolio', 'Owner cash', 'Open PA profit', 'Live PAs', 'Spares', 'Evals in flight', 'Evals started', 'PAs blown', 'Received since prior row', 'Contributed (cum.)', 'Pipeline spend (cum.)'],
+  monthIdx.map(i => {
+    const m = D.days[i].slice(0, 7), rec = S.received[i] - prevRec;
+    prevRec = S.received[i];
+    return [m, usd(portfolio[i]), usd(S.cash[i]), usd(S.live_profit[i]), S.alive[i], S.spares[i], S.in_flight[i],
+            evStarts[m] || 0, blownM[m] || 0, usd(rec), usd(S.contrib[i]), usd(spend[i])];
+  }));
+table('tAccounts', ['Accounts', 'Count', 'Activated', 'Blown', 'Lifetime', 'Trades', 'Payouts each', 'Received each', 'Final equity'],
+  groups.map(g => [ranges(g.ids), g.n, dISO(g.act), g.died !== null ? dISO(g.died) : 'alive',
+    g.died !== null ? Math.floor((g.died - g.act) / DAY) + ' d' : '—', nf.format(g.trades), g.payouts || '—',
+    g.received ? usd(g.received) : '—', usd(g.died !== null ? g.death_equity : g.end_profit)]));
+table('tEvals', ['Evaluations', 'Count', 'Started', 'Outcome', 'Months paid each', 'Blown', 'Resets'],
+  lanes.map(ln => [ranges(ln.ids), ln.n, dISO(ln.start), outcome(ln, false), ln.e.months_paid, ln.blows, ln.e.resets]));
+
+const job = D.meta.job;
+document.getElementById('method').innerHTML = [
+  `Replayed the saved winner <code>(${job.map(x => typeof x === 'string' ? `'${x}'` : String(x)).join(', ')})</code> with observation-only hooks. It reproduced <code>summary.json</code> (${usd(D.meta.pocket_usd)} in pocket, ${D.meta.accounts} PAs, ${D.meta.alive_at_end} alive) and every row of <code>pipeline_daily.csv</code>.`,
+  `PA equity is sampled at the 00:00 daily check, after that day's payout decisions. A blown PA's last point is the intratrade excursion that killed it, so the final drop is real but its timing within the day is compressed.`,
+  `PAs activated at the same moment trade the same tape and have identical paths. They are drawn as one line and are not independent outcomes.`,
+  `Portfolio counts profit still inside live PAs at face value. At tape end ${usd(sm.terminal.stranded_usd)} sat there and the firm-permitted closing request extracted ${usd(sm.terminal.gross_usd)} of it.`,
+  `Evaluation blow, pass and reset moments come from the same replay: blows and passes at the trade exit, resets at the monthly renewal. All results are in-sample on one tape.`
+].map(x => `<li>${x}</li>`).join('');
+
+// ------------------------------------------------------------------ boot
+syncChips();
+renderAll();
+let rz = 0;
+new ResizeObserver(() => { cancelAnimationFrame(rz); rz = requestAnimationFrame(renderAll); }).observe(document.querySelector('.instrument'));
+matchMedia('(prefers-color-scheme: dark)').addEventListener('change', renderAll);
+new MutationObserver(renderAll).observe(document.documentElement, {attributes: true, attributeFilter: ['data-theme']});
+if (document.fonts && document.fonts.ready) document.fonts.ready.then(renderAll);
+})();
+</script>

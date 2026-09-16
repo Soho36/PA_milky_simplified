@@ -1,0 +1,391 @@
+<meta charset="utf-8">
+<title>Cadence and Budgets at Cap 20</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500&family=IBM+Plex+Sans:wght@400;500;600&display=swap">
+<style>
+:root{
+  color-scheme:light;
+  --plane:#f9f9f7; --surface:#fcfcfb; --ink:#0b0b0b; --ink-2:#52514e; --muted:#898781;
+  --grid:#e1e0d9; --axis:#c3c2b7; --ring:rgba(11,11,11,.10);
+  --s1:#2a78d6; --s2:#eb6834; --s3:#1baf7a; --s4:#eda100; --s5:#e87ba4; --s6:#008300; --s7:#4a3aa7; --s8:#e34948;
+  --sel:rgba(42,120,214,.12); --shadow:0 8px 28px rgba(11,11,11,.12);
+  --mono:"IBM Plex Mono", ui-monospace, Consolas, monospace;
+  --sans:"IBM Plex Sans", system-ui, -apple-system, "Segoe UI", sans-serif;
+}
+@media (prefers-color-scheme: dark){
+  :root:not([data-theme="light"]){
+    color-scheme:dark;
+    --plane:#0d0d0d; --surface:#1a1a19; --ink:#ffffff; --ink-2:#c3c2b7; --muted:#898781;
+    --grid:#2c2c2a; --axis:#383835; --ring:rgba(255,255,255,.10);
+    --s1:#3987e5; --s2:#d95926; --s3:#199e70; --s4:#c98500; --s5:#d55181; --s6:#008300; --s7:#9085e9; --s8:#e66767;
+    --sel:rgba(57,135,229,.18); --shadow:0 8px 28px rgba(0,0,0,.55);
+  }
+}
+:root[data-theme="dark"]{
+  color-scheme:dark;
+  --plane:#0d0d0d; --surface:#1a1a19; --ink:#ffffff; --ink-2:#c3c2b7; --muted:#898781;
+  --grid:#2c2c2a; --axis:#383835; --ring:rgba(255,255,255,.10);
+  --s1:#3987e5; --s2:#d95926; --s3:#199e70; --s4:#c98500; --s5:#d55181; --s6:#008300; --s7:#9085e9; --s8:#e66767;
+  --sel:rgba(57,135,229,.18); --shadow:0 8px 28px rgba(0,0,0,.55);
+}
+*{box-sizing:border-box}
+[hidden]{display:none!important}
+body{margin:0;background:var(--plane);color:var(--ink);font:14px/1.5 var(--sans);padding-inline:20px}
+.wrap{max-width:1240px;margin:0 auto;padding-block:28px 64px}
+.eyebrow{font:500 11.5px/1.4 var(--mono);color:var(--muted);letter-spacing:.02em;margin:0 0 8px;overflow-wrap:anywhere}
+h1{font-weight:600;font-size:clamp(22px,3vw,30px);line-height:1.15;letter-spacing:-.012em;margin:0 0 10px;text-wrap:balance}
+.lede{color:var(--ink-2);max-width:86ch;margin:0 0 20px}
+.ledger{display:flex;flex-wrap:wrap;gap:1px;background:var(--ring);border:1px solid var(--ring);border-radius:12px;overflow:hidden;margin:0 0 18px}
+.ledger > div{flex:1 1 180px;background:var(--surface);padding:10px 14px 11px;display:grid;gap:1px;align-content:start}
+.ledger dt{font-size:12px;color:var(--ink-2)}
+.ledger dd{margin:0}
+.ledger .val{font:500 17px/1.3 var(--mono);font-variant-numeric:tabular-nums;color:var(--ink)}
+.ledger .sub{font-size:12px;color:var(--muted);overflow-wrap:anywhere}
+.controls{position:sticky;top:0;z-index:5;background:var(--plane);display:flex;flex-wrap:wrap;align-items:end;gap:10px 14px;padding-block:10px;border-bottom:1px solid var(--ring);margin-bottom:14px}
+.field{display:grid;gap:3px}
+.field label{font-size:11px;color:var(--muted);letter-spacing:.04em;text-transform:uppercase}
+select{font:500 12.5px var(--mono);padding:5px 8px;border-radius:8px;border:1px solid var(--ring);background:var(--surface);color:var(--ink);max-width:220px}
+select:focus-visible,canvas:focus-visible,summary:focus-visible,button:focus-visible{outline:2px solid var(--s1);outline-offset:2px}
+.spacer{flex:1 1 auto}
+.count{font:12.5px var(--mono);color:var(--ink-2);font-variant-numeric:tabular-nums}
+.btn{font:500 12.5px var(--mono);padding:6px 10px;border-radius:999px;border:1px solid var(--ring);background:var(--surface);color:var(--ink-2);cursor:pointer}
+.btn:hover{border-color:var(--axis);color:var(--ink)}
+.btn[aria-pressed="true"]{background:var(--ink);border-color:var(--ink);color:var(--surface)}
+.instrument{background:var(--surface);border:1px solid var(--ring);border-radius:12px;padding:16px 16px 6px}
+.panel-head{display:flex;flex-wrap:wrap;align-items:baseline;gap:4px 18px;margin-bottom:6px}
+.panel-head h2{font-size:15px;font-weight:600;margin:0}
+.legend{display:flex;flex-wrap:wrap;gap:4px 14px;font-size:12.5px;color:var(--ink-2);list-style:none;margin:0;padding:0}
+.legend li{display:inline-flex;align-items:center;gap:6px}
+.sw{display:inline-block;width:10px;height:10px;border-radius:50%;flex:none}
+.note{font-size:12.5px;color:var(--ink-2);flex-basis:100%;margin:2px 0 0;max-width:100ch}
+.canvas-box{position:relative}
+canvas{display:block;width:100%;touch-action:pan-y;border-radius:4px}
+.tip{position:fixed;z-index:10;pointer-events:none;background:var(--surface);color:var(--ink);border:1px solid var(--ring);box-shadow:var(--shadow);border-radius:8px;padding:8px 11px 9px;font-size:12.5px;line-height:1.45;max-width:min(380px,calc(100vw - 16px))}
+.tip .d{font:500 12px var(--mono);color:var(--muted);margin-bottom:4px}
+.tip table{border-collapse:collapse}
+.tip td{padding:1px 0;vertical-align:baseline}
+.tip td.v{text-align:right;padding-left:16px;font-family:var(--mono);font-variant-numeric:tabular-nums}
+.tip .k{color:var(--ink-2)}
+details{margin-top:14px;background:var(--surface);border:1px solid var(--ring);border-radius:12px}
+summary{cursor:pointer;padding:12px 16px;font-weight:600;font-size:14px}
+summary span{font-weight:400;color:var(--muted);margin-left:8px;font-size:12.5px}
+.table-scroll{overflow:auto;max-height:560px;margin:0 16px 16px}
+table.data{border-collapse:collapse;font-size:12.5px;width:100%}
+table.data th{position:sticky;top:0;background:var(--surface);text-align:right;font-weight:500;color:var(--ink-2);padding:6px 10px;border-bottom:1px solid var(--axis);white-space:nowrap}
+table.data td{text-align:right;padding:4px 10px;border-bottom:1px solid var(--grid);font-family:var(--mono);font-variant-numeric:tabular-nums;white-space:nowrap}
+table.data th.t,table.data td.t{text-align:left}
+table.data tr.best td{background:color-mix(in srgb, var(--s1) 10%, transparent)}
+.method{margin-top:24px;color:var(--ink-2);font-size:13px;max-width:92ch}
+.method h2{font-size:14px;color:var(--ink);margin:0 0 6px}
+.method ul{margin:0;padding-left:18px;display:grid;gap:5px}
+code{font-family:var(--mono);font-size:.92em}
+@media (max-width:640px){ body{padding-inline:16px} .instrument{padding:12px 10px 2px} select{max-width:150px} }
+</style>
+
+<div class="wrap">
+  <header>
+    <p class="eyebrow" id="eyebrow"></p>
+    <h1 id="headline"></h1>
+    <p class="lede" id="lede"></p>
+    <dl class="ledger" id="ledger"></dl>
+  </header>
+
+  <div class="controls">
+    <div class="field"><label for="fx">X axis</label><select id="fx"></select></div>
+    <div class="field"><label for="fy">Y axis</label><select id="fy"></select></div>
+    <div class="field"><label for="fc">Colour</label><select id="fc"></select></div>
+    <div id="filters" style="display:flex;flex-wrap:wrap;gap:10px 14px"></div>
+    <div class="spacer"></div>
+    <button class="btn" id="connect" type="button" aria-pressed="true">Connect points</button>
+    <span class="count" id="count"></span>
+  </div>
+
+  <main class="instrument">
+    <div class="panel-head">
+      <h2 id="chartTitle"></h2>
+      <ul class="legend" id="legend"></ul>
+      <p class="note" id="chartNote"></p>
+    </div>
+    <div class="canvas-box" id="chart"><canvas role="img" aria-label="Study outcomes against the chosen setting"></canvas></div>
+  </main>
+
+  <details open>
+    <summary>Rows <span id="tableCap"></span></summary>
+    <div class="table-scroll" id="tRows"></div>
+  </details>
+
+  <section class="method">
+    <h2>How to read this</h2>
+    <ul id="method"></ul>
+  </section>
+</div>
+
+<div class="tip" id="tip" hidden></div>
+
+<script id="study-data" type="application/json">{"meta":{"key":"cadence_budgets_cap20","title":"Cadence and Budgets at Cap 20","path":"study__full_rulebook__RR__withdrawal_cadence__monthly_purchases__cap_20__cash_budgets","source":"study.json (rows)","rows":372,"headline":"This provides the fairer bridge between the old cadence study and the purchase studies: shared settings reproduce exactly when the assumptions match. Funding and capacity constraints can change which withdrawal/purchase combination is attractive.","default":{"x":"withdrawal_policy","y":"combined_net_cash_usd","color":"purchase_policy"}},"cols":["purchase_policy","withdrawal_policy","initial_cash_usd","monthly_contribution_usd","combined_net_cash_usd","ongoing_net_cash_usd","terminal_received_usd","accounts_bought","alive_before_terminal","purchase_spend_usd","minimum_owner_cash_usd","delta_ongoing_net_cash_usd_vs_monthly","delta_combined_net_cash_usd_vs_monthly"],"kinds":["param","param","param","param","metric","metric","metric","metric","metric","metric","metric","metric","metric"],"numeric":{"purchase_policy":false,"withdrawal_policy":false,"initial_cash_usd":true,"monthly_contribution_usd":true,"combined_net_cash_usd":true,"ongoing_net_cash_usd":true,"terminal_received_usd":true,"accounts_bought":true,"alive_before_terminal":true,"purchase_spend_usd":true,"minimum_owner_cash_usd":true,"delta_ongoing_net_cash_usd_vs_monthly":true,"delta_combined_net_cash_usd_vs_monthly":true},"values":{"purchase_policy":["monthly_one"],"withdrawal_policy":["fixed_1000_backlog","fixed_1500_backlog","fixed_750_backlog","maximum_excess_monthly","minimum_monthly"],"initial_cash_usd":[1000,5000],"monthly_contribution_usd":[0,200],"accounts_bought":[57,58,59,60,61,62,63,64],"alive_before_terminal":[2,3,11,13,14,16,17,18,19,20],"purchase_spend_usd":[11400.0,11600.0,11800.0,12000.0,12200.0,12400.0,12600.0,12800.0],"minimum_owner_cash_usd":[0.0,800.0,4800.0],"delta_ongoing_net_cash_usd_vs_monthly":[-4678.76,-4678.75,-3720.71,-3720.7,-2905.0,-1946.95,0.0,4260.85,4719.15,4955.34,5813.64,11658.76,11668.76,11678.76,11888.76,11891.27,15189.65,15199.65,15209.64,15219.64,15222.16,15419.64,15422.16,59050.0,66800.0,67800.0,68100.0,68300.0,69100.0,70550.0,71400.0,74500.0,75500.0,76050.0,76550.0,78000.0,79000.0,88450.0,104200.0,104400.0,105550.0,105750.0,106200.0,106950.0,107150.0,107900.0,107950.0,112850.0,115350.0,117150.0,118650.0,118750.0,120100.0],"delta_combined_net_cash_usd_vs_monthly":[-107024.38,-106066.33,-102252.91,-101328.91,-101294.86,-100612.9,-99654.85,-88111.75,-80384.78,-79426.73,-74804.37,-74713.3,-73755.25,-73523.3,-72565.25,-66987.21,-46313.93,-29357.1,-18030.81,-11823.03,-4991.1,-4191.14,0.0,784.57,784.63,5532.84,5732.84,6032.84,6232.84,6854.48,7054.48,7254.44,7254.48,7454.44,7654.44,9036.05,9036.11,9236.04,9236.11,9436.04,9636.04,9636.05,9636.11,9836.05,9836.11,10036.05,10036.11]},"data":[["monthly_one","monthly_one","monthly_one","monthly_one","monthly_one","monthly_one","monthly_one","monthly_one","monthly_one","monthly_one","monthly_one","monthly_one","monthly_one","monthly_one","monthly_one","monthly_one","monthly_one","monthly_one","monthly_one","monthly_one","monthly_one","monthly_one","monthly_one","monthly_one","monthly_one","monthly_one","monthly_one","monthly_one","monthly_one","monthly_one","monthly_one","monthly_one","monthly_one","monthly_one","monthly_one","monthly_one","monthly_one","monthly_one","monthly_one","monthly_one","monthly_one","monthly_one","monthly_one","monthly_one","monthly_one","monthly_one","monthly_one","monthly_one","monthly_one","monthly_one","monthly_one","monthly_one","monthly_one","monthly_one","monthly_one","monthly_one","monthly_one","monthly_one","monthly_one","monthly_one","monthly_one","monthly_one","monthly_one","monthly_one","monthly_one","monthly_one","monthly_one","monthly_one","monthly_one","monthly_one","monthly_one","monthly_one","monthly_one","monthly_one","monthly_one","monthly_one","monthly_one","monthly_one","monthly_one","monthly_one","monthly_one","monthly_one","monthly_one","monthly_one","monthly_one","monthly_one","monthly_one","monthly_one","monthly_one","monthly_one","monthly_one","monthly_one","monthly_one","monthly_one","monthly_one","monthly_one","monthly_one","monthly_one","monthly_one","monthly_one","monthly_one","monthly_one","monthly_one","monthly_one","monthly_one","monthly_one","monthly_one","monthly_one","monthly_one","monthly_one","monthly_one","monthly_one","monthly_one","monthly_one","monthly_one","monthly_one","monthly_one","monthly_one","monthly_one","monthly_one","monthly_one","monthly_one","monthly_one","monthly_one","monthly_one","monthly_one","monthly_one","monthly_one","monthly_one","monthly_one","monthly_one","monthly_one","monthly_one","monthly_one","monthly_one","monthly_one","monthly_one","monthly_one","monthly_one","monthly_one","monthly_one","monthly_one","monthly_one","monthly_one","monthly_one","monthly_one","monthly_one","monthly_one","monthly_one","monthly_one","monthly_one","monthly_one","monthly_one","monthly_one","monthly_one","monthly_one","monthly_one","monthly_one","monthly_one","monthly_one","monthly_one","monthly_one","monthly_one","monthly_one","monthly_one","monthly_one","monthly_one","monthly_one","monthly_one","monthly_one","monthly_one","monthly_one","monthly_one","monthly_one","monthly_one","monthly_one","monthly_one","monthly_one","monthly_one","monthly_one","monthly_one","monthly_one","monthly_one","monthly_one","monthly_one","monthly_one","monthly_one","monthly_one","monthly_one","monthly_one","monthly_one","monthly_one","monthly_one","monthly_one","monthly_one","monthly_one","monthly_one","monthly_one","monthly_one","monthly_one","monthly_one","monthly_one","monthly_one","monthly_one","monthly_one","monthly_one","monthly_one","monthly_one","monthly_one","monthly_one","monthly_one","monthly_one","monthly_one","monthly_one","monthly_one","monthly_one","monthly_one","monthly_one","monthly_one","monthly_one","monthly_one","monthly_one","monthly_one","monthly_one","monthly_one","monthly_one","monthly_one","monthly_one","monthly_one","monthly_one","monthly_one","monthly_one","monthly_one","monthly_one","monthly_one","monthly_one","monthly_one","monthly_one","monthly_one","monthly_one","monthly_one","monthly_one","monthly_one","monthly_one","monthly_one","monthly_one","monthly_one","monthly_one","monthly_one","monthly_one","monthly_one","monthly_one","monthly_one","monthly_one","monthly_one","monthly_one","monthly_one","monthly_one","monthly_one","monthly_one","monthly_one","monthly_one","monthly_one","monthly_one","monthly_one","monthly_one","monthly_one","monthly_one","monthly_one","monthly_one","monthly_one","monthly_one","monthly_one","monthly_one","monthly_one","monthly_one","monthly_one","monthly_one","monthly_one","monthly_one","monthly_one","monthly_one","monthly_one","monthly_one","monthly_one","monthly_one","monthly_one","monthly_one","monthly_one","monthly_one","monthly_one","monthly_one","monthly_one","monthly_one","monthly_one","monthly_one","monthly_one","monthly_one","monthly_one","monthly_one","monthly_one","monthly_one","monthly_one","monthly_one","monthly_one","monthly_one","monthly_one","monthly_one","monthly_one","monthly_one","monthly_one","monthly_one","monthly_one","monthly_one","monthly_one","monthly_one","monthly_one","monthly_one","monthly_one","monthly_one","monthly_one","monthly_one","monthly_one","monthly_one","monthly_one","monthly_one","monthly_one","monthly_one","monthly_one","monthly_one","monthly_one","monthly_one","monthly_one","monthly_one","monthly_one","monthly_one","monthly_one","monthly_one","monthly_one","monthly_one","monthly_one","monthly_one","monthly_one","monthly_one","monthly_one","monthly_one","monthly_one","monthly_one","monthly_one","monthly_one","monthly_one","monthly_one","monthly_one","monthly_one","monthly_one","monthly_one","monthly_one","monthly_one","monthly_one","monthly_one","monthly_one","monthly_one","monthly_one","monthly_one","monthly_one","monthly_one","monthly_one","monthly_one","monthly_one","monthly_one","monthly_one","monthly_one"],["fixed_750_backlog","fixed_750_backlog","fixed_750_backlog","fixed_750_backlog","fixed_750_backlog","fixed_750_backlog","fixed_750_backlog","fixed_750_backlog","fixed_750_backlog","fixed_750_backlog","fixed_750_backlog","fixed_750_backlog","fixed_750_backlog","fixed_750_backlog","fixed_750_backlog","fixed_750_backlog","fixed_750_backlog","fixed_750_backlog","fixed_1000_backlog","fixed_1000_backlog","fixed_1000_backlog","fixed_1000_backlog","fixed_1000_backlog","fixed_1000_backlog","fixed_1000_backlog","fixed_1000_backlog","fixed_1000_backlog","fixed_1000_backlog","fixed_1000_backlog","fixed_1000_backlog","fixed_1000_backlog","fixed_1000_backlog","fixed_1000_backlog","fixed_1000_backlog","fixed_1000_backlog","fixed_1000_backlog","fixed_1500_backlog","fixed_1500_backlog","fixed_1500_backlog","fixed_1500_backlog","fixed_1500_backlog","fixed_1500_backlog","fixed_1500_backlog","fixed_1500_backlog","fixed_1500_backlog","fixed_1500_backlog","fixed_1500_backlog","fixed_1500_backlog","fixed_1500_backlog","fixed_1500_backlog","fixed_1500_backlog","fixed_1500_backlog","fixed_1500_backlog","fixed_1500_backlog","minimum_monthly","minimum_monthly","minimum_monthly","minimum_monthly","minimum_monthly","minimum_monthly","minimum_monthly","minimum_monthly","minimum_monthly","minimum_monthly","minimum_monthly","minimum_monthly","minimum_monthly","minimum_monthly","minimum_monthly","minimum_monthly","minimum_monthly","minimum_monthly","minimum_monthly","minimum_monthly","minimum_monthly","maximum_excess_monthly","maximum_excess_monthly","maximum_excess_monthly","maximum_excess_monthly","maximum_excess_monthly","maximum_excess_monthly","maximum_excess_monthly","maximum_excess_monthly","maximum_excess_monthly","maximum_excess_monthly","maximum_excess_monthly","maximum_excess_monthly","maximum_excess_monthly","maximum_excess_monthly","maximum_excess_monthly","maximum_excess_monthly","maximum_excess_monthly","maximum_excess_monthly","fixed_750_backlog","fixed_750_backlog","fixed_750_backlog","fixed_750_backlog","fixed_750_backlog","fixed_750_backlog","fixed_750_backlog","fixed_750_backlog","fixed_750_backlog","fixed_750_backlog","fixed_750_backlog","fixed_750_backlog","fixed_750_backlog","fixed_750_backlog","fixed_750_backlog","fixed_750_backlog","fixed_750_backlog","fixed_750_backlog","fixed_1000_backlog","fixed_1000_backlog","fixed_1000_backlog","fixed_1000_backlog","fixed_1000_backlog","fixed_1000_backlog","fixed_1000_backlog","fixed_1000_backlog","fixed_1000_backlog","fixed_1000_backlog","fixed_1000_backlog","fixed_1000_backlog","fixed_1000_backlog","fixed_1000_backlog","fixed_1000_backlog","fixed_1000_backlog","fixed_1000_backlog","fixed_1000_backlog","fixed_1500_backlog","fixed_1500_backlog","fixed_1500_backlog","fixed_1500_backlog","fixed_1500_backlog","fixed_1500_backlog","fixed_1500_backlog","fixed_1500_backlog","fixed_1500_backlog","fixed_1500_backlog","fixed_1500_backlog","fixed_1500_backlog","fixed_1500_backlog","fixed_1500_backlog","fixed_1500_backlog","fixed_1500_backlog","fixed_1500_backlog","fixed_1500_backlog","minimum_monthly","minimum_monthly","minimum_monthly","minimum_monthly","minimum_monthly","minimum_monthly","minimum_monthly","minimum_monthly","minimum_monthly","minimum_monthly","minimum_monthly","minimum_monthly","minimum_monthly","minimum_monthly","minimum_monthly","minimum_monthly","minimum_monthly","minimum_monthly","minimum_monthly","minimum_monthly","minimum_monthly","maximum_excess_monthly","maximum_excess_monthly","maximum_excess_monthly","maximum_excess_monthly","maximum_excess_monthly","maximum_excess_monthly","maximum_excess_monthly","maximum_excess_monthly","maximum_excess_monthly","maximum_excess_monthly","maximum_excess_monthly","maximum_excess_monthly","maximum_excess_monthly","maximum_excess_monthly","maximum_excess_monthly","maximum_excess_monthly","maximum_excess_monthly","maximum_excess_monthly","fixed_750_backlog","fixed_750_backlog","fixed_750_backlog","fixed_750_backlog","fixed_750_backlog","fixed_750_backlog","fixed_750_backlog","fixed_750_backlog","fixed_750_backlog","fixed_750_backlog","fixed_750_backlog","fixed_750_backlog","fixed_750_backlog","fixed_750_backlog","fixed_750_backlog","fixed_750_backlog","fixed_750_backlog","fixed_750_backlog","fixed_1000_backlog","fixed_1000_backlog","fixed_1000_backlog","fixed_1000_backlog","fixed_1000_backlog","fixed_1000_backlog","fixed_1000_backlog","fixed_1000_backlog","fixed_1000_backlog","fixed_1000_backlog","fixed_1000_backlog","fixed_1000_backlog","fixed_1000_backlog","fixed_1000_backlog","fixed_1000_backlog","fixed_1000_backlog","fixed_1000_backlog","fixed_1000_backlog","fixed_1500_backlog","fixed_1500_backlog","fixed_1500_backlog","fixed_1500_backlog","fixed_1500_backlog","fixed_1500_backlog","fixed_1500_backlog","fixed_1500_backlog","fixed_1500_backlog","fixed_1500_backlog","fixed_1500_backlog","fixed_1500_backlog","fixed_1500_backlog","fixed_1500_backlog","fixed_1500_backlog","fixed_1500_backlog","fixed_1500_backlog","fixed_1500_backlog","minimum_monthly","minimum_monthly","minimum_monthly","minimum_monthly","minimum_monthly","minimum_monthly","minimum_monthly","minimum_monthly","minimum_monthly","minimum_monthly","minimum_monthly","minimum_monthly","minimum_monthly","minimum_monthly","minimum_monthly","minimum_monthly","minimum_monthly","minimum_monthly","minimum_monthly","minimum_monthly","minimum_monthly","maximum_excess_monthly","maximum_excess_monthly","maximum_excess_monthly","maximum_excess_monthly","maximum_excess_monthly","maximum_excess_monthly","maximum_excess_monthly","maximum_excess_monthly","maximum_excess_monthly","maximum_excess_monthly","maximum_excess_monthly","maximum_excess_monthly","maximum_excess_monthly","maximum_excess_monthly","maximum_excess_monthly","maximum_excess_monthly","maximum_excess_monthly","maximum_excess_monthly","fixed_750_backlog","fixed_750_backlog","fixed_750_backlog","fixed_750_backlog","fixed_750_backlog","fixed_750_backlog","fixed_750_backlog","fixed_750_backlog","fixed_750_backlog","fixed_750_backlog","fixed_750_backlog","fixed_750_backlog","fixed_750_backlog","fixed_750_backlog","fixed_750_backlog","fixed_750_backlog","fixed_750_backlog","fixed_750_backlog","fixed_1000_backlog","fixed_1000_backlog","fixed_1000_backlog","fixed_1000_backlog","fixed_1000_backlog","fixed_1000_backlog","fixed_1000_backlog","fixed_1000_backlog","fixed_1000_backlog","fixed_1000_backlog","fixed_1000_backlog","fixed_1000_backlog","fixed_1000_backlog","fixed_1000_backlog","fixed_1000_backlog","fixed_1000_backlog","fixed_1000_backlog","fixed_1000_backlog","fixed_1500_backlog","fixed_1500_backlog","fixed_1500_backlog","fixed_1500_backlog","fixed_1500_backlog","fixed_1500_backlog","fixed_1500_backlog","fixed_1500_backlog","fixed_1500_backlog","fixed_1500_backlog","fixed_1500_backlog","fixed_1500_backlog","fixed_1500_backlog","fixed_1500_backlog","fixed_1500_backlog","fixed_1500_backlog","fixed_1500_backlog","fixed_1500_backlog","minimum_monthly","minimum_monthly","minimum_monthly","minimum_monthly","minimum_monthly","minimum_monthly","minimum_monthly","minimum_monthly","minimum_monthly","minimum_monthly","minimum_monthly","minimum_monthly","minimum_monthly","minimum_monthly","minimum_monthly","minimum_monthly","minimum_monthly","minimum_monthly","minimum_monthly","minimum_monthly","minimum_monthly","maximum_excess_monthly","maximum_excess_monthly","maximum_excess_monthly","maximum_excess_monthly","maximum_excess_monthly","maximum_excess_monthly","maximum_excess_monthly","maximum_excess_monthly","maximum_excess_monthly","maximum_excess_monthly","maximum_excess_monthly","maximum_excess_monthly","maximum_excess_monthly","maximum_excess_monthly","maximum_excess_monthly","maximum_excess_monthly","maximum_excess_monthly","maximum_excess_monthly"],[1000,1000,1000,1000,1000,1000,1000,1000,1000,1000,1000,1000,1000,1000,1000,1000,1000,1000,1000,1000,1000,1000,1000,1000,1000,1000,1000,1000,1000,1000,1000,1000,1000,1000,1000,1000,1000,1000,1000,1000,1000,1000,1000,1000,1000,1000,1000,1000,1000,1000,1000,1000,1000,1000,1000,1000,1000,1000,1000,1000,1000,1000,1000,1000,1000,1000,1000,1000,1000,1000,1000,1000,1000,1000,1000,1000,1000,1000,1000,1000,1000,1000,1000,1000,1000,1000,1000,1000,1000,1000,1000,1000,1000,1000,1000,1000,1000,1000,1000,1000,1000,1000,1000,1000,1000,1000,1000,1000,1000,1000,1000,1000,1000,1000,1000,1000,1000,1000,1000,1000,1000,1000,1000,1000,1000,1000,1000,1000,1000,1000,1000,1000,1000,1000,1000,1000,1000,1000,1000,1000,1000,1000,1000,1000,1000,1000,1000,1000,1000,1000,1000,1000,1000,1000,1000,1000,1000,1000,1000,1000,1000,1000,1000,1000,1000,1000,1000,1000,1000,1000,1000,1000,1000,1000,1000,1000,1000,1000,1000,1000,1000,1000,1000,1000,1000,1000,5000,5000,5000,5000,5000,5000,5000,5000,5000,5000,5000,5000,5000,5000,5000,5000,5000,5000,5000,5000,5000,5000,5000,5000,5000,5000,5000,5000,5000,5000,5000,5000,5000,5000,5000,5000,5000,5000,5000,5000,5000,5000,5000,5000,5000,5000,5000,5000,5000,5000,5000,5000,5000,5000,5000,5000,5000,5000,5000,5000,5000,5000,5000,5000,5000,5000,5000,5000,5000,5000,5000,5000,5000,5000,5000,5000,5000,5000,5000,5000,5000,5000,5000,5000,5000,5000,5000,5000,5000,5000,5000,5000,5000,5000,5000,5000,5000,5000,5000,5000,5000,5000,5000,5000,5000,5000,5000,5000,5000,5000,5000,5000,5000,5000,5000,5000,5000,5000,5000,5000,5000,5000,5000,5000,5000,5000,5000,5000,5000,5000,5000,5000,5000,5000,5000,5000,5000,5000,5000,5000,5000,5000,5000,5000,5000,5000,5000,5000,5000,5000,5000,5000,5000,5000,5000,5000,5000,5000,5000,5000,5000,5000,5000,5000,5000,5000,5000,5000,5000,5000,5000,5000,5000,5000,5000,5000,5000,5000,5000,5000,5000,5000,5000,5000,5000,5000],[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,200,200,200,200,200,200,200,200,200,200,200,200,200,200,200,200,200,200,200,200,200,200,200,200,200,200,200,200,200,200,200,200,200,200,200,200,200,200,200,200,200,200,200,200,200,200,200,200,200,200,200,200,200,200,200,200,200,200,200,200,200,200,200,200,200,200,200,200,200,200,200,200,200,200,200,200,200,200,200,200,200,200,200,200,200,200,200,200,200,200,200,200,200,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,200,200,200,200,200,200,200,200,200,200,200,200,200,200,200,200,200,200,200,200,200,200,200,200,200,200,200,200,200,200,200,200,200,200,200,200,200,200,200,200,200,200,200,200,200,200,200,200,200,200,200,200,200,200,200,200,200,200,200,200,200,200,200,200,200,200,200,200,200,200,200,200,200,200,200,200,200,200,200,200,200,200,200,200,200,200,200,200,200,200,200,200,200],[298261.47,289909.99,289609.99,289309.99,289009.99,288709.99,299046.1,298946.1,298846.1,298946.1,298846.1,298746.1,218834.74,217344.74,215854.74,285118.85,296464.43,296364.43,298261.47,289909.99,289609.99,289309.99,289009.99,288709.99,299046.1,298946.1,298846.1,298946.1,298846.1,298746.1,217876.69,216386.69,214896.69,296564.43,296464.43,296364.43,298261.47,289909.99,289609.99,289309.99,289009.99,288709.99,299046.1,298946.1,298846.1,298946.1,298846.1,298746.1,217876.69,216386.69,214896.69,296564.43,296464.43,296364.43,296754.37,296754.37,296754.37,296754.37,296754.37,296254.37,302287.21,302287.21,302287.21,302287.21,302487.21,302487.21,302487.21,227482.84,267397.27,267397.27,284931.34,302287.21,302287.21,302287.21,235300.0,298261.47,289909.99,289609.99,289309.99,289009.99,288709.99,299046.1,298946.1,298846.1,298946.1,298846.1,298746.1,217876.69,216386.69,214896.69,296564.43,296464.43,296364.43,460286.01,451934.53,451634.53,451334.53,451034.53,450734.53,461070.58,460970.58,460870.57,460770.57,460670.58,460570.58,354219.68,352279.68,350339.67,446343.43,458089.01,457989.01,460286.01,451934.53,451634.53,451334.53,451034.53,450734.53,461070.58,460970.58,460870.57,460770.57,460670.58,460570.58,353261.63,351321.63,349381.62,458189.01,458089.01,457989.01,460286.01,451934.53,451634.53,451334.53,451034.53,450734.53,461070.58,460970.58,460870.57,460770.57,460670.58,460570.58,353261.63,351321.63,349381.62,458189.01,458089.01,457989.01,458778.91,458778.91,458778.91,458778.91,458778.91,458278.91,464311.75,464311.75,464311.75,464311.75,464311.75,464311.75,464311.75,362982.84,412464.98,412464.98,440748.1,464311.75,464311.75,464311.75,376200.0,460286.01,451934.53,451634.53,451334.53,451034.53,450734.53,461070.58,460970.58,460870.57,460770.57,460670.58,460570.58,353261.63,351321.63,349381.62,458189.01,458089.01,457989.01,460486.01,452134.53,451834.53,451534.53,451234.53,450934.53,461270.58,461170.58,461070.57,461170.57,461070.58,460970.58,354419.68,352479.68,350539.67,446543.43,458289.01,458189.01,460486.01,452134.53,451834.53,451534.53,451234.53,450934.53,461270.58,461170.58,461070.57,461170.57,461070.58,460970.58,353461.63,351521.63,349581.62,458389.01,458289.01,458189.01,460486.01,452134.53,451834.53,451534.53,451234.53,450934.53,461270.58,461170.58,461070.57,461170.57,461070.58,460970.58,353461.63,351521.63,349581.62,458389.01,458289.01,458189.01,458978.91,458978.91,458978.91,458978.91,458978.91,458478.91,464511.75,464511.75,464511.75,464511.75,464711.75,464711.75,464711.75,363182.84,412664.98,412664.98,440948.1,464511.75,464511.75,464511.75,376400.0,460486.01,452134.53,451834.53,451534.53,451234.53,450934.53,461270.58,461170.58,461070.57,461170.57,461070.58,460970.58,353461.63,351521.63,349581.62,458389.01,458289.01,458189.01,460286.01,451934.53,451634.53,451334.53,451034.53,450734.53,461070.58,460970.58,460870.57,460770.57,460670.58,460570.58,354219.68,352279.68,350339.67,446343.43,458089.01,457989.01,460286.01,451934.53,451634.53,451334.53,451034.53,450734.53,461070.58,460970.58,460870.57,460770.57,460670.58,460570.58,353261.63,351321.63,349381.62,458189.01,458089.01,457989.01,460286.01,451934.53,451634.53,451334.53,451034.53,450734.53,461070.58,460970.58,460870.57,460770.57,460670.58,460570.58,353261.63,351321.63,349381.62,458189.01,458089.01,457989.01,458778.91,458778.91,458778.91,458778.91,458778.91,458278.91,464311.75,464311.75,464311.75,464311.75,464311.75,464311.75,464311.75,362982.84,412464.98,412464.98,440748.1,464311.75,464311.75,464311.75,376200.0,460286.01,451934.53,451634.53,451334.53,451034.53,450734.53,461070.58,460970.58,460870.57,460770.57,460670.58,460570.58,353261.63,351321.63,349381.62,458189.01,458089.01,457989.01],[220781.69,219291.69,217801.69,216311.69,214821.69,213331.69,232440.45,230960.45,229480.45,228200.45,226712.96,225222.96,218834.74,217344.74,215854.74,220572.54,219540.84,218050.84,220781.69,219291.69,217801.69,216311.69,214821.69,213331.69,232440.45,230960.45,229480.45,228200.45,226712.96,225222.96,217876.69,216386.69,214896.69,221030.84,219540.84,218050.84,220781.69,219291.69,217801.69,216311.69,214821.69,213331.69,232440.45,230960.45,229480.45,228200.45,226712.96,225222.96,217876.69,216386.69,214896.69,221030.84,219540.84,218050.84,147900.0,146900.0,145900.0,145400.0,145400.0,144400.0,163900.0,218450.0,216000.0,214000.0,213700.0,213200.0,211200.0,222950.0,222400.0,222400.0,223900.0,224400.0,221450.0,220950.0,235300.0,220781.69,219291.69,217801.69,216311.69,214821.69,213331.69,232440.45,230960.45,229480.45,228200.45,226712.96,225222.96,217876.69,216386.69,214896.69,221030.84,219540.84,218050.84,357940.38,356000.38,354060.38,352120.38,350180.38,348240.38,373130.03,371200.03,369270.02,367340.02,365402.54,363462.54,354219.68,352279.68,350339.67,357075.72,355994.02,354054.02,357940.38,356000.38,354060.38,352120.38,350180.38,348240.38,373130.03,371200.03,369270.02,367340.02,365402.54,363462.54,353261.63,351321.63,349381.62,357934.02,355994.02,354054.02,357940.38,356000.38,354060.38,352120.38,350180.38,348240.38,373130.03,371200.03,369270.02,367340.02,365402.54,363462.54,353261.63,351321.63,349381.62,357934.02,355994.02,354054.02,245500.0,243000.0,242000.0,241500.0,241500.0,239500.0,270000.0,353400.0,350950.0,348950.0,348450.0,347050.0,343700.0,358450.0,358350.0,358350.0,360750.0,361600.0,358650.0,358150.0,376200.0,357940.38,356000.38,354060.38,352120.38,350180.38,348240.38,373130.03,371200.03,369270.02,367340.02,365402.54,363462.54,353261.63,351321.63,349381.62,357934.02,355994.02,354054.02,358140.38,356200.38,354260.38,352320.38,350380.38,348440.38,373330.03,371400.03,369470.02,367740.02,365802.54,363862.54,354419.68,352479.68,350539.67,357275.72,356194.02,354254.02,358140.38,356200.38,354260.38,352320.38,350380.38,348440.38,373330.03,371400.03,369470.02,367740.02,365802.54,363862.54,353461.63,351521.63,349581.62,358134.02,356194.02,354254.02,358140.38,356200.38,354260.38,352320.38,350380.38,348440.38,373330.03,371400.03,369470.02,367740.02,365802.54,363862.54,353461.63,351521.63,349581.62,358134.02,356194.02,354254.02,245700.0,243200.0,242200.0,241700.0,241700.0,239700.0,270200.0,353600.0,351150.0,349150.0,348850.0,347450.0,344100.0,358650.0,358550.0,358550.0,360950.0,361800.0,358850.0,358350.0,376400.0,358140.38,356200.38,354260.38,352320.38,350380.38,348440.38,373330.03,371400.03,369470.02,367740.02,365802.54,363862.54,353461.63,351521.63,349581.62,358134.02,356194.02,354254.02,357940.38,356000.38,354060.38,352120.38,350180.38,348240.38,373130.03,371200.03,369270.02,367340.02,365402.54,363462.54,354219.68,352279.68,350339.67,357075.72,355994.02,354054.02,357940.38,356000.38,354060.38,352120.38,350180.38,348240.38,373130.03,371200.03,369270.02,367340.02,365402.54,363462.54,353261.63,351321.63,349381.62,357934.02,355994.02,354054.02,357940.38,356000.38,354060.38,352120.38,350180.38,348240.38,373130.03,371200.03,369270.02,367340.02,365402.54,363462.54,353261.63,351321.63,349381.62,357934.02,355994.02,354054.02,245500.0,243000.0,242000.0,241500.0,241500.0,239500.0,270000.0,353400.0,350950.0,348950.0,348450.0,347050.0,343700.0,358450.0,358350.0,358350.0,360750.0,361600.0,358650.0,358150.0,376200.0,357940.38,356000.38,354060.38,352120.38,350180.38,348240.38,373130.03,371200.03,369270.02,367340.02,365402.54,363462.54,353261.63,351321.63,349381.62,357934.02,355994.02,354054.02],[77479.78,70618.3,71808.3,72998.3,74188.3,75378.3,66605.65,67985.65,69365.65,70745.65,72133.14,73523.14,0,0,0,64546.31,76923.59,78313.59,77479.78,70618.3,71808.3,72998.3,74188.3,75378.3,66605.65,67985.65,69365.65,70745.65,72133.14,73523.14,0,0,0,75533.59,76923.59,78313.59,77479.78,70618.3,71808.3,72998.3,74188.3,75378.3,66605.65,67985.65,69365.65,70745.65,72133.14,73523.14,0,0,0,75533.59,76923.59,78313.59,148854.37,149854.37,150854.37,151354.37,151354.37,151854.37,138387.21,83837.21,86287.21,88287.21,88787.21,89287.21,91287.21,4532.84,44997.27,44997.27,61031.34,77887.21,80837.21,81337.21,0,77479.78,70618.3,71808.3,72998.3,74188.3,75378.3,66605.65,67985.65,69365.65,70745.65,72133.14,73523.14,0,0,0,75533.59,76923.59,78313.59,102345.63,95934.15,97574.15,99214.15,100854.15,102494.15,87940.55,89770.55,91600.55,93430.55,95268.04,97108.04,0,0,0,89267.71,102094.99,103934.99,102345.63,95934.15,97574.15,99214.15,100854.15,102494.15,87940.55,89770.55,91600.55,93430.55,95268.04,97108.04,0,0,0,100254.99,102094.99,103934.99,102345.63,95934.15,97574.15,99214.15,100854.15,102494.15,87940.55,89770.55,91600.55,93430.55,95268.04,97108.04,0,0,0,100254.99,102094.99,103934.99,213278.91,215778.91,216778.91,217278.91,217278.91,218778.91,194311.75,110911.75,113361.75,115361.75,115861.75,117261.75,120611.75,4532.84,54114.98,54114.98,79998.1,102711.75,105661.75,106161.75,0,102345.63,95934.15,97574.15,99214.15,100854.15,102494.15,87940.55,89770.55,91600.55,93430.55,95268.04,97108.04,0,0,0,100254.99,102094.99,103934.99,102345.63,95934.15,97574.15,99214.15,100854.15,102494.15,87940.55,89770.55,91600.55,93430.55,95268.04,97108.04,0,0,0,89267.71,102094.99,103934.99,102345.63,95934.15,97574.15,99214.15,100854.15,102494.15,87940.55,89770.55,91600.55,93430.55,95268.04,97108.04,0,0,0,100254.99,102094.99,103934.99,102345.63,95934.15,97574.15,99214.15,100854.15,102494.15,87940.55,89770.55,91600.55,93430.55,95268.04,97108.04,0,0,0,100254.99,102094.99,103934.99,213278.91,215778.91,216778.91,217278.91,217278.91,218778.91,194311.75,110911.75,113361.75,115361.75,115861.75,117261.75,120611.75,4532.84,54114.98,54114.98,79998.1,102711.75,105661.75,106161.75,0,102345.63,95934.15,97574.15,99214.15,100854.15,102494.15,87940.55,89770.55,91600.55,93430.55,95268.04,97108.04,0,0,0,100254.99,102094.99,103934.99,102345.63,95934.15,97574.15,99214.15,100854.15,102494.15,87940.55,89770.55,91600.55,93430.55,95268.04,97108.04,0,0,0,89267.71,102094.99,103934.99,102345.63,95934.15,97574.15,99214.15,100854.15,102494.15,87940.55,89770.55,91600.55,93430.55,95268.04,97108.04,0,0,0,100254.99,102094.99,103934.99,102345.63,95934.15,97574.15,99214.15,100854.15,102494.15,87940.55,89770.55,91600.55,93430.55,95268.04,97108.04,0,0,0,100254.99,102094.99,103934.99,213278.91,215778.91,216778.91,217278.91,217278.91,218778.91,194311.75,110911.75,113361.75,115361.75,115861.75,117261.75,120611.75,4532.84,54114.98,54114.98,79998.1,102711.75,105661.75,106161.75,0,102345.63,95934.15,97574.15,99214.15,100854.15,102494.15,87940.55,89770.55,91600.55,93430.55,95268.04,97108.04,0,0,0,100254.99,102094.99,103934.99],[58,58,58,58,58,58,58,58,58,57,57,57,58,58,58,58,58,58,58,58,58,58,58,58,58,58,58,57,57,57,58,58,58,58,58,58,58,58,58,58,58,58,58,58,58,57,57,57,58,58,58,58,58,58,58,58,58,58,58,58,58,58,58,58,57,57,57,58,58,58,58,58,58,58,58,58,58,58,58,58,58,58,58,58,57,57,57,58,58,58,58,58,58,60,60,60,60,60,60,60,60,60,60,60,60,64,64,64,64,62,62,60,60,60,60,60,60,60,60,60,60,60,60,64,64,64,62,62,62,60,60,60,60,60,60,60,60,60,60,60,60,64,64,64,62,62,62,60,60,60,60,60,60,60,60,60,60,60,60,60,64,64,64,64,60,60,60,64,60,60,60,60,60,60,60,60,60,60,60,60,64,64,64,62,62,62,59,59,59,59,59,59,59,59,59,58,58,58,63,63,63,63,61,61,59,59,59,59,59,59,59,59,59,58,58,58,63,63,63,61,61,61,59,59,59,59,59,59,59,59,59,58,58,58,63,63,63,61,61,61,59,59,59,59,59,59,59,59,59,59,58,58,58,63,63,63,63,59,59,59,63,59,59,59,59,59,59,59,59,59,58,58,58,63,63,63,61,61,61,60,60,60,60,60,60,60,60,60,60,60,60,64,64,64,64,62,62,60,60,60,60,60,60,60,60,60,60,60,60,64,64,64,62,62,62,60,60,60,60,60,60,60,60,60,60,60,60,64,64,64,62,62,62,60,60,60,60,60,60,60,60,60,60,60,60,60,64,64,64,64,60,60,60,64,60,60,60,60,60,60,60,60,60,60,60,60,64,64,64,62,62,62],[17,17,17,17,17,17,17,17,17,17,17,17,2,2,2,14,16,16,17,17,17,17,17,17,17,17,17,17,17,17,2,2,2,16,16,16,17,17,17,17,17,17,17,17,17,17,17,17,2,2,2,16,16,16,17,17,17,17,17,17,17,17,17,17,17,17,17,3,11,11,14,17,17,17,2,17,17,17,17,17,17,17,17,17,17,17,17,2,2,2,16,16,16,20,20,20,20,20,20,20,20,20,20,20,20,2,2,2,19,20,20,20,20,20,20,20,20,20,20,20,20,20,20,2,2,2,20,20,20,20,20,20,20,20,20,20,20,20,20,20,20,2,2,2,20,20,20,20,20,20,20,20,20,20,20,20,20,20,20,20,3,13,13,18,20,20,20,2,20,20,20,20,20,20,20,20,20,20,20,20,2,2,2,20,20,20,20,20,20,20,20,20,20,20,20,20,20,20,2,2,2,19,20,20,20,20,20,20,20,20,20,20,20,20,20,20,2,2,2,20,20,20,20,20,20,20,20,20,20,20,20,20,20,20,2,2,2,20,20,20,20,20,20,20,20,20,20,20,20,20,20,20,20,3,13,13,18,20,20,20,2,20,20,20,20,20,20,20,20,20,20,20,20,2,2,2,20,20,20,20,20,20,20,20,20,20,20,20,20,20,20,2,2,2,19,20,20,20,20,20,20,20,20,20,20,20,20,20,20,2,2,2,20,20,20,20,20,20,20,20,20,20,20,20,20,20,20,2,2,2,20,20,20,20,20,20,20,20,20,20,20,20,20,20,20,20,3,13,13,18,20,20,20,2,20,20,20,20,20,20,20,20,20,20,20,20,2,2,2,20,20,20],[11600.0,11600.0,11600.0,11600.0,11600.0,11600.0,11600.0,11600.0,11600.0,11400.0,11400.0,11400.0,11600.0,11600.0,11600.0,11600.0,11600.0,11600.0,11600.0,11600.0,11600.0,11600.0,11600.0,11600.0,11600.0,11600.0,11600.0,11400.0,11400.0,11400.0,11600.0,11600.0,11600.0,11600.0,11600.0,11600.0,11600.0,11600.0,11600.0,11600.0,11600.0,11600.0,11600.0,11600.0,11600.0,11400.0,11400.0,11400.0,11600.0,11600.0,11600.0,11600.0,11600.0,11600.0,11600.0,11600.0,11600.0,11600.0,11600.0,11600.0,11600.0,11600.0,11600.0,11600.0,11400.0,11400.0,11400.0,11600.0,11600.0,11600.0,11600.0,11600.0,11600.0,11600.0,11600.0,11600.0,11600.0,11600.0,11600.0,11600.0,11600.0,11600.0,11600.0,11600.0,11400.0,11400.0,11400.0,11600.0,11600.0,11600.0,11600.0,11600.0,11600.0,12000.0,12000.0,12000.0,12000.0,12000.0,12000.0,12000.0,12000.0,12000.0,12000.0,12000.0,12000.0,12800.0,12800.0,12800.0,12800.0,12400.0,12400.0,12000.0,12000.0,12000.0,12000.0,12000.0,12000.0,12000.0,12000.0,12000.0,12000.0,12000.0,12000.0,12800.0,12800.0,12800.0,12400.0,12400.0,12400.0,12000.0,12000.0,12000.0,12000.0,12000.0,12000.0,12000.0,12000.0,12000.0,12000.0,12000.0,12000.0,12800.0,12800.0,12800.0,12400.0,12400.0,12400.0,12000.0,12000.0,12000.0,12000.0,12000.0,12000.0,12000.0,12000.0,12000.0,12000.0,12000.0,12000.0,12000.0,12800.0,12800.0,12800.0,12800.0,12000.0,12000.0,12000.0,12800.0,12000.0,12000.0,12000.0,12000.0,12000.0,12000.0,12000.0,12000.0,12000.0,12000.0,12000.0,12000.0,12800.0,12800.0,12800.0,12400.0,12400.0,12400.0,11800.0,11800.0,11800.0,11800.0,11800.0,11800.0,11800.0,11800.0,11800.0,11600.0,11600.0,11600.0,12600.0,12600.0,12600.0,12600.0,12200.0,12200.0,11800.0,11800.0,11800.0,11800.0,11800.0,11800.0,11800.0,11800.0,11800.0,11600.0,11600.0,11600.0,12600.0,12600.0,12600.0,12200.0,12200.0,12200.0,11800.0,11800.0,11800.0,11800.0,11800.0,11800.0,11800.0,11800.0,11800.0,11600.0,11600.0,11600.0,12600.0,12600.0,12600.0,12200.0,12200.0,12200.0,11800.0,11800.0,11800.0,11800.0,11800.0,11800.0,11800.0,11800.0,11800.0,11800.0,11600.0,11600.0,11600.0,12600.0,12600.0,12600.0,12600.0,11800.0,11800.0,11800.0,12600.0,11800.0,11800.0,11800.0,11800.0,11800.0,11800.0,11800.0,11800.0,11800.0,11600.0,11600.0,11600.0,12600.0,12600.0,12600.0,12200.0,12200.0,12200.0,12000.0,12000.0,12000.0,12000.0,12000.0,12000.0,12000.0,12000.0,12000.0,12000.0,12000.0,12000.0,12800.0,12800.0,12800.0,12800.0,12400.0,12400.0,12000.0,12000.0,12000.0,12000.0,12000.0,12000.0,12000.0,12000.0,12000.0,12000.0,12000.0,12000.0,12800.0,12800.0,12800.0,12400.0,12400.0,12400.0,12000.0,12000.0,12000.0,12000.0,12000.0,12000.0,12000.0,12000.0,12000.0,12000.0,12000.0,12000.0,12800.0,12800.0,12800.0,12400.0,12400.0,12400.0,12000.0,12000.0,12000.0,12000.0,12000.0,12000.0,12000.0,12000.0,12000.0,12000.0,12000.0,12000.0,12000.0,12800.0,12800.0,12800.0,12800.0,12000.0,12000.0,12000.0,12800.0,12000.0,12000.0,12000.0,12000.0,12000.0,12000.0,12000.0,12000.0,12000.0,12000.0,12000.0,12000.0,12800.0,12800.0,12800.0,12400.0,12400.0,12400.0],[0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,800.0,800.0,800.0,800.0,800.0,800.0,800.0,800.0,800.0,800.0,800.0,800.0,800.0,800.0,800.0,800.0,800.0,800.0,800.0,800.0,800.0,800.0,800.0,800.0,800.0,800.0,800.0,800.0,800.0,800.0,800.0,800.0,800.0,800.0,800.0,800.0,800.0,800.0,800.0,800.0,800.0,800.0,800.0,800.0,800.0,800.0,800.0,800.0,800.0,800.0,800.0,800.0,800.0,800.0,800.0,800.0,800.0,800.0,800.0,800.0,800.0,800.0,800.0,800.0,800.0,800.0,800.0,800.0,800.0,800.0,800.0,800.0,800.0,800.0,800.0,800.0,800.0,800.0,800.0,800.0,800.0,800.0,800.0,800.0,800.0,800.0,800.0,800.0,800.0,800.0,800.0,800.0,800.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,4800.0,4800.0,4800.0,4800.0,4800.0,4800.0,4800.0,4800.0,4800.0,4800.0,4800.0,4800.0,4800.0,4800.0,4800.0,4800.0,4800.0,4800.0,4800.0,4800.0,4800.0,4800.0,4800.0,4800.0,4800.0,4800.0,4800.0,4800.0,4800.0,4800.0,4800.0,4800.0,4800.0,4800.0,4800.0,4800.0,4800.0,4800.0,4800.0,4800.0,4800.0,4800.0,4800.0,4800.0,4800.0,4800.0,4800.0,4800.0,4800.0,4800.0,4800.0,4800.0,4800.0,4800.0,4800.0,4800.0,4800.0,4800.0,4800.0,4800.0,4800.0,4800.0,4800.0,4800.0,4800.0,4800.0,4800.0,4800.0,4800.0,4800.0,4800.0,4800.0,4800.0,4800.0,4800.0,4800.0,4800.0,4800.0,4800.0,4800.0,4800.0,4800.0,4800.0,4800.0,4800.0,4800.0,4800.0,4800.0,4800.0,4800.0,4800.0,4800.0,4800.0],[0.0,0.0,0.0,0.0,0.0,0.0,11658.76,11668.76,11678.76,11888.76,11891.27,11891.27,-1946.95,-1946.95,-1946.95,4260.85,4719.15,4719.15,0.0,0.0,0.0,0.0,0.0,0.0,11658.76,11668.76,11678.76,11888.76,11891.27,11891.27,-2905.0,-2905.0,-2905.0,4719.15,4719.15,4719.15,0.0,0.0,0.0,0.0,0.0,0.0,11658.76,11668.76,11678.76,11888.76,11891.27,11891.27,-2905.0,-2905.0,-2905.0,4719.15,4719.15,4719.15,0.0,0.0,0.0,0.0,0.0,0.0,0.0,70550.0,69100.0,68100.0,68300.0,67800.0,66800.0,59050.0,74500.0,75500.0,78000.0,79000.0,76050.0,76550.0,71400.0,0.0,0.0,0.0,0.0,0.0,0.0,11658.76,11668.76,11678.76,11888.76,11891.27,11891.27,-2905.0,-2905.0,-2905.0,4719.15,4719.15,4719.15,0.0,0.0,0.0,0.0,0.0,0.0,15189.65,15199.65,15209.64,15219.64,15222.16,15222.16,-3720.7,-3720.7,-3720.71,4955.34,5813.64,5813.64,0.0,0.0,0.0,0.0,0.0,0.0,15189.65,15199.65,15209.64,15219.64,15222.16,15222.16,-4678.75,-4678.75,-4678.76,5813.64,5813.64,5813.64,0.0,0.0,0.0,0.0,0.0,0.0,15189.65,15199.65,15209.64,15219.64,15222.16,15222.16,-4678.75,-4678.75,-4678.76,5813.64,5813.64,5813.64,0.0,0.0,0.0,0.0,0.0,0.0,0.0,107900.0,107950.0,106950.0,106950.0,105550.0,104200.0,88450.0,112850.0,115350.0,118750.0,120100.0,117150.0,118650.0,106200.0,0.0,0.0,0.0,0.0,0.0,0.0,15189.65,15199.65,15209.64,15219.64,15222.16,15222.16,-4678.75,-4678.75,-4678.76,5813.64,5813.64,5813.64,0.0,0.0,0.0,0.0,0.0,0.0,15189.65,15199.65,15209.64,15419.64,15422.16,15422.16,-3720.7,-3720.7,-3720.71,4955.34,5813.64,5813.64,0.0,0.0,0.0,0.0,0.0,0.0,15189.65,15199.65,15209.64,15419.64,15422.16,15422.16,-4678.75,-4678.75,-4678.76,5813.64,5813.64,5813.64,0.0,0.0,0.0,0.0,0.0,0.0,15189.65,15199.65,15209.64,15419.64,15422.16,15422.16,-4678.75,-4678.75,-4678.76,5813.64,5813.64,5813.64,0.0,0.0,0.0,0.0,0.0,0.0,0.0,107900.0,107950.0,106950.0,107150.0,105750.0,104400.0,88450.0,112850.0,115350.0,118750.0,120100.0,117150.0,118650.0,106200.0,0.0,0.0,0.0,0.0,0.0,0.0,15189.65,15199.65,15209.64,15419.64,15422.16,15422.16,-4678.75,-4678.75,-4678.76,5813.64,5813.64,5813.64,0.0,0.0,0.0,0.0,0.0,0.0,15189.65,15199.65,15209.64,15219.64,15222.16,15222.16,-3720.7,-3720.7,-3720.71,4955.34,5813.64,5813.64,0.0,0.0,0.0,0.0,0.0,0.0,15189.65,15199.65,15209.64,15219.64,15222.16,15222.16,-4678.75,-4678.75,-4678.76,5813.64,5813.64,5813.64,0.0,0.0,0.0,0.0,0.0,0.0,15189.65,15199.65,15209.64,15219.64,15222.16,15222.16,-4678.75,-4678.75,-4678.76,5813.64,5813.64,5813.64,0.0,0.0,0.0,0.0,0.0,0.0,0.0,107900.0,107950.0,106950.0,106950.0,105550.0,104200.0,88450.0,112850.0,115350.0,118750.0,120100.0,117150.0,118650.0,106200.0,0.0,0.0,0.0,0.0,0.0,0.0,15189.65,15199.65,15209.64,15219.64,15222.16,15222.16,-4678.75,-4678.75,-4678.76,5813.64,5813.64,5813.64],[0.0,0.0,0.0,0.0,0.0,0.0,784.63,9036.11,9236.11,9636.11,9836.11,10036.11,-79426.73,-72565.25,-73755.25,-4191.14,7454.44,7654.44,0.0,0.0,0.0,0.0,0.0,0.0,784.63,9036.11,9236.11,9636.11,9836.11,10036.11,-80384.78,-73523.3,-74713.3,7254.44,7454.44,7654.44,0.0,0.0,0.0,0.0,0.0,0.0,784.63,9036.11,9236.11,9636.11,9836.11,10036.11,-80384.78,-73523.3,-74713.3,7254.44,7454.44,7654.44,0.0,0.0,0.0,0.0,0.0,0.0,0.0,5532.84,5532.84,5532.84,5732.84,5732.84,6232.84,-74804.37,-29357.1,-29357.1,-11823.03,5532.84,5532.84,6032.84,-66987.21,0.0,0.0,0.0,0.0,0.0,0.0,784.63,9036.11,9236.11,9636.11,9836.11,10036.11,-80384.78,-73523.3,-74713.3,7254.44,7454.44,7654.44,0.0,0.0,0.0,0.0,0.0,0.0,784.57,9036.05,9236.04,9436.04,9636.05,9836.05,-106066.33,-99654.85,-101294.86,-4991.1,7054.48,7254.48,0.0,0.0,0.0,0.0,0.0,0.0,784.57,9036.05,9236.04,9436.04,9636.05,9836.05,-107024.38,-100612.9,-102252.91,6854.48,7054.48,7254.48,0.0,0.0,0.0,0.0,0.0,0.0,784.57,9036.05,9236.04,9436.04,9636.05,9836.05,-107024.38,-100612.9,-102252.91,6854.48,7054.48,7254.48,0.0,0.0,0.0,0.0,0.0,0.0,0.0,5532.84,5532.84,5532.84,5532.84,5532.84,6032.84,-101328.91,-46313.93,-46313.93,-18030.81,5532.84,5532.84,6032.84,-88111.75,0.0,0.0,0.0,0.0,0.0,0.0,784.57,9036.05,9236.04,9436.04,9636.05,9836.05,-107024.38,-100612.9,-102252.91,6854.48,7054.48,7254.48,0.0,0.0,0.0,0.0,0.0,0.0,784.57,9036.05,9236.04,9636.04,9836.05,10036.05,-106066.33,-99654.85,-101294.86,-4991.1,7054.48,7254.48,0.0,0.0,0.0,0.0,0.0,0.0,784.57,9036.05,9236.04,9636.04,9836.05,10036.05,-107024.38,-100612.9,-102252.91,6854.48,7054.48,7254.48,0.0,0.0,0.0,0.0,0.0,0.0,784.57,9036.05,9236.04,9636.04,9836.05,10036.05,-107024.38,-100612.9,-102252.91,6854.48,7054.48,7254.48,0.0,0.0,0.0,0.0,0.0,0.0,0.0,5532.84,5532.84,5532.84,5732.84,5732.84,6232.84,-101328.91,-46313.93,-46313.93,-18030.81,5532.84,5532.84,6032.84,-88111.75,0.0,0.0,0.0,0.0,0.0,0.0,784.57,9036.05,9236.04,9636.04,9836.05,10036.05,-107024.38,-100612.9,-102252.91,6854.48,7054.48,7254.48,0.0,0.0,0.0,0.0,0.0,0.0,784.57,9036.05,9236.04,9436.04,9636.05,9836.05,-106066.33,-99654.85,-101294.86,-4991.1,7054.48,7254.48,0.0,0.0,0.0,0.0,0.0,0.0,784.57,9036.05,9236.04,9436.04,9636.05,9836.05,-107024.38,-100612.9,-102252.91,6854.48,7054.48,7254.48,0.0,0.0,0.0,0.0,0.0,0.0,784.57,9036.05,9236.04,9436.04,9636.05,9836.05,-107024.38,-100612.9,-102252.91,6854.48,7054.48,7254.48,0.0,0.0,0.0,0.0,0.0,0.0,0.0,5532.84,5532.84,5532.84,5532.84,5532.84,6032.84,-101328.91,-46313.93,-46313.93,-18030.81,5532.84,5532.84,6032.84,-88111.75,0.0,0.0,0.0,0.0,0.0,0.0,784.57,9036.05,9236.04,9436.04,9636.05,9836.05,-107024.38,-100612.9,-102252.91,6854.48,7054.48,7254.48]]}</script>
+<script>
+(() => {
+'use strict';
+const D = JSON.parse(document.getElementById('study-data').textContent);
+const COLS = D.cols, KINDS = D.kinds, NUMERIC = D.numeric, VALUES = D.values, DATA = D.data;
+const N = DATA.length ? DATA[0].length : 0;
+const MINUS = '−';
+const MONO = '"IBM Plex Mono", ui-monospace, Consolas, monospace';
+const SANS = '"IBM Plex Sans", system-ui, -apple-system, "Segoe UI", sans-serif';
+const SERIES = ['s1', 's2', 's3', 's4', 's5', 's6', 's7', 's8'];
+const nf = new Intl.NumberFormat('en-US', {maximumFractionDigits: 0});
+const nf2 = new Intl.NumberFormat('en-US', {maximumFractionDigits: 2});
+const clamp = (v, a, b) => Math.max(a, Math.min(b, v));
+const isMoney = c => /usd|cash|total|ongoing|terminal|spend|fees|reserve|pocket|balance|headroom|cost/i.test(c);
+const trim = (x, d) => x.toFixed(d).replace(/\.0$/, '');
+function fmt(col, v) {
+  if (v === null || v === undefined) return '—';
+  if (typeof v === 'string') return v;
+  if (isMoney(col)) return (v < 0 ? MINUS + '$' : '$') + nf.format(Math.abs(Math.round(v)));
+  return Math.abs(v) >= 1000 ? nf.format(v) : nf2.format(v);
+}
+function fmtShort(col, v) {
+  if (v === null || v === undefined) return '—';
+  if (typeof v === 'string') return v;
+  if (isMoney(col)) {
+    const a = Math.abs(v), s = v < 0 ? MINUS + '$' : '$';
+    if (a >= 1e6) return s + trim(a / 1e6, 1) + 'M';
+    if (a >= 1e3) return s + trim(a / 1e3, a >= 1e4 ? 0 : 1) + 'k';
+    return s + Math.round(a);
+  }
+  return Math.abs(v) >= 1e4 ? nf.format(Math.round(v)) : nf2.format(v);
+}
+const col = name => DATA[COLS.indexOf(name)];
+const params = COLS.filter((c, i) => KINDS[i] === 'param');
+const metrics = COLS.filter((c, i) => KINDS[i] === 'metric');
+
+let X = D.meta.default.x, Y = D.meta.default.y, CBY = D.meta.default.color, connect = true;
+if (!COLS.includes(X)) X = params[0];
+if (!COLS.includes(Y)) Y = metrics[0];
+if (!COLS.includes(CBY)) CBY = params.find(p => p !== X) || params[0];
+const filters = {};
+
+function option(sel, list, chosen) {
+  sel.innerHTML = list.map(v => `<option value="${v}"${v === chosen ? ' selected' : ''}>${v}</option>`).join('');
+}
+const fx = document.getElementById('fx'), fy = document.getElementById('fy'), fc = document.getElementById('fc');
+option(fx, COLS, X); option(fy, metrics, Y); option(fc, ['(none)'].concat(params), CBY);
+
+function buildFilters() {
+  const host = document.getElementById('filters');
+  host.innerHTML = '';
+  for (const p of params) {
+    if (p === X || p === CBY) continue;
+    const vals = VALUES[p];
+    if (!vals || vals.length < 2 || vals.length > 30) continue;
+    const id = 'flt_' + p;
+    const wrap = document.createElement('div');
+    wrap.className = 'field';
+    wrap.innerHTML = `<label for="${id}">${p}</label><select id="${id}"><option value="">all</option>` +
+      vals.map(v => `<option value="${v}"${String(filters[p]) === String(v) ? ' selected' : ''}>${fmtShort(p, v)}</option>`).join('') + '</select>';
+    const sel = wrap.querySelector('select');
+    sel.addEventListener('change', () => { filters[p] = sel.value === '' ? undefined : vals[sel.selectedIndex - 1]; draw(); });
+    host.appendChild(wrap);
+  }
+}
+
+function visibleRows() {
+  const out = [];
+  const cx = col(X), cy = col(Y);
+  for (let i = 0; i < N; i++) {
+    if (cx[i] === null || cy[i] === null) continue;
+    let keep = true;
+    for (const p in filters) {
+      if (filters[p] === undefined) continue;
+      if (col(p)[i] !== filters[p]) { keep = false; break; }
+    }
+    if (keep) out.push(i);
+  }
+  return out;
+}
+
+// ------------------------------------------------------------------ chart
+const box = document.getElementById('chart'), cv = box.querySelector('canvas');
+const ctx = cv.getContext('2d');
+const C = {};
+function readColors() {
+  const cs = getComputedStyle(document.documentElement);
+  for (const k of ['surface', 'ink', 'ink-2', 'muted', 'grid', 'axis', 'sel'].concat(SERIES)) C[k] = cs.getPropertyValue('--' + k).trim();
+}
+function yScale(lo, hi, target) {
+  if (hi <= lo) { hi = lo + 1; }
+  const raw = (hi - lo) / Math.max(2, target);
+  const pow = 10 ** Math.floor(Math.log10(raw)), f = raw / pow;
+  const step = (f <= 1 ? 1 : f <= 2 ? 2 : f <= 2.5 ? 2.5 : f <= 5 ? 5 : 10) * pow;
+  const a = Math.floor(lo / step + 1e-9) * step, b = Math.ceil(hi / step - 1e-9) * step;
+  const ticks = [];
+  for (let v = a; v <= b + step / 2; v += step) ticks.push(Math.round(v * 1e6) / 1e6);
+  return {lo: a, hi: b, ticks};
+}
+let geo = null, points = [], groups = [];
+function draw() {
+  readColors();
+  const rows = visibleRows();
+  const xNum = NUMERIC[X], cx = col(X), cy = col(Y), cc = CBY === '(none)' ? null : col(CBY);
+
+  const xCats = xNum ? null : Array.from(new Set(rows.map(i => cx[i]))).sort((a, b) => (a > b ? 1 : a < b ? -1 : 0));
+  const keys = cc ? Array.from(new Set(rows.map(i => cc[i]))).sort((a, b) => (typeof a === 'number' && typeof b === 'number') ? a - b : String(a) > String(b) ? 1 : -1) : ['all'];
+  groups = keys.slice(0, 8).map((k, i) => ({key: k, color: C[SERIES[i % SERIES.length]]}));
+  const extra = keys.length - groups.length;
+
+  const w = box.clientWidth, narrow = w < 620;
+  const h = narrow ? 320 : 400, dpr = window.devicePixelRatio || 1;
+  cv.width = Math.round(w * dpr); cv.height = Math.round(h * dpr); cv.style.height = h + 'px';
+  ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+  ctx.clearRect(0, 0, w, h);
+  if (!rows.length) { ctx.fillStyle = C.muted; ctx.font = '13px ' + SANS; ctx.fillText('No rows match these filters', 20, 40); points = []; return; }
+
+  const L = narrow ? 52 : 74, R = 16, T = 14, B = xNum ? 34 : 64;
+  const pw = Math.max(10, w - L - R), ph = h - T - B;
+  let ylo = Infinity, yhi = -Infinity;
+  for (const i of rows) { const v = cy[i]; if (v < ylo) ylo = v; if (v > yhi) yhi = v; }
+  const pad = (yhi - ylo) * 0.06 || Math.abs(yhi || 1) * 0.1;
+  const y = yScale(Math.min(ylo - pad, yhi >= 0 ? 0 : ylo - pad), yhi + pad, ph / 46);
+  let xlo = 0, xhi = 1;
+  if (xNum) { xlo = Infinity; xhi = -Infinity; for (const i of rows) { const v = cx[i]; if (v < xlo) xlo = v; if (v > xhi) xhi = v; } if (xhi === xlo) { xhi = xlo + 1; } }
+  const X2 = v => xNum ? L + (v - xlo) / (xhi - xlo) * pw : L + (xCats.indexOf(v) + 0.5) / xCats.length * pw;
+  const Y2 = v => T + (1 - (v - y.lo) / (y.hi - y.lo)) * ph;
+  geo = {L, R, T, B, pw, ph, xNum, xCats, X2, Y2, y};
+
+  ctx.lineWidth = 1; ctx.font = '11px ' + MONO; ctx.textAlign = 'right'; ctx.textBaseline = 'middle';
+  for (const v of y.ticks) {
+    const yy = Math.round(Y2(v)) + 0.5;
+    ctx.strokeStyle = v === 0 ? C.axis : C.grid;
+    ctx.beginPath(); ctx.moveTo(L, yy); ctx.lineTo(L + pw, yy); ctx.stroke();
+    ctx.fillStyle = C.muted; ctx.fillText(fmtShort(Y, v), L - 8, yy);
+  }
+  ctx.textAlign = 'center'; ctx.textBaseline = 'top';
+  if (xNum) {
+    const xs = yScale(xlo, xhi, pw / 90);
+    for (const v of xs.ticks) {
+      if (v < xlo - 1e-9 || v > xhi + 1e-9) continue;
+      const xx = Math.round(X2(v)) + 0.5;
+      ctx.strokeStyle = C.grid; ctx.beginPath(); ctx.moveTo(xx, T); ctx.lineTo(xx, T + ph); ctx.stroke();
+      ctx.fillStyle = C.muted; ctx.fillText(fmtShort(X, v), xx, T + ph + 8);
+    }
+  } else {
+    ctx.save();
+    xCats.forEach(v => {
+      const xx = X2(v);
+      ctx.strokeStyle = C.grid; ctx.beginPath(); ctx.moveTo(xx, T); ctx.lineTo(xx, T + ph); ctx.stroke();
+      ctx.save(); ctx.translate(xx, T + ph + 8); ctx.rotate(-Math.PI / 5);
+      ctx.fillStyle = C.muted; ctx.textAlign = 'right'; ctx.textBaseline = 'middle';
+      const label = String(v); ctx.fillText(label.length > 22 ? label.slice(0, 21) + '…' : label, 0, 0); ctx.restore();
+    });
+    ctx.restore();
+  }
+  ctx.strokeStyle = C.axis; const by = Math.round(T + ph) + 0.5;
+  ctx.beginPath(); ctx.moveTo(L, by); ctx.lineTo(L + pw, by); ctx.stroke();
+
+  points = [];
+  ctx.save(); ctx.beginPath(); ctx.rect(L, T - 8, pw, ph + 16); ctx.clip();
+  for (const g of groups) {
+    const idx = rows.filter(i => (cc ? cc[i] : 'all') === g.key);
+    if (connect && xNum) {
+      const sorted = idx.slice().sort((a, b) => cx[a] - cx[b]);
+      ctx.strokeStyle = g.color; ctx.lineWidth = 1.75; ctx.globalAlpha = 0.85; ctx.lineJoin = 'round';
+      ctx.beginPath();
+      sorted.forEach((i, k) => { const px = X2(cx[i]), py = Y2(cy[i]); k ? ctx.lineTo(px, py) : ctx.moveTo(px, py); });
+      ctx.stroke(); ctx.globalAlpha = 1;
+    }
+    for (const i of idx) {
+      const px = X2(cx[i]), py = Y2(cy[i]);
+      ctx.beginPath(); ctx.arc(px, py, 3, 0, 7); ctx.fillStyle = g.color; ctx.globalAlpha = 0.85; ctx.fill(); ctx.globalAlpha = 1;
+      points.push({i, px, py, color: g.color});
+    }
+  }
+  ctx.restore();
+
+  document.getElementById('legend').innerHTML = (cc ? groups : []).map(g =>
+    `<li><span class="sw" style="background:${g.color}"></span>${CBY}: ${fmtShort(CBY, g.key)}</li>`).join('') +
+    (extra > 0 ? `<li>${extra} more ${CBY} values not shown</li>` : '');
+  document.getElementById('chartTitle').textContent = `${Y} by ${X}`;
+  document.getElementById('chartNote').textContent =
+    `${rows.length.toLocaleString()} of ${N.toLocaleString()} rows shown.` +
+    (connect && xNum ? ' Lines join tested points within a colour; nothing between them was simulated.' : '') +
+    (extra > 0 ? ` Only the first 8 ${CBY} values are drawn; filter to see the rest.` : '');
+  document.getElementById('count').textContent = `${rows.length.toLocaleString()} rows`;
+  buildTable(rows);
+  buildLedger(rows);
+}
+
+// ------------------------------------------------------------------ tooltip
+const tip = document.getElementById('tip');
+function showTip(i, cxp, cyp) {
+  const rowsHtml = COLS.map(c => `<tr><td class="k">${c}</td><td class="v">${fmt(c, col(c)[i])}</td></tr>`).join('');
+  tip.innerHTML = `<div class="d">row ${i + 1}</div><table>${rowsHtml}</table>`;
+  tip.hidden = false;
+  const r = tip.getBoundingClientRect();
+  tip.style.left = clamp(cxp + 16, 8, Math.max(8, innerWidth - r.width - 8)) + 'px';
+  tip.style.top = clamp(cyp + 16, 8, Math.max(8, innerHeight - r.height - 8)) + 'px';
+}
+cv.addEventListener('pointermove', e => {
+  const r = cv.getBoundingClientRect(), px = e.clientX - r.left, py = e.clientY - r.top;
+  let best = null, bd = 14;
+  for (const p of points) { const d = Math.hypot(p.px - px, p.py - py); if (d < bd) { bd = d; best = p; } }
+  if (!best) { tip.hidden = true; return; }
+  showTip(best.i, e.clientX, e.clientY);
+});
+cv.addEventListener('pointerleave', () => { tip.hidden = true; });
+addEventListener('scroll', () => { tip.hidden = true; }, {passive: true});
+
+// ------------------------------------------------------------------ table + ledger
+function buildTable(rows) {
+  const cy = col(Y);
+  const sorted = rows.slice().sort((a, b) => cy[b] - cy[a]).slice(0, 300);
+  const head = COLS.map(c => `<th scope="col" class="${NUMERIC[c] ? '' : 't'}">${c}</th>`).join('');
+  const body = sorted.map((i, k) => '<tr' + (k === 0 ? ' class="best"' : '') + '>' +
+    COLS.map(c => `<td class="${NUMERIC[c] ? '' : 't'}">${fmt(c, col(c)[i])}</td>`).join('') + '</tr>').join('');
+  document.getElementById('tRows').innerHTML = `<table class="data"><thead><tr>${head}</tr></thead><tbody>${body}</tbody></table>`;
+  document.getElementById('tableCap').textContent = `top ${sorted.length.toLocaleString()} of ${rows.length.toLocaleString()} shown, sorted by ${Y}`;
+}
+function buildLedger(rows) {
+  const cy = col(Y);
+  let best = rows[0];
+  for (const i of rows) if (cy[i] > cy[best]) best = i;
+  const settings = params.filter(p => VALUES[p] && VALUES[p].length > 1)
+    .map(p => `${p} ${fmtShort(p, col(p)[best])}`).join(' · ');
+  const facts = [
+    [`Best ${Y}`, fmt(Y, cy[best]), settings || 'single setting'],
+    ['Rows in view', rows.length.toLocaleString(), `${N.toLocaleString()} in the study`],
+    ['Settings varied', String(params.filter(p => VALUES[p] && VALUES[p].length > 1).length), params.join(', ')],
+    ['Outcomes recorded', String(metrics.length), metrics.slice(0, 6).join(', ') + (metrics.length > 6 ? ' …' : '')],
+  ];
+  document.getElementById('ledger').innerHTML = facts.map(([k, v, s]) =>
+    `<div><dt>${k}</dt><dd class="val">${v}</dd><dd class="sub">${s}</dd></div>`).join('');
+}
+
+// ------------------------------------------------------------------ text
+document.getElementById('eyebrow').textContent = `results / ${D.meta.path}`;
+document.getElementById('headline').textContent = D.meta.title;
+document.getElementById('lede').textContent = D.meta.headline ||
+  `${D.meta.rows.toLocaleString()} saved settings from this study, plotted straight from ${D.meta.source}.`;
+document.getElementById('method').innerHTML = [
+  `Every point is one saved simulation from <code>${D.meta.source}</code>: ${D.meta.rows.toLocaleString()} rows, ${params.length} settings and ${metrics.length} recorded outcomes.`,
+  `Pick any setting for the X axis, any outcome for Y, and colour by a second setting. The filters narrow the rest; with several settings free, many points share an X position.`,
+  `Nothing here is re-simulated. The numbers are the study's own saved values, and the table lists the highest-scoring rows in view.`,
+  `All runs share one historical tape, so these are in-sample comparisons, not forecasts, and settings were not independently re-optimised for every combination.`,
+].map(x => `<li>${x}</li>`).join('');
+
+fx.addEventListener('change', () => { X = fx.value; buildFilters(); draw(); });
+fy.addEventListener('change', () => { Y = fy.value; draw(); });
+fc.addEventListener('change', () => { CBY = fc.value; buildFilters(); draw(); });
+document.getElementById('connect').addEventListener('click', e => {
+  connect = !connect; e.currentTarget.setAttribute('aria-pressed', String(connect)); draw();
+});
+
+buildFilters();
+draw();
+let rz = 0;
+new ResizeObserver(() => { cancelAnimationFrame(rz); rz = requestAnimationFrame(draw); }).observe(box);
+matchMedia('(prefers-color-scheme: dark)').addEventListener('change', draw);
+new MutationObserver(draw).observe(document.documentElement, {attributes: true, attributeFilter: ['data-theme']});
+if (document.fonts && document.fonts.ready) document.fonts.ready.then(draw);
+})();
+</script>
