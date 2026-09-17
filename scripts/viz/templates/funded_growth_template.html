@@ -1,0 +1,487 @@
+<meta charset="utf-8">
+<title>Funded Growth Routing</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500&family=IBM+Plex+Sans:wght@400;500;600&display=swap">
+<style>
+:root{
+  color-scheme:light;
+  --plane:#f9f9f7; --surface:#fcfcfb; --ink:#0b0b0b; --ink-2:#52514e; --muted:#898781;
+  --grid:#e1e0d9; --axis:#c3c2b7; --ring:rgba(11,11,11,.10);
+  --s1:#2a78d6; --s2:#eb6834; --s3:#1baf7a; --s4:#eda100;
+  --sel:rgba(42,120,214,.12); --shadow:0 8px 28px rgba(11,11,11,.12);
+  --mono:"IBM Plex Mono", ui-monospace, Consolas, monospace;
+  --sans:"IBM Plex Sans", system-ui, -apple-system, "Segoe UI", sans-serif;
+}
+@media (prefers-color-scheme: dark){
+  :root:not([data-theme="light"]){
+    color-scheme:dark;
+    --plane:#0d0d0d; --surface:#1a1a19; --ink:#ffffff; --ink-2:#c3c2b7; --muted:#898781;
+    --grid:#2c2c2a; --axis:#383835; --ring:rgba(255,255,255,.10);
+    --s1:#3987e5; --s2:#d95926; --s3:#199e70; --s4:#c98500;
+    --sel:rgba(57,135,229,.18); --shadow:0 8px 28px rgba(0,0,0,.55);
+  }
+}
+:root[data-theme="dark"]{
+  color-scheme:dark;
+  --plane:#0d0d0d; --surface:#1a1a19; --ink:#ffffff; --ink-2:#c3c2b7; --muted:#898781;
+  --grid:#2c2c2a; --axis:#383835; --ring:rgba(255,255,255,.10);
+  --s1:#3987e5; --s2:#d95926; --s3:#199e70; --s4:#c98500;
+  --sel:rgba(57,135,229,.18); --shadow:0 8px 28px rgba(0,0,0,.55);
+}
+*{box-sizing:border-box}
+[hidden]{display:none!important}
+body{margin:0;background:var(--plane);color:var(--ink);font:14px/1.5 var(--sans);padding-inline:20px}
+.wrap{max-width:1240px;margin:0 auto;padding-block:28px 64px}
+.eyebrow{font:500 11.5px/1.4 var(--mono);color:var(--muted);letter-spacing:.02em;margin:0 0 8px;overflow-wrap:anywhere}
+h1{font-weight:600;font-size:clamp(22px,3vw,30px);line-height:1.15;letter-spacing:-.012em;margin:0 0 10px;text-wrap:balance}
+.lede{color:var(--ink-2);max-width:86ch;margin:0 0 20px}
+.ledger{display:flex;flex-wrap:wrap;gap:1px;background:var(--ring);border:1px solid var(--ring);border-radius:12px;overflow:hidden;margin:0 0 18px}
+.ledger > div{flex:1 1 175px;background:var(--surface);padding:10px 14px 11px;display:grid;gap:1px;align-content:start}
+.ledger dt{font-size:12px;color:var(--ink-2)}
+.ledger dd{margin:0}
+.ledger .val{font:500 18px/1.3 var(--mono);font-variant-numeric:tabular-nums;color:var(--ink)}
+.ledger .sub{font-size:12px;color:var(--muted)}
+.controls{position:sticky;top:0;z-index:5;background:var(--plane);display:flex;flex-wrap:wrap;align-items:center;gap:8px 16px;padding-block:10px;border-bottom:1px solid var(--ring);margin-bottom:14px}
+.group{display:flex;align-items:center;gap:6px;flex-wrap:wrap}
+.ctl-label{font-size:11px;color:var(--muted);letter-spacing:.04em;text-transform:uppercase}
+.chip{font:500 12.5px/1 var(--mono);padding:6px 10px;border-radius:999px;border:1px solid var(--ring);background:var(--surface);color:var(--ink-2);cursor:pointer}
+.chip:hover{border-color:var(--axis);color:var(--ink)}
+.chip[aria-pressed="true"]{background:var(--ink);border-color:var(--ink);color:var(--surface)}
+.chip:focus-visible,canvas:focus-visible,summary:focus-visible{outline:2px solid var(--s1);outline-offset:2px}
+.hint{font-size:12px;color:var(--muted);margin-left:auto}
+.instrument{background:var(--surface);border:1px solid var(--ring);border-radius:12px}
+.panel{padding:16px 16px 6px}
+.panel + .panel{border-top:1px solid var(--ring)}
+.panel-head{display:flex;flex-wrap:wrap;align-items:baseline;gap:4px 18px;margin-bottom:6px}
+.panel h2{font-size:15px;font-weight:600;margin:0}
+.legend{display:flex;flex-wrap:wrap;gap:4px 14px;font-size:12.5px;color:var(--ink-2);list-style:none;margin:0;padding:0}
+.legend li{display:inline-flex;align-items:center;gap:6px}
+.sw{display:inline-block;width:11px;height:11px;border-radius:3px;flex:none}
+.sw.faint{opacity:.45}
+.sw.line{height:2px;width:14px;border-radius:1px}
+.sw.dash{height:0;width:14px;border-top:2px dashed;background:none;border-radius:0}
+.note{font-size:12.5px;color:var(--ink-2);flex-basis:100%;margin:2px 0 0;max-width:100ch}
+.canvas-box{position:relative}
+canvas{display:block;width:100%;touch-action:pan-y;border-radius:4px}
+.tip{position:fixed;z-index:10;pointer-events:none;background:var(--surface);color:var(--ink);border:1px solid var(--ring);box-shadow:var(--shadow);border-radius:8px;padding:8px 11px 9px;font-size:12.5px;line-height:1.45;max-width:min(390px,calc(100vw - 16px))}
+.tip .d{font:500 12px var(--mono);color:var(--muted);margin-bottom:4px}
+.tip table{border-collapse:collapse}
+.tip td{padding:1px 0;vertical-align:baseline}
+.tip td.v{text-align:right;padding-left:16px;font-family:var(--mono);font-variant-numeric:tabular-nums}
+.tip .k{display:inline-flex;align-items:center;gap:6px;color:var(--ink-2)}
+details{margin-top:14px;background:var(--surface);border:1px solid var(--ring);border-radius:12px}
+summary{cursor:pointer;padding:12px 16px;font-weight:600;font-size:14px}
+summary span{font-weight:400;color:var(--muted);margin-left:8px;font-size:12.5px}
+.table-scroll{overflow:auto;max-height:560px;margin:0 16px 16px}
+table.data{border-collapse:collapse;font-size:12.5px;width:100%}
+table.data th{position:sticky;top:0;background:var(--surface);text-align:right;font-weight:500;color:var(--ink-2);padding:6px 10px;border-bottom:1px solid var(--axis);white-space:nowrap}
+table.data td{text-align:right;padding:4px 10px;border-bottom:1px solid var(--grid);font-family:var(--mono);font-variant-numeric:tabular-nums;white-space:nowrap}
+table.data th.t,table.data td.t{text-align:left}
+table.data tr.ref td{background:color-mix(in srgb, var(--s1) 8%, transparent)}
+.method{margin-top:24px;color:var(--ink-2);font-size:13px;max-width:92ch}
+.method h2{font-size:14px;color:var(--ink);margin:0 0 6px}
+.method ul{margin:0;padding-left:18px;display:grid;gap:6px}
+code{font-family:var(--mono);font-size:.92em}
+@media (max-width:640px){ body{padding-inline:16px} .panel{padding:12px 10px 2px} .hint{margin-left:0;flex-basis:100%} }
+</style>
+
+<div class="wrap">
+  <header>
+    <p class="eyebrow" id="eyebrow"></p>
+    <h1>The execution constraint, priced</h1>
+    <p class="lede" id="lede"></p>
+    <dl class="ledger" id="ledger"></dl>
+  </header>
+
+  <div class="controls">
+    <div class="group"><span class="ctl-label">Start</span><div class="chips" id="c_start_year" style="display:flex;gap:6px"></div></div>
+    <div class="group"><span class="ctl-label">Retained balance</span><div class="chips" id="c_retained_balance_usd" style="display:flex;gap:6px"></div></div>
+    <span class="hint">Four funding budgets across the page, four execution policies in each</span>
+  </div>
+
+  <main class="instrument">
+    <section class="panel">
+      <div class="panel-head">
+        <h2>Net cash, and how much waits for the closing request</h2>
+        <ul class="legend" id="legend1"></ul>
+        <p class="note">Bar height is total net cash after all account costs, excluding owner contributions. The faded top is the single firm-permitted closing request. Every arm shares the same funding, purchase rules, withdrawal rule and 20-account cap.</p>
+      </div>
+      <div class="canvas-box" id="pNet"><canvas role="img" aria-label="Net cash by execution policy and funding budget"></canvas></div>
+    </section>
+
+    <section class="panel">
+      <div class="panel-head">
+        <h2>Share of the idealised model</h2>
+        <ul class="legend" id="legend2"></ul>
+        <p class="note" id="shareNote"></p>
+      </div>
+      <div class="canvas-box" id="pShare"><canvas role="img" aria-label="Total net cash as a share of the unlimited reference"></canvas></div>
+    </section>
+
+    <section class="panel">
+      <div class="panel-head">
+        <h2>Copies taken</h2>
+        <ul class="legend" id="legend3"></ul>
+        <p class="note">Copying stacks many copies onto the setups it can take; routing deliberately reserves capacity so later overlapping setups still find a free account. Same accounts, very different exposure.</p>
+      </div>
+      <div class="canvas-box" id="pCopies"><canvas role="img" aria-label="Trade copies taken by execution policy"></canvas></div>
+    </section>
+
+    <section class="panel">
+      <div class="panel-head">
+        <h2>Distinct signals traded</h2>
+        <ul class="legend" id="legend4"></ul>
+        <p class="note">Share of exported signals that received at least one copy. Blocked copying misses signals because one setup can occupy the whole book; the routed arms hold capacity back to keep participation at 100%.</p>
+      </div>
+      <div class="canvas-box" id="pSignals"><canvas role="img" aria-label="Share of exported signals traded"></canvas></div>
+    </section>
+
+    <section class="panel">
+      <div class="panel-head">
+        <h2>Accounts consumed</h2>
+        <ul class="legend" id="legend5"></ul>
+        <p class="note" id="accountsNote"></p>
+      </div>
+      <div class="canvas-box" id="pAccounts"><canvas role="img" aria-label="Accounts bought, split into survivors and deaths"></canvas></div>
+    </section>
+  </main>
+
+  <details>
+    <summary>All runs <span id="tableCap"></span></summary>
+    <div class="table-scroll" id="tRows"></div>
+  </details>
+
+  <section class="method">
+    <h2>How to read this</h2>
+    <ul id="method"></ul>
+  </section>
+</div>
+
+<div class="tip" id="tip" hidden></div>
+
+<script id="funded-growth-data" type="application/json">__FUNDED_GROWTH_JSON__</script>
+<script>
+(() => {
+'use strict';
+const D = JSON.parse(document.getElementById('funded-growth-data').textContent);
+const ROWS = D.rows, DIMS = D.dims;
+const MINUS = '−';
+const MONO = '"IBM Plex Mono", ui-monospace, Consolas, monospace';
+const SANS = '"IBM Plex Sans", system-ui, -apple-system, "Segoe UI", sans-serif';
+const nf = new Intl.NumberFormat('en-US', {maximumFractionDigits: 0});
+const trim = (x, d) => x.toFixed(d).replace(/\.0$/, '');
+const usd = v => (v < 0 ? MINUS + '$' : '$') + nf.format(Math.abs(Math.round(v)));
+const usdK = v => {
+  const a = Math.abs(v), s = v < 0 ? MINUS + '$' : '$';
+  if (a >= 1e6) return s + trim(a / 1e6, 1) + 'M';
+  if (a >= 1e3) return s + trim(a / 1e3, a >= 1e4 ? 0 : 1) + 'k';
+  return s + Math.round(a);
+};
+const pct = v => (v === null || v === undefined ? '—' : Math.round(v * 100) + '%');
+const clamp = (v, a, b) => Math.max(a, Math.min(b, v));
+const ARMS = ['unlimited_reference', 'blocked_copy', 'adaptive_max_headroom', 'adaptive_round_robin'];
+const ARM_COLOR = {unlimited_reference: 's1', blocked_copy: 's2', adaptive_max_headroom: 's3', adaptive_round_robin: 's4'};
+const ARM_LABEL = {unlimited_reference: 'unlimited copying (idealised)', blocked_copy: 'blocked copying (realistic)',
+                   adaptive_max_headroom: 'routed, max headroom', adaptive_round_robin: 'routed, round robin'};
+const ARM_SHORT = {unlimited_reference: 'unlimited', blocked_copy: 'blocked', adaptive_max_headroom: 'max headroom', adaptive_round_robin: 'round robin'};
+
+const sel = {
+  start_year: DIMS.start_year[0],
+  retained_balance_usd: DIMS.retained_balance_usd[DIMS.retained_balance_usd.length - 1],
+};
+const groups = [];
+for (const cash of DIMS.initial_cash_usd) for (const monthly of DIMS.monthly_contribution_usd) groups.push({cash, monthly});
+
+const inView = r => r.start_year === sel.start_year && r.retained_balance_usd === sel.retained_balance_usd;
+const cell = (g, arm) => ROWS.find(r => inView(r) && r.initial_cash_usd === g.cash &&
+  r.monthly_contribution_usd === g.monthly && r.arm === arm);
+const share = r => {
+  const ref = cell({cash: r.initial_cash_usd, monthly: r.monthly_contribution_usd}, 'unlimited_reference');
+  return ref && ref.total_net_usd > 0 ? r.total_net_usd / ref.total_net_usd : null;
+};
+
+const C = {};
+function readColors() {
+  const cs = getComputedStyle(document.documentElement);
+  for (const k of ['surface', 'ink', 'ink-2', 'muted', 'grid', 'axis', 's1', 's2', 's3', 's4', 'sel']) C[k] = cs.getPropertyValue('--' + k).trim();
+}
+function yScale(lo, hi, target) {
+  if (hi <= lo) hi = lo + 1;
+  const raw = (hi - lo) / Math.max(2, target);
+  const pow = 10 ** Math.floor(Math.log10(raw)), f = raw / pow;
+  const step = (f <= 1 ? 1 : f <= 2 ? 2 : f <= 2.5 ? 2.5 : f <= 5 ? 5 : 10) * pow;
+  const a = Math.floor(lo / step + 1e-9) * step, b = Math.ceil(hi / step - 1e-9) * step;
+  const ticks = [];
+  for (let v = a; v <= b + step / 2; v += step) ticks.push(Math.round(v * 1e6) / 1e6);
+  return {lo: a, hi: b, ticks};
+}
+
+const panels = [];
+const tip = document.getElementById('tip');
+function panel(id, cfg) {
+  const box = document.getElementById(id), cv = box.querySelector('canvas');
+  const p = {id, cfg, box, cv, ctx: cv.getContext('2d'), bars: []};
+  panels.push(p);
+  cv.addEventListener('pointermove', e => {
+    const r = cv.getBoundingClientRect(), px = e.clientX - r.left, py = e.clientY - r.top;
+    const hit = p.bars.find(b => px >= b.x - 1 && px <= b.x + b.w + 1 &&
+      py >= Math.min(b.y0, b.y1) - 4 && py <= Math.max(b.y0, b.y1) + 4);
+    if (!hit) { tip.hidden = true; return; }
+    showTip(hit.row, e.clientX, e.clientY);
+  });
+  cv.addEventListener('pointerleave', () => { tip.hidden = true; });
+  return p;
+}
+function layout(p) {
+  const w = p.box.clientWidth;
+  p.narrow = w < 620;
+  p.L = p.narrow ? 48 : 68; p.R = 12; p.Tp = 12; p.B = 44;
+  const h = p.narrow ? p.cfg.height[0] : p.cfg.height[1], dpr = window.devicePixelRatio || 1;
+  p.w = w; p.h = h; p.dpr = dpr;
+  p.cv.width = Math.round(w * dpr); p.cv.height = Math.round(h * dpr); p.cv.style.height = h + 'px';
+  p.pw = Math.max(10, w - p.L - p.R); p.ph = h - p.Tp - p.B;
+}
+const Y = (p, y, v) => p.Tp + (1 - (v - y.lo) / (y.hi - y.lo)) * p.ph;
+function frame(p, c, y, fmt) {
+  c.clearRect(0, 0, p.w, p.h);
+  c.lineWidth = 1; c.font = '11px ' + MONO; c.textAlign = 'right'; c.textBaseline = 'middle';
+  for (const v of y.ticks) {
+    const yy = Math.round(Y(p, y, v)) + 0.5;
+    c.strokeStyle = v === 0 ? C.axis : C.grid;
+    c.beginPath(); c.moveTo(p.L, yy); c.lineTo(p.L + p.pw, yy); c.stroke();
+    c.fillStyle = C.muted; c.fillText(fmt(v), p.L - 8, yy);
+  }
+  const gw = p.pw / groups.length;
+  c.textAlign = 'center'; c.textBaseline = 'top'; c.font = '11px ' + SANS;
+  groups.forEach((g, i) => {
+    const cx = p.L + gw * (i + 0.5);
+    c.fillStyle = C['ink-2']; c.fillText(usdK(g.cash) + ' to start', cx, p.Tp + p.ph + 8);
+    c.fillStyle = C.muted; c.fillText(g.monthly ? '+ ' + usdK(g.monthly) + '/month' : 'no monthly top-up', cx, p.Tp + p.ph + 23);
+  });
+}
+function barPanel(id, height, opts) {
+  return panel(id, {
+    height,
+    draw(p, c) {
+      const vals = [0];
+      for (const g of groups) for (const arm of ARMS) {
+        const r = cell(g, arm);
+        if (!r) continue;
+        const v = opts.total(r);
+        if (v !== null && v !== undefined) vals.push(v);
+        if (opts.marker) vals.push(opts.marker(r));
+      }
+      if (opts.refLine !== undefined) vals.push(opts.refLine);
+      const y = yScale(Math.min(...vals) * 1.05, Math.max(...vals) * 1.08, p.ph / 44);
+      frame(p, c, y, opts.fmt);
+      const gw = p.pw / groups.length, bw = Math.min(26, gw / (ARMS.length + 1));
+      const zero = Y(p, y, 0);
+      p.bars = [];
+      groups.forEach((g, gi) => {
+        ARMS.forEach((arm, ai) => {
+          const r = cell(g, arm);
+          if (!r) return;
+          const v = opts.total(r);
+          if (v === null || v === undefined) return;
+          const x = p.L + gw * gi + gw / 2 + (ai - 1.5) * (bw + 3) - bw / 2;
+          const color = C[ARM_COLOR[arm]];
+          if (opts.split) {
+            const [base, extra] = opts.split(r);
+            const yBase = Y(p, y, base), yTop = Y(p, y, base + extra);
+            c.fillStyle = color;
+            c.fillRect(x, Math.min(yBase, zero), bw, Math.max(1, Math.abs(yBase - zero)));
+            if (extra > 0) {
+              c.save(); c.globalAlpha = 0.45; c.fillStyle = color;
+              c.fillRect(x, yTop, bw, Math.max(1, yBase - yTop - 2)); c.restore();
+            }
+            p.bars.push({x, w: bw, y0: zero, y1: yTop, row: r});
+          } else {
+            const yv = Y(p, y, v);
+            c.fillStyle = color;
+            c.fillRect(x, Math.min(yv, zero), bw, Math.max(1, Math.abs(yv - zero)));
+            p.bars.push({x, w: bw, y0: zero, y1: yv, row: r});
+          }
+          if (opts.marker) {
+            const my = Math.round(Y(p, y, opts.marker(r))) + 0.5;
+            c.strokeStyle = C.ink; c.lineWidth = 2;
+            c.beginPath(); c.moveTo(x, my); c.lineTo(x + bw, my); c.stroke();
+          }
+        });
+      });
+      if (opts.refLine !== undefined) {
+        const ry = Math.round(Y(p, y, opts.refLine)) + 0.5;
+        if (ry > p.Tp && ry < p.Tp + p.ph) {
+          c.save(); c.strokeStyle = C.muted; c.setLineDash([4, 4]); c.lineWidth = 1;
+          c.beginPath(); c.moveTo(p.L, ry); c.lineTo(p.L + p.pw, ry); c.stroke(); c.restore();
+          c.font = '10.5px ' + SANS; c.textAlign = 'left'; c.textBaseline = 'bottom';
+          c.save(); c.lineWidth = 3; c.lineJoin = 'round'; c.strokeStyle = C.surface;
+          c.strokeText(opts.refLabel, p.L + 6, ry - 3);
+          c.fillStyle = C['ink-2']; c.fillText(opts.refLabel, p.L + 6, ry - 3); c.restore();
+        }
+      }
+    }
+  });
+}
+
+barPanel('pNet', [230, 280], {
+  fmt: usdK, total: r => r.total_net_usd,
+  split: r => [r.ongoing_net_usd, r.terminal_received_usd],
+});
+barPanel('pShare', [190, 225], {
+  fmt: v => Math.round(v * 100) + '%', total: share,
+  refLine: 1, refLabel: 'the idealised model',
+});
+barPanel('pCopies', [180, 215], {fmt: v => nf.format(v), total: r => r.copies});
+barPanel('pSignals', [170, 200], {
+  fmt: v => Math.round(v * 100) + '%', total: r => r.signal_participation,
+  refLine: 1, refLabel: 'every exported signal',
+});
+barPanel('pAccounts', [190, 225], {
+  fmt: v => nf.format(v), total: r => r.accounts,
+  split: r => [r.alive, r.deaths], marker: r => r.peak_live,
+  refLine: D.meta.live_cap, refLabel: D.meta.live_cap + '-live account cap',
+});
+
+const swatch = arm => `<span class="sw" style="background:var(--${ARM_COLOR[arm]})"></span>`;
+function showTip(r, cx, cy) {
+  const s = share(r);
+  const rows = [
+    ['Total net cash', usd(r.total_net_usd)],
+    ['Ongoing / closing', `${usd(r.ongoing_net_usd)} / ${usd(r.terminal_received_usd)}`],
+    ['Share of idealised', s === null ? '—' : pct(s)],
+    ['Vs blocked copying', usd(r.delta_total_vs_blocked_usd)],
+    ['Copies taken', `${nf.format(r.copies)} (${trim(r.copies_vs_unlimited_ratio, 2)}× idealised)`],
+    ['Signals traded', `${pct(r.signal_participation)} of ${nf.format(r.signals_loaded)}`],
+    ['Requested copies filled', pct(r.requested_copy_coverage)],
+    ['Accounts bought / died', `${r.accounts} / ${r.deaths}`],
+    ['Peak live / alive at end', `${r.peak_live} / ${r.alive}`],
+    ['Growth / replacement buys', `${r.growth_purchases} / ${r.replacement_purchases}`],
+    ['Spent on accounts', usd(r.purchase_cost_usd)],
+    ['Owner contributions', usd(r.owner_contributions_usd)],
+    ['Cash-blocked decisions', nf.format(r.cash_limited_decisions)],
+  ];
+  tip.innerHTML = `<div class="d">${swatch(r.arm)} ${ARM_LABEL[r.arm]} · ${usdK(r.initial_cash_usd)}` +
+    `${r.monthly_contribution_usd ? ' + ' + usdK(r.monthly_contribution_usd) + '/mo' : ''} · ${r.start_year}</div>` +
+    '<table>' + rows.map(([k, v]) => `<tr><td><span class="k">${k}</span></td><td class="v">${v}</td></tr>`).join('') + '</table>';
+  tip.hidden = false;
+  const box = tip.getBoundingClientRect();
+  tip.style.left = clamp(cx + 16, 8, Math.max(8, innerWidth - box.width - 8)) + 'px';
+  tip.style.top = clamp(cy + 16, 8, Math.max(8, innerHeight - box.height - 8)) + 'px';
+}
+addEventListener('scroll', () => { tip.hidden = true; }, {passive: true});
+
+function legends() {
+  const items = ARMS.map(a => `<li>${swatch(a)}${ARM_LABEL[a]}</li>`).join('');
+  document.getElementById('legend1').innerHTML = items +
+    '<li><span class="sw faint" style="background:var(--ink-2)"></span>closing request on top</li>';
+  document.getElementById('legend2').innerHTML = items;
+  document.getElementById('legend3').innerHTML = items;
+  document.getElementById('legend4').innerHTML = items;
+  document.getElementById('legend5').innerHTML = items +
+    '<li><span class="sw faint" style="background:var(--ink-2)"></span>accounts that died</li>' +
+    '<li><span class="sw line" style="background:var(--ink)"></span>peak live</li>' +
+    `<li><span class="sw dash" style="border-color:var(--muted)"></span>${D.meta.live_cap}-live cap</li>`;
+}
+
+function ledger() {
+  const view = ROWS.filter(inView);
+  const usable = view.filter(r => share(r) !== null);
+  const blocked = usable.filter(r => r.arm === 'blocked_copy').map(share).sort((a, b) => a - b);
+  const median = arr => arr.length ? (arr.length % 2 ? arr[(arr.length - 1) / 2] : (arr[arr.length / 2 - 1] + arr[arr.length / 2]) / 2) : null;
+  const routedWins = groups.filter(g => {
+    const r = ARMS.map(a => cell(g, a)).filter(Boolean);
+    if (r.length < 4) return false;
+    const bestRouted = Math.max(...r.filter(x => x.arm.startsWith('adaptive')).map(x => x.total_net_usd));
+    const bestCopy = Math.max(...r.filter(x => !x.arm.startsWith('adaptive')).map(x => x.total_net_usd));
+    return bestRouted > bestCopy;
+  }).length;
+  const rich = groups[groups.length - 1];
+  const u = cell(rich, 'unlimited_reference'), b = cell(rich, 'blocked_copy');
+  const mh = cell(rich, 'adaptive_max_headroom');
+  const facts = [
+    ['Idealised model', u ? usd(u.total_net_usd) : '—', u ? `${usdK(rich.cash)}${rich.monthly ? ' + ' + usdK(rich.monthly) + '/mo' : ''}, overlapping copies allowed` : ''],
+    ['What the EA can do', b ? usd(b.total_net_usd) : '—', b && u ? `${pct(b.total_net_usd / u.total_net_usd)} of it, one position per account` : ''],
+    ['Blocking costs', blocked.length ? pct(median(blocked) - 1) : '—', 'median across the budgets shown'],
+    ['Best routed arm', mh ? usd(mh.total_net_usd) : '—', mh && u ? `max headroom, ${pct(mh.total_net_usd / u.total_net_usd)} of idealised` : ''],
+    ['Accounts consumed', b && mh ? `${b.deaths} vs ${mh.deaths}` : '—', 'blocked copying versus routing, same budget'],
+    ['Budgets where routing wins', `${routedWins} of ${groups.length}`, 'total net cash, this start and reserve'],
+  ];
+  document.getElementById('ledger').innerHTML = facts.map(([k, v, s]) =>
+    `<div><dt>${k}</dt><dd class="val">${v}</dd><dd class="sub">${s}</dd></div>`).join('');
+}
+
+function table() {
+  const view = ROWS.filter(inView).sort((a, b) =>
+    a.initial_cash_usd - b.initial_cash_usd || a.monthly_contribution_usd - b.monthly_contribution_usd ||
+    ARMS.indexOf(a.arm) - ARMS.indexOf(b.arm));
+  const head = ['Budget', 'Policy', 'Copies', 'Signals', 'Accounts', 'Died', 'Peak live', 'Ongoing', 'Closing', 'Total', 'vs idealised'];
+  const body = view.map(r => `<tr${r.arm === 'unlimited_reference' ? ' class="ref"' : ''}>` + [
+    `<td class="t">${usdK(r.initial_cash_usd)}${r.monthly_contribution_usd ? ' + ' + usdK(r.monthly_contribution_usd) + '/mo' : ''}</td>`,
+    `<td class="t">${ARM_SHORT[r.arm]}</td>`, `<td>${nf.format(r.copies)}</td>`, `<td>${pct(r.signal_participation)}</td>`,
+    `<td>${r.accounts}</td>`, `<td>${r.deaths}</td>`, `<td>${r.peak_live}</td>`,
+    `<td>${usd(r.ongoing_net_usd)}</td>`, `<td>${usd(r.terminal_received_usd)}</td>`, `<td>${usd(r.total_net_usd)}</td>`,
+    `<td>${r.arm === 'unlimited_reference' ? '—' : usd(r.delta_total_vs_unlimited_usd)}</td>`].join('') + '</tr>').join('');
+  document.getElementById('tRows').innerHTML =
+    `<table class="data"><thead><tr>${head.map((h, i) => `<th scope="col" class="${i < 2 ? 't' : ''}">${h}</th>`).join('')}</tr></thead><tbody>${body}</tbody></table>`;
+  document.getElementById('tableCap').textContent = `${view.length} of ${ROWS.length} runs · ${D.meta.cases} cases in the study`;
+}
+
+function chips() {
+  const defs = [['start_year', v => String(v)], ['retained_balance_usd', v => 'retain ' + usdK(v)]];
+  for (const [dim, label] of defs) {
+    const host = document.getElementById('c_' + dim);
+    host.innerHTML = '';
+    for (const v of DIMS[dim]) {
+      const b = document.createElement('button');
+      b.type = 'button'; b.className = 'chip'; b.textContent = label(v);
+      b.setAttribute('aria-pressed', String(sel[dim] === v));
+      b.addEventListener('click', () => { sel[dim] = v; render(); });
+      host.appendChild(b);
+    }
+  }
+}
+
+function render() {
+  readColors();
+  chips(); legends(); ledger(); table();
+  const dead = groups.filter(g => {
+    const u = cell(g, 'unlimited_reference');
+    return u && u.total_net_usd <= 0;
+  }).length;
+  document.getElementById('shareNote').textContent =
+    'Total net cash as a share of the unlimited benchmark, which allows one account to hold overlapping positions. ' +
+    'That benchmark is not executable by a single-entry EA; it is the yardstick, not a target.' +
+    (dead ? ` ${dead} of ${groups.length} budgets here left the copying books with no cash to rebuild, so no share is shown for them.` : '');
+  document.getElementById('accountsNote').textContent =
+    `Every account ever bought, split into those alive at the horizon and those lost. Purchases must be affordable from ` +
+    `contributions and actual payout receipts, starting from ${D.meta.initial_accounts} paid accounts under ${D.meta.acquisition.replace(/_/g, ' ')}.`;
+  for (const p of panels) {
+    layout(p);
+    if (!p.w) continue;
+    const c = p.ctx;
+    c.setTransform(p.dpr, 0, 0, p.dpr, 0, 0);
+    p.cfg.draw(p, c);
+  }
+}
+
+const esc = s => s.replace(/&/g, '&amp;').replace(/</g, '&lt;');
+const md = s => esc(s).replace(/\*\*([^*]+)\*\*/g, '<strong>$1</strong>');
+document.getElementById('eyebrow').textContent = 'results / ' + D.meta.path;
+document.getElementById('lede').textContent = D.meta.paragraphs[0] ||
+  'Four execution policies on identical funding, purchase rules and withdrawal settings.';
+document.getElementById('method').innerHTML = (D.meta.paragraphs.length ? D.meta.paragraphs : []).map(t => `<li>${md(t)}</li>`).join('') +
+  `<li>${D.meta.rows} runs across ${D.meta.cases} cases. Before drawing, this page re-checks the study's own comparison columns: ` +
+  `every delta against the unlimited and blocked arms, every copy ratio, that accounts bought equals survivors plus deaths, ` +
+  `and that no run breached the ${D.meta.live_cap}-live cap.</li>` +
+  `<li>Cash is compared at equal funding, not at equal exposure or equal risk. The unlimited benchmark does not aggregate ` +
+  `concurrent floating profit and loss, and all arms carry exported per-trade extrema, so none of this establishes matched drawdown.</li>`;
+
+render();
+let rz = 0;
+new ResizeObserver(() => { cancelAnimationFrame(rz); rz = requestAnimationFrame(render); }).observe(document.querySelector('.instrument'));
+matchMedia('(prefers-color-scheme: dark)').addEventListener('change', render);
+new MutationObserver(render).observe(document.documentElement, {attributes: true, attributeFilter: ['data-theme']});
+if (document.fonts && document.fonts.ready) document.fonts.ready.then(render);
+})();
+</script>
