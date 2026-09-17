@@ -1,0 +1,15 @@
+{
+  "schema": "pa_milky.routing_fixed_inventory.v1",
+  "scenario": "config/scenarios/full_rulebook_monthly_500.json",
+  "output": "results/legacy_25k/routing_fixed_inventory",
+  "workers": 4,
+  "starts": [2020, 2023],
+  "retained_balances": [31900, 30000],
+  "initial_accounts": 20,
+  "capacity_per_copy": 5,
+  "replacement_rule": "none",
+  "capacity_search_step": 20,
+  "capacity_search_limit": 400,
+  "withdrawal": {"amount_rule": "minimum", "cadence": "daily"},
+  "design": "All inventory paid on the first calendar boundary before trading. No subsequent purchases, replacements, contributions or live cap. Same-resource arms start 20; routed arms retain fixed R=4 even after deaths. Exact exposure freezes the unrestricted model's realized per-trade copies. A separate R=20 full-tape target tests 100 initial seats and, if necessary, larger inventories. Capacity search finds the first successful tested size in steps of 20, not a global minimum."
+}

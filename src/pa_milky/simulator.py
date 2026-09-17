@@ -207,11 +207,24 @@ def decision_boundaries(first: datetime, last: datetime, cadence: str):
 
 def run_book(trades: list[Trade], config: RunConfig, *, acquisition: AcquisitionPolicy | None = None,
              observer=None, routing: RoutingPolicy | None = None, replay=None,
-             initial_accounts: int | None = None) -> BookResult:
+             initial_accounts: int | None = None, fixed_accounts: int | None = None,
+             routing_demand: list[int] | None = None) -> BookResult:
     """Walk the tape, opening one account a month and asking the firm monthly."""
 
     if not trades:
         raise ValueError("no trades to simulate")
+    if fixed_accounts is not None:
+        if (not isinstance(fixed_accounts, int) or isinstance(fixed_accounts, bool)
+                or fixed_accounts < 1):
+            raise ValueError('Fixed inventory must be a positive integer')
+        if acquisition is not None or replay is not None or initial_accounts is not None or config.max_accounts is not None:
+            raise ValueError('Fixed inventory cannot be combined with another purchase policy')
+    if routing_demand is not None:
+        if routing is None or fixed_accounts is None or replay is not None:
+            raise ValueError('Routing demand requires routed fixed inventory')
+        if len(routing_demand) != len(trades) or any(
+                not isinstance(n, int) or isinstance(n, bool) or n < 0 for n in routing_demand):
+            raise ValueError('Routing demand must contain one nonnegative integer per trade')
     if replay is not None and (acquisition is not None or routing is None):
         raise ValueError("A matched replay requires routing and its own frozen purchase schedule")
     if initial_accounts is not None:
@@ -252,7 +265,7 @@ def run_book(trades: list[Trade], config: RunConfig, *, acquisition: Acquisition
             replay.record_purchase(at, count, accounts, emergency=True)
 
     router = (TradeRouter(trades, routing,
-                          demand=replay.demand if replay is not None else None,
+                          demand=replay.demand if replay is not None else routing_demand,
                           provision=provision if replay is not None else None)
               if routing is not None else None)
 
@@ -286,7 +299,10 @@ def run_book(trades: list[Trade], config: RunConfig, *, acquisition: Acquisition
             denials.extend(denied)
             pending.sort(key=lambda item: item.due_at)
 
-        if replay is not None:
+        if fixed_accounts is not None:
+            # A single paid initial inventory; deaths never trigger purchases.
+            count = fixed_accounts if monthly and opened == 1 else 0
+        elif replay is not None:
             count = replay.purchases.get(boundary, 0)
             if replay.max_live_accounts is not None and count + sum(a.alive for a in accounts) > replay.max_live_accounts:
                 raise ValueError('Scheduled pool purchase exceeds the live-account cap')
@@ -312,7 +328,7 @@ def run_book(trades: list[Trade], config: RunConfig, *, acquisition: Acquisition
         for _ in range(count):
             accounts.append(
                 Account(
-                    account_id=len(accounts)+1 if purchasing or replay is not None else opened,
+                    account_id=len(accounts)+1 if purchasing or replay is not None or fixed_accounts is not None else opened,
                     cohort_month=f"{year:04d}-{month:02d}",
                     activated_at=boundary,
                     purchase_fee_usd=config.purchase_fee_usd,

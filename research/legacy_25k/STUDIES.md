@@ -5,6 +5,7 @@ paths; there is no need to browse the full results tree to follow the research.
 
 | Question | Evidence | Scope |
 |---|---|---|
+| What changes with fixed resources versus matched exposure? | [Fixed-inventory comparison](ROUTING_FIXED_INVENTORY.md) | All seats initially funded, no replacements/growth; 20-account controls, exact exposure replay, separate full-tape capacity test |
 | How do routing and copying compare with identical funding and monthly growth? | [Funded growth comparison](ROUTING_GROWTH.md) | Five initial seats, funded replacements, daily minimum withdrawals, live cap 20, adaptive R; includes an executable blocked-copy control |
 | How does routing work when existing capacity is reused? | [Corrected routing comparison](ROUTING_REUSE.md) | 48 matched-replay cases plus 48 fixed-R arms; incremental purchases; fixed pools enforce cap 20; instant supply/funding assumptions |
 | Which reserve works best for each policy and account size? | [Paired 25K/50K reserve search](../../results/comparisons/legacy_25k_vs_50k/reserve_by_policy/REPORT.generated.md) | Same grids per pair; funded cap 20; minimum/maximum withdrawal families; both cash objectives |

@@ -127,6 +127,18 @@ Before searching, the runner checks two things:
 - One evaluation started on every weekday reproduces EODMAE's pass rates and
   days to pass (the reconciliation table in the report).
 
+## Fixed-inventory routing comparison
+
+Run `venv/Scripts/python.exe scripts/study_routing_fixed_inventory.py`, then
+`venv/Scripts/python.exe scripts/audit_routing_fixed_inventory.py`.
+The profile is `legacy_25k_routing_fixed_inventory.json`; output goes to
+`results/legacy_25k/routing_fixed_inventory/`. All seats are purchased before
+trading, with no subsequent purchases or replacements. Twenty-account
+resource controls are separate from exact per-trade reference exposure
+replays and full-tape R=20 capacity trials. The latter search in steps of 20;
+first success is sufficient on this tape, not necessarily a global minimum.
+All arms within each case share the daily minimum withdrawal policy.
+
 ## Evaluation pipeline capacity
 
 Run `venv/Scripts/python.exe scripts/study_legacy_pipeline_capacity.py`.

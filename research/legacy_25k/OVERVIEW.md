@@ -1,5 +1,12 @@
 # Legacy 25K: current findings
 
+**Fixed-inventory allocation comparison:** [same resources and same exposure](ROUTING_FIXED_INVENTORY.md)
+separates 20-account controls from larger matched-exposure pools, with no growth
+or replacements. Copying fails early from the 2020 start but leads cash from
+the fresh 2023 start. Matching every trade copy still changes extraction and
+account costs. K=5R covers occupancy before deaths; unreplaced losses can
+require a larger initial pool to maintain full-tape coverage.
+
 **Matched-budget growth comparison:** [routing versus copying](ROUTING_GROWTH.md)
 starts all arms with five paid accounts and applies the same monthly growth,
 funded death replacements and daily minimum withdrawals. Routed R scales with

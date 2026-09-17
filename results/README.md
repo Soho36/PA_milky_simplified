@@ -1,5 +1,10 @@
 # Results index
 
+New: [fixed-inventory routing tables](legacy_25k/routing_fixed_inventory/REPORT.generated.md)
+and [interpretation](../research/legacy_25k/ROUTING_FIXED_INVENTORY.md): all seats
+funded initially, no growth or replacements; separate same-resource and exact
+modeled-exposure comparisons, plus a full-tape capacity test.
+
 New: [funded routing/copying growth tables](legacy_25k/routing_funded_growth/REPORT.generated.md)
 and [interpretation](../research/legacy_25k/ROUTING_GROWTH.md): same initial
 accounts, owner budgets, monthly growth and replacement rules; routed R grows
