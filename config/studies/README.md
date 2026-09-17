@@ -1,5 +1,10 @@
 # Study profiles
 
+`legacy_25k_routing_growth.json` is the dedicated matched-budget growth design
+for `scripts/study_routing_growth.py`. It starts each arm with five paid accounts,
+then uses monthly growth plus funded death replacements and daily minimum
+withdrawals. See [growth findings](../../research/legacy_25k/ROUTING_GROWTH.md).
+
 The dedicated `legacy_25k_routing_reuse.json` experiment uses
 `scripts/study_legacy_routing.py --profile PATH` (its own schema, not `--study`).
 It freezes reference trade-copy demand and buys only the entry-time free-slot

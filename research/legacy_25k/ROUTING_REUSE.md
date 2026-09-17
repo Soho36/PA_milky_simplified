@@ -1,5 +1,10 @@
 # Corrected routing: reuse existing capacity
 
+For the subsequent comparison with monthly growth and funded death replacements
+under the same owner budgets, see [routing versus copying](ROUTING_GROWTH.md).
+That study allows R to grow with the live pool and includes a non-routing
+one-position control; the fixed-R results on this page remain a separate experiment.
+
 **The purchase error is fixed.** Routing already used one global account pool;
 it did not divide accounts into separate five-seat groups. The error was buying
 five more seats on every reference purchase date regardless of the available

@@ -1,5 +1,12 @@
 # Legacy 25K: current findings
 
+**Matched-budget growth comparison:** [routing versus copying](ROUTING_GROWTH.md)
+starts all arms with five paid accounts and applies the same monthly growth,
+funded death replacements and daily minimum withdrawals. Routed R scales with
+live inventory up to four. Copying produces more total cash in most tested
+cases while taking substantially more copies; signal coverage and account
+turnover differ. Resource matching is not exposure matching.
+
 **Corrected routing follow-up:** [capacity reuse and fixed-R pools](ROUTING_REUSE.md)
 replace five-per-purchase overbuying with purchases of only the free-slot
 shortfall. The matched replay preserves earlier exposure; the separate R=1–4

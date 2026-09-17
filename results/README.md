@@ -1,5 +1,10 @@
 # Results index
 
+New: [funded routing/copying growth tables](legacy_25k/routing_funded_growth/REPORT.generated.md)
+and [interpretation](../research/legacy_25k/ROUTING_GROWTH.md): same initial
+accounts, owner budgets, monthly growth and replacement rules; routed R grows
+with available live capacity. Different execution policies imply different exposure.
+
 Current routing: [capacity-reuse tables](legacy_25k/routing_capacity_reuse/REPORT.generated.md),
 [fixed-R pool tables](legacy_25k/routing_fixed_pool/REPORT.generated.md), and
 [interpretation](../research/legacy_25k/ROUTING_REUSE.md). These buy only the

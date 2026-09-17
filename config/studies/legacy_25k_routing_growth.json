@@ -1,0 +1,16 @@
+{
+  "schema": "pa_milky.routing_growth.v1",
+  "scenario": "config/scenarios/full_rulebook_monthly_500.json",
+  "output": "results/legacy_25k/routing_funded_growth",
+  "workers": 4,
+  "starts": [2020, 2023],
+  "budgets": [[1000, 0], [1000, 200], [5000, 0], [5000, 200]],
+  "initial_accounts": 5,
+  "max_live_accounts": 20,
+  "acquisition": "monthly_plus_replacements",
+  "capacity_per_copy": 5,
+  "retained_balances": [30000, 31900],
+  "withdrawal": {"amount_rule": "minimum", "cadence": "daily"},
+  "arms": ["unlimited_reference", "blocked_copy", "adaptive_max_headroom", "adaptive_round_robin"],
+  "design": "Identical initial five paid accounts, owner funding, 20-live-account cap, monthly growth plus daily funded death replacements, daily minimum payout checks and retained balance within each pair. Adaptive R=floor(live accounts/5), recomputed at entry; R=0 below five, with no rescue funding. Copy exposure and endogenous purchase paths may differ. Initial five replace the first month's ordinary one-account purchase."
+}

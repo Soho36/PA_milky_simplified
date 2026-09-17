@@ -41,14 +41,18 @@ class RoutingPolicy:
     mode: str = "routed"
     copies: int = 1
     allocation: str = "max_headroom"
+    capacity_per_copy: int = 5
 
     def __post_init__(self):
-        if self.mode not in {"routed", "blocked"}:
+        if self.mode not in {"routed", "blocked", "adaptive"}:
             raise ValueError("Unknown routing mode")
         if not isinstance(self.copies, int) or isinstance(self.copies, bool) or self.copies < 1:
             raise ValueError("copies must be a positive integer")
         if self.allocation not in {"max_headroom", "round_robin"}:
             raise ValueError("Unknown allocation")
+        if (not isinstance(self.capacity_per_copy, int) or isinstance(self.capacity_per_copy, bool)
+                or self.capacity_per_copy < 1):
+            raise ValueError('capacity_per_copy must be a positive integer')
 
 
 class TradeRouter:
@@ -67,6 +71,7 @@ class TradeRouter:
         self.busy_shortfall = self.inventory_shortfall = 0
         self.fills = []
         self.peak_occupied = 0
+        self.target_counts = {}
 
     @property
     def next_entry(self):
@@ -83,7 +88,9 @@ class TradeRouter:
         eligible = [a for a in accounts if a.alive and a.activated_at <= trade.entry_at]
         free = [a for a in eligible if a.account_id not in self.busy]
         wanted = (self.demand[index] if self.demand is not None else
+                  len(eligible) // self.policy.capacity_per_copy if self.policy.mode == 'adaptive' else
                   len(eligible) if self.policy.mode == "blocked" else self.policy.copies)
+        self.target_counts[wanted] = self.target_counts.get(wanted, 0) + 1
         if self.policy.allocation == "max_headroom":
             free.sort(key=lambda a: (-a.headroom_usd, a.account_id))
         else:
@@ -121,11 +128,14 @@ class TradeRouter:
 
     def summary(self):
         return {"policy": asdict(self.policy),
-                "demand_source": 'per_trade_override' if self.demand is not None else 'policy',
+                "demand_source": ('per_trade_override' if self.demand is not None else
+                                  'live_account_count' if self.policy.mode == 'adaptive' else 'policy'),
                 "signals_offered": self.offered,
                 "copies_requested": self.requested, "copies_filled": self.filled,
                 "signals_fully_filled": self.fully_filled,
                 "signals_partially_filled": self.partial, "signals_missed": self.missed,
+                "signals_with_no_target": self.target_counts.get(0, 0),
+                "target_copy_histogram": self.target_counts,
                 "copies_missed_busy": self.busy_shortfall,
                 "copies_missed_inventory": self.inventory_shortfall,
                 "peak_occupied_accounts": self.peak_occupied,

@@ -206,13 +206,22 @@ def decision_boundaries(first: datetime, last: datetime, cadence: str):
 
 
 def run_book(trades: list[Trade], config: RunConfig, *, acquisition: AcquisitionPolicy | None = None,
-             observer=None, routing: RoutingPolicy | None = None, replay=None) -> BookResult:
+             observer=None, routing: RoutingPolicy | None = None, replay=None,
+             initial_accounts: int | None = None) -> BookResult:
     """Walk the tape, opening one account a month and asking the firm monthly."""
 
     if not trades:
         raise ValueError("no trades to simulate")
     if replay is not None and (acquisition is not None or routing is None):
         raise ValueError("A matched replay requires routing and its own frozen purchase schedule")
+    if initial_accounts is not None:
+        if (not isinstance(initial_accounts, int) or isinstance(initial_accounts, bool)
+                or initial_accounts < 1 or acquisition is None or replay is not None
+                or acquisition.spare_capacity is not None):
+            raise ValueError('Initial accounts require a positive count and direct funded acquisition')
+        if (initial_accounts > acquisition.max_live_accounts
+                or initial_accounts * config.purchase_fee_usd > acquisition.initial_cash_usd):
+            raise ValueError('Initial accounts exceed the live cap or initial cash')
 
     if acquisition is not None and config.max_accounts is not None:
         raise ValueError("Budgeted acquisition uses its own live-account cap; max_accounts must be unset")
@@ -285,8 +294,19 @@ def run_book(trades: list[Trade], config: RunConfig, *, acquisition: Acquisition
             purchasing.receive(payouts)
             if monthly:
                 purchasing.fund(boundary)
-            count = purchasing.decide(boundary, opened-1, sum(a.alive for a in accounts),
-                                      len(accounts), config.purchase_fee_usd)
+            if initial_accounts is not None and monthly and opened == 1:
+                # This replaces the first month's ordinary purchase; growth
+                # starts next month, with replacements at the usual daily check.
+                count = initial_accounts
+                purchasing.deploy(boundary, count, config.purchase_fee_usd)
+                purchasing.seed_bought = True
+                purchasing.filled_month_slots.add((year, month))
+                purchasing.decisions.append({'at': boundary.isoformat(), 'wanted': count,
+                    'bought': count, 'alive_before': 0, 'initial_inventory': True,
+                    'cash_limited': False, 'capacity_limited': False})
+            else:
+                count = purchasing.decide(boundary, opened-1, sum(a.alive for a in accounts),
+                                          len(accounts), config.purchase_fee_usd)
         else:
             count = int(monthly and (config.max_accounts is None or opened <= config.max_accounts))
         for _ in range(count):
