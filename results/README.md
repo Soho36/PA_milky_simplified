@@ -1,5 +1,10 @@
 # Results index
 
+New: [hybrid routing tables](legacy_25k/routing_hybrid/REPORT.generated.md)
+and [interpretation](../research/legacy_25k/ROUTING_HYBRID.md): six minimum/cap
+settings under the same fixed inventory and withdrawal policies. Includes
+copy distributions, coverage shortfalls and exact reproduction of prior controls.
+
 New: [fixed-inventory routing tables](legacy_25k/routing_fixed_inventory/REPORT.generated.md)
 and [interpretation](../research/legacy_25k/ROUTING_FIXED_INVENTORY.md): all seats
 funded initially, no growth or replacements; separate same-resource and exact

@@ -5,6 +5,7 @@ paths; there is no need to browse the full results tree to follow the research.
 
 | Question | Evidence | Scope |
 |---|---|---|
+| Can routing protect participation while increasing copies? | [Hybrid routing](ROUTING_HYBRID.md) | Six minimum/cap settings, 20 initial accounts, no replacements, unchanged withdrawals; 16 prior controls reproduced |
 | What changes with fixed resources versus matched exposure? | [Fixed-inventory comparison](ROUTING_FIXED_INVENTORY.md) | All seats initially funded, no replacements/growth; 20-account controls, exact exposure replay, separate full-tape capacity test |
 | How do routing and copying compare with identical funding and monthly growth? | [Funded growth comparison](ROUTING_GROWTH.md) | Five initial seats, funded replacements, daily minimum withdrawals, live cap 20, adaptive R; includes an executable blocked-copy control |
 | How does routing work when existing capacity is reused? | [Corrected routing comparison](ROUTING_REUSE.md) | 48 matched-replay cases plus 48 fixed-R arms; incremental purchases; fixed pools enforce cap 20; instant supply/funding assumptions |

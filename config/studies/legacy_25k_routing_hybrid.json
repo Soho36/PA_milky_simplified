@@ -1,0 +1,16 @@
+{
+  "schema": "pa_milky.routing_hybrid.v1",
+  "scenario": "config/scenarios/full_rulebook_monthly_500.json",
+  "output": "results/legacy_25k/routing_hybrid",
+  "control_output": "results/legacy_25k/routing_fixed_inventory",
+  "workers": 4,
+  "starts": [2020, 2023],
+  "retained_balances": [31900, 30000],
+  "initial_accounts": 20,
+  "concurrency_limit": 5,
+  "minimum_copies": [1, 2],
+  "maximum_copies": [4, 8, 12],
+  "replacement_rule": "none",
+  "withdrawal": {"cadence": "daily", "amount_rule": "minimum"},
+  "design": "Fixed initial inventory, no purchases or replacements after day one. Hybrid reserves m*max(0,5-A-1) free accounts for future setups, where A counts distinct currently occupied signals. Target=min(cap,max(m,free-reserve)); allocate available accounts in descending current headroom. Current minimum participation takes priority when depleted inventory cannot support both current minimum and future reservations. No future exits or P&L used to choose targets. Prior controls must reproduce numerically and by per-trade account assignment."
+}

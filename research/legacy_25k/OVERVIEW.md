@@ -1,5 +1,12 @@
 # Legacy 25K: current findings
 
+**Hybrid routing:** [minimum participation with variable copies](ROUTING_HYBRID.md)
+tests reserving free seats while using spare capacity for extra copies.
+Higher caps improve 2023 cash with full coverage at the main reserve, but
+deplete inventory badly from 2020. Minimum one / cap four maintains full
+coverage in all four cases, with slightly lower or equal cash versus fixed
+R=4 max-headroom. Free-slot protection does not ensure account survival.
+
 **Fixed-inventory allocation comparison:** [same resources and same exposure](ROUTING_FIXED_INVENTORY.md)
 separates 20-account controls from larger matched-exposure pools, with no growth
 or replacements. Copying fails early from the 2020 start but leads cash from

@@ -129,6 +129,13 @@ Before searching, the runner checks two things:
 
 ## Fixed-inventory routing comparison
 
+The follow-up hybrid experiment uses `legacy_25k_routing_hybrid.json`.
+Run `venv/Scripts/python.exe scripts/study_routing_hybrid.py`, followed by
+`venv/Scripts/python.exe scripts/audit_routing_hybrid.py`. It tests minimum
+participation of one/two copies and caps of four/eight/twelve, with max-headroom
+selection, 20 initial seats and no replacements. The prior fixed-inventory
+controls must exist and reproduce; their artifacts are preserved.
+
 Run `venv/Scripts/python.exe scripts/study_routing_fixed_inventory.py`, then
 `venv/Scripts/python.exe scripts/audit_routing_fixed_inventory.py`.
 The profile is `legacy_25k_routing_fixed_inventory.json`; output goes to
