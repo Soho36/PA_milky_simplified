@@ -1,0 +1,205 @@
+{
+  "row": {
+    "job": [
+      "blocked",
+      2020,
+      1000,
+      200,
+      "maximum",
+      "weekly",
+      0,
+      0,
+      true,
+      1,
+      20,
+      10,
+      false
+    ],
+    "mode": "blocked",
+    "start_year": 2020,
+    "initial_cash": 1000,
+    "monthly_funding": 200,
+    "withdrawal": "maximum",
+    "cadence": "weekly",
+    "headroom": 0,
+    "amount": 0,
+    "retained_balance": 25100.0,
+    "persistent": true,
+    "interval": 1,
+    "concurrency": 20,
+    "spares": 10,
+    "reserve_seats": false,
+    "ongoing": 413381.5,
+    "terminal": 0,
+    "total": 413381.5,
+    "accounts": 344,
+    "alive": 18,
+    "receipts": 480900.5,
+    "activated": 344,
+    "evaluations": 371,
+    "evaluation_months": 743,
+    "evaluation_fees": 24519.0,
+    "activation_fees": 43000.0,
+    "spend": 67519.0,
+    "ending_cash": 429981.5,
+    "contributions": 16600.0,
+    "spares_at_end": 0,
+    "in_flight_at_end": 12,
+    "copies": 130514,
+    "signals_loaded": 12658,
+    "economics": {
+      "booked_net_trading_usd": 451940.6,
+      "firm_split_usd": 0.0,
+      "retained_profit_usd": 47673.25,
+      "failed_positive_ledger_usd": 34356.45,
+      "failed_negative_ledger_usd": 110989.6,
+      "purchase_fees_usd": 67519.0,
+      "pocket_usd": 413381.5,
+      "residual_usd": 0.0,
+      "firm_capital_consumed_usd": 110989.6,
+      "withdrawals_financed_by_firm_usd": 0.0,
+      "booked_deficits_not_funded_by_owner_usd": 110989.6,
+      "dead_account_booked_deficits_usd": 110989.6,
+      "live_account_booked_deficits_usd": 0.0,
+      "gross_withdrawals_exceeding_booked_earnings_usd": 0.0
+    },
+    "deaths": 326,
+    "replacements_filled": 324,
+    "replacements_unfilled": 2,
+    "next_check_service": 0.3926,
+    "replacement_wait_median_days": 11.02,
+    "replacement_wait_p95_days": 58.02,
+    "unfilled_account_days": 6238.63,
+    "oldest_unfilled_days": 14.04,
+    "zero_live_days": 100.67,
+    "average_live_accounts": 14.0,
+    "peak_subscriptions": 20,
+    "peak_in_flight": 20,
+    "peak_passes_month": 24,
+    "activation_blocked_account_checks": 1380,
+    "renewals_unaffordable": 15,
+    "start_unaffordable_checks": 244,
+    "cash_blocked_days": 318,
+    "signals_executed": 8885,
+    "zero_live_signals": 563,
+    "allocation_sha256": "a2688ce7df38d829bcd963b501d05dc27d899cd7752c5432be3765d9958a8d08"
+  },
+  "config": {
+    "schema_version": "pa_milky_simplified.scenario.v1",
+    "scenario": "full_rulebook_monthly_500",
+    "brick": null,
+    "brick_name": "full_rulebook_monthly_500",
+    "description": "Headline. Every Apex payout rule switched on, and our own behaviour is to request $500 -- the firm's minimum -- from each account every calendar month, carrying unpayable months as a backlog.",
+    "data": {
+      "sweeps_root": "1_sweeps",
+      "strategy": "RR",
+      "risk_reward": "1.00",
+      "expected_windows": 23,
+      "expected_trades": 12658
+    },
+    "execution": {
+      "contracts_per_copy": 1,
+      "commission_usd_per_mnq_round_turn": 1.05,
+      "slippage_ticks": 0,
+      "concurrency": "unlimited",
+      "path_order": "mae_first",
+      "commission_applies_to_excursions": false
+    },
+    "product": {
+      "product": "Apex Legacy 25K PA",
+      "starting_balance_usd": 25000.0,
+      "trailing_drawdown_usd": 1500.0,
+      "frozen_floor_profit_usd": 100.0,
+      "threshold_touch_fails": true,
+      "purchase_fee_usd": 200.0
+    },
+    "book": {
+      "cadence": "one_new_pa_per_calendar_month",
+      "activation_moment": "first_instant_of_calendar_month",
+      "max_accounts": null,
+      "replace_on_death": false
+    },
+    "firm_rules": {
+      "consistency": {
+        "enabled": true,
+        "max_day_fraction": 0.3,
+        "applies_through_payout": 5
+      },
+      "denial_on_shortfall": {
+        "enabled": true
+      },
+      "maximum_payout": {
+        "enabled": true,
+        "amount_usd": 1500.0,
+        "applies_through_payout": 5
+      },
+      "minimum_balance": {
+        "enabled": true,
+        "balance_usd": 26600.0
+      },
+      "minimum_payout": {
+        "enabled": true,
+        "amount_usd": 500.0
+      },
+      "processing_delay": {
+        "enabled": false,
+        "days": 0
+      },
+      "profit_split": {
+        "enabled": true,
+        "mode": "cumulative_threshold",
+        "full_rate_threshold_usd": 25000.0,
+        "reduced_rate": 0.9,
+        "full_rate_from_payout": 6
+      },
+      "profitable_days": {
+        "enabled": true,
+        "required_days": 5,
+        "profit_threshold_usd": 50.0
+      },
+      "safety_net": {
+        "enabled": true,
+        "net_balance_usd": 26600.0,
+        "encroachment_allowance_usd": 500.0,
+        "applies_through_payout": 3
+      },
+      "trading_days": {
+        "enabled": true,
+        "required_days": 8
+      }
+    },
+    "policy": {
+      "name": "maximum_0_weekly_h0",
+      "cadence": "weekly",
+      "amount_usd": 0,
+      "amount_rule": "maximum",
+      "shortfall": "skip",
+      "quantize_to_amount": false,
+      "min_retained_balance_usd": 25100.0,
+      "terminal_withdrawal": "firm_permitted"
+    }
+  },
+  "acquisition": {
+    "name": "monthly_current_slot_replacements",
+    "initial_cash_usd": 1000,
+    "monthly_contribution_usd": 200,
+    "max_live_accounts": 20,
+    "replacement_target": 1,
+    "reinvest_fraction": 1,
+    "restart_when_empty": false,
+    "spare_capacity": 10,
+    "passes_per_month": 0,
+    "evaluation": {
+      "profit_target_usd": 1500,
+      "trailing_drawdown_usd": 1500,
+      "monthly_fee_usd": 33,
+      "activation_fee_usd": 125,
+      "contracts": 3
+    },
+    "evaluations_at_once": 20,
+    "persistent_demand": true,
+    "evaluation_start_interval_days": 1,
+    "evaluations_reserve_seats": false,
+    "activate_on_first_check": false
+  }
+}

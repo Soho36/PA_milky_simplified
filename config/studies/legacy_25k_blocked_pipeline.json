@@ -1,0 +1,25 @@
+{
+  "scenario": "config/scenarios/full_rulebook_monthly_500.json",
+  "evaluation_spec": "config/studies/legacy_eval_supply.json",
+  "output": "results/legacy_25k/blocked_pipeline",
+  "budget": [1000, 200],
+  "workers": 6,
+  "concurrency": [2, 5, 10, 20],
+  "start_intervals_days": [0, 1, 7],
+  "spares": [0, 2, 5, 10],
+  "persistent_demand": [false, true],
+  "anchors": {
+    "blocked_instant_maximum": ["maximum", "weekly", 0, 0],
+    "blocked_instant_fixed_tie": ["fixed", "weekly", 0, 1500],
+    "previous_pipeline_total": ["minimum", "calendar_month", 2800, 0],
+    "previous_pipeline_ongoing": ["minimum", "daily", 3900, 0]
+  },
+  "headrooms": [0, 500, 1000, 2000, 2800, 3900, 4900, 6000, 6800, 8000, 10000, 15000],
+  "amounts": [["minimum", 0], ["maximum", 0], ["fixed", 1500]],
+  "cadences": ["daily", "weekly", "calendar_month"],
+  "refinement_radius": 400,
+  "refinement_step": 100,
+  "transfer_budgets": [[1000, 0], [5000, 0], [5000, 200]],
+  "transfer_starts": [2021, 2022, 2023, 2024, 2025],
+  "design": "Legacy25K blocked copying, one MNQ per free PA, same evaluation engine as legacy_pipeline_capacity. Screen four frozen withdrawal policies across all 192 pipelines. Nominate both cash-objective leaders per seat mode and concurrency, and the original pipeline, then search withdrawals on their union and refine per family. Current-slot replacement demand is fixed; persistent demand is an explicit pipeline factor. No free starting PAs, all evaluation and activation spending deducted. Pair screen and final winners with unrestricted PA execution under identical supply. Historical transfers are frozen, overlapping in-sample sensitivities. Best tested, not a global optimum."
+}

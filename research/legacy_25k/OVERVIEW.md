@@ -1,5 +1,9 @@
 # Legacy 25K: current findings
 
+**Blocked copying with evaluation supply:** [pipeline study](BLOCKED_PIPELINE.md)
+extends the instant-supply result with paid evaluations, replacement delays,
+spare inventory and a shared 20-seat cap at the same $1,000 + $200/month budget.
+
 **Blocked-copying optimization:** [joint operating-policy search](BLOCKED_OPTIMIZATION.md)
 tests 3,932 settings at $1,000 initially plus $200/month. Three policies tie
 at $665,420.55 net cash; a representative starts one account, uses monthly

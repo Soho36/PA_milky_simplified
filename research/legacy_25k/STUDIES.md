@@ -5,6 +5,7 @@ paths; there is no need to browse the full results tree to follow the research.
 
 | Question | Evidence | Scope |
 |---|---|---|
+| What changes when blocked copying must obtain PAs through evaluations? | [Blocked pipeline study](BLOCKED_PIPELINE.md) | Same $1,000 + $200/month; frozen policies, capacity sweep, withdrawal retuning, replacement delays and paired execution controls |
 | Which operating policy works best with blocked copying? | [Joint blocked-copying search](BLOCKED_OPTIMIZATION.md) | Primary budget $1,000 + $200/month; initial inventory, purchases, reserves and withdrawals; two cash objectives |
 | Can routing protect participation while increasing copies? | [Hybrid routing](ROUTING_HYBRID.md) | Six minimum/cap settings, 20 initial accounts, no replacements, unchanged withdrawals; 16 prior controls reproduced |
 | What changes with fixed resources versus matched exposure? | [Fixed-inventory comparison](ROUTING_FIXED_INVENTORY.md) | All seats initially funded, no replacements/growth; 20-account controls, exact exposure replay, separate full-tape capacity test |
