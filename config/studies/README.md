@@ -129,6 +129,15 @@ Before searching, the runner checks two things:
 
 ## Fixed-inventory routing comparison
 
+The separate joint optimization uses `legacy_25k_blocked_optimization.json`
+and the user-selected budget $1,000 initially plus $200/month. Run
+`venv/Scripts/python.exe scripts/optimize_blocked_copying.py`, followed by
+`venv/Scripts/python.exe scripts/audit_blocked_optimization.py`.
+It exhausts a declared coarse grid, locally refines reserves, then transfers
+frozen winners across other budgets and historical starts. Checkpoints can
+resume only with identical code, settings and inputs. The bound on the
+optimization claim is documented in the profile and research notes.
+
 The follow-up hybrid experiment uses `legacy_25k_routing_hybrid.json`.
 Run `venv/Scripts/python.exe scripts/study_routing_hybrid.py`, followed by
 `venv/Scripts/python.exe scripts/audit_routing_hybrid.py`. It tests minimum

@@ -1,5 +1,11 @@
 # Results index
 
+New: [blocked-copying optimization](legacy_25k/blocked_optimization/REPORT.generated.md)
+and [interpretation](../research/legacy_25k/BLOCKED_OPTIMIZATION.md): 3,932 joint
+policy settings at $1,000 + $200/month, two cash objectives, exact historical
+controls and frozen transfers of all three tied leaders. Instant $200
+replacement supply remains an explicit modeling assumption.
+
 New: [hybrid routing tables](legacy_25k/routing_hybrid/REPORT.generated.md)
 and [interpretation](../research/legacy_25k/ROUTING_HYBRID.md): six minimum/cap
 settings under the same fixed inventory and withdrawal policies. Includes

@@ -1,5 +1,13 @@
 # Legacy 25K: current findings
 
+**Blocked-copying optimization:** [joint operating-policy search](BLOCKED_OPTIMIZATION.md)
+tests 3,932 settings at $1,000 initially plus $200/month. Three policies tie
+at $665,420.55 net cash; a representative starts one account, uses monthly
+growth plus replacements, and requests maximum weekly withdrawals with
+a $25,100 reserve. It purchases 531 accounts and loses 511 under the inherited
+instant $200 account-supply model. This is the best tested result and an
+exhaustive coarse-grid optimum, not a proven optimum over arbitrary policies.
+
 **Hybrid routing:** [minimum participation with variable copies](ROUTING_HYBRID.md)
 tests reserving free seats while using spare capacity for extra copies.
 Higher caps improve 2023 cash with full coverage at the main reserve, but
