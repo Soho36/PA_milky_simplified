@@ -96,11 +96,45 @@ def matched_deltas(rows):
     return output
 
 
+def blocked_controls(cache, spec):
+    """Settings shared with the 25K blocked-copying optimization must reproduce exactly.
+
+    Weekly purchases are excluded: that study buys its seed account on the first
+    day, while this one waits for the first Monday.
+    """
+    source = spec['blocked_controls']
+    verified = 0
+    for line in (PROJECT_ROOT/source['checkpoint']).read_text(encoding='utf-8').splitlines():
+        r = json.loads(line)
+        if (r['start_year'], r['initial_accounts'], r['amount']) != (2020, 1, 0) or \
+                r['acquisition'] not in source['acquisitions'] or r['withdrawal'] not in spec['amount_rules']:
+            continue
+        key = sim.job(source['product'], r['initial_cash'], r['monthly_funding'], r['acquisition'],
+                      r['withdrawal'], r['cadence'], r['headroom'])
+        if key not in cache:
+            continue
+        actual = cache[key]
+        assert all(actual[k] == r[k] for k in ('ongoing', 'total', 'accounts', 'alive', 'reserve',
+                                               'allocation_sha256')), ('blocked control drift', key)
+        verified += 1
+    assert verified >= source['minimum_matches'], ('too few blocked controls', verified)
+    return verified
+
+
 def render(rows, selected, spec, controls):
-    text = '# Legacy 25K versus 50K: best tested reserves by operating policy\n\n'
+    blocking = sim.execution_of(spec) == 'blocking'
+    text = ('# Legacy 25K versus 50K: best tested reserves by operating policy'
+            + (' — blocked copying' if blocking else '') + '\n\n')
     text += (f'{len(rows):,} simulations; {len(selected)//2} product/budget/policy families; '
-             f'{controls} prior matched controls reproduced. Each paired family tests exactly '
-             'the same floor-headroom values for both products.\n\n')
+             + (f'{controls} blocked-optimization settings reproduced, including per-trade account assignments. '
+                if blocking else f'{controls} prior matched controls reproduced. ')
+             + 'Each paired family tests exactly the same floor-headroom values for both products.\n\n')
+    if blocking:
+        text += ('**Execution: blocked copying.** Each funded account holds at most one position. '
+                 'A signal is copied by every live account that is flat at its entry; an account still '
+                 'in an earlier trade skips it. Everything else matches the '
+                 '[non-blocking comparison](../../../comparisons/legacy_25k_vs_50k/reserve_by_policy/REPORT.md), '
+                 'where every live account copies every signal: same tape, grid, budgets, fees and rules.\n\n')
     text += ('## How to read this comparison\n\n'
              'These are in-sample best tested settings, not global optima or expected future earnings. '
              'A reserve is the balance left after a withdrawal, not a trading stop. '
@@ -126,9 +160,13 @@ def render(rows, selected, spec, controls):
              'local refinement, not a continuous or exhaustive $100 grid. Secondary objective, then '
              'lower reserve, breaks display ties. All primary-score ties remain in the data.\n\n'
              'The frozen floors are $25,100 and $50,100: headroom $6,800 means reserves '
-             '$31,900 and $56,900. The old 25K cadence study tested $31,600–$32,100 plus '
-             'the $30,000 minimum-policy control; its $31,900 result was conditional on that grid.\n\n'
-             '## Files\n\n'
+             '$31,900 and $56,900. '
+             + ('The blocked-optimization cross-check covers monthly and monthly-plus-replacement '
+                'purchases; weekly purchases are excluded because that study buys its seed account '
+                'on the first day rather than the first Monday.\n\n' if blocking else
+                'The old 25K cadence study tested $31,600–$32,100 plus '
+                'the $30,000 minimum-policy control; its $31,900 result was conditional on that grid.\n\n')
+             + '## Files\n\n'
              '- [All paired settings](all_settings.csv) and [matched 50K-minus-25K differences](matched_deltas.csv).\n'
              '- [Best reserves by family and objective](best_by_policy.csv), including exact ties, tested bounds '
              'and the explicit list of tested reserves within 1% of the best positive score. '
@@ -161,17 +199,19 @@ def render(rows, selected, spec, controls):
     return text
 
 
-def main():
-    spec = json.loads(SPEC_PATH.read_text(encoding='utf-8'))
-    sim.initialize()
+def main(spec_path=SPEC_PATH):
+    spec = json.loads(Path(spec_path).read_text(encoding='utf-8'))
+    execution = sim.execution_of(spec)
+    sim.initialize(execution)
     assert spec['budgets'] == sim.P['legacy_25k']['budgets'] == sim.P['legacy_50k']['budgets']
     assert sim.P['legacy_25k']['max_live_accounts'] == sim.P['legacy_50k']['max_live_accounts'] == 20
     assert input_digest(sim.C['legacy_25k']) == input_digest(sim.C['legacy_50k'])
     out = (PROJECT_ROOT / spec['output']).resolve()
-    assert out.is_relative_to(PROJECT_ROOT / 'results/comparisons')
+    assert out.is_relative_to(PROJECT_ROOT / sim.RESULT_ROOTS[execution])
     out.mkdir(parents=True, exist_ok=True)
+    # Office lock files (~$name) exist only while a workbook is open and are unreadable then.
     protected = {str(f): sha256_file(f) for f in (PROJECT_ROOT/'results').rglob('*')
-                 if f.is_file() and not f.is_relative_to(out)}
+                 if f.is_file() and not f.is_relative_to(out) and not f.name.startswith('~$')}
     contract = {'spec': spec, 'configs': {k: to_payload(v) for k, v in sim.C.items()},
                 'engine': engine_digest(), 'inputs': input_digest(sim.C['legacy_25k']),
                 'evaluator_sha256': sha256_file(Path(sim.__file__)),
@@ -205,7 +245,8 @@ def main():
                     print(f'{label}: {n}/{len(missing)} completed', flush=True)
         return [cache[j] for j in jobs]
 
-    with ProcessPoolExecutor(max_workers=spec['workers'], initializer=sim.initialize) as pool:
+    with ProcessPoolExecutor(max_workers=spec['workers'], initializer=sim.initialize,
+                             initargs=(execution,)) as pool:
         coarse_rows = run(pool, coarse, 'Paired coarse grid')
         refined = refinement_jobs(coarse_rows, spec)
         run(pool, refined, 'Paired per-family refinement')
@@ -215,12 +256,16 @@ def main():
     deltas = matched_deltas(rows)
     assert len(rows) == 2 * len(deltas)
     assert len(selected) == 2 * 2 * 4 * 3 * 2 * 3
-    previous = json.loads((PROJECT_ROOT/'results/legacy_50k/operating_policies/study.json').read_text(encoding='utf-8'))
-    controls = 0
-    for r in previous['matched_controls']:
-        actual = cache[tuple(r['job'])]
-        assert all(actual[k] == r[k] for k in ('ongoing', 'total', 'accounts', 'alive', 'reserve', 'fee'))
-        controls += 1
+    if execution == 'blocking':
+        # The saved matched controls are non-blocking results; they cannot apply here.
+        controls = blocked_controls(cache, spec)
+    else:
+        previous = json.loads((PROJECT_ROOT/'results/legacy_50k/operating_policies/study.json').read_text(encoding='utf-8'))
+        controls = 0
+        for r in previous['matched_controls']:
+            actual = cache[tuple(r['job'])]
+            assert all(actual[k] == r[k] for k in ('ongoing', 'total', 'accounts', 'alive', 'reserve', 'fee'))
+            controls += 1
     write_csv(out/'all_settings.csv', rows)
     write_csv(out/'best_by_policy.csv', selected)
     write_csv(out/'matched_deltas.csv', deltas)
@@ -235,4 +280,4 @@ def main():
 
 
 if __name__ == '__main__':
-    main()
+    main(*sys.argv[1:])

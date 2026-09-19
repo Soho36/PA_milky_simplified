@@ -15,15 +15,28 @@ from pa_milky.firm import Rulebook
 from pa_milky.economics import Economics
 from pa_milky.provenance import input_digest,engine_digest,sha256_file
 from pa_milky.report import write_outputs
+from pa_milky.routing import RoutingPolicy
 from pa_milky.study_reports import write_study_report
-P=None;C=None;T=None
+P=None;C=None;T=None;ROUTING=None
+# Non-blocking: every live account copies every signal, even while already in a
+# position. Blocking: an account copies a signal only while flat (one position).
+ROUTINGS={'non_blocking':None,'blocking':RoutingPolicy(mode='blocked')}
+# Each execution mode owns a separate results tree; neither may write into the other.
+RESULT_ROOTS={'non_blocking':'results/comparisons','blocking':'results/comparisons_blocking'}
 
 
-def initialize():
-    global P,C,T
+def execution_of(spec):
+    mode=spec.get('execution','non_blocking')
+    assert mode in ROUTINGS,('Unknown execution mode',mode)
+    return mode
+
+
+def initialize(execution='non_blocking'):
+    global P,C,T,ROUTING
     P={k:load_study_profile(f'config/studies/{k}.json') for k in ('legacy_25k','legacy_50k')}
     C={k:load_config(study_path(p,'scenario')) for k,p in P.items()}
     T=load_tape(C['legacy_50k'])
+    ROUTING=ROUTINGS[execution]
 
 
 def job(product,initial,monthly,acquisition,rule,cadence,headroom,strict=False):
@@ -41,7 +54,7 @@ def evaluate(j,detail=False):
         rules['minimum_balance']=replace(r,params={**r.params,'retain_after_payout_from':6})
         cfg=replace(cfg,rulebook=Rulebook(rules))
     acquisition=AcquisitionPolicy(acq,initial,monthly,max_live_accounts=P[product]['max_live_accounts'])
-    result=run_book(T,cfg,acquisition=acquisition)
+    result=run_book(T,cfg,acquisition=acquisition,routing=ROUTING)
     e=Economics.measure(result);cash=result.acquisition.summary()
     assert e.residual_usd==cash['cash_identity_residual_usd']==0
     assert cash['net_cash_created_usd']==result.pocket_usd
@@ -51,7 +64,13 @@ def evaluate(j,detail=False):
          'strict_post_payout_balance':strict,'fee':base.purchase_fee_usd,'accounts':len(result.accounts),
          'alive':result.alive_at_horizon,'ongoing':round(result.pocket_usd-terminal,2),
          'terminal':terminal,'total':result.pocket_usd,'contributions':cash['owner_contributions_usd'],
-         'ending_owner_cash':cash['ending_owner_cash_usd'],'economics':e.to_payload(),'job':j}
+         'ending_owner_cash':cash['ending_owner_cash_usd']}
+    if ROUTING is not None:
+        # Non-blocking rows keep their original fields, so either tree can be regenerated unchanged.
+        signals=sum(bool(f['accounts']) for f in result.routing_fills)
+        row.update(execution='blocking',copies=result.copies_filled,signals_executed=signals,
+                   signal_participation=signals/len(T),allocation_sha256=result.routing['allocation_sha256'])
+    row.update(economics=e.to_payload(),job=j)
     return (row,result) if detail else row
 
 

@@ -1,0 +1,289 @@
+{
+  "schema_version": "pa_milky_simplified.result.v1",
+  "generated_utc": "2026-09-19T00:34:27+00:00",
+  "brick": null,
+  "brick_name": "legacy_50k_full_rulebook",
+  "scenario": "legacy_50k_full_rulebook",
+  "run": {
+    "strategy": "RR",
+    "risk_reward": "1.00",
+    "contracts_per_copy": 1,
+    "commission_usd_per_copy": 1.05,
+    "path_order": "mae_first",
+    "concurrency": "blocked",
+    "trailing_drawdown_usd": 2500.0,
+    "frozen_floor_profit_usd": 100.0,
+    "purchase_fee_usd": 250.0
+  },
+  "tape": {
+    "trades_loaded": 12658,
+    "expected_trades": 12658,
+    "size_verified": true,
+    "strategy": "RR",
+    "first_entry": "2020-01-02 07:50:40",
+    "last_exit": "2026-07-13 21:30:40",
+    "copies_filled": 76088
+  },
+  "book": {
+    "months_in_dataset": 79,
+    "accounts_opened": 56,
+    "accounts_alive_at_end": 1,
+    "accounts_dead": 55,
+    "survival_rate": 0.0179
+  },
+  "cash": {
+    "spent_on_accounts_usd": 14000.0,
+    "withdrawn_usd": 282478.15,
+    "owner_cash_position_usd": 268478.15,
+    "received_usd": 282478.15,
+    "lost_to_split_usd": 0.0
+  },
+  "economics": {
+    "booked_net_trading_usd": 275479.85,
+    "firm_split_usd": 0.0,
+    "retained_profit_usd": 532.0,
+    "failed_positive_ledger_usd": 14177.4,
+    "failed_negative_ledger_usd": 21707.7,
+    "purchase_fees_usd": 14000.0,
+    "pocket_usd": 268478.15,
+    "residual_usd": 0.0,
+    "firm_capital_consumed_usd": 21707.7,
+    "withdrawals_financed_by_firm_usd": 0.0,
+    "booked_deficits_not_funded_by_owner_usd": 21707.7,
+    "dead_account_booked_deficits_usd": 21707.7,
+    "live_account_booked_deficits_usd": 0.0,
+    "gross_withdrawals_exceeding_booked_earnings_usd": 0.0
+  },
+  "alive_equity": {
+    "profit_above_start": {
+      "count": 1,
+      "total": 532.0,
+      "mean": 532.0,
+      "median": 532.0,
+      "min": 532.0,
+      "max": 532.0
+    },
+    "total_balance_usd": 50532.0,
+    "total_paper_profit_usd": 532.0,
+    "paper_profit_minus_cost_usd": -13468.0
+  },
+  "dead_accounts": {
+    "count": 55,
+    "lifetime_days": {
+      "count": 55,
+      "total": 19528.0,
+      "mean": 355.05,
+      "median": 283.0,
+      "min": 3.0,
+      "max": 983.0
+    },
+    "trades_before_death": {
+      "count": 55,
+      "total": 76038.0,
+      "mean": 1382.51,
+      "median": 1073.0,
+      "min": 23.0,
+      "max": 3850.0
+    }
+  },
+  "trades_per_account": {
+    "count": 56,
+    "total": 76088.0,
+    "mean": 1358.71,
+    "median": 1047.0,
+    "min": 23.0,
+    "max": 3850.0
+  },
+  "firm_rules": {
+    "active": [
+      "consistency",
+      "denial_on_shortfall",
+      "maximum_payout",
+      "minimum_balance",
+      "minimum_payout",
+      "profit_split",
+      "profitable_days",
+      "safety_net",
+      "trading_days"
+    ],
+    "rulebook": {
+      "consistency": {
+        "enabled": true,
+        "max_day_fraction": 0.3,
+        "applies_through_payout": 5
+      },
+      "denial_on_shortfall": {
+        "enabled": true
+      },
+      "maximum_payout": {
+        "enabled": true,
+        "amount_usd": 2000,
+        "applies_through_payout": 5
+      },
+      "minimum_balance": {
+        "enabled": true,
+        "balance_usd": 52600
+      },
+      "minimum_payout": {
+        "enabled": true,
+        "amount_usd": 500.0
+      },
+      "processing_delay": {
+        "enabled": false,
+        "days": 0
+      },
+      "profit_split": {
+        "enabled": true,
+        "mode": "cumulative_threshold",
+        "full_rate_threshold_usd": 25000.0,
+        "reduced_rate": 0.9,
+        "full_rate_from_payout": 6
+      },
+      "profitable_days": {
+        "enabled": true,
+        "required_days": 5,
+        "profit_threshold_usd": 50.0
+      },
+      "safety_net": {
+        "enabled": true,
+        "net_balance_usd": 52600,
+        "encroachment_allowance_usd": 500.0,
+        "applies_through_payout": 3
+      },
+      "trading_days": {
+        "enabled": true,
+        "required_days": 8
+      }
+    }
+  },
+  "terminal": {
+    "mode": "firm_permitted",
+    "at": "2026-07-13 21:30:40",
+    "accounts_alive_at_horizon": 1,
+    "equity_at_horizon_usd": 532.0,
+    "accounts_paid": 0,
+    "gross_usd": 0.0,
+    "received_usd": 0.0,
+    "extracted_fraction_of_equity": 0.0,
+    "stranded_usd": 532.0
+  },
+  "routing": {
+    "policy": {
+      "mode": "blocked",
+      "copies": 1,
+      "allocation": "max_headroom",
+      "capacity_per_copy": 5,
+      "minimum_copies": 1,
+      "maximum_copies": 8
+    },
+    "demand_source": "policy",
+    "signals_offered": 12658,
+    "copies_requested": 104481,
+    "copies_filled": 76088,
+    "signals_fully_filled": 8917,
+    "signals_partially_filled": 11,
+    "signals_missed": 3221,
+    "signals_with_no_target": 509,
+    "target_copy_histogram": {
+      "1": 1039,
+      "2": 757,
+      "3": 870,
+      "4": 1931,
+      "5": 1184,
+      "6": 937,
+      "7": 663,
+      "8": 455,
+      "9": 393,
+      "0": 509,
+      "10": 244,
+      "11": 192,
+      "12": 164,
+      "13": 151,
+      "14": 190,
+      "15": 170,
+      "16": 169,
+      "17": 164,
+      "18": 155,
+      "19": 161,
+      "20": 2160
+    },
+    "copies_missed_busy": 28393,
+    "copies_missed_inventory": 0,
+    "peak_occupied_accounts": 20,
+    "minimum_copy_shortfall": 0,
+    "reservation_shortfall_offers": 0,
+    "allocation_sha256": "f70acd75d9228d9b15f615de72e29a9cceeb08710bc270f23f717c3a813474ee",
+    "copy_coverage": 0.7282472411251807
+  },
+  "withdrawals": {
+    "policy": "monthly_maximum",
+    "amount_usd": 0.0,
+    "eligibility_balance_usd": 52600.0,
+    "safety_net_balance_usd": 52100.0,
+    "shortfall": "skip",
+    "events": 307,
+    "first_withdrawal": "2020-11-09 00:00:00",
+    "last_withdrawal": "2026-06-15 00:00:00",
+    "accounts_that_ever_paid": 36,
+    "accounts_that_never_paid": 20,
+    "per_paying_account_usd": {
+      "count": 36,
+      "total": 282478.15,
+      "mean": 7846.62,
+      "median": 10756.75,
+      "min": 570.25,
+      "max": 17140.75
+    },
+    "entitlement_accrued_usd": 0.0,
+    "outstanding_on_live_accounts_usd": 0.0,
+    "outstanding_lost_to_deaths_usd": 0.0
+  },
+  "denials": {
+    "requests_denied": 727,
+    "requests_approved": 307,
+    "requests_withheld_by_policy": 1551,
+    "requests_unpaid_at_horizon": 0,
+    "blocked_by_first": {
+      "minimum_balance": 671,
+      "trading_days": 40,
+      "profitable_days": 13,
+      "consistency": 3
+    },
+    "blocked_by_any": {
+      "minimum_balance": 671,
+      "profitable_days": 288,
+      "trading_days": 195,
+      "consistency": 50
+    },
+    "binding_cap_on_approved": {
+      "maximum_payout": 3
+    }
+  },
+  "acquisition": {
+    "policy": {
+      "name": "monthly_one",
+      "initial_cash_usd": 1000,
+      "monthly_contribution_usd": 0,
+      "max_live_accounts": 20,
+      "replacement_target": 1,
+      "reinvest_fraction": 1,
+      "restart_when_empty": false,
+      "spare_capacity": null,
+      "passes_per_month": 0,
+      "evaluation": null,
+      "evaluations_at_once": 0,
+      "persistent_demand": false,
+      "evaluation_start_interval_days": 0,
+      "evaluations_reserve_seats": true,
+      "activate_on_first_check": false
+    },
+    "owner_contributions_usd": 1000.0,
+    "payouts_received_usd": 282478.15,
+    "purchase_spend_usd": 14000.0,
+    "ending_owner_cash_usd": 269478.15,
+    "net_cash_created_usd": 268478.15,
+    "cash_limited_decisions": 10,
+    "capacity_limited_decisions": 13,
+    "cash_identity_residual_usd": 0.0
+  }
+}

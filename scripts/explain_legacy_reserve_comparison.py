@@ -1,7 +1,9 @@
 """Replay headline winners and expose turnover and the owner-loss accounting."""
 from dataclasses import asdict
+from datetime import datetime
 from pathlib import Path
 import json
+import sys
 
 import study_legacy_reserve_comparison as study
 from pa_milky.config import PROJECT_ROOT, to_payload
@@ -14,12 +16,29 @@ PURCHASE_LABEL = {'monthly_one': 'Monthly', 'weekly_one': 'Weekly',
 CADENCE_LABEL = {'calendar_month': 'monthly', 'weekly': 'weekly', 'daily': 'daily'}
 
 
-def main():
-    spec = json.loads(study.SPEC_PATH.read_text(encoding='utf-8'))
+def one_position_check(result):
+    """Independently of the router's busy set: no account's copied trades may overlap."""
+    held = {}
+    for fill in result.routing_fills:
+        for account in fill['accounts']:
+            held.setdefault(account, []).append((datetime.fromisoformat(fill['entry_at']),
+                                                 datetime.fromisoformat(fill['exit_at'])))
+    for spans in held.values():
+        spans.sort()
+        # Exits precede entries at the same timestamp, so touching spans do not overlap.
+        assert all(a[1] <= b[0] for a, b in zip(spans, spans[1:])), 'account held two positions'
+    copies = sum(len(fill['accounts']) for fill in result.routing_fills)
+    assert copies == result.copies_filled
+    return {'accounts_checked': len(held), 'copies': copies}
+
+
+def main(spec_path=study.SPEC_PATH):
+    spec = json.loads(Path(spec_path).read_text(encoding='utf-8'))
+    blocking = study.sim.execution_of(spec) == 'blocking'
     out = PROJECT_ROOT / spec['output']
     payload = json.loads((out/'study.json').read_text(encoding='utf-8'))
     assert spec == payload['spec']
-    study.sim.initialize()
+    study.sim.initialize(study.sim.execution_of(spec))
     assert engine_digest() == payload['engine']
     assert input_digest(study.sim.C['legacy_25k']) == payload['inputs']
     assert {k: to_payload(v) for k, v in study.sim.C.items()} == payload['configs']
@@ -27,6 +46,7 @@ def main():
     winners = []
     replayed = {}
     strict_rows = {}
+    position_checks = {}
     for i, m in spec['budgets']:
         for score in study.SCORES:
             for prod in spec['products']:
@@ -42,13 +62,22 @@ def main():
                         'run_config': to_payload(result.config),
                         'acquisition': asdict(result.acquisition.policy)}, indent=2), encoding='utf-8')
                     replayed[key] = folder.name
+                    if blocking:
+                        position_checks[folder.name] = one_position_check(result)
                     strict_rows[key] = study.sim.evaluate((*key[:-1], True))
                     print(f'Verified {prod} {i}+{m} {score}: {r[score]:,.2f}', flush=True)
                 winners.append({**r, 'objective': score, 'ledger': replayed[key]})
 
-    text = '# What the broader reserve comparison changes\n\n'
-    text += ('The earlier $31,900 reserve was conditional on the tested operating setup. '
-             'This paired search allows each purchase/withdrawal/cadence family to choose '
+    text = '# What the broader reserve comparison changes' + (' — blocked copying' if blocking else '') + '\n\n'
+    if blocking:
+        text += ('**Execution: blocked copying.** Each funded account holds at most one position: '
+                 'accounts still in an earlier trade skip a new signal. Replaying every headline winner '
+                 f'confirmed that none of their {sum(c["accounts_checked"] for c in position_checks.values()):,} '
+                 'accounts ever held two trades at once. Compare the '
+                 '[non-blocking findings](../../../comparisons/legacy_25k_vs_50k/reserve_by_policy/FINDINGS.md), '
+                 'where every live account copies every signal.\n\n')
+    text += ('' if blocking else 'The earlier $31,900 reserve was conditional on the tested operating setup. ')
+    text += ('This paired search allows each purchase/withdrawal/cadence family to choose '
              'its own reserve, with identical headroom coverage for the two account sizes. '
              'Use the [complete policy tables](REPORT.generated.md) for every family; '
              'this page explains the headline winners and their turnover.\n\n'
@@ -63,19 +92,24 @@ def main():
         if r['objective'] != 'total':
             continue
         text += f"| ${r['initial_cash']:,} + ${r['monthly_funding']:,}/mo | {PRODUCT_LABEL[r['product']]} | {PURCHASE_LABEL[r['acquisition']]} | {r['withdrawal']} / {CADENCE_LABEL[r['cadence']]} | ${r['reserve']:,.0f} | ${r['ongoing']:,.2f} | ${r['total']:,.2f} | {r['accounts']} / {r['alive']} |\n"
-    text += ('\n## Where the ongoing-cash winner differs\n\n'
-             'Only product/budget pairs with a different selected bundle are listed here. '
-             'For the others, the same tested bundle leads both objectives.\n\n'
-             '| Budget | Product | Purchases | Withdrawal / checks | Reserve | Ongoing | Total | Bought / alive |\n'
-             '|---|---|---|---|---:|---:|---:|---:|\n')
+    text += '\n## Where the ongoing-cash winner differs\n\n'
+    differing = []
     for r in winners:
         if r['objective'] != 'ongoing':
             continue
         terminal_winner = next(x for x in winners if (x['product'], x['initial_cash'],
             x['monthly_funding'], x['objective']) == (r['product'], r['initial_cash'], r['monthly_funding'], 'total'))
-        if r['job'] == terminal_winner['job']:
-            continue
-        text += f"| ${r['initial_cash']:,} + ${r['monthly_funding']:,}/mo | {PRODUCT_LABEL[r['product']]} | {PURCHASE_LABEL[r['acquisition']]} | {r['withdrawal']} / {CADENCE_LABEL[r['cadence']]} | ${r['reserve']:,.0f} | ${r['ongoing']:,.2f} | ${r['total']:,.2f} | {r['accounts']} / {r['alive']} |\n"
+        if r['job'] != terminal_winner['job']:
+            differing.append(r)
+    if differing:
+        text += ('Only product/budget pairs with a different selected bundle are listed here. '
+                 'For the others, the same tested bundle leads both objectives.\n\n'
+                 '| Budget | Product | Purchases | Withdrawal / checks | Reserve | Ongoing | Total | Bought / alive |\n'
+                 '|---|---|---|---|---:|---:|---:|---:|\n')
+        for r in differing:
+            text += f"| ${r['initial_cash']:,} + ${r['monthly_funding']:,}/mo | {PRODUCT_LABEL[r['product']]} | {PURCHASE_LABEL[r['acquisition']]} | {r['withdrawal']} / {CADENCE_LABEL[r['cadence']]} | ${r['reserve']:,.0f} | ${r['ongoing']:,.2f} | ${r['total']:,.2f} | {r['accounts']} / {r['alive']} |\n"
+    else:
+        text += 'None: in every product/budget pair, the same tested bundle leads both objectives.\n'
     text += ('\n## What supports those cash results?\n\n'
              'A 20-live-account cap does not limit cumulative purchases to 20. Low reserves '
              'combined with prompt replacement can turn this into repeated withdrawal and '
@@ -136,12 +170,14 @@ def main():
             r['acquisition'], r['withdrawal'], r['cadence'], r['headroom']) == (i, m, 'monthly_one', 'minimum', 'daily', 6800)}
         a, b = pair['legacy_25k']['total'], pair['legacy_50k']['total']
         text += f'| ${i:,} + ${m:,}/mo | ${a:,.2f} | ${b:,.2f} | ${b-a:,.2f} |\n'
-    text += ('\n## How to interpret a selected reserve\n\n'
-             'The old daily-minimum study tested up to $32,100. Reserves $31,900, $32,000 '
-             'and $32,100 tied on total cash; $31,900 had the highest ongoing cash among '
-             'those ties. It was not a uniquely optimal balance. See the '
-             '[historical table and operating notes](HOW_THIS_STUDY_WORKS.md).\n\n'
-             'The new [best-by-policy file](best_by_policy.csv) records exact ties and '
+    text += '\n## How to interpret a selected reserve\n\n'
+    if not blocking:
+        # That history is a non-blocking result; it says nothing about blocked copying.
+        text += ('The old daily-minimum study tested up to $32,100. Reserves $31,900, $32,000 '
+                 'and $32,100 tied on total cash; $31,900 had the highest ongoing cash among '
+                 'those ties. It was not a uniquely optimal balance. See the '
+                 '[historical table and operating notes](HOW_THIS_STUDY_WORKS.md).\n\n')
+    text += ('The new [best-by-policy file](best_by_policy.csv) records exact ties and '
              'explicit tested reserves within 1% of each best positive score. These need '
              'not form a continuous band. A boundary winner is conditional on the tested '
              'limits; a flat loss across reserves means no useful reserve was found, '
@@ -152,17 +188,22 @@ def main():
              'leaders operationally, the unresolved payout interpretation and acquisition '
              'assumptions are the next material questions to test.\n\n'
              'Regenerate this explanation and the verified winner ledgers with '
-             '`scripts/explain_legacy_reserve_comparison.py` after the main study. Existing '
+             '`scripts/explain_legacy_reserve_comparison.py'
+             + (' config/studies/legacy_reserve_comparison_blocking.json' if blocking else '')
+             + '` after the main study. Existing '
              '`FINDINGS.md` remains reader-owned; `FINDINGS.generated.md` is refreshed.\n')
     (out/'FINDINGS.generated.md').write_text(text, encoding='utf-8')
     if not (out/'FINDINGS.md').exists():
         (out/'FINDINGS.md').write_text(text, encoding='utf-8')
-    (out/'winner_analysis.json').write_text(json.dumps({
+    analysis = {
         'study_sha256': sha256_file(out/'study.json'),
         'explainer_sha256': sha256_file(Path(__file__)),
         'verified_unique_replays': len(replayed), 'winners': winners,
-        'strict_fixed_policy_sensitivity': list(strict_rows.values())}, indent=2), encoding='utf-8')
+        'strict_fixed_policy_sensitivity': list(strict_rows.values())}
+    if blocking:
+        analysis['one_position_checks'] = position_checks
+    (out/'winner_analysis.json').write_text(json.dumps(analysis, indent=2), encoding='utf-8')
 
 
 if __name__ == '__main__':
-    main()
+    main(*sys.argv[1:])

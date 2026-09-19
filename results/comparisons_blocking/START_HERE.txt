@@ -1,0 +1,21 @@
+START HERE — How do the product comparisons change when each account holds one position at a time?
+
+Question answered
+How do the product comparisons change when each account holds one position at a time?
+
+What we learned
+legacy_25k_vs_50k here repeats comparisons/legacy_25k_vs_50k with blocked copying: an account
+copies a signal only while flat, instead of adding every signal on top of open positions. Each
+study keeps its non-blocking grid, budgets, fees and rules.
+
+How to interpret it
+The non-blocking tree is the preserved reference. Compare matching folders; only the execution
+rule differs. Studies are rerun in chain order, so a folder missing here has not been rerun
+yet.
+
+Subfolders
+- legacy_25k_vs_50k (has its own START_HERE.txt)
+
+For the surrounding study, open ../START_HERE.txt.
+
+Reading note: ongoing cash is received during trading, after costs. Total cash also includes any closing withdrawal. These are historical simulations, not forecasts.

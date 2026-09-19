@@ -98,6 +98,13 @@ STUDIES = [
          default=dict(x='reserve', y='total', color='rule')),
 ]
 
+# Every comparison study has a blocked-copying twin with the same layout under
+# comparisons_blocking; its rows add the copy-participation measures.
+STUDIES += [dict(s, key=s['key']+'_blocking', title=s['title']+' — Blocked Copying',
+                 path=s['path'].replace('comparisons/', 'comparisons_blocking/', 1),
+                 metrics=s['metrics']+['signal_participation', 'copies'])
+            for s in STUDIES if s['path'].startswith('comparisons/')]
+
 
 def coerce(v):
     if v is None or v == '':
@@ -180,5 +187,8 @@ if __name__ == '__main__':
     wanted = set(sys.argv[2:])
     for spec in STUDIES:
         if wanted and spec['key'] not in wanted:
+            continue
+        if not wanted and not (RESULTS / spec['path']).exists():
+            print(f"{spec['key']:28} skipped: not run yet")
             continue
         build(spec, dest)

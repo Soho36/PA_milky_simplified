@@ -1,0 +1,20 @@
+{
+  "execution": "blocking",
+  "products": ["legacy_25k", "legacy_50k"],
+  "budgets": [[1000, 0], [1000, 200], [5000, 0], [5000, 200]],
+  "acquisitions": ["monthly_one", "weekly_one", "monthly_current_slot_replacements"],
+  "amount_rules": ["minimum", "maximum"],
+  "cadences": ["calendar_month", "weekly", "daily"],
+  "headrooms": [0, 1000, 2000, 3000, 4000, 4900, 5000, 6000, 6500, 6800, 7000, 8000, 9000, 10000, 12500, 15000],
+  "refinement_radius": 500,
+  "refinement_step": 100,
+  "workers": 7,
+  "output": "results/comparisons_blocking/legacy_25k_vs_50k/reserve_by_policy",
+  "blocked_controls": {
+    "checkpoint": "results/legacy_25k/blocked_optimization/checkpoint.jsonl",
+    "product": "legacy_25k",
+    "acquisitions": ["monthly_one", "monthly_current_slot_replacements"],
+    "minimum_matches": 96
+  },
+  "note": "Blocked-copying counterpart of legacy_reserve_comparison.json: identical grid, refinement rule, budgets and products; each funded account copies a signal only while flat. Settings shared with the 25K blocked-copying optimization (one seed account, monthly or monthly-plus-replacement purchases) must reproduce exactly, including per-trade account assignments."
+}

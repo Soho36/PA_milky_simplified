@@ -85,6 +85,26 @@ is refreshed; a reader copy with additional notes is preserved.
 The linked Excel workbook includes the same paired comparisons, four budget tabs,
 matched observations, reserve ties and all simulation settings.
 
+### Blocked-copying twin
+
+A spec with `"execution": "blocking"` runs the same study with one position per
+account: an account copies a signal only while flat. A spec without the key is
+non-blocking, as before. Blocking specs must write under
+`results/comparisons_blocking/`, and non-blocking specs under
+`results/comparisons/`, so the two trees never mix. The non-blocking tree is
+the preserved reference and is not rerun.
+
+```powershell
+.\venv\Scripts\python.exe scripts/study_legacy_reserve_comparison.py config/studies/legacy_reserve_comparison_blocking.json
+.\venv\Scripts\python.exe scripts/explain_legacy_reserve_comparison.py config/studies/legacy_reserve_comparison_blocking.json
+.\venv\Scripts\python.exe scripts/format_legacy_comparison_reports.py results/comparisons_blocking/legacy_25k_vs_50k/reserve_by_policy
+```
+
+`legacy_reserve_comparison_blocking.json` keeps the non-blocking grid. Its
+controls are the settings it shares with the 25K blocked-copying optimization,
+which must reproduce exactly, including per-trade account assignments. The
+explainer also checks each replayed winner independently for overlapping trades.
+
 ## Limited supply of funded accounts (spare shelf)
 
 Run `venv/Scripts/python.exe scripts/study_legacy_spare_shelf.py`. The

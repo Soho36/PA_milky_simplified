@@ -2,10 +2,13 @@
 import hashlib
 import json
 import re
+import sys
 from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[1]
 OUT = ROOT / 'results/comparisons/legacy_25k_vs_50k/reserve_by_policy'
+# The workbook summarizes the non-blocking comparison only.
+EXCEL = '[Excel workbook — summary, budget comparisons and data](../../../../outputs/01a08833-466a-7372-9c06-5ddf2e946598/Legacy_25K_vs_50K.xlsx)'
 
 
 def compact(value):
@@ -61,7 +64,7 @@ def pair_table(lines):
     return result, len(groups)
 
 
-def format_report(text):
+def format_report(text, excel=EXCEL):
     lines = text.splitlines()
     output, count, i = [], 0, 0
     while i < len(lines):
@@ -81,21 +84,22 @@ def format_report(text):
             '† marks a tie at a tested range boundary. Cash pairs are ongoing / terminal-inclusive, in USD.')
     if count:
         output[2:2] = [note, '']
-    excel = '[Excel workbook — summary, budget comparisons and data](../../../../outputs/01a08833-466a-7372-9c06-5ddf2e946598/Legacy_25K_vs_50K.xlsx)'
-    if excel not in output:
+    if excel is not None and excel not in output:
         output[2:2] = [excel, '']
     output = [line.replace('(1 ties)', '(1 tie)') for line in output]
     return '\n'.join(output) + '\n', count
 
 
-def main():
+def main(folder=OUT):
+    out = ROOT / folder
+    excel = EXCEL if out.resolve() == OUT.resolve() else None
     evidence = ['study.json', 'winner_analysis.json', 'all_settings.csv', 'best_by_policy.csv', 'matched_deltas.csv']
-    hashes = {n: hashlib.sha256((OUT/n).read_bytes()).hexdigest() for n in evidence}
+    hashes = {n: hashlib.sha256((out/n).read_bytes()).hexdigest() for n in evidence}
     result = {'evidence_sha256': hashes, 'reports': {}}
     for name in ('REPORT', 'FINDINGS'):
-        generated, reader = OUT/f'{name}.generated.md', OUT/f'{name}.md'
+        generated, reader = out/f'{name}.generated.md', out/f'{name}.md'
         old = generated.read_text(encoding='utf-8')
-        new, pairs = format_report(old)
+        new, pairs = format_report(old, excel)
         mirror = reader.exists() and reader.read_text(encoding='utf-8') == old
         generated.write_text(new, encoding='utf-8')
         if mirror:
@@ -103,10 +107,10 @@ def main():
         blocks = re.findall(r'^\|[^\n]*\*\*25K[^\n]*\n\|[^\n]*\n((?:\|[^\n]*\n)+)', new, re.MULTILINE)
         result['reports'][name] = {'paired_rows': sum(len(b.splitlines()) for b in blocks),
                                   'rows_converted_this_run': pairs, 'reader_copy_refreshed': mirror}
-    assert hashes == {n: hashlib.sha256((OUT/n).read_bytes()).hexdigest() for n in evidence}
-    (OUT/'presentation.json').write_text(json.dumps(result, indent=2), encoding='utf-8')
+    assert hashes == {n: hashlib.sha256((out/n).read_bytes()).hexdigest() for n in evidence}
+    (out/'presentation.json').write_text(json.dumps(result, indent=2), encoding='utf-8')
     print(json.dumps(result['reports']))
 
 
 if __name__ == '__main__':
-    main()
+    main(*sys.argv[1:])

@@ -2,11 +2,15 @@
 from pathlib import Path
 import hashlib
 import json
+import sys
 import textwrap
 
 ROOT = Path(__file__).resolve().parents[1]/'results'
 NAME = 'START_HERE.txt'
 COMPARE = 'comparisons/legacy_25k_vs_50k'
+# The blocked-copying twin of COMPARE: same studies, one position per account.
+BLOCKED = 'comparisons_blocking'
+COMPARE_BLOCKED = BLOCKED+'/legacy_25k_vs_50k'
 
 # Questions and conclusions are editorial; run-specific numbers below come
 # directly from the saved summaries, rather than from folder-name guesses.
@@ -38,6 +42,15 @@ GUIDES = {
     COMPARE+'/march_failure_review': ('Does minimum withdrawal reduce synchronized failure, and did replacements really restore the book quickly?',
         'At the same $6,700 reserve and pipeline, maximum loses all 20 PAs on March 30; minimum loses one in 25K and none in 50K. Minimum preserves balance differences and more equity. The maximum runs do not recover all 20 within a month. The 25K minimum cash winner instead activates 19 replacements in April after earlier March failures.',
         'The review contains 14 baseline replays and eight evaluation-supply interruptions. Low-reserve minimum winners can still lose the entire book. Large lifetime cash totals can hide zero remaining earning capacity when failure occurs near the end of the data.'),
+    BLOCKED: ('How do the product comparisons change when each account holds one position at a time?',
+        'legacy_25k_vs_50k here repeats comparisons/legacy_25k_vs_50k with blocked copying: an account copies a signal only while flat, instead of adding every signal on top of open positions. Each study keeps its non-blocking grid, budgets, fees and rules.',
+        'The non-blocking tree is the preserved reference. Compare matching folders; only the execution rule differs. Studies are rerun in chain order, so a folder missing here has not been rerun yet.'),
+    COMPARE_BLOCKED: ('Which account size and withdrawal/replacement approach works best when each account holds one position?',
+        'So far reserve_by_policy has been rerun. Blocking lowers cash in most matched settings, but the instant-supply winners keep their shape: prompt replacement, maximum withdrawals and little or no voluntary reserve. 25K still leads 50K in every funded budget.',
+        'Remaining reruns, in order: spare_shelf, eval_supply, pipeline_capacity, reserve_frontier, reserve_frontier_minimum, march_failure_review. Each blocked study reads its predecessor from this tree, never from the non-blocking one.'),
+    COMPARE_BLOCKED+'/reserve_by_policy': ('What reserve works best for each withdrawal and purchase policy when each account holds one position?',
+        'Across 2,936 settings run in both modes, blocking lowers total cash in 2,334 and raises it in 188; the other 414 lose the whole seed either way. Headline winners fall 11–49%. 25K with $1,000 + $200/month drops from $749,859 to $665,421 and still buys 531 PAs. 50K with $1,000 and no contributions falls from $530,386 to $268,478, and its winner switches to monthly purchases with maximum weekly withdrawals.',
+        'There is no evaluation delay here: seats cost $200 / $250 and are available at once, so the high-turnover winners depend on that supply. 206 settings shared with the 25K blocked-copying optimization reproduce exactly, and no replayed winner account ever held two trades at once.'),
     'legacy_50k': ('What changed when the earlier 25K model was extended to 50K?',
         'operating_policies contains the first 50K operating search and matched 25K controls. The later comparisons/legacy_25k_vs_50k studies provide a broader paired search and introduce replacement supply.',
         'This is a navigation folder, not a separate simulation. Its operating study predates actual evaluation supply.'),
@@ -158,6 +171,8 @@ def saved_run(folder, relative):
             context += f" Supply is an assumed {acq['passes_per_month']} passes per month, not traded evaluations."
         else:
             context += ' Funded accounts are immediately available when affordable; evaluations are absent.'
+        if relative.startswith(BLOCKED+'/'):
+            context += ' Each PA copies a signal only while flat (blocked copying).'
         if acq.get('name') == 'quarterly_three':
             context += ' This historical three-account quarterly batch is excluded from the parent’s newer main schedule rankings.'
     else:
@@ -239,8 +254,10 @@ def build(folder):
     return text
 
 
-def main():
-    folders = [ROOT]+sorted(p for p in ROOT.rglob('*') if p.is_dir())
+def main(scope=None):
+    # A scope documents one subtree, e.g. comparisons_blocking, leaving every other guide alone.
+    top = ROOT/scope if scope else ROOT
+    folders = [top]+sorted(p for p in top.rglob('*') if p.is_dir())
     # Build everything before writing, so an unsupported schema cannot leave
     # only a subset of directories documented.
     documents = {p/NAME: build(p) for p in folders}
@@ -257,4 +274,4 @@ def main():
 
 
 if __name__ == '__main__':
-    main()
+    main(*sys.argv[1:])
