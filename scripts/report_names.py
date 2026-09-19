@@ -35,8 +35,11 @@ def write_study_report(out, report):
         reader.write_text(report, encoding='utf-8')
 
 
-def _sha(path):
-    return hashlib.sha256(Path(path).read_bytes()).hexdigest()
+def _shas(path):
+    # A checkout with core.autocrlf rewrites LF files as CRLF without changing their content,
+    # so a file also matches through its LF-normalized bytes.
+    data = Path(path).read_bytes()
+    return {hashlib.sha256(data).hexdigest(), hashlib.sha256(data.replace(b'\r\n', b'\n')).hexdigest()}
 
 
 @lru_cache(maxsize=None)
@@ -52,7 +55,7 @@ def _script_edits():
 def verified(path, digest):
     """True if `path` still has `digest`, or was renamed/edited exactly as the ledgers record."""
     path = Path(path).resolve()
-    if path.is_file() and _sha(path) == digest:
+    if path.is_file() and digest in _shas(path):
         return True
     key = path.relative_to(PROJECT_ROOT).as_posix()
     ledger = _ledger()
@@ -66,10 +69,10 @@ def verified(path, digest):
         for edit in edits:
             if edit['old_sha256'] == reached:
                 reached = edit['new_sha256']
-        return path.is_file() and _sha(path) == reached
+        return path.is_file() and reached in _shas(path)
     else:
         return False
     # Files edited in place record the committed content in both line-ending forms,
     # because earlier pins hashed whichever form the working copy happened to have.
     before = {record['old_sha256'], record.get('old_sha256_crlf')}
-    return digest in before and current.is_file() and _sha(current) == record['new_sha256']
+    return digest in before and current.is_file() and record['new_sha256'] in _shas(current)
