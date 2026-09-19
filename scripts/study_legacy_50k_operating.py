@@ -46,6 +46,22 @@ def blocking_fields(result):
             'signal_participation':signals/len(T),'allocation_sha256':result.routing['allocation_sha256']}
 
 
+def one_position_check(result):
+    """Independently of the router's busy set: no account's copied trades may overlap."""
+    held = {}
+    for fill in result.routing_fills:
+        for account in fill['accounts']:
+            held.setdefault(account, []).append((datetime.fromisoformat(fill['entry_at']),
+                                                 datetime.fromisoformat(fill['exit_at'])))
+    for spans in held.values():
+        spans.sort()
+        # Exits precede entries at the same timestamp, so touching spans do not overlap.
+        assert all(a[1] <= b[0] for a, b in zip(spans, spans[1:])), 'account held two positions'
+    copies = sum(len(fill['accounts']) for fill in result.routing_fills)
+    assert copies == result.copies_filled
+    return {'accounts_checked': len(held), 'copies': copies}
+
+
 def initialize(execution='non_blocking'):
     global P,C,T,ROUTING
     P={k:load_study_profile(f'config/studies/{k}.json') for k in ('legacy_25k','legacy_50k')}

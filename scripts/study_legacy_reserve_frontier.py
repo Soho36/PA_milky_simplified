@@ -23,10 +23,12 @@ SPEC_PATH = PROJECT_ROOT/'config/studies/legacy_reserve_frontier.json'
 SPEC = TAPES = None
 
 
-def initialize():
+def initialize(spec_path=SPEC_PATH):
     global SPEC, TAPES
-    prior.initialize()
-    SPEC = json.loads(SPEC_PATH.read_text())
+    SPEC = json.loads(Path(spec_path).read_text())
+    # The pipeline study fixes the execution mode, predecessor tree and evaluation settings.
+    prior.initialize(PROJECT_ROOT/SPEC.get('pipeline_spec', 'config/studies/legacy_pipeline_capacity.json'))
+    assert prior.sim.execution_of(prior.SPEC) == prior.sim.execution_of(SPEC), 'pipeline study from another tree'
     TAPES = {}
     for window in SPEC['windows']:
         first, last = map(datetime.fromisoformat, (window['start'], window['end_exclusive']))
@@ -63,7 +65,8 @@ def evaluate(job, detail=False):
     tape = TAPES[window]
     first, last = min(t.entry_at for t in tape), max(t.exit_at for t in tape)
     observer = ReserveObserver(first, last, trace=detail)
-    result = run_book(tape, replace(base, policy=policy), acquisition=acquisition, observer=observer)
+    result = run_book(tape, replace(base, policy=policy), acquisition=acquisition, observer=observer,
+                      routing=prior.sim.ROUTING)
     ledger = result.acquisition
     cash = ledger.summary()
     terminal = round(sum(e.received_usd for e in result.terminal_payouts), 2)
@@ -105,7 +108,7 @@ def evaluate(job, detail=False):
         'deaths_2026_03_30': sum(a.died_at.date().isoformat() == '2026-03-30' for a in deaths),
         'last_death': max((a.died_at.isoformat() for a in deaths), default=None),
         'largest_simultaneous_deaths': max(Counter(a.died_at for a in deaths).values(), default=0),
-        **measure_pipeline(result), **observer.summary(), 'job': list(job)}
+        **measure_pipeline(result), **observer.summary(), **prior.sim.blocking_fields(result), 'job': list(job)}
     return (row, result, observer) if detail else row
 
 
@@ -113,16 +116,18 @@ def write_json(path, data):
     path.write_text(json.dumps(data, indent=2, default=str)+'\n', encoding='utf-8')
 
 
-def main():
-    initialize()
+def main(spec_path=SPEC_PATH):
+    initialize(spec_path)
+    blocking = prior.sim.execution_of(SPEC) == 'blocking'
     out = PROJECT_ROOT/SPEC['output']
+    assert out.resolve().is_relative_to(PROJECT_ROOT/prior.sim.RESULT_ROOTS[prior.sim.execution_of(SPEC)])
     out.mkdir(parents=True, exist_ok=True)
     contract = {'schema': 'pa_milky.reserve_frontier.v1', 'spec': SPEC,
         'engine': engine_digest(), 'inputs': input_digest(prior.sim.C['legacy_25k']),
         'configs': {k: to_payload(v) for k, v in prior.sim.C.items()},
         'evaluation_spec': prior.EVAL,
         'runner_hashes': {str(p.relative_to(PROJECT_ROOT)): sha256_file(p) for p in
-            [Path(__file__), Path(prior.__file__), Path(prior.sim.__file__), SPEC_PATH]},
+            [Path(__file__), Path(prior.__file__), Path(prior.sim.__file__), (PROJECT_ROOT/spec_path).resolve()]},
         'protected_results': {str(p.relative_to(PROJECT_ROOT)): sha256_file(p)
             for p in (PROJECT_ROOT/'results').rglob('*') if p.is_file() and out not in p.parents}}
     contract_path = out/'contract.json'
@@ -137,9 +142,13 @@ def main():
     old = prior.read_rows('pipeline_capacity')
     controls = []
     for product, pipe in SPEC['pipelines'].items():
-        for h in (6000, 6800, 8000):
-            j = (product, *SPEC['budget'], 'maximum', 'daily', h, True,
-                 pipe['interval'], pipe['concurrency'], pipe['spares'], True)
+        frozen = (True, pipe['interval'], pipe['concurrency'], pipe['spares'], True)
+        targets = [(product, *SPEC['budget'], 'maximum', 'daily', h, *frozen) for h in (6000, 6800, 8000)]
+        saved_jobs = {tuple(r['job']) for r in old}
+        if blocking and not any(j in saved_jobs for j in targets):
+            # The blocked pipeline search did not shortlist this pipeline: replay every saved row that uses it.
+            targets = sorted(j for j in saved_jobs if j[0] == product and list(j[1:3]) == SPEC['budget'] and j[6:] == frozen)
+        for j in targets:
             saved = next((r for r in old if tuple(r['job']) == j), None)
             if saved is None:
                 continue
@@ -154,7 +163,8 @@ def main():
                  [json.loads(line) for line in checkpoint.read_text().splitlines()] } if checkpoint.exists() else {}
     requested = jobs()
     missing = [j for j in requested if j not in completed]
-    with ProcessPoolExecutor(max_workers=SPEC['workers'], initializer=initialize) as pool:
+    with ProcessPoolExecutor(max_workers=SPEC['workers'], initializer=initialize,
+                             initargs=(str(spec_path),)) as pool:
         futures = {pool.submit(evaluate, j): j for j in missing}
         with checkpoint.open('a', encoding='utf-8') as log:
             for i, future in enumerate(as_completed(futures), 1):
@@ -179,10 +189,13 @@ def main():
             row.update(best_ongoing_headroom=best['headroom'], best_ongoing=best['ongoing'])
             boundaries.append(row)
     prior.csv_write(out/'boundaries.csv', boundaries)
+    position_checks = {}
     for product in SPEC['pipelines']:
         for h in (6700, 6780.10, 6780.11, 6800):
             row, result, observer = evaluate((product, 'full', h), detail=True)
             assert row == completed[(product, 'full', h)]
+            if blocking:
+                position_checks[f'{product}__shared_seats__reserve_{h}'] = prior.sim.one_position_check(result)
             folder = out/f'{product}__shared_seats__reserve_{h}'
             folder.mkdir(exist_ok=True)
             write_json(folder/'summary.json', row)
@@ -197,9 +210,10 @@ def main():
         'runs': len(rows), 'historical_controls': controls,
         'protected_files_unchanged': len(contract['protected_results']),
         'all_economic_and_cap_checks_passed': True,
-        'detail_replays_matched': 8, 'contract_sha256': sha256_file(contract_path)})
+        'detail_replays_matched': 8, 'contract_sha256': sha256_file(contract_path),
+        **({'one_position_checks': position_checks} if blocking else {})})
     print(f'Complete: {out}', flush=True)
 
 
 if __name__ == '__main__':
-    main()
+    main(*sys.argv[1:])

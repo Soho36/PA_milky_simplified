@@ -1,6 +1,5 @@
 """Replay headline winners and expose turnover and the owner-loss accounting."""
 from dataclasses import asdict
-from datetime import datetime
 from pathlib import Path
 import json
 import sys
@@ -15,22 +14,6 @@ PRODUCT_LABEL = {'legacy_25k': '25K', 'legacy_50k': '50K'}
 PURCHASE_LABEL = {'monthly_one': 'Monthly', 'weekly_one': 'Weekly',
                   'monthly_current_slot_replacements': 'Monthly + replacements'}
 CADENCE_LABEL = {'calendar_month': 'monthly', 'weekly': 'weekly', 'daily': 'daily'}
-
-
-def one_position_check(result):
-    """Independently of the router's busy set: no account's copied trades may overlap."""
-    held = {}
-    for fill in result.routing_fills:
-        for account in fill['accounts']:
-            held.setdefault(account, []).append((datetime.fromisoformat(fill['entry_at']),
-                                                 datetime.fromisoformat(fill['exit_at'])))
-    for spans in held.values():
-        spans.sort()
-        # Exits precede entries at the same timestamp, so touching spans do not overlap.
-        assert all(a[1] <= b[0] for a, b in zip(spans, spans[1:])), 'account held two positions'
-    copies = sum(len(fill['accounts']) for fill in result.routing_fills)
-    assert copies == result.copies_filled
-    return {'accounts_checked': len(held), 'copies': copies}
 
 
 def main(spec_path=study.SPEC_PATH):
@@ -65,7 +48,7 @@ def main(spec_path=study.SPEC_PATH):
                         'acquisition': asdict(result.acquisition.policy)}, indent=2), encoding='utf-8')
                     replayed[key] = folder.name
                     if blocking:
-                        position_checks[folder.name] = one_position_check(result)
+                        position_checks[folder.name] = study.sim.one_position_check(result)
                     strict_rows[key] = study.sim.evaluate((*key[:-1], True))
                     print(f'Verified {prod} {i}+{m} {score}: {r[score]:,.2f}', flush=True)
                 winners.append({**r, 'objective': score, 'ledger': replayed[key]})

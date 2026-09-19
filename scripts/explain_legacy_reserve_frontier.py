@@ -2,6 +2,7 @@
 from pathlib import Path
 import csv
 import json
+import sys
 from report_names import report_path
 
 ROOT = Path(__file__).resolve().parents[1]
@@ -20,25 +21,53 @@ def table(rows, columns):
     return text+'\n'
 
 
-def main():
-    study = json.loads((OUT/'study.json').read_text())
-    audit = json.loads((OUT/'AUDIT.json').read_text())
+def stable_zero(family, key):
+    # Lowest tested reserve from which this and every higher tested reserve has none.
+    return next((r['headroom'] for i, r in enumerate(family) if all(x[key] == 0 for x in family[i:])), None)
+
+
+def main(folder=OUT):
+    out = ROOT/folder
+    study = json.loads((out/'study.json').read_text())
+    audit = json.loads((out/'AUDIT.json').read_text())
+    blocking = study['spec'].get('execution') == 'blocking'
     rows = study['rows']
     full = [r for r in rows if r['window'] == 'full']
-    text = '# Fixed daily-maximum reserve frontier\n\n'
+    families = {p: sorted((r for r in full if r['product'] == p), key=lambda r: r['headroom'])
+                for p in study['spec']['pipelines']}
+    boundary = {p: stable_zero(f, 'deaths_2026_03_30') for p, f in families.items()}
+    reference = ROOT/'results/comparisons/legacy_25k_vs_50k/reserve_frontier'
+    text = '# Fixed daily-maximum reserve frontier' + (' — blocked copying' if blocking else '') + '\n\n'
     text += (f"Completed {len(rows)} simulations: two products, eight historical windows, frozen pipelines. "
         'The primary model reserves a PA slot for every in-flight evaluation and requires activation '
-        'at the first daily check after passing. An unaffordable pass is abandoned.\n\n'
-        '**Finding:** the March 2026 survival cliff is a common loss affecting synchronized PA balances. '
-        'The exact full-tape boundary is a retrospective diagnostic, not a dollar-precise operating recommendation. '
-        'Above it, distinguish nearly flat total cash from declining ongoing cash.\n\n')
+        'at the first daily check after passing. An unaffordable pass is abandoned.\n\n')
+    if blocking:
+        plain = json.loads((reference/'study.json').read_text())
+        plain_boundary = {p: stable_zero(sorted((r for r in plain['rows'] if r['window'] == 'full' and r['product'] == p),
+                                                key=lambda r: r['headroom']), 'deaths_2026_03_30') for p in families}
+        text += ('**Execution: blocked copying.** Each funded account holds at most one position; an account still in an '
+            'earlier trade skips a new signal. Pipelines, reserve grid, probes and windows are exactly those of the '
+            '[non-blocking frontier](../../../comparisons/legacy_25k_vs_50k/reserve_frontier/reserve_frontier__REPORT.md).\n\n')
+        text += ('**Finding:** the March 30, 2026 trade is no longer the cliff it was without blocking. On the full history, '
+            + '; '.join(f"{p} has no PA death that day from {money(boundary[p])} (without blocking: "
+                        f"{money(plain_boundary[p])})" for p in families)
+            + '. The boundary remains a retrospective diagnostic, not a dollar-precise operating recommendation. '
+            'Above it, distinguish nearly flat total cash from declining ongoing cash.\n\n')
+    else:
+        text += ('**Finding:** the March 2026 survival cliff is a common loss affecting synchronized PA balances. '
+            'The exact full-tape boundary is a retrospective diagnostic, not a dollar-precise operating recommendation. '
+            'Above it, distinguish nearly flat total cash from declining ongoing cash.\n\n')
     text += '## Frozen design and meanings\n\n'
     text += ('Both products start with $5,000 and receive $200 in each later calendar month; one monthly growth order '
         'persists until filled, with death replacements taking priority. Live trading PAs + activated dormant spares '
         '+ in-flight evaluations cannot exceed 20. Both use at most 20 concurrent evaluation subscriptions and a '
         'target of two **already activated** spare PAs. New evaluation starts are spaced seven days apart for 25K '
-        'and one day apart for 50K. These settings are frozen from the prior shared-seat daily-maximum search; '
-        'they are not optimized again here.\n\n'
+        'and one day apart for 50K. '
+        + ('These settings are frozen from the non-blocking shared-seat daily-maximum search, so only the copying '
+           'rule differs; they are not optimized again here.\n\n' if blocking else
+           'These settings are frozen from the prior shared-seat daily-maximum search; '
+           'they are not optimized again here.\n\n')
+        +
         'The reserve is the withdrawal target above the frozen failure floor, not a guaranteed minimum balance '
         'through subsequent losses. A $6,800 reserve means a $31,900 nominal balance target for 25K or $56,900 '
         'for 50K: $6,900 profit equity above starting balance, with a failure floor at +$100. '
@@ -47,27 +76,51 @@ def main():
         'Total net cash adds the model-permitted terminal withdrawal. Owner contributions are financing, not profit. '
         'Terminal profit equity is reported separately in the CSV and is not all necessarily withdrawable.\n\n'
         'The common reserve grid is $0–$10,000 in $1,000 steps, supplemented by $5,500–$8,000 in $100 steps. '
-        'Full-tape diagnostics add $10 steps inside the known cliff and two cent-level checks inferred from the '
-        'previous $6,700 failure. These extra points deliberately use hindsight.\n\n')
+        + ('Full-tape diagnostics keep the $10 steps and two cent-level checks placed around the non-blocking cliff, '
+           'so both frontiers share one grid.\n\n' if blocking else
+           'Full-tape diagnostics add $10 steps inside the known cliff and two cent-level checks inferred from the '
+           'previous $6,700 failure. These extra points deliberately use hindsight.\n\n'))
     text += '## March 30, 2026: the exact event\n\n'
     trace_rows = []
     for product in study['spec']['pipelines']:
         for h in (6700, 6780.1, 6780.11, 6800):
-            folder = OUT/f'{product}__shared_seats__reserve_{h}'
+            folder = out/f'{product}__shared_seats__reserve_{h}'
             trace = list(csv.DictReader((folder/'march_trade_trace.csv').open(newline='')))
             event = [r for r in trace if r['trade_key'] == 'RR1.00:3-4:558:2084']
-            assert len(event) == 20
-            assert len({r['adverse_equity'] for r in event}) == 1
-            trace_rows.append({'product': product, 'reserve': h, 'at': event[0]['at'],
-                'before': float(event[0]['equity_before']), 'mae': float(event[0]['mae']),
-                'adverse': float(event[0]['adverse_equity']),
-                'floor': float(event[0]['floor_after']),
-                'failed': sum(r['alive_after'] == 'False' for r in event)})
-    text += table(trace_rows, [('product', 'Product', str), ('reserve', 'Reserve', money),
+            if blocking:
+                assert event
+            else:
+                assert len(event) == 20
+                assert len({r['adverse_equity'] for r in event}) == 1
+            weakest = min(event, key=lambda r: float(r['adverse_equity']))
+            trace_rows.append({'product': product, 'reserve': h, 'at': weakest['at'],
+                'before': float(weakest['equity_before']), 'mae': float(weakest['mae']),
+                'adverse': float(weakest['adverse_equity']),
+                'floor': float(weakest['floor_after']),
+                'failed': sum(r['alive_after'] == 'False' for r in event),
+                'pas': len(event), 'balances': len({r['adverse_equity'] for r in event})})
+    columns = [('product', 'Product', str), ('reserve', 'Reserve', money),
         ('before', 'Profit equity before trade / PA', money), ('mae', 'Trade MAE', money),
         ('adverse', 'Adverse profit equity / PA', money), ('floor', 'Failure floor', money),
-        ('failed', 'PAs failing', str)])
-    text += ('All rows refer to the same tape trade, `RR1.00:3-4:558:2084`, recorded at its '
+        ('failed', 'PAs failing', str)]
+    if blocking:
+        columns[2:6] = [('pas', 'PAs in the trade', str), ('balances', 'Distinct balances', str),
+            ('before', 'Weakest PA equity before trade', money), ('mae', 'Trade MAE', money),
+            ('adverse', 'Weakest PA adverse equity', money), ('floor', 'Failure floor', money)]
+    text += table(trace_rows, columns)
+    if blocking:
+        lowest = {r['product']: r for r in trace_rows if r['reserve'] == 6700}
+        plain_before = {}
+        for product in lowest:
+            trace = list(csv.DictReader((reference/f'{product}__shared_seats__reserve_6700'/'march_trade_trace.csv').open(newline='')))
+            plain_before[product] = float(next(r for r in trace if r['trade_key'] == 'RR1.00:3-4:558:2084')['equity_before'])
+        text += ('All rows refer to the same tape trade, `RR1.00:3-4:558:2084`, recorded at its exit on 2026-03-30 at '
+            '06:00. Where balances differ, the table shows the weakest PA. '
+            + ' '.join(f"At $6,700 the weakest {p} PA entered the trade with {money(r['before'])} of profit equity, "
+                       f"against {money(plain_before[p])} without blocking, and kept {money(r['adverse']-r['floor'])} "
+                       'above the failure floor at the worst point.' for p, r in lowest.items())
+            + ' Without blocking, overlapping positions had already drained the book before this trade.\n\n')
+    text += '' if blocking else ('All rows refer to the same tape trade, `RR1.00:3-4:558:2084`, recorded at its '
         'exit on 2026-03-30 at 06:00. The intratrade breach itself has no finer timestamp in these exports. '
         'Touching the +$100 floor fails. The one-cent separation demonstrates the simulator threshold and '
         'rounding, not predictive precision. The $6,800 reserve leaves only $19.89 above the inferred '
@@ -76,10 +129,19 @@ def main():
         'do not provide twenty independent chances of surviving that loss. A count of twenty deaths here '
         'is one common shock, not twenty independent observations.\n\n')
     text += '## Full-history frontier\n\n'
-    text += ('The highest **ongoing** net cash on the tested full-history grid occurs at **$5,700** for both '
-        'products. That policy loses the established book in 2026. At $6,800, less cash has been received during '
-        'operation, but all 20 trading PAs remain alive at the horizon, with much larger closing withdrawals. '
-        'A reserve selected for survival is therefore a different choice from the best operating-cash result.\n\n')
+    if blocking:
+        for product, family in families.items():
+            best = max(family, key=lambda r: r['ongoing'])
+            at = next(r for r in family if r['headroom'] == 6800)
+            text += (f"{product}: the highest **ongoing** net cash on the tested full-history grid occurs at "
+                f"**{money(best['headroom'])}** ({money(best['ongoing'])}, {best['alive']} PAs alive at the horizon). "
+                f"At $6,800 it is {money(at['ongoing'])} ongoing and {money(at['total'])} total, with {at['alive']} PAs alive. ")
+        text += 'A reserve selected for survival is a different choice from the best operating-cash result.\n\n'
+    else:
+        text += ('The highest **ongoing** net cash on the tested full-history grid occurs at **$5,700** for both '
+            'products. That policy loses the established book in 2026. At $6,800, less cash has been received during '
+            'operation, but all 20 trading PAs remain alive at the horizon, with much larger closing withdrawals. '
+            'A reserve selected for survival is therefore a different choice from the best operating-cash result.\n\n')
     columns = [('headroom', 'Reserve', money), ('ongoing', 'Ongoing net', money),
         ('terminal', 'Closing cash', money), ('total', 'Total net', money), ('deaths', 'PA deaths', str),
         ('evaluations', 'Eval subscriptions', str), ('alive', 'PAs alive at end', str)]
@@ -92,7 +154,8 @@ def main():
         margin_rows = []
         for h in (7000, 7500, 8000):
             r = next(r for r in family if r['headroom'] == h)
-            margin_rows.append({'headroom': h, 'margin': round(h-6780.11, 2),
+            margin_rows.append({'headroom': h,
+                'margin': None if boundary[product] is None else round(h-boundary[product], 2),
                 'ongoing_cost': round(base['ongoing']-r['ongoing'], 2),
                 'terminal_change': round(r['terminal']-base['terminal'], 2),
                 'total_change': round(r['total']-base['total'], 2),
@@ -126,11 +189,27 @@ def main():
         'profit, and actual drawdown headroom are separate CSV columns. Intratrade marked equity cannot be '
         'time-weighted from MAE/MFE exports because the intratrade timing is unknown.\n\n')
     text += '## Historical window sensitivity\n\n'
-    text += ('The 2024 cold starts expose a higher boundary in 25K: one PA older than a year fails '
-        'on March 24, 2026 with a $6,800 target. **$7,100 is the first common-grid reserve after which '
-        'there are no aged-PA deaths** in those windows (only $100 resolution here). The 50K '
-        '2026-containing windows reach that condition at $6,800. This is direct evidence that $6,800 '
-        'is not a universal boundary even on the same historical tape.\n\n')
+    if blocking:
+        for product in families:
+            found = [b['deaths_of_pas_at_least_one_year_old_stable_zero_from'] for b in study['boundaries']
+                     if b['product'] == product and b['window'].startswith('start_')
+                     and b['deaths_of_pas_at_least_one_year_old_stable_zero_from'] is not None]
+            never = [b['window'] for b in study['boundaries'] if b['product'] == product
+                     and b['deaths_of_pas_at_least_one_year_old_stable_zero_from'] is None]
+            text += (f"{product}: across the annual cold starts, aged-PA deaths stop from {money(min(found))}"
+                     + (f" to {money(max(found))}" if max(found) != min(found) else '') + '. '
+                     if found else f'{product}: no annual cold start reaches a reserve without aged-PA deaths. ')
+            if never:
+                names = ', '.join('the full history' if w == 'full' else f'the {w} window' for w in never)
+                text += (f'In {names}, PAs aged at least a year still die at the highest tested reserve, '
+                         'so the grid has no such boundary there. ')
+        text += 'Compare the non-blocking windows before treating any single value as a universal boundary.\n\n'
+    else:
+        text += ('The 2024 cold starts expose a higher boundary in 25K: one PA older than a year fails '
+            'on March 24, 2026 with a $6,800 target. **$7,100 is the first common-grid reserve after which '
+            'there are no aged-PA deaths** in those windows (only $100 resolution here). The 50K '
+            '2026-containing windows reach that condition at $6,800. This is direct evidence that $6,800 '
+            'is not a universal boundary even on the same historical tape.\n\n')
     window_rows = []
     for b in study['boundaries']:
         h = b['deaths_of_pas_at_least_one_year_old_stable_zero_from']
@@ -181,7 +260,11 @@ def main():
         f"Eight detailed trace replays match their frontier rows. {audit['protected_files_unchanged']} "
         'pre-existing result files are unchanged. The contract records input, engine, runner and configuration hashes '
         'and rejects a resume under changed assumptions.\n\n')
-    text += ('An output-only repair omitted the nested date-keyed daily P&L dictionary from the flat death CSV. '
+    if blocking:
+        checks = audit['one_position_checks']
+        text += (f"Every trace replay was also checked independently for overlapping positions: across the {len(checks)} "
+                 f"replays, none of {sum(c['accounts_checked'] for c in checks.values())} PA histories held two trades at once.\n\n")
+    text += '' if blocking else ('An output-only repair omitted the nested date-keyed daily P&L dictionary from the flat death CSV. '
         '`OUTPUT_EXPORT_FIX.json` verifies that this was the sole source change, that all numerical functions '
         'are unchanged, and that the completed checkpoint was preserved. The original runner and contract '
         'are archived alongside the repair record.\n\n')
@@ -197,9 +280,9 @@ def main():
         'Files: [complete frontier](frontier.csv), [window boundaries](boundaries.csv), '
         '[machine-readable study](study.json), [audit](AUDIT.json). Detail folders contain the March trade '
         'trace, PA deaths, evaluation histories, replacement waits and daily pipeline states.\n')
-    report_path(OUT, 'REPORT.md').write_text(text, encoding='utf-8')
-    print(report_path(OUT, 'REPORT.md'))
+    report_path(out, 'REPORT.md').write_text(text, encoding='utf-8')
+    print(report_path(out, 'REPORT.md'))
 
 
 if __name__ == '__main__':
-    main()
+    main(*sys.argv[1:])

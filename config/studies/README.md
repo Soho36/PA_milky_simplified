@@ -138,6 +138,21 @@ needs ReportLab (and Node with sharp for the PNG), which the venv does not have.
 The saved blocked-pipeline audit pins the pipeline runner's hash, so its
 blocking edit is recorded in `results/SCRIPT_EDITS.json`.
 
+Then the daily-maximum reserve frontier. Its `pipeline_spec` selects the blocked
+pipeline study (execution mode, predecessor tree and evaluation settings); the
+pipelines, reserve grid, cliff probes and windows stay frozen exactly as in the
+non-blocking frontier:
+
+```powershell
+.\venv\Scripts\python.exe scripts/study_legacy_reserve_frontier.py config/studies/legacy_reserve_frontier_blocking.json
+.\venv\Scripts\python.exe scripts/explain_legacy_reserve_frontier.py results/comparisons_blocking/legacy_25k_vs_50k/reserve_frontier
+```
+
+When the blocked pipeline search did not shortlist a frozen pipeline, its
+controls replay every saved pipeline row that uses it. The explainer computes
+every result sentence for the blocked frontier and still reproduces the saved
+non-blocking report exactly.
+
 `legacy_reserve_comparison_blocking.json` keeps the non-blocking grid. Its
 controls are the settings it shares with the 25K blocked-copying optimization,
 which must reproduce exactly, including per-trade account assignments. The
