@@ -10,13 +10,18 @@ import json
 import subprocess
 import sys
 
+if '--out' in sys.argv:
+    # Chart another study folder, e.g. the blocked-copying twin; positional arguments are unchanged.
+    at=sys.argv.index('--out');FOLDER=sys.argv[at+1];del sys.argv[at:at+2]
+else:
+    FOLDER=None
 if len(sys.argv)>1:sys.path.append(sys.argv[1])
 from reportlab.graphics import renderSVG
 from reportlab.graphics.charts.lineplots import LinePlot
 from reportlab.graphics.shapes import Drawing, Line, Rect, String
 from reportlab.lib import colors
 
-OUT=Path(__file__).resolve().parents[1]/'results/comparisons/legacy_25k_vs_50k/pipeline_capacity'
+OUT=Path(__file__).resolve().parents[1]/(FOLDER or 'results/comparisons/legacy_25k_vs_50k/pipeline_capacity')
 
 
 def main():

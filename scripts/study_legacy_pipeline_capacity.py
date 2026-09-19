@@ -26,17 +26,21 @@ from pa_milky.simulator import run_book
 from report_names import write_study_report
 
 SPEC_PATH=PROJECT_ROOT/'config/studies/legacy_pipeline_capacity.json'
+# Non-blocking default at import; initialize() repoints it to the spec's own execution tree.
 ROOT=PROJECT_ROOT/'results/comparisons/legacy_25k_vs_50k'
+ROOT_DEFAULT=ROOT
 ACQ='monthly_current_slot_replacements'
 SCORES=('total','ongoing')
 SPEC=EVAL=None
 
 
 def initialize(spec_path=SPEC_PATH):
-    global SPEC,EVAL
+    global SPEC,EVAL,ROOT
     SPEC=json.loads(Path(spec_path).read_text(encoding='utf-8'))
     EVAL=json.loads((PROJECT_ROOT/SPEC['evaluation_spec']).read_text(encoding='utf-8'))
-    sim.initialize()
+    sim.initialize(sim.execution_of(SPEC))
+    # Predecessor studies are read from, and outputs written to, this study's own tree.
+    ROOT=sim.prior_folder(SPEC,'prior_root',ROOT_DEFAULT)
 
 
 def read_rows(name):
@@ -69,7 +73,7 @@ def evaluate(j,detail=False):
         evaluation=EvaluationSpec(**EVAL['evaluations'][prod]),evaluations_at_once=concurrency,
         persistent_demand=persistent,evaluation_start_interval_days=interval,
         evaluations_reserve_seats=reserve_seats)
-    r=run_book(sim.T,replace(base,policy=pol),acquisition=acq)
+    r=run_book(sim.T,replace(base,policy=pol),acquisition=acq,routing=sim.ROUTING)
     cash=r.acquisition.summary()
     assert Economics.measure(r).residual_usd==cash['cash_identity_residual_usd']==0
     assert cash['net_cash_created_usd']==r.pocket_usd
@@ -86,7 +90,7 @@ def evaluate(j,detail=False):
         'activation_fees':cash['activation_fees_usd'],'spend':r.total_purchase_cost_usd,
         'ending_cash':cash['ending_owner_cash_usd'],'contributions':cash['owner_contributions_usd'],
         'spares_at_end':r.unused_spares,'in_flight_at_end':len(r.acquisition.active),
-        **measure_pipeline(r),'job':list(j)}
+        **measure_pipeline(r),**sim.blocking_fields(r),'job':list(j)}
     return (row,r) if detail else row
 
 
@@ -117,10 +121,18 @@ def table(rows):
 
 
 def render(screen,search,frontier,anchors,controls,sensitivity):
-    text='# Evaluation pipeline capacity: Legacy 25K and 50K\n\n'
+    blocking=sim.execution_of(SPEC)=='blocking'
+    text='# Evaluation pipeline capacity: Legacy 25K and 50K'+(' — blocked copying' if blocking else '')+'\n\n'
     text+=(f"{len(screen):,} fixed-policy screening rows; {len(search):,} reserve-search rows (overlap possible). "
-        f"{controls} historical headline controls reproduced exactly. January 2020–July 2026 tape. "
+        f"{controls} historical headline controls reproduced exactly"+(', including per-trade account assignments' if blocking else '')+'. '
+        'January 2020–July 2026 tape. '
         '$5,000 initial + $200/month, unless a budget sensitivity is explicitly shown.\n\n')
+    if blocking:
+        text+=('**Execution: blocked copying.** Each funded account holds at most one position; an account still in an '
+            'earlier trade skips a new signal. Evaluations trade one position at a time, as before. The anchors and '
+            'controls come from the [blocked evaluation-supply](../eval_supply/eval_supply__REPORT.md) and '
+            '[blocked reserve](../reserve_by_policy/reserve_by_policy__REPORT.md) studies. Everything else matches the '
+            '[non-blocking pipeline study](../../../comparisons/legacy_25k_vs_50k/pipeline_capacity/pipeline_capacity__REPORT.md).\n\n')
     text+='## What was tested\n\n'
     text+=('- Main experiment keeps live funded accounts + activated spares + evaluations in flight within 20 seats. '
         'The separate seat sensitivity allows evaluations outside that cap; live + activated spares still cannot exceed 20. '
@@ -219,15 +231,18 @@ def main(spec_path=SPEC_PATH):
         # Reproduce all eight old evaluation winners, including non-hybrid acquisitions.
         # The original evaluator is used only for historical controls.
         import study_legacy_eval_supply as old
-        old.initialize()
+        old.initialize(PROJECT_ROOT/SPEC['evaluation_spec'])
+        assert sim.execution_of(old.SPEC)==sim.execution_of(SPEC),'evaluation study from another execution tree'
+        # Blocked replays must also assign every trade to the same accounts.
+        matched=('total','ongoing','accounts','alive')+(('allocation_sha256',) if sim.ROUTING is not None else ())
         controls=0
         for p,budget in product(SPEC['products'],EVAL['budgets']):
             w=best([r for r in prior if r['product']==p and [r['initial_cash'],r['monthly_funding']]==budget],'total')
             replay=old.evaluate(w['job'])
-            assert all(replay[k]==w[k] for k in ('total','ongoing','accounts','alive'))
+            assert all(replay[k]==w[k] for k in matched)
             w=best([r for r in instant if r['product']==p and [r['initial_cash'],r['monthly_funding']]==budget],'total')
             replay=sim.evaluate(w['job'])
-            assert all(replay[k]==w[k] for k in ('total','ongoing','accounts','alive'))
+            assert all(replay[k]==w[k] for k in matched)
             controls+=2
         print(f'Historical controls reproduced: {controls}',flush=True)
         pipes=list(product(SPEC['persistent_demand'],SPEC['start_intervals_days'],SPEC['concurrency'],SPEC['spares'],(True,)))

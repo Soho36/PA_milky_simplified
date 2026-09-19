@@ -15,6 +15,8 @@ import json
 
 PROJECT_ROOT = Path(__file__).resolve().parents[1]
 LEDGER = PROJECT_ROOT/'results/RENAMES.json'
+# Later edits to scripts that saved audits pin, each with its verification.
+SCRIPT_EDITS = PROJECT_ROOT/'results/SCRIPT_EDITS.json'
 
 
 def report_path(folder, kind):
@@ -42,8 +44,13 @@ def _ledger():
     return json.loads(LEDGER.read_text(encoding='utf-8')) if LEDGER.exists() else {'files': {}, 'scripts': {}}
 
 
+@lru_cache(maxsize=None)
+def _script_edits():
+    return json.loads(SCRIPT_EDITS.read_text(encoding='utf-8'))['edits'] if SCRIPT_EDITS.exists() else []
+
+
 def verified(path, digest):
-    """True if `path` still has `digest`, or was renamed/edited exactly as the ledger records."""
+    """True if `path` still has `digest`, or was renamed/edited exactly as the ledgers record."""
     path = Path(path).resolve()
     if path.is_file() and _sha(path) == digest:
         return True
@@ -53,8 +60,13 @@ def verified(path, digest):
         record = ledger['files'][key]
         current = PROJECT_ROOT/record['renamed_to']
     elif key in ledger.get('scripts', {}):
-        record = ledger['scripts'][key]
-        current = path
+        # Follow the recorded edits, in order, from the pinned hash to the file as it is now.
+        edits = [ledger['scripts'][key]] + [e for e in _script_edits() if e['path'] == key]
+        reached = digest
+        for edit in edits:
+            if edit['old_sha256'] == reached:
+                reached = edit['new_sha256']
+        return path.is_file() and _sha(path) == reached
     else:
         return False
     # Files edited in place record the committed content in both line-ending forms,

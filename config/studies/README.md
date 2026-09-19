@@ -124,6 +124,20 @@ with the 25K blocked-pipeline study must reproduce that study exactly. The
 a later engine change altered how supply-limited days are logged, although
 cash, accounts and economics still reproduce.
 
+Then pipeline capacity, whose `prior_root` names the tree its anchors and
+controls come from, followed by its explainer and audit on the blocked folder:
+
+```powershell
+.\venv\Scripts\python.exe scripts/study_legacy_pipeline_capacity.py config/studies/legacy_pipeline_capacity_blocking.json
+.\venv\Scripts\python.exe scripts/explain_legacy_pipeline_capacity.py results/comparisons_blocking/legacy_25k_vs_50k/pipeline_capacity
+.\venv\Scripts\python.exe scripts/audit_pipeline_capacity.py results/comparisons_blocking/legacy_25k_vs_50k/pipeline_capacity
+```
+
+`plot_legacy_pipeline_capacity.py --out <folder>` draws the capacity chart; it
+needs ReportLab (and Node with sharp for the PNG), which the venv does not have.
+The saved blocked-pipeline audit pins the pipeline runner's hash, so its
+blocking edit is recorded in `results/SCRIPT_EDITS.json`.
+
 `legacy_reserve_comparison_blocking.json` keeps the non-blocking grid. Its
 controls are the settings it shares with the 25K blocked-copying optimization,
 which must reproduce exactly, including per-trade account assignments. The

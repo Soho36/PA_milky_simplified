@@ -1,0 +1,12 @@
+{
+  "purpose": "Edits to scripts whose hash saved audits pin, after the 2026-09-20 report rename (RENAMES.json). scripts/report_names.verified follows these edits in order.",
+  "edits": [
+    {
+      "path": "scripts/study_legacy_pipeline_capacity.py",
+      "old_sha256": "af407726643e77d6ee5f810ed2a1eeb3bcd2a44f7e39d0ea5e38749d6ff1cad5",
+      "new_sha256": "0a3835db3e3a047f9b1fc30ae228ed575827bbfd1858e41eadf5ad8b585557aa",
+      "change": "Blocked-copying switch: execution mode, predecessor tree and routing come from the spec. Without \"execution\" the study is unchanged.",
+      "verification": "Three saved non-blocking pipeline_capacity rows re-evaluate byte-for-byte identical with this version and with the committed one."
+    }
+  ]
+}

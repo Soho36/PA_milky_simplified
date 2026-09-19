@@ -42,5 +42,15 @@ class ReportNameTests(unittest.TestCase):
         self.assertFalse(report_names.verified(ROOT/script, '0'*64))
 
 
+    def test_pinned_script_is_accepted_through_its_recorded_edits(self):
+        contract = ROOT/'results/legacy_25k/blocked_pipeline/contract.json'
+        if not contract.exists():
+            self.skipTest('saved blocked-pipeline study absent')
+        pins = json.loads(contract.read_text(encoding='utf-8'))['helpers']
+        script = ROOT/'scripts/study_legacy_pipeline_capacity.py'
+        self.assertTrue(report_names.verified(script, pins['study_legacy_pipeline_capacity.py']))
+        self.assertFalse(report_names.verified(script, '0'*64))
+
+
 if __name__ == '__main__':
     unittest.main()

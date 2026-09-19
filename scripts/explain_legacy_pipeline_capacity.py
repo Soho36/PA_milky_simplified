@@ -24,20 +24,28 @@ def pipe(r):
     return f"{r['concurrency']} subscriptions; {start}; {r['spares']} spares; {'persistent' if r['persistent'] else 'day-only'}"
 
 
-def main():
-    s=json.loads((OUT/'study.json').read_text(encoding='utf-8'))
-    rows=[json.loads(x) for x in (OUT/'checkpoint.jsonl').read_text(encoding='utf-8').splitlines()]
+def main(folder=OUT):
+    out=PROJECT_ROOT/folder
+    s=json.loads((out/'study.json').read_text(encoding='utf-8'))
+    rows=[json.loads(x) for x in (out/'checkpoint.jsonl').read_text(encoding='utf-8').splitlines()]
     primary=[r for r in rows if [r['initial_cash'],r['monthly_funding']]==s['spec']['budget']]
-    oldroot=OUT.parent
+    oldroot=out.parent
     old=[json.loads(x) for x in (oldroot/'eval_supply/checkpoint.jsonl').read_text().splitlines()]
     instant=[json.loads(x) for x in (oldroot/'reserve_by_policy/checkpoint.jsonl').read_text().splitlines()]
-    text='# What expanded evaluation capacity changed\n\n'
+    blocking=s['spec'].get('execution')=='blocking'
+    text='# What expanded evaluation capacity changed'+(' — blocked copying' if blocking else '')+'\n\n'
     text+=(f"{s['unique_simulations']:,} unique simulations, {s['controls']} reproduced historical controls. "
         'January 2020–July 2026; $5,000 initial + $200/month. Dollar figures are net of evaluation and activation fees, '
         'and exclude owner contributions. Main results retain the shared 20-seat cap.\n\n')
-    if (OUT/'capacity_frontier.png').exists():
+    if blocking:
+        text+=('**Execution: blocked copying.** Each funded account holds at most one position; an account still in an '
+               'earlier trade skips a new signal. Compare the [non-blocking findings]'
+               '(../../../comparisons/legacy_25k_vs_50k/pipeline_capacity/pipeline_capacity__FINDINGS.generated.md).\n\n')
+    earlier='/'.join(str(choose([r for r in old if r['product']==p and [r['initial_cash'],r['monthly_funding']]==s['spec']['budget']])['accounts'])
+                     for p in s['spec']['products'])
+    if (out/'capacity_frontier.png').exists():
         text+='![Capacity comparison](capacity_frontier.png)\n\n'
-    text+=('The earlier 57/44 funded-account counts were outcomes of the winning withdrawal policies, not production ceilings. '
+    text+=(f'The earlier {earlier} funded-account counts were outcomes of the winning withdrawal policies, not production ceilings. '
         'The original five-evaluation pipeline already supplied many more accounts under aggressive withdrawals. '
         'The relevant question is whether expanded supply makes that higher turnover timely and profitable enough to win.\n\n')
     text+='## Does the old aggressive policy recover?\n\n'
@@ -64,7 +72,9 @@ def main():
         text+=(f"| {p} | ${w['headroom']:,} | ${w['ongoing']:,.0f} | ${w['terminal']:,.0f} | "
                f"${w['total']:,.0f} | {w['accounts']} |\n")
     text+='\nThese are the best tested **daily maximum** candidates, not the winners across all withdrawal families. '
-    text+='This supports the earlier reserve region under that particular withdrawal policy, not a universal reserve amount.\n\n'
+    text+=('Compare with the $6,000–$7,000 region found without blocking. These cushions belong to that particular '
+           'withdrawal policy, not a universal reserve amount.\n\n' if blocking else
+           'This supports the earlier reserve region under that particular withdrawal policy, not a universal reserve amount.\n\n')
     text+='\n## What retuning selected\n\n'
     text+='| Product / score | Pipeline | Withdrawal | Cushion above floor | Ongoing | Closing | Total | Funded / alive |\n|---|---|---|---:|---:|---:|---:|---:|\n'
     for r in s['winners']:
@@ -88,7 +98,7 @@ def main():
                    'score at this same pipeline and withdrawal family. Do not interpret cent-level rankings as a unique optimum.\n')
     text+='\n'
     import csv
-    with (OUT/'reserve_near_ties.csv').open('w',newline='',encoding='utf-8') as f:
+    with (out/'reserve_near_ties.csv').open('w',newline='',encoding='utf-8') as f:
         writer=csv.DictWriter(f,fieldnames=list(ties[0]))
         writer.writeheader();writer.writerows({**r,'job':json.dumps(r['job'])} for r in ties)
     text+='## Replacement service of the selected total winners\n\n'
@@ -104,7 +114,7 @@ def main():
     text+='## Matched changes at frozen withdrawal settings\n\n'
     text+='These comparisons use the full screening matrix only. Each pair keeps product, withdrawal policy, seat mode, and all other pipeline settings fixed. '
     text+='Medians and win shares describe this grid, not probabilities of future improvement.\n\n'
-    with (OUT/'screening.csv').open(encoding='utf-8',newline='') as f:
+    with (out/'screening.csv').open(encoding='utf-8',newline='') as f:
         ids={tuple(json.loads(r['job'])) for r in csv.DictReader(f)}
     screen=[r for r in primary if tuple(r['job']) in ids]
     text+='| Product | Seat mode | Change | Matched pairs | Median total change | Share improved |\n|---|---|---|---:|---:|---:|\n'
@@ -146,19 +156,23 @@ def main():
                    and pol(r)==pol(w) and pipe(r)==pipe(w))
             cells.append(f"${r['total']:,.0f} ({r['accounts']} funded)")
         text+=f'| {p} | '+' | '.join(cells)+' |\n'
-    text+='\nBoth selected total-winner pipelines run out of usable funding at $1,000 with no top-ups. '
-    text+='This does not mean that budget cannot work under another policy: the separate 50K ongoing-winner replay remains profitable. '
-    text+=f'The full budget table is in {report_path(OUT,"REPORT.generated.md").name} and budget_sensitivity.csv.\n\n'
+    if blocking:
+        text+='\nThese replays are not re-optimized for the smaller budgets; compare them with the budget-specific winners of the evaluation-supply study. '
+    else:
+        text+='\nBoth selected total-winner pipelines run out of usable funding at $1,000 with no top-ups. '
+        text+='This does not mean that budget cannot work under another policy: the separate 50K ongoing-winner replay remains profitable. '
+    text+=f'The full budget table is in {report_path(out,"REPORT.generated.md").name} and budget_sensitivity.csv.\n\n'
     text+='## Limits and reproducibility\n\n'
     text+='The pipeline search screens three historical anchors before retuning a matched shortlist. It can miss a pipeline that needs an entirely different '
     text+='withdrawal policy to perform well. The same tape and starting date are used throughout. Different budgets are sensitivity replays, '
     text+='not independent samples. Increasing concurrency need not improve profit: it changes cohort timing, fees and the seats available to funded accounts. '
     text+='No constant-capacity, independent-pass or monotone-profit assumption is warranted.\n\n'
-    text+=f'See [full generated report]({report_path(OUT,"REPORT.generated.md").name}), [capacity table](frontier.csv), [screening rows](screening.csv), '
+    text+=f'See [full generated report]({report_path(out,"REPORT.generated.md").name}), [capacity table](frontier.csv), [screening rows](screening.csv), '
     text+='[all settings](all_settings.csv), [audit](AUDIT.json), and [run contract](contract.json). Rebuild this note with '
-    text+='`venv/Scripts/python.exe scripts/explain_legacy_pipeline_capacity.py`.\n'
-    report_path(OUT,'FINDINGS.generated.md').write_text(text,encoding='utf-8')
-    print(report_path(OUT,'FINDINGS.generated.md'))
+    text+=('`venv/Scripts/python.exe scripts/explain_legacy_pipeline_capacity.py'
+           +(f' {out.relative_to(PROJECT_ROOT).as_posix()}' if blocking else '')+'`.\n')
+    report_path(out,'FINDINGS.generated.md').write_text(text,encoding='utf-8')
+    print(report_path(out,'FINDINGS.generated.md'))
 
 
-if __name__=='__main__':main()
+if __name__=='__main__':main(*sys.argv[1:])

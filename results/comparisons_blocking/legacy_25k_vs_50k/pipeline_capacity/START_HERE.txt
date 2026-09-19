@@ -1,0 +1,40 @@
+START HERE — Is replacement capacity limiting profit when each account holds one position, and does a larger or staggered evaluation pipeline help?
+
+Question answered
+Is replacement capacity limiting profit when each account holds one position, and does a larger
+or staggered evaluation pipeline help?
+
+What we learned
+Best tested winners fall 19–24% against the non-blocking pipeline study, and every winner now
+takes the minimum withdrawal with $0–$2,400 above the floor. In the main shared-seat comparison
+50K leads 25K: $518,683 against $497,570 total, and $469,400 against $453,544 ongoing; without
+blocking 25K led both. Expanded pipelines lift the old aggressive instant-supply policy only to
+$325,884 (25K) and $335,443 (50K), about half its instant-supply cash. The best daily-maximum
+cushion is still $6,800 for both products.
+
+How to interpret it
+shared_seats reserves one of 20 places for each live PA, activated spare or in-flight
+evaluation; evals_outside_cap is a separate sensitivity. Anchors and controls come from the
+blocked eval_supply and reserve_by_policy studies, and all 16 controls reproduce, including
+per-trade account assignments. The capacity chart is not drawn here: it needs ReportLab, which
+the venv lacks.
+
+Files to open first
+- pipeline_capacity__REPORT.generated.md
+- pipeline_capacity__REPORT.md
+- frontier.csv
+- all_settings.csv
+
+Subfolders
+- legacy_25k__evals_outside_cap__best_ongoing (has its own START_HERE.txt)
+- legacy_25k__evals_outside_cap__best_total (has its own START_HERE.txt)
+- legacy_25k__shared_seats__best_ongoing (has its own START_HERE.txt)
+- legacy_25k__shared_seats__best_total (has its own START_HERE.txt)
+- legacy_50k__evals_outside_cap__best_ongoing (has its own START_HERE.txt)
+- legacy_50k__evals_outside_cap__best_total (has its own START_HERE.txt)
+- legacy_50k__shared_seats__best_ongoing (has its own START_HERE.txt)
+- legacy_50k__shared_seats__best_total (has its own START_HERE.txt)
+
+For the surrounding study, open ../START_HERE.txt.
+
+Reading note: ongoing cash is received during trading, after costs. Total cash also includes any closing withdrawal. These are historical simulations, not forecasts.

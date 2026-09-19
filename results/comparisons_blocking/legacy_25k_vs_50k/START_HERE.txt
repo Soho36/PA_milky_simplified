@@ -5,19 +5,20 @@ Which account size and withdrawal/replacement approach works best when each acco
 position?
 
 What we learned
-So far reserve_by_policy, spare_shelf and eval_supply have been rerun. Blocking lowers cash in
-most matched settings. With instant supply the winners keep their shape (prompt replacement,
-maximum withdrawals, little or no reserve) and 25K leads 50K in every funded budget. Once
-supply is limited, winners switch to minimum withdrawals and buy far fewer accounts; with
-evaluations traded on the tape, 50K leads 25K in three of the four budgets.
+So far reserve_by_policy, spare_shelf, eval_supply and pipeline_capacity have been rerun.
+Blocking lowers cash in most matched settings. With instant supply the winners keep their shape
+(prompt replacement, maximum withdrawals, little or no reserve) and 25K leads 50K in every
+funded budget. Once supply is limited, winners switch to minimum withdrawals and buy far fewer
+accounts; with evaluations traded on the tape, 50K leads 25K in three of the four budgets and
+in the main pipeline search.
 
 How to interpret it
-Remaining reruns, in order: pipeline_capacity, reserve_frontier, reserve_frontier_minimum,
-march_failure_review. Each blocked study reads its predecessor from this tree, never from the
-non-blocking one.
+Remaining reruns, in order: reserve_frontier, reserve_frontier_minimum, march_failure_review.
+Each blocked study reads its predecessor from this tree, never from the non-blocking one.
 
 Subfolders
 - eval_supply (has its own START_HERE.txt)
+- pipeline_capacity (has its own START_HERE.txt)
 - reserve_by_policy (has its own START_HERE.txt)
 - spare_shelf (has its own START_HERE.txt)
 
