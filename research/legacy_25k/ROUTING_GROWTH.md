@@ -9,7 +9,7 @@ in most tested cases, but it also takes substantially more trade copies**.
 Routing captures more distinct signals and, in the main example, requires
 many fewer replacement accounts. Neither approach wins on every measure.
 
-[Full tables](../../results/legacy_25k/routing_funded_growth/REPORT.generated.md),
+[Full tables](../../results/legacy_25k/routing_funded_growth/routing_funded_growth__REPORT.generated.md),
 [comparison CSV](../../results/legacy_25k/routing_funded_growth/comparison.csv),
 [independent audit](../../results/legacy_25k/routing_funded_growth/AUDIT.generated.json).
 

@@ -7,6 +7,7 @@ sys.path.insert(0,str(Path(__file__).resolve().parents[1]/'src'))
 from pa_milky.config import PROJECT_ROOT
 from study_blocked_pipeline import best, policy, pipeline, ORIGINAL, table
 from study_legacy_pipeline_capacity import csv_write, pipeline_label
+from report_names import report_path
 
 
 def main():
@@ -120,9 +121,9 @@ def main():
            'All supply assumptions are inherited, including indefinite waiting for activation, no spare expiry '
            'and no payout-processing delay. The outside-cap arm is a sensitivity, not a statement about firm rules. '
            'Evaluation launch dates share the tape and do not create independent pass probabilities.\n\n'
-           '[Full generated report](REPORT.generated.md), [all settings](all_settings.csv), '
+           f'[Full generated report]({report_path(root,"REPORT.generated.md").name}), [all settings](all_settings.csv), '
            '[independent audit](AUDIT.generated.json), [study protocol](../../../research/legacy_25k/BLOCKED_PIPELINE.md).\n')
-    (root/'FINDINGS.generated.md').write_text(text,encoding='utf-8')
+    report_path(root,'FINDINGS.generated.md').write_text(text,encoding='utf-8')
     print(text[:5500])
 
 

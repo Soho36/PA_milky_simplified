@@ -8,7 +8,7 @@ balance. It buys 531 accounts over the dataset and loses 511, while never
 exceeding 20 live accounts. The result is conditional on immediate $200
 funded-account supply; it is not an established optimum for an evaluation pipeline.
 
-[Generated search tables](../../results/legacy_25k/blocked_optimization/REPORT.generated.md),
+[Generated search tables](../../results/legacy_25k/blocked_optimization/blocked_optimization__REPORT.generated.md),
 [all settings](../../results/legacy_25k/blocked_optimization/all_settings.csv),
 [independent audit](../../results/legacy_25k/blocked_optimization/AUDIT.generated.json),
 [all tied-policy transfers](../../results/legacy_25k/blocked_optimization/tied_transfers.csv).

@@ -1,0 +1,17 @@
+{
+  "execution": "blocking",
+  "prior": "results/comparisons_blocking/legacy_25k_vs_50k/reserve_by_policy",
+  "products": ["legacy_25k", "legacy_50k"],
+  "budgets": [[1000, 0], [1000, 200], [5000, 0], [5000, 200]],
+  "spares": [0, 5, 10],
+  "passes": [1, 2, 3, 5, 10],
+  "amount_rules": ["minimum", "maximum"],
+  "cadences": ["calendar_month", "weekly", "daily"],
+  "headrooms": [0, 500, 1000, 1500, 2000, 3000, 4000, 5000, 6500, 8000, 10000],
+  "refinement_radius": 400,
+  "refinement_step": 100,
+  "ledger_passes": 3,
+  "workers": 7,
+  "output": "results/comparisons_blocking/legacy_25k_vs_50k/spare_shelf",
+  "note": "Blocked-copying counterpart of legacy_spare_shelf.json: identical grid, shelves, pass rates and refinement rule; each funded account copies a signal only while flat. The unlimited-supply reference and every row whose supply cannot bind come from the blocked reserve comparison and must reproduce it exactly, including per-trade account assignments."
+}

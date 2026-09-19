@@ -13,8 +13,9 @@ from pa_milky.simulator import run_book
 from pa_milky.economics import Economics
 from pa_milky.provenance import input_digest,engine_digest,git_revision,sha256_file
 from pa_milky.report import write_outputs
-from pa_milky.study_reports import write_study_report
+from report_names import write_study_report
 from pa_milky.study_config import load_study_profile, study_path, study_policies, profile_provenance
+from report_names import report_path
 STUDY = load_study_profile()
 C=None
 T=None
@@ -111,8 +112,8 @@ def render_purchase_comparison(rows):
         text+='### Fixed-withdrawal comparisons\n\nThese hold withdrawal settings and funding fixed. Compare purchase strategies within a family; the separate expansion and historical tables retain their evidence without entering the main ranking.\n\n'
         for policy in dict.fromkeys(r['withdrawal_policy'] for r in family):
             text+='#### '+policy+'\n\n'+grouped_tables([r for r in family if r['withdrawal_policy']==policy])
-    text+='## Why quarterly-three is historical\n\nQuarterly-three schedules 12 seats a year, like monthly-one, but batches three identical accounts on the same date. Under the shared deterministic tape those accounts share outcomes. The January quarterly phase was the original single-phase winner, not evidence of general superiority. User-supplied phase checks showed large reversals; see [phase sensitivity](PHASE_SENSITIVITY.md) for attribution and limits. Those checks have not been independently reproduced by this report generator.\n\n'
-    text+='No simulation rows were discarded. Existing reader reports and detailed best-run folders may describe the earlier all-policy ranking; use this report for the current comparison scope. See [operating notes](HOW_THIS_STUDY_WORKS.md) for funding, purchase and withdrawal conventions. Historical results are not forecasts; weekday stability alone is not validation across market periods.\n'
+    text+='## Why quarterly-three is historical\n\nQuarterly-three schedules 12 seats a year, like monthly-one, but batches three identical accounts on the same date. Under the shared deterministic tape those accounts share outcomes. The January quarterly phase was the original single-phase winner, not evidence of general superiority. User-supplied phase checks showed large reversals; see [phase sensitivity]('+report_path(study_path(STUDY, 'purchases'), 'PHASE_SENSITIVITY.md').name+') for attribution and limits. Those checks have not been independently reproduced by this report generator.\n\n'
+    text+='No simulation rows were discarded. Existing reader reports and detailed best-run folders may describe the earlier all-policy ranking; use this report for the current comparison scope. See [operating notes]('+report_path(study_path(STUDY, 'purchases'), 'HOW_THIS_STUDY_WORKS.md').name+') for funding, purchase and withdrawal conventions. Historical results are not forecasts; weekday stability alone is not validation across market periods.\n'
     return text
 
 

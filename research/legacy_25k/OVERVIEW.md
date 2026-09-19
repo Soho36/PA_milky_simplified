@@ -39,13 +39,13 @@ shortfall. The matched replay preserves earlier exposure; the separate R=1–4
 pools start with K=5R and enforce 20 live accounts. Both attain full historical
 coverage, conditional on immediate funded-seat supply and sufficient funding.
 
-**Evaluation-capacity follow-up:** the [pipeline-capacity experiment](../../results/comparisons/legacy_25k_vs_50k/pipeline_capacity/FINDINGS.generated.md)
+**Evaluation-capacity follow-up:** the [pipeline-capacity experiment](../../results/comparisons/legacy_25k_vs_50k/pipeline_capacity/pipeline_capacity__FINDINGS.generated.md)
 tests whether persistent demand, staggered evaluations, greater concurrency
 and spare inventory support higher account turnover. Its main comparison uses
 $5,000 initially plus $200/month, and keeps ongoing and closing cash separate.
 
 **Broader reserve comparison:** start with the
-[paired 25K/50K findings](../../results/comparisons/legacy_25k_vs_50k/reserve_by_policy/FINDINGS.generated.md)
+[paired 25K/50K findings](../../results/comparisons/legacy_25k_vs_50k/reserve_by_policy/reserve_by_policy__FINDINGS.generated.md)
 for fresh reserve searches within each funded purchase/withdrawal/cadence family.
 The conclusions below describe the earlier candidate sets. In particular,
 $31,900 is not a universally selected reserve, and a 20-live-account limit
@@ -85,12 +85,12 @@ Best tested terminal-inclusive bundle among the three main schedules:
 | $5,000 | $0 | weekly_one | daily_minimum_retain_31900 | $443,000 | $544,527 |
 | $5,000 | $200 | weekly_one | daily_minimum_retain_31900 | $490,700 | $589,340 |
 
-Source: [current grouped purchase report](../../results/study__full_rulebook__RR__account_purchases__cash_budgets/REPORT.generated.md).
+Source: [current grouped purchase report](../../results/study__full_rulebook__RR__account_purchases__cash_budgets/study__full_rulebook__RR__account_purchases__cash_budgets__REPORT.generated.md).
 This restricted ranking is not the best of every operating family. The tightest
 budget still has a higher historical result under restarting reinvestment.
 
 The earlier quarterly-three headline depended on its January purchase phase.
-[User-supplied phase checks](../../results/study__full_rulebook__RR__account_purchases__cash_budgets/PHASE_SENSITIVITY.md)
+[User-supplied phase checks](../../results/study__full_rulebook__RR__account_purchases__cash_budgets/study__full_rulebook__RR__account_purchases__cash_budgets__PHASE_SENSITIVITY.md)
 showed large reversals and much smaller weekday variation for weekly-one in
 the funded examples. Those additional simulations have not been independently
 reproduced here. Weekly-one is a less phase-sensitive candidate on that evidence,
@@ -128,7 +128,7 @@ not a proven universally robust policy.
 The uncapped amount/cushion and cadence studies agree at 27 common settings.
 The funded cadence and purchase studies agree at all 12 common monthly-purchase
 settings. All 108 original purchase candidates reproduced exactly when the two
-faster schedules were added. The [consistency audit](../../results/CONSISTENCY_AUDIT.md)
+faster schedules were added. The [consistency audit](../../results/results__CONSISTENCY_AUDIT.md)
 checks arithmetic and saved controls; it is not an out-of-sample validation.
 
 A fixed-withdrawal purchase table holds withdrawal settings constant. A table
@@ -153,7 +153,7 @@ results. The 25K thresholds and rankings are not transferable findings for 50K.
 
 ## Additional replacement experiment
 
-The [current 48-candidate replacement study](../../results/study__full_rulebook__RR__monthly_replacements__cap_20__cash_budgets/REPORT.generated.md)
+The [current 48-candidate replacement study](../../results/study__full_rulebook__RR__monthly_replacements__cap_20__cash_budgets/study__full_rulebook__RR__monthly_replacements__cap_20__cash_budgets__REPORT.generated.md)
 replaces deaths at the next daily check, consumes an unused current-month slot,
 and never cancels a future scheduled purchase. The earlier future-slot version
 is archived and is not the current policy.

@@ -6,6 +6,7 @@ import json
 from pa_milky.config import PROJECT_ROOT
 from pa_milky.provenance import sha256_file
 from audit_legacy_routing import read_csv
+from report_names import verified
 
 
 def cents(value):
@@ -16,9 +17,9 @@ def audit(root):
     data = json.loads((root/'study.json').read_text(encoding='utf-8'))
     profile = data['profile']
     for name, checksum in data['evidence_files'].items():
-        assert sha256_file(root/name) == checksum, name
+        assert verified(root/name, checksum), name
     for name, checksum in data['preserved_control_files'].items():
-        assert sha256_file(PROJECT_ROOT/profile['control_output']/name) == checksum, name
+        assert verified(PROJECT_ROOT/profile['control_output']/name, checksum), name
     cases = sorted({r['case'] for r in data['rows']})
     assert len(cases) == len(profile['starts'])*len(profile['retained_balances'])
     assert len(data['rows']) == len(cases)*(4+len(profile['minimum_copies'])*len(profile['maximum_copies']))

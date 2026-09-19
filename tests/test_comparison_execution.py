@@ -35,6 +35,17 @@ class ExecutionModeTests(unittest.TestCase):
         self.assertIsNone(sim.ROUTINGS['non_blocking'])
         self.assertEqual(sim.ROUTINGS['blocking'].mode, 'blocked')
 
+    def test_a_study_cannot_read_its_predecessor_from_the_other_tree(self):
+        blocked = 'results/comparisons_blocking/legacy_25k_vs_50k/reserve_by_policy'
+        plain = 'results/comparisons/legacy_25k_vs_50k/reserve_by_policy'
+        self.assertEqual(sim.prior_folder({'execution': 'blocking', 'prior': blocked}, 'prior', plain),
+                         (ROOT/blocked).resolve())
+        self.assertEqual(sim.prior_folder({}, 'prior', plain), (ROOT/plain).resolve())
+        with self.assertRaises(AssertionError):
+            sim.prior_folder({'execution': 'blocking'}, 'prior', plain)
+        with self.assertRaises(AssertionError):
+            sim.prior_folder({'prior': blocked}, 'prior', plain)
+
     def test_blocked_controls_skip_other_seeds_and_detect_drift(self):
         def source(acq, seed=1, ongoing=10.0):
             return {'start_year': 2020, 'initial_accounts': seed, 'amount': 0, 'acquisition': acq,

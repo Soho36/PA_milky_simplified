@@ -4,6 +4,7 @@ import json
 import re
 import sys
 from pathlib import Path
+from report_names import report_path
 
 ROOT = Path(__file__).resolve().parents[1]
 OUT = ROOT / 'results/comparisons/legacy_25k_vs_50k/reserve_by_policy'
@@ -97,7 +98,7 @@ def main(folder=OUT):
     hashes = {n: hashlib.sha256((out/n).read_bytes()).hexdigest() for n in evidence}
     result = {'evidence_sha256': hashes, 'reports': {}}
     for name in ('REPORT', 'FINDINGS'):
-        generated, reader = out/f'{name}.generated.md', out/f'{name}.md'
+        generated, reader = report_path(out, f'{name}.generated.md'), report_path(out, f'{name}.md')
         old = generated.read_text(encoding='utf-8')
         new, pairs = format_report(old, excel)
         mirror = reader.exists() and reader.read_text(encoding='utf-8') == old

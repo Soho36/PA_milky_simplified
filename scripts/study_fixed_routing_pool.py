@@ -14,6 +14,7 @@ from pa_milky.provenance import input_digest, engine_digest, sha256_file
 from pa_milky.routing import capacity_audit
 from pa_milky.routing_study import fixed_pool_run, funding_requirements, measure, demand_digest
 from study_legacy_routing import write_csv, account_rows
+from report_names import report_path
 
 PROFILE = BASE = TAPE = OUT = None
 
@@ -124,7 +125,7 @@ def main():
                                  for p in sorted((OUT / case).iterdir()) if p.is_file()}
     (OUT / 'study.json').write_text(json.dumps(payload, indent=2), encoding='utf-8')
     write_csv(OUT / 'comparison.csv', [{k: v for k, v in r.items() if not isinstance(v, dict)} for r in rows])
-    (OUT / 'REPORT.generated.md').write_text(report(rows), encoding='utf-8')
+    report_path(OUT, 'REPORT.generated.md').write_text(report(rows), encoding='utf-8')
     print(f'Wrote {OUT}', flush=True)
 
 

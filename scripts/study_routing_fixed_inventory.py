@@ -15,6 +15,7 @@ from pa_milky.routing import RoutingPolicy, capacity_audit, entry_key
 from pa_milky.routing_study import measure, demand_digest
 from pa_milky.simulator import run_book
 from study_legacy_routing import write_csv, account_rows
+from report_names import report_path
 
 PROFILE_PATH = PROJECT_ROOT / 'config/studies/legacy_25k_routing_fixed_inventory.json'
 PROFILE = BASE = TAPE = OUT = None
@@ -193,7 +194,7 @@ def main():
                                 for c in cases for p in sorted((OUT/c['rows'][0]['case']).iterdir()) if p.is_file()}
     (OUT/'study.json').write_text(json.dumps(payload, indent=2), encoding='utf-8')
     write_csv(OUT/'comparison.csv', [{k:v for k,v in r.items() if not isinstance(v,dict)} for r in rows])
-    (OUT/'REPORT.generated.md').write_text(render(cases), encoding='utf-8')
+    report_path(OUT, 'REPORT.generated.md').write_text(render(cases), encoding='utf-8')
     print(f'Wrote {OUT}', flush=True)
 
 

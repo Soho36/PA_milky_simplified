@@ -7,6 +7,7 @@ import sys
 
 sys.path.insert(0,str(Path(__file__).resolve().parents[1]/'src'))
 from pa_milky.config import PROJECT_ROOT
+from report_names import report_path
 
 OUT=PROJECT_ROOT/'results/comparisons/legacy_25k_vs_50k/pipeline_capacity'
 
@@ -147,17 +148,17 @@ def main():
         text+=f'| {p} | '+' | '.join(cells)+' |\n'
     text+='\nBoth selected total-winner pipelines run out of usable funding at $1,000 with no top-ups. '
     text+='This does not mean that budget cannot work under another policy: the separate 50K ongoing-winner replay remains profitable. '
-    text+='The full budget table is in REPORT.generated.md and budget_sensitivity.csv.\n\n'
+    text+=f'The full budget table is in {report_path(OUT,"REPORT.generated.md").name} and budget_sensitivity.csv.\n\n'
     text+='## Limits and reproducibility\n\n'
     text+='The pipeline search screens three historical anchors before retuning a matched shortlist. It can miss a pipeline that needs an entirely different '
     text+='withdrawal policy to perform well. The same tape and starting date are used throughout. Different budgets are sensitivity replays, '
     text+='not independent samples. Increasing concurrency need not improve profit: it changes cohort timing, fees and the seats available to funded accounts. '
     text+='No constant-capacity, independent-pass or monotone-profit assumption is warranted.\n\n'
-    text+='See [full generated report](REPORT.generated.md), [capacity table](frontier.csv), [screening rows](screening.csv), '
+    text+=f'See [full generated report]({report_path(OUT,"REPORT.generated.md").name}), [capacity table](frontier.csv), [screening rows](screening.csv), '
     text+='[all settings](all_settings.csv), [audit](AUDIT.json), and [run contract](contract.json). Rebuild this note with '
     text+='`venv/Scripts/python.exe scripts/explain_legacy_pipeline_capacity.py`.\n'
-    (OUT/'FINDINGS.generated.md').write_text(text,encoding='utf-8')
-    print(OUT/'FINDINGS.generated.md')
+    report_path(OUT,'FINDINGS.generated.md').write_text(text,encoding='utf-8')
+    print(report_path(OUT,'FINDINGS.generated.md'))
 
 
 if __name__=='__main__':main()

@@ -9,7 +9,8 @@ from pa_milky.acquisition import AcquisitionPolicy
 from pa_milky.policy_study import policies
 from pa_milky.provenance import input_digest, engine_digest, sha256_file
 from pa_milky.config import to_payload
-from pa_milky.study_reports import write_study_report
+from report_names import write_study_report
+from report_names import report_path
 
 STUDY=purchases.STUDY
 OUT=purchases.study_path(STUDY, 'budgeted_cadence')
@@ -105,7 +106,7 @@ def main():
             report+=f'#### {p.name}\n\n'+purchases.grouped_tables(arms)+'\n\n'
     report+='## Interpretation limits\n\nCadence comparisons at the same policy and cushion are available as monthly-control deltas in candidates.csv. Best-cushion tables adapt cushion as well as cadence. For minimum requests, cadence changes the opportunity to request $500; fixed targets still accrue entitlement monthly.\n\nFunding and capacity are held constant as rules, but realized purchases can change with payout timing and survival. These are operating-policy effects including those purchase responses, not cash-timing effects on an identical book. No trading-neutral or hold-ceiling claim is made.\n\nThe configured withdrawal settings in the purchase study are shared controls, not necessarily the winners of this wider capped cadence grid. Re-optimizing all purchase strategies over this wider grid is a separate experiment. All results are historical and in-sample.\n\nReproduce: `venv/Scripts/python.exe scripts/study_budgeted_withdrawal_cadence.py`. Historical reports and reader breakdowns are retained unchanged.\n'
     write_study_report(OUT,report)
-    print(f'All {len(checks)} shared controls matched. Report: '+str(OUT/'REPORT.md'),flush=True)
+    print(f'All {len(checks)} shared controls matched. Report: '+str(report_path(OUT, 'REPORT.md')),flush=True)
 
 
 if __name__=='__main__':main()

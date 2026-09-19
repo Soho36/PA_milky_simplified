@@ -17,7 +17,7 @@ from pa_milky.policy import WithdrawalPolicy
 from pa_milky.provenance import engine_digest, input_digest, sha256_file
 from pa_milky.report import write_outputs
 from pa_milky.simulator import run_book
-from pa_milky.study_reports import write_study_report
+from report_names import write_study_report
 
 SPEC_PATH = PROJECT_ROOT / 'config/studies/legacy_spare_shelf.json'
 PRIOR = PROJECT_ROOT / 'results/comparisons/legacy_25k_vs_50k/reserve_by_policy'
@@ -40,7 +40,7 @@ def evaluate(j, detail=False):
                            min_retained_balance_usd=base.trailing_floor_balance_usd + headroom)
     acquisition = AcquisitionPolicy(acq, initial, monthly, max_live_accounts=sim.P[product]['max_live_accounts'],
                                     spare_capacity=spares, passes_per_month=passes)
-    result = run_book(sim.T, replace(base, policy=pol), acquisition=acquisition)
+    result = run_book(sim.T, replace(base, policy=pol), acquisition=acquisition, routing=sim.ROUTING)
     e = Economics.measure(result)
     cash = result.acquisition.summary()
     assert e.residual_usd == cash['cash_identity_residual_usd'] == 0
@@ -53,7 +53,7 @@ def evaluate(j, detail=False):
            'spares_unused': cash['spares_unused_at_end'], 'supply_limited': cash['supply_limited_decisions'],
            'ongoing': round(result.pocket_usd - terminal, 2), 'terminal': terminal, 'total': result.pocket_usd,
            'contributions': cash['owner_contributions_usd'], 'ending_owner_cash': cash['ending_owner_cash_usd'],
-           'economics': e.to_payload(), 'job': j}
+           **sim.blocking_fields(result), 'economics': e.to_payload(), 'job': j}
     return (row, result) if detail else row
 
 
@@ -148,12 +148,22 @@ def bundle(r):
 
 def render(rows, spec, prior_best, controls, deltas):
     products = spec['products']
-    text = '# Legacy 25K versus 50K under a limited supply of funded accounts\n\n'
+    blocking = sim.execution_of(spec) == 'blocking'
+    text = ('# Legacy 25K versus 50K under a limited supply of funded accounts'
+            + (' — blocked copying' if blocking else '') + '\n\n')
     text += (f'{len(rows):,} simulations. {controls} rows that must equal the unlimited-supply study '
-             'reproduced it exactly. Both products are tested on exactly the same settings.\n\n')
+             'reproduced it exactly' + (', including per-trade account assignments' if blocking else '')
+             + '. Both products are tested on exactly the same settings.\n\n')
+    if blocking:
+        text += ('**Execution: blocked copying.** Each funded account holds at most one position; an account '
+                 'still in an earlier trade skips a new signal. The unlimited-supply reference is the '
+                 '[blocked reserve comparison](../reserve_by_policy/reserve_by_policy__REPORT.md). Everything else matches the '
+                 '[non-blocking spare-shelf study](../../../comparisons/legacy_25k_vs_50k/spare_shelf/spare_shelf__REPORT.md).\n\n')
+    funded = [r['accounts'] for (prod, i, m), r in prior_best.items() if prod == 'legacy_25k' and m > 0]
+    turnover = f'{min(funded)}–{max(funded)} accounts' if blocking else '600+ accounts'
     text += ('## The question\n\n'
              'The unlimited-supply study let every purchase become a funded account at once. Its '
-             'best 25K bundles bought 600+ accounts by replacing deaths immediately. Here funded '
+             f'best 25K bundles bought {turnover} by replacing deaths immediately. Here funded '
              'accounts come from passed evaluations: at most **N passes per calendar month**, each '
              'paid in full ($200 / $250) when it passes. A pass not needed at once waits dormant on a '
              'shelf of up to K spares, and **spares count toward the 20-account cap**. Spares left at the '
@@ -220,10 +230,12 @@ def render(rows, spec, prior_best, controls, deltas):
 
 def main(spec_path=SPEC_PATH):
     spec = json.loads(Path(spec_path).read_text(encoding='utf-8'))
-    sim.initialize()
+    execution = sim.execution_of(spec)
+    sim.initialize(execution)
     assert input_digest(sim.C['legacy_25k']) == input_digest(sim.C['legacy_50k'])
     out = (PROJECT_ROOT / spec['output']).resolve()
-    assert out.is_relative_to(PROJECT_ROOT / 'results/comparisons')
+    assert out.is_relative_to(PROJECT_ROOT / sim.RESULT_ROOTS[execution])
+    prior_folder = sim.prior_folder(spec, 'prior', PRIOR)
     out.mkdir(parents=True, exist_ok=True)
     # Office lock files (~$name) exist only while a workbook is open and are unreadable then.
     protected = {str(f): sha256_file(f) for f in (PROJECT_ROOT / 'results').rglob('*')
@@ -242,7 +254,7 @@ def main(spec_path=SPEC_PATH):
         for line in checkpoint.read_text(encoding='utf-8').splitlines():
             r = json.loads(line)
             cache[tuple(r['job'])] = r
-    prior = [json.loads(line) for line in (PRIOR / 'checkpoint.jsonl').read_text(encoding='utf-8').splitlines()]
+    prior = [json.loads(line) for line in (prior_folder / 'checkpoint.jsonl').read_text(encoding='utf-8').splitlines()]
     prior = [r for r in prior if not r['strict_post_payout_balance']]
     prior_rows = {tuple(r['job'][:7]): r for r in prior}
     prior_best = {}
@@ -270,16 +282,20 @@ def main(spec_path=SPEC_PATH):
                     print(f'{label}: {n}/{len(missing)} completed', flush=True)
         return [cache[j] for j in jobs]
 
-    with ProcessPoolExecutor(max_workers=spec['workers'], initializer=sim.initialize) as pool:
+    with ProcessPoolExecutor(max_workers=spec['workers'], initializer=sim.initialize,
+                             initargs=(execution,)) as pool:
         anchor_rows = run(pool, anchors, 'Unlimited-supply anchors')
         coarse_rows = run(pool, coarse, 'Coarse grid')
         refined = refinement_jobs(coarse_rows, spec)
         run(pool, refined, 'Refinement')
     rows = [cache[j] for j in sorted(set(coarse) | set(refined))]
     # Every row whose supply cannot bind must equal the unlimited-supply study.
+    # Blocked rows must also assign every trade to the same accounts.
+    matched = ('ongoing', 'total', 'accounts', 'alive') + (('allocation_sha256',) if execution == 'blocking' else ())
+
     def reproduces(r):
         old = prior_rows[tuple(r['job'][:7])]
-        return all(r[k] == old[k] for k in ('ongoing', 'total', 'accounts', 'alive'))
+        return all(r[k] == old[k] for k in matched)
 
     assert all(reproduces(r) for r in anchor_rows), 'unlimited supply no longer reproduces the earlier winners'
     unbound = [r for r in rows if tuple(r['job'][:7]) in prior_rows and r['spares'] == 0

@@ -2,7 +2,7 @@
 
 This extends the [blocked-copying optimization](BLOCKED_OPTIMIZATION.md)
 using the supply mechanics from the earlier
-[pipeline-capacity study](../../results/comparisons/legacy_25k_vs_50k/pipeline_capacity/FINDINGS.generated.md).
+[pipeline-capacity study](../../results/comparisons/legacy_25k_vs_50k/pipeline_capacity/pipeline_capacity__FINDINGS.generated.md).
 The primary budget stays at **$1,000 initially plus $200/month**.
 
 **Result:** after 4,896 unique simulations, the best tested ongoing cash with
@@ -96,8 +96,8 @@ screen/search domains, winning scores, every exported cash event, evaluation
 fees and paid activations, funded-seat provenance, seat limits, replacement
 wait totals and all selected PA entry assignments.
 
-[Generated report](../../results/legacy_25k/blocked_pipeline/REPORT.generated.md),
-[findings](../../results/legacy_25k/blocked_pipeline/FINDINGS.generated.md),
+[Generated report](../../results/legacy_25k/blocked_pipeline/blocked_pipeline__REPORT.generated.md),
+[findings](../../results/legacy_25k/blocked_pipeline/blocked_pipeline__FINDINGS.generated.md),
 [all settings](../../results/legacy_25k/blocked_pipeline/all_settings.csv),
 [audit](../../results/legacy_25k/blocked_pipeline/AUDIT.generated.json).
 

@@ -1,0 +1,577 @@
+{
+  "purpose": "Reports under results/ are named <folder>__<original name> since 2026-09-20. \"files\": old path -> new path, hash before the rename and after links were rewritten. \"scripts\": scripts edited only to use the new names, hash before and after. scripts/report_names.verified lets hash-pinned audits accept exactly these changes. Entries whose renamed_to equals their key were edited in place (links only); old_sha256 / old_sha256_crlf hash the committed content with LF / CRLF line endings.",
+  "files": {
+    "results/comparisons/legacy_25k_vs_50k/eval_supply/Breakdown_evaluation_polices.md": {
+      "renamed_to": "results/comparisons/legacy_25k_vs_50k/eval_supply/eval_supply__Breakdown_evaluation_polices.md",
+      "old_sha256": "f4ea30cf2bec63c73fcd77645aa105e9acb8a12d08d965cee18ac4411af9af8b",
+      "new_sha256": "f4ea30cf2bec63c73fcd77645aa105e9acb8a12d08d965cee18ac4411af9af8b"
+    },
+    "results/comparisons/legacy_25k_vs_50k/eval_supply/REPORT.generated.md": {
+      "renamed_to": "results/comparisons/legacy_25k_vs_50k/eval_supply/eval_supply__REPORT.generated.md",
+      "old_sha256": "09bf432a9d090dbbf59c3f8de591756df8b951f2bdf77fa14ef8c661684b3869",
+      "new_sha256": "09bf432a9d090dbbf59c3f8de591756df8b951f2bdf77fa14ef8c661684b3869"
+    },
+    "results/comparisons/legacy_25k_vs_50k/eval_supply/REPORT.md": {
+      "renamed_to": "results/comparisons/legacy_25k_vs_50k/eval_supply/eval_supply__REPORT.md",
+      "old_sha256": "4c5cfcddff738961397a8f6223cc894dfb96f9720fb5e8b3a01edf1db09a9a3b",
+      "new_sha256": "4c5cfcddff738961397a8f6223cc894dfb96f9720fb5e8b3a01edf1db09a9a3b"
+    },
+    "results/comparisons/legacy_25k_vs_50k/march_failure_review/REPORT.md": {
+      "renamed_to": "results/comparisons/legacy_25k_vs_50k/march_failure_review/march_failure_review__REPORT.md",
+      "old_sha256": "0b6e57464ed1a4ae843be3f218d1bd2f06b5c420fefb0d34d22bd695b0791a85",
+      "new_sha256": "0b6e57464ed1a4ae843be3f218d1bd2f06b5c420fefb0d34d22bd695b0791a85"
+    },
+    "results/comparisons/legacy_25k_vs_50k/pipeline_capacity/FINDINGS.generated.md": {
+      "renamed_to": "results/comparisons/legacy_25k_vs_50k/pipeline_capacity/pipeline_capacity__FINDINGS.generated.md",
+      "old_sha256": "7da9f086dcb831882b9bb64d63852309699f6560645160d3a1581cce27fc5d00",
+      "new_sha256": "bb1a047c0075ee73ae16fdee9bf39039e05f0f281d2d717f4ccc0a631e18beb8"
+    },
+    "results/comparisons/legacy_25k_vs_50k/pipeline_capacity/REPORT.generated.md": {
+      "renamed_to": "results/comparisons/legacy_25k_vs_50k/pipeline_capacity/pipeline_capacity__REPORT.generated.md",
+      "old_sha256": "f1aefbee141a09ac8c8c528f402b84e85385e17e6d1d4727c7f82de11518c3bb",
+      "new_sha256": "f1aefbee141a09ac8c8c528f402b84e85385e17e6d1d4727c7f82de11518c3bb"
+    },
+    "results/comparisons/legacy_25k_vs_50k/pipeline_capacity/REPORT.md": {
+      "renamed_to": "results/comparisons/legacy_25k_vs_50k/pipeline_capacity/pipeline_capacity__REPORT.md",
+      "old_sha256": "f1aefbee141a09ac8c8c528f402b84e85385e17e6d1d4727c7f82de11518c3bb",
+      "new_sha256": "f1aefbee141a09ac8c8c528f402b84e85385e17e6d1d4727c7f82de11518c3bb"
+    },
+    "results/comparisons/legacy_25k_vs_50k/pipeline_capacity/transcript.md": {
+      "renamed_to": "results/comparisons/legacy_25k_vs_50k/pipeline_capacity/pipeline_capacity__transcript.md",
+      "old_sha256": "f81b28da9d5e4428b54d415b6dcc4955b443344ba29ca7c03fabd702ec582470",
+      "new_sha256": "f81b28da9d5e4428b54d415b6dcc4955b443344ba29ca7c03fabd702ec582470"
+    },
+    "results/comparisons/legacy_25k_vs_50k/reserve_by_policy/FINDINGS.generated.md": {
+      "renamed_to": "results/comparisons/legacy_25k_vs_50k/reserve_by_policy/reserve_by_policy__FINDINGS.generated.md",
+      "old_sha256": "d9d6e592d58719b42270f1e7eed239651e6a2771cf5c9f75b76c7112510a8e58",
+      "new_sha256": "1766d08e21b47d3c8f428b24ab30155f265cae360799c1413f32c5e5ff132b06"
+    },
+    "results/comparisons/legacy_25k_vs_50k/reserve_by_policy/FINDINGS.md": {
+      "renamed_to": "results/comparisons/legacy_25k_vs_50k/reserve_by_policy/reserve_by_policy__FINDINGS.md",
+      "old_sha256": "d9d6e592d58719b42270f1e7eed239651e6a2771cf5c9f75b76c7112510a8e58",
+      "new_sha256": "1766d08e21b47d3c8f428b24ab30155f265cae360799c1413f32c5e5ff132b06"
+    },
+    "results/comparisons/legacy_25k_vs_50k/reserve_by_policy/HOW_THIS_STUDY_WORKS.md": {
+      "renamed_to": "results/comparisons/legacy_25k_vs_50k/reserve_by_policy/reserve_by_policy__HOW_THIS_STUDY_WORKS.md",
+      "old_sha256": "7591ab1bc11f760a0d5d7fa1e82eea6620e635ef34baffb0e701c7a7a2f1b41b",
+      "new_sha256": "9b9567e5d13609bef2a3a3b7237d1e11d24836a3e3688bb8876add268096f0a8"
+    },
+    "results/comparisons/legacy_25k_vs_50k/reserve_by_policy/REPORT.generated.md": {
+      "renamed_to": "results/comparisons/legacy_25k_vs_50k/reserve_by_policy/reserve_by_policy__REPORT.generated.md",
+      "old_sha256": "698f881dfeafe6a1e28abb9f54ce3d16266b27f4def897c408de654f7c04254c",
+      "new_sha256": "91cbf466202b49e77d0e4d46081fd89f00b3c887652f55536fa31185735e820e"
+    },
+    "results/comparisons/legacy_25k_vs_50k/reserve_by_policy/REPORT.md": {
+      "renamed_to": "results/comparisons/legacy_25k_vs_50k/reserve_by_policy/reserve_by_policy__REPORT.md",
+      "old_sha256": "698f881dfeafe6a1e28abb9f54ce3d16266b27f4def897c408de654f7c04254c",
+      "new_sha256": "91cbf466202b49e77d0e4d46081fd89f00b3c887652f55536fa31185735e820e"
+    },
+    "results/comparisons/legacy_25k_vs_50k/reserve_frontier/REPORT.md": {
+      "renamed_to": "results/comparisons/legacy_25k_vs_50k/reserve_frontier/reserve_frontier__REPORT.md",
+      "old_sha256": "147e9c6c4e00105736d054e82e5ebd541a9f8fb5ff5ad8f8fe90a16e4ee1491b",
+      "new_sha256": "147e9c6c4e00105736d054e82e5ebd541a9f8fb5ff5ad8f8fe90a16e4ee1491b"
+    },
+    "results/comparisons/legacy_25k_vs_50k/reserve_frontier_minimum/REPORT.md": {
+      "renamed_to": "results/comparisons/legacy_25k_vs_50k/reserve_frontier_minimum/reserve_frontier_minimum__REPORT.md",
+      "old_sha256": "27c473ec27698ebd342b2af2cf54615049a3274bbcd6651360a1fb9f37d8977e",
+      "new_sha256": "27c473ec27698ebd342b2af2cf54615049a3274bbcd6651360a1fb9f37d8977e"
+    },
+    "results/comparisons/legacy_25k_vs_50k/spare_shelf/REPORT.generated.md": {
+      "renamed_to": "results/comparisons/legacy_25k_vs_50k/spare_shelf/spare_shelf__REPORT.generated.md",
+      "old_sha256": "fa76e1ff9badaee6b84edaeae2ecb93537bc032740af91ea349d39e72709b821",
+      "new_sha256": "fa76e1ff9badaee6b84edaeae2ecb93537bc032740af91ea349d39e72709b821"
+    },
+    "results/comparisons/legacy_25k_vs_50k/spare_shelf/REPORT.md": {
+      "renamed_to": "results/comparisons/legacy_25k_vs_50k/spare_shelf/spare_shelf__REPORT.md",
+      "old_sha256": "fa76e1ff9badaee6b84edaeae2ecb93537bc032740af91ea349d39e72709b821",
+      "new_sha256": "fa76e1ff9badaee6b84edaeae2ecb93537bc032740af91ea349d39e72709b821"
+    },
+    "results/comparisons_blocking/legacy_25k_vs_50k/reserve_by_policy/FINDINGS.generated.md": {
+      "renamed_to": "results/comparisons_blocking/legacy_25k_vs_50k/reserve_by_policy/reserve_by_policy__FINDINGS.generated.md",
+      "old_sha256": "682faf5a528c3f8e45e6e06d521c43c573957d01afa0ef21ad10427098d39e7d",
+      "new_sha256": "14ff8a5a97f7a4323b9d2547c84e93ffbca000626539cd1178c842fd04f3a5da"
+    },
+    "results/comparisons_blocking/legacy_25k_vs_50k/reserve_by_policy/FINDINGS.md": {
+      "renamed_to": "results/comparisons_blocking/legacy_25k_vs_50k/reserve_by_policy/reserve_by_policy__FINDINGS.md",
+      "old_sha256": "682faf5a528c3f8e45e6e06d521c43c573957d01afa0ef21ad10427098d39e7d",
+      "new_sha256": "14ff8a5a97f7a4323b9d2547c84e93ffbca000626539cd1178c842fd04f3a5da"
+    },
+    "results/comparisons_blocking/legacy_25k_vs_50k/reserve_by_policy/HOW_THIS_STUDY_WORKS.md": {
+      "renamed_to": "results/comparisons_blocking/legacy_25k_vs_50k/reserve_by_policy/reserve_by_policy__HOW_THIS_STUDY_WORKS.md",
+      "old_sha256": "38d0d6d9372c0d4310d2707b587e27ae1ebe05a715c05d5d0f58d7d3390251e8",
+      "new_sha256": "4d7bb711163df958600edd26358bbe51e5e82b90beef347d0d24ec333b7826b3"
+    },
+    "results/comparisons_blocking/legacy_25k_vs_50k/reserve_by_policy/REPORT.generated.md": {
+      "renamed_to": "results/comparisons_blocking/legacy_25k_vs_50k/reserve_by_policy/reserve_by_policy__REPORT.generated.md",
+      "old_sha256": "c441c9388ee2fe0739ff3ed2128b4b45e0bf0f2a854868efeec983fb11148d59",
+      "new_sha256": "1468ec4b552a26fae3ec57cba78442a0598effe5587661810b0cd7ba4281f326"
+    },
+    "results/comparisons_blocking/legacy_25k_vs_50k/reserve_by_policy/REPORT.md": {
+      "renamed_to": "results/comparisons_blocking/legacy_25k_vs_50k/reserve_by_policy/reserve_by_policy__REPORT.md",
+      "old_sha256": "c441c9388ee2fe0739ff3ed2128b4b45e0bf0f2a854868efeec983fb11148d59",
+      "new_sha256": "1468ec4b552a26fae3ec57cba78442a0598effe5587661810b0cd7ba4281f326"
+    },
+    "results/comparisons_blocking/legacy_25k_vs_50k/spare_shelf/REPORT.generated.md": {
+      "renamed_to": "results/comparisons_blocking/legacy_25k_vs_50k/spare_shelf/spare_shelf__REPORT.generated.md",
+      "old_sha256": "4bbadc683da132f56d0a805e8eab7fdbdbac52ef5c1b7eeb2e755db5e58b57e5",
+      "new_sha256": "9ac48d266a2b6cb0f90c1f912b444544f5f2da0b21c695851b0d80352a8cf692"
+    },
+    "results/comparisons_blocking/legacy_25k_vs_50k/spare_shelf/REPORT.md": {
+      "renamed_to": "results/comparisons_blocking/legacy_25k_vs_50k/spare_shelf/spare_shelf__REPORT.md",
+      "old_sha256": "4bbadc683da132f56d0a805e8eab7fdbdbac52ef5c1b7eeb2e755db5e58b57e5",
+      "new_sha256": "9ac48d266a2b6cb0f90c1f912b444544f5f2da0b21c695851b0d80352a8cf692"
+    },
+    "results/CONSISTENCY_AUDIT.md": {
+      "renamed_to": "results/results__CONSISTENCY_AUDIT.md",
+      "old_sha256": "979b2c59f5b2ad342dd52a8b96d1685754128bd448f6582f2803a9215329f3f8",
+      "new_sha256": "61d4d0896f7efc79971d78bcf656f74f55d815ef14f1b4ac0f817e40d1aa91a6"
+    },
+    "results/full_rulebook__hold__terminal_request/RUN.md": {
+      "renamed_to": "results/full_rulebook__hold__terminal_request/full_rulebook__hold__terminal_request__RUN.md",
+      "old_sha256": "fc25e4b08d245be6e69522037d5233bd97b146f66e3fa24aac38a36ccb3fa774",
+      "new_sha256": "fc25e4b08d245be6e69522037d5233bd97b146f66e3fa24aac38a36ccb3fa774"
+    },
+    "results/full_rulebook__monthly_500__no_cushion__no_terminal/INTERPRETATION.md": {
+      "renamed_to": "results/full_rulebook__monthly_500__no_cushion__no_terminal/full_rulebook__monthly_500__no_cushion__no_terminal__INTERPRETATION.md",
+      "old_sha256": "73756937841b64ff24174c9ea1973c96c62738bdf266d557a0ef855ab3e1b515",
+      "new_sha256": "73756937841b64ff24174c9ea1973c96c62738bdf266d557a0ef855ab3e1b515"
+    },
+    "results/full_rulebook__monthly_500__no_cushion__no_terminal/RUN.md": {
+      "renamed_to": "results/full_rulebook__monthly_500__no_cushion__no_terminal/full_rulebook__monthly_500__no_cushion__no_terminal__RUN.md",
+      "old_sha256": "acf82804cf09e039f46ecd0b1c56e4ced1daa9314c843d55f4427f292ef239dc",
+      "new_sha256": "acf82804cf09e039f46ecd0b1c56e4ced1daa9314c843d55f4427f292ef239dc"
+    },
+    "results/full_rulebook__monthly_500__no_cushion__no_terminal__adapted_search/RUN.md": {
+      "renamed_to": "results/full_rulebook__monthly_500__no_cushion__no_terminal__adapted_search/full_rulebook__monthly_500__no_cushion__no_terminal__adapted_search__RUN.md",
+      "old_sha256": "5e925f3da6fd14b5408258c7d7a9f3f419aad0e25dc1432a5cc4945908dab4d5",
+      "new_sha256": "5e925f3da6fd14b5408258c7d7a9f3f419aad0e25dc1432a5cc4945908dab4d5"
+    },
+    "results/full_rulebook__monthly_500__retain_30000__terminal_request/RUN.md": {
+      "renamed_to": "results/full_rulebook__monthly_500__retain_30000__terminal_request/full_rulebook__monthly_500__retain_30000__terminal_request__RUN.md",
+      "old_sha256": "9bb689c57dc8483ad41742b018d883caca21b6d9168c09726177d1d2c641bd8f",
+      "new_sha256": "9bb689c57dc8483ad41742b018d883caca21b6d9168c09726177d1d2c641bd8f"
+    },
+    "results/full_rulebook__monthly_maximum__no_cushion__no_terminal/RUN.md": {
+      "renamed_to": "results/full_rulebook__monthly_maximum__no_cushion__no_terminal/full_rulebook__monthly_maximum__no_cushion__no_terminal__RUN.md",
+      "old_sha256": "55f6975129b710de676214a9b7879dcb7c05211a620f0c3c96e40019a8149db4",
+      "new_sha256": "55f6975129b710de676214a9b7879dcb7c05211a620f0c3c96e40019a8149db4"
+    },
+    "results/legacy_25k/blocked_optimization/REPORT.generated.md": {
+      "renamed_to": "results/legacy_25k/blocked_optimization/blocked_optimization__REPORT.generated.md",
+      "old_sha256": "0c12d107626a8576d30ac1cb079fdb2079b8155cb93c520475e0df365fc1576f",
+      "new_sha256": "0c12d107626a8576d30ac1cb079fdb2079b8155cb93c520475e0df365fc1576f"
+    },
+    "results/legacy_25k/blocked_pipeline/FINDINGS.generated.md": {
+      "renamed_to": "results/legacy_25k/blocked_pipeline/blocked_pipeline__FINDINGS.generated.md",
+      "old_sha256": "ce61b6482b122e559dea70a486563d6808c500bb6e17689adcd065a67145c248",
+      "new_sha256": "00c892da23225de7e36c24cbb43a0ba6ed832e351f9776fd63cf19904019a89e"
+    },
+    "results/legacy_25k/blocked_pipeline/REPORT.generated.md": {
+      "renamed_to": "results/legacy_25k/blocked_pipeline/blocked_pipeline__REPORT.generated.md",
+      "old_sha256": "0222294ea3d006e22bf37bd89712f36457d7d7021bb523a3f1e20cf6b50b3b79",
+      "new_sha256": "0222294ea3d006e22bf37bd89712f36457d7d7021bb523a3f1e20cf6b50b3b79"
+    },
+    "results/legacy_25k/blocked_pipeline/REPORT.md": {
+      "renamed_to": "results/legacy_25k/blocked_pipeline/blocked_pipeline__REPORT.md",
+      "old_sha256": "0222294ea3d006e22bf37bd89712f36457d7d7021bb523a3f1e20cf6b50b3b79",
+      "new_sha256": "0222294ea3d006e22bf37bd89712f36457d7d7021bb523a3f1e20cf6b50b3b79"
+    },
+    "results/legacy_25k/routing_capacity_reuse/REPORT.generated.md": {
+      "renamed_to": "results/legacy_25k/routing_capacity_reuse/routing_capacity_reuse__REPORT.generated.md",
+      "old_sha256": "8babde7c17f38f06e4d2c72591d1310f2a30511b1e5cb0719535d33f15f116f4",
+      "new_sha256": "8babde7c17f38f06e4d2c72591d1310f2a30511b1e5cb0719535d33f15f116f4"
+    },
+    "results/legacy_25k/routing_fixed_inventory/REPORT.generated.md": {
+      "renamed_to": "results/legacy_25k/routing_fixed_inventory/routing_fixed_inventory__REPORT.generated.md",
+      "old_sha256": "8b0714b6907021391af188635fabd042d65ff5e70dfbcd8d581a415f315a6d85",
+      "new_sha256": "8b0714b6907021391af188635fabd042d65ff5e70dfbcd8d581a415f315a6d85"
+    },
+    "results/legacy_25k/routing_fixed_pool/REPORT.generated.md": {
+      "renamed_to": "results/legacy_25k/routing_fixed_pool/routing_fixed_pool__REPORT.generated.md",
+      "old_sha256": "3d2e9b89c6eba6a249151633a9ca5345417426241498d9f247c837c41c109a74",
+      "new_sha256": "3d2e9b89c6eba6a249151633a9ca5345417426241498d9f247c837c41c109a74"
+    },
+    "results/legacy_25k/routing_funded_growth/REPORT.generated.md": {
+      "renamed_to": "results/legacy_25k/routing_funded_growth/routing_funded_growth__REPORT.generated.md",
+      "old_sha256": "6b7611d10bdd6170770b8ca7ad2bbbb6b7a2444fa40155590a3fdcbd0c7dedf0",
+      "new_sha256": "6b7611d10bdd6170770b8ca7ad2bbbb6b7a2444fa40155590a3fdcbd0c7dedf0"
+    },
+    "results/legacy_25k/routing_hybrid/REPORT.generated.md": {
+      "renamed_to": "results/legacy_25k/routing_hybrid/routing_hybrid__REPORT.generated.md",
+      "old_sha256": "9d73b0275e6744a1481ae09abfad0a2ac3155a46d76bae0cb362e8a7d82a7bbe",
+      "new_sha256": "9d73b0275e6744a1481ae09abfad0a2ac3155a46d76bae0cb362e8a7d82a7bbe"
+    },
+    "results/legacy_25k/routing_matched_exposure/REPORT.generated.md": {
+      "renamed_to": "results/legacy_25k/routing_matched_exposure/routing_matched_exposure__REPORT.generated.md",
+      "old_sha256": "0cf859a5af581900550fda2a54184813dfbf13c7820d13ce3474978380aefb5d",
+      "new_sha256": "0cf859a5af581900550fda2a54184813dfbf13c7820d13ce3474978380aefb5d"
+    },
+    "results/legacy_50k/operating_policies/HOW_THIS_STUDY_WORKS.md": {
+      "renamed_to": "results/legacy_50k/operating_policies/operating_policies__HOW_THIS_STUDY_WORKS.md",
+      "old_sha256": "02d378fba0f574140396f6b8e5161cf7b9b7ef9cd1dc0b9b7ad5f19da23b7afd",
+      "new_sha256": "02d378fba0f574140396f6b8e5161cf7b9b7ef9cd1dc0b9b7ad5f19da23b7afd"
+    },
+    "results/legacy_50k/operating_policies/REPORT.generated.md": {
+      "renamed_to": "results/legacy_50k/operating_policies/operating_policies__REPORT.generated.md",
+      "old_sha256": "cfb09d1ec84b1fbacab8e1e1d5833e367542ce6d48e78bd7085e112caac35535",
+      "new_sha256": "cfb09d1ec84b1fbacab8e1e1d5833e367542ce6d48e78bd7085e112caac35535"
+    },
+    "results/legacy_50k/operating_policies/REPORT.md": {
+      "renamed_to": "results/legacy_50k/operating_policies/operating_policies__REPORT.md",
+      "old_sha256": "cfb09d1ec84b1fbacab8e1e1d5833e367542ce6d48e78bd7085e112caac35535",
+      "new_sha256": "cfb09d1ec84b1fbacab8e1e1d5833e367542ce6d48e78bd7085e112caac35535"
+    },
+    "results/legacy_rules__monthly_100__no_cushion__no_terminal/RUN.md": {
+      "renamed_to": "results/legacy_rules__monthly_100__no_cushion__no_terminal/legacy_rules__monthly_100__no_cushion__no_terminal__RUN.md",
+      "old_sha256": "e44f8883561976bc5ede13a9329aba6d06cc7a6d015e2a3393beaab917a78139",
+      "new_sha256": "e44f8883561976bc5ede13a9329aba6d06cc7a6d015e2a3393beaab917a78139"
+    },
+    "results/no_payout_rules__hold__no_terminal/RUN.md": {
+      "renamed_to": "results/no_payout_rules__hold__no_terminal/no_payout_rules__hold__no_terminal__RUN.md",
+      "old_sha256": "548e93a60f43974abe2ac60f45408fa810963fe8fed39bfaa651427bdc886654",
+      "new_sha256": "548e93a60f43974abe2ac60f45408fa810963fe8fed39bfaa651427bdc886654"
+    },
+    "results/no_payout_rules__hold__terminal_idealized/RUN.md": {
+      "renamed_to": "results/no_payout_rules__hold__terminal_idealized/no_payout_rules__hold__terminal_idealized__RUN.md",
+      "old_sha256": "43960e9d4f4173bbd32fde11ed019cbe820699b668b072c101ee91383c2daa18",
+      "new_sha256": "43960e9d4f4173bbd32fde11ed019cbe820699b668b072c101ee91383c2daa18"
+    },
+    "results/no_payout_rules__monthly_500__retain_26100__no_terminal/RUN.md": {
+      "renamed_to": "results/no_payout_rules__monthly_500__retain_26100__no_terminal/no_payout_rules__monthly_500__retain_26100__no_terminal__RUN.md",
+      "old_sha256": "33ce401495f0c919444633926c671b65bc599d271ae09de6d0d9e86ac2e3c55b",
+      "new_sha256": "33ce401495f0c919444633926c671b65bc599d271ae09de6d0d9e86ac2e3c55b"
+    },
+    "results/README.md": {
+      "renamed_to": "results/results__README.md",
+      "old_sha256": "d22db8fe7ed1a88a87a3156a87e5fd776099b58f6217bbdc05d4be0f0f32e7d6",
+      "new_sha256": "40e978f7b63dc06d8db28d319fe0aac822ecc3098cc3bb2c2e1ca2407da66978"
+    },
+    "results/study__full_rulebook__RR__account_purchases__cash_budgets/HOW_THIS_STUDY_WORKS.md": {
+      "renamed_to": "results/study__full_rulebook__RR__account_purchases__cash_budgets/study__full_rulebook__RR__account_purchases__cash_budgets__HOW_THIS_STUDY_WORKS.md",
+      "old_sha256": "2d2d605e698d44d53189c7a37c0a914498a8b5d13a5784068a6786e6e9bffeaa",
+      "new_sha256": "149329b78543c6b84e521fa5c7f9999d240fe6ab30128f4e98d0bc27c1818d29"
+    },
+    "results/study__full_rulebook__RR__account_purchases__cash_budgets/PHASE_SENSITIVITY.md": {
+      "renamed_to": "results/study__full_rulebook__RR__account_purchases__cash_budgets/study__full_rulebook__RR__account_purchases__cash_budgets__PHASE_SENSITIVITY.md",
+      "old_sha256": "03f46144ba94e220fee09d712661d7e97a10e1a3b38df20ca1765cc9ded72e36",
+      "new_sha256": "03f46144ba94e220fee09d712661d7e97a10e1a3b38df20ca1765cc9ded72e36"
+    },
+    "results/study__full_rulebook__RR__account_purchases__cash_budgets/REPORT.generated.md": {
+      "renamed_to": "results/study__full_rulebook__RR__account_purchases__cash_budgets/study__full_rulebook__RR__account_purchases__cash_budgets__REPORT.generated.md",
+      "old_sha256": "ffa07ac5494faf89e2231626039be1175a63a0dcd7cc78c7c71436e56cf0507b",
+      "new_sha256": "60021e9d92f7e187d8e032d04e79b100ff542ece6f61d24ea20fedd33831c275"
+    },
+    "results/study__full_rulebook__RR__account_purchases__cash_budgets/REPORT.md": {
+      "renamed_to": "results/study__full_rulebook__RR__account_purchases__cash_budgets/study__full_rulebook__RR__account_purchases__cash_budgets__REPORT.md",
+      "old_sha256": "c2f768c1258c087ca9e862e200a9d84910f3052dd5340de0573481a432e6dba5",
+      "new_sha256": "c2f768c1258c087ca9e862e200a9d84910f3052dd5340de0573481a432e6dba5"
+    },
+    "results/study__full_rulebook__RR__monthly_amount_x_cushion__dual_terminal_scores/HOW_THIS_STUDY_WORKS.md": {
+      "renamed_to": "results/study__full_rulebook__RR__monthly_amount_x_cushion__dual_terminal_scores/study__full_rulebook__RR__monthly_amount_x_cushion__dual_terminal_scores__HOW_THIS_STUDY_WORKS.md",
+      "old_sha256": "f03eeef55ed2a06d90a41a0c1fddcb2e73c860694b805a9d1bdfc6345aeb8e36",
+      "new_sha256": "3647aa85e60223c2a12e13338c0dc39b16bfabd4165273bae9ca692160665d5b"
+    },
+    "results/study__full_rulebook__RR__monthly_amount_x_cushion__dual_terminal_scores/REPORT.md": {
+      "renamed_to": "results/study__full_rulebook__RR__monthly_amount_x_cushion__dual_terminal_scores/study__full_rulebook__RR__monthly_amount_x_cushion__dual_terminal_scores__REPORT.md",
+      "old_sha256": "ec6d10b20f86030e0bf2d8d63d5f2e7be5aa489248034bb5403017c666c3f51a",
+      "new_sha256": "ec6d10b20f86030e0bf2d8d63d5f2e7be5aa489248034bb5403017c666c3f51a"
+    },
+    "results/study__full_rulebook__RR__monthly_replacements__cap_20__cash_budgets/HOW_THIS_STUDY_WORKS.md": {
+      "renamed_to": "results/study__full_rulebook__RR__monthly_replacements__cap_20__cash_budgets/study__full_rulebook__RR__monthly_replacements__cap_20__cash_budgets__HOW_THIS_STUDY_WORKS.md",
+      "old_sha256": "733b726d82037e0d316e259c0f26e7e9553af5a9d329074acf47bba26c10942d",
+      "new_sha256": "22626467fa3908cb7f5f1bf84647faf9ef3048af12414460b5ac9ecbf1c79aeb"
+    },
+    "results/study__full_rulebook__RR__monthly_replacements__cap_20__cash_budgets/REPORT.generated.md": {
+      "renamed_to": "results/study__full_rulebook__RR__monthly_replacements__cap_20__cash_budgets/study__full_rulebook__RR__monthly_replacements__cap_20__cash_budgets__REPORT.generated.md",
+      "old_sha256": "fcf093624ffa749c397ee5157cabdbf4b2aebf5e3a04b19e70ea17612b92b752",
+      "new_sha256": "fcf093624ffa749c397ee5157cabdbf4b2aebf5e3a04b19e70ea17612b92b752"
+    },
+    "results/study__full_rulebook__RR__monthly_replacements__cap_20__cash_budgets/REPORT.md": {
+      "renamed_to": "results/study__full_rulebook__RR__monthly_replacements__cap_20__cash_budgets/study__full_rulebook__RR__monthly_replacements__cap_20__cash_budgets__REPORT.md",
+      "old_sha256": "315255662700fb8bf766d230a9a90874f61cc9a4fa31b9e16e6c78e9475ccb13",
+      "new_sha256": "315255662700fb8bf766d230a9a90874f61cc9a4fa31b9e16e6c78e9475ccb13"
+    },
+    "results/study__full_rulebook__RR__withdrawal_cadence__monthly_purchases/HOW_THIS_STUDY_WORKS.md": {
+      "renamed_to": "results/study__full_rulebook__RR__withdrawal_cadence__monthly_purchases/study__full_rulebook__RR__withdrawal_cadence__monthly_purchases__HOW_THIS_STUDY_WORKS.md",
+      "old_sha256": "1692049dd8c0990f66517b898d53ce21ec54659fcdf9ebeba5b4b3088e062f09",
+      "new_sha256": "cd2fe5857fc2994686a5c67b6f7ee90ed3053dd4fa59ce16bd8f2cdeced053f3"
+    },
+    "results/study__full_rulebook__RR__withdrawal_cadence__monthly_purchases/REPORT.md": {
+      "renamed_to": "results/study__full_rulebook__RR__withdrawal_cadence__monthly_purchases/study__full_rulebook__RR__withdrawal_cadence__monthly_purchases__REPORT.md",
+      "old_sha256": "5c811fbea3f6577b459e3d6b2254c1557956e3ce6d0a7f8e0d096638c69f1b0f",
+      "new_sha256": "5c811fbea3f6577b459e3d6b2254c1557956e3ce6d0a7f8e0d096638c69f1b0f"
+    },
+    "results/study__full_rulebook__RR__withdrawal_cadence__monthly_purchases__cap_20__cash_budgets/HOW_THIS_STUDY_WORKS.md": {
+      "renamed_to": "results/study__full_rulebook__RR__withdrawal_cadence__monthly_purchases__cap_20__cash_budgets/study__full_rulebook__RR__withdrawal_cadence__monthly_purchases__cap_20__cash_budgets__HOW_THIS_STUDY_WORKS.md",
+      "old_sha256": "7e6baf6c27337c0170d8925e1b668e92fc17ba44b00cb122f60c8a0f2a884216",
+      "new_sha256": "050836d9c4393977a9bee60cc397f8f89b0289460538a9584d33d63d3c6e53df"
+    },
+    "results/study__full_rulebook__RR__withdrawal_cadence__monthly_purchases__cap_20__cash_budgets/REPORT.generated.md": {
+      "renamed_to": "results/study__full_rulebook__RR__withdrawal_cadence__monthly_purchases__cap_20__cash_budgets/study__full_rulebook__RR__withdrawal_cadence__monthly_purchases__cap_20__cash_budgets__REPORT.generated.md",
+      "old_sha256": "d37b0bf3046ab4df4690d833cd9427f41e4cf056af5afbf3b0bf2836caad0886",
+      "new_sha256": "d37b0bf3046ab4df4690d833cd9427f41e4cf056af5afbf3b0bf2836caad0886"
+    },
+    "results/study__full_rulebook__RR__withdrawal_cadence__monthly_purchases__cap_20__cash_budgets/REPORT.md": {
+      "renamed_to": "results/study__full_rulebook__RR__withdrawal_cadence__monthly_purchases__cap_20__cash_budgets/study__full_rulebook__RR__withdrawal_cadence__monthly_purchases__cap_20__cash_budgets__REPORT.md",
+      "old_sha256": "c6b9d697a3e7e59ba62014716ead47d73d5c60c10ab00c86e267fcb6009211a0",
+      "new_sha256": "c6b9d697a3e7e59ba62014716ead47d73d5c60c10ab00c86e267fcb6009211a0"
+    },
+    "results/comparisons/legacy_25k_vs_50k/eval_supply/START_HERE.txt": {
+      "renamed_to": "results/comparisons/legacy_25k_vs_50k/eval_supply/START_HERE.txt",
+      "old_sha256": "8d1fb76dfc9cf4c16e1743a2fa44e580968e0dd010c70c77a8b5c5ceb9593052",
+      "new_sha256": "2d7f1d10242b71bc2ec8dfce42f2b9d361ae596041015ff7a7386c332e0177d2",
+      "old_sha256_crlf": "b3c04410d392e0210644570fd945ea31ca589b26d16648ac5474dc2deef93301"
+    },
+    "results/comparisons/legacy_25k_vs_50k/march_failure_review/START_HERE.txt": {
+      "renamed_to": "results/comparisons/legacy_25k_vs_50k/march_failure_review/START_HERE.txt",
+      "old_sha256": "057708b6055197e17f3a0047304aef435604cfcc4b4e739105d704fc56390617",
+      "new_sha256": "2e5192c36a3879e46d1ab0021538039f2371e83893af8bd84f45047afdbe1d88",
+      "old_sha256_crlf": "ea44d4e12af62c34f33a3f33d1a373aa7cdd01c4a37f2f1c5830cf99c6360421"
+    },
+    "results/comparisons/legacy_25k_vs_50k/pipeline_capacity/START_HERE.txt": {
+      "renamed_to": "results/comparisons/legacy_25k_vs_50k/pipeline_capacity/START_HERE.txt",
+      "old_sha256": "efa162a359655a6c4ee128e4fd583ed40c8477b7dffb99e6704ee431797fc9a2",
+      "new_sha256": "6a864ad32c216a1c0e639febf44d261d0074153b9bd65bd63c2a5c76b50e1b9a",
+      "old_sha256_crlf": "8a7e25a30f35a9747d69a1846062e77cbbc81cdde1c0400cee70a2236dd4f1b1"
+    },
+    "results/comparisons/legacy_25k_vs_50k/reserve_by_policy/START_HERE.txt": {
+      "renamed_to": "results/comparisons/legacy_25k_vs_50k/reserve_by_policy/START_HERE.txt",
+      "old_sha256": "3367f61bbadb3b183bbff69c52649e6e7fd68fa07b683e2e6c16609023dbfa57",
+      "new_sha256": "46eca0045174887fbcd91011435dbd9be2381c455d95c6763a0e1e7a88c4c95c",
+      "old_sha256_crlf": "13498bb3baf2ee2dbe38e24b1df53e0c3405052c83eb91533ccf0e55d6bc42e8"
+    },
+    "results/comparisons/legacy_25k_vs_50k/reserve_frontier/START_HERE.txt": {
+      "renamed_to": "results/comparisons/legacy_25k_vs_50k/reserve_frontier/START_HERE.txt",
+      "old_sha256": "860a40f89d7319963b501291501f4511ead4e9e038728e487927b1d0a00b72d1",
+      "new_sha256": "05b6ecf4387e463c266e65e1d20edb72bd6a7dd40f15ad0f5dabc5dcbdc6b7d1",
+      "old_sha256_crlf": "f3ccc62fdfe009c347c2843dece183a71b66eea0b1c0327be550081de18fe07f"
+    },
+    "results/comparisons/legacy_25k_vs_50k/reserve_frontier_minimum/START_HERE.txt": {
+      "renamed_to": "results/comparisons/legacy_25k_vs_50k/reserve_frontier_minimum/START_HERE.txt",
+      "old_sha256": "68196d9797949be4449eb6e87716099892e845a0e9d7bf35891aa3cc7634f9c6",
+      "new_sha256": "15a1d5ad3998ce8dcefbb51724406b374790ccc8b5b2356fe35a305fe7a3db30",
+      "old_sha256_crlf": "004a264301807b1f11ca05fc42c3fd0b908bbbe820c2c4dd3505615d3cdac175"
+    },
+    "results/comparisons/legacy_25k_vs_50k/spare_shelf/START_HERE.txt": {
+      "renamed_to": "results/comparisons/legacy_25k_vs_50k/spare_shelf/START_HERE.txt",
+      "old_sha256": "17a34478495d9ac6f28a22973c8423db86b72449ae3c818428fb842c9d1b360d",
+      "new_sha256": "ea73f4ec4e812ede2482ac7c2cb610ca39a28e1185dbce1cb11777e25866f418",
+      "old_sha256_crlf": "671d30dfc87240fdd3482813950810e0d8f2d1c00216661e093b55ed6803b497"
+    },
+    "results/comparisons_blocking/legacy_25k_vs_50k/reserve_by_policy/START_HERE.txt": {
+      "renamed_to": "results/comparisons_blocking/legacy_25k_vs_50k/reserve_by_policy/START_HERE.txt",
+      "old_sha256": "140d356f9e0900c766f6a11e42a341735c02a13695474560d891c9c448a79ed5",
+      "new_sha256": "e913f89747bd6674231e3731492c8760e6f75f56147bb2436599459dda9226e2",
+      "old_sha256_crlf": "a846476bcee53ac20ad5ad309d9e4c9a6f0f20259473a88525f8798b12a6b230"
+    },
+    "results/legacy_50k/operating_policies/START_HERE.txt": {
+      "renamed_to": "results/legacy_50k/operating_policies/START_HERE.txt",
+      "old_sha256": "c62899e16c3920cc566e8f7e7bfbea021aa2235ee7c67db459a84fdd49a23e7d",
+      "new_sha256": "a48f9578c5fd7440e2bebfa9171a96972eee63079a5de4ed36d88b52eb0a524f",
+      "old_sha256_crlf": "3695cbe73012c22046d96c382c5dc31c09c7f94118f77bc679d8a0574e55de12"
+    },
+    "results/study__full_rulebook__RR__account_purchases__cash_budgets/START_HERE.txt": {
+      "renamed_to": "results/study__full_rulebook__RR__account_purchases__cash_budgets/START_HERE.txt",
+      "old_sha256": "5d33ba82cf351d6f333c0a5ec6d0c0ce2544006beb612bc8fba3c864b2569017",
+      "new_sha256": "5703dd370a3252b87477e5e03f06755dd9309100de006a72c43d8394b58df9a4",
+      "old_sha256_crlf": "6725cff4b16c7bbc22471ac1aa69df33ae68b527894bc8491b9bacf00521583f"
+    },
+    "results/study__full_rulebook__RR__monthly_amount_x_cushion__dual_terminal_scores/START_HERE.txt": {
+      "renamed_to": "results/study__full_rulebook__RR__monthly_amount_x_cushion__dual_terminal_scores/START_HERE.txt",
+      "old_sha256": "8e137fc05dfba1d7bd82aeafd5e11d851e5567dfdcbbe1e9647b010c458d2fa8",
+      "new_sha256": "4845540117a18853930a636f6f8597d03da76542c22529fff89f892625333d62",
+      "old_sha256_crlf": "65c9be6d4216477de79833fe00178b94ba7f26d33303992579650aa97ebb014b"
+    },
+    "results/study__full_rulebook__RR__monthly_replacements__cap_20__cash_budgets/START_HERE.txt": {
+      "renamed_to": "results/study__full_rulebook__RR__monthly_replacements__cap_20__cash_budgets/START_HERE.txt",
+      "old_sha256": "1ce58aabbf2c60bba69ccc87860724243c50b62055f05cb855181a1b0eefd2e5",
+      "new_sha256": "33f2e4e9de5cefdc213ad3a44593645c98a8dc1302e9c4ac3bf1999d466f7835",
+      "old_sha256_crlf": "13b423b0b4bc1f3990c2353bac661ad601a7d1acee407befefdc29732298c959"
+    },
+    "results/study__full_rulebook__RR__withdrawal_cadence__monthly_purchases/START_HERE.txt": {
+      "renamed_to": "results/study__full_rulebook__RR__withdrawal_cadence__monthly_purchases/START_HERE.txt",
+      "old_sha256": "a671cc2abf4167589619927f75fa17bc22746009e066629be3cdcda8dc545591",
+      "new_sha256": "b42910a1699d5427dff20cb06d289ad91d3cd5275c387adf808fed8660c10cf7",
+      "old_sha256_crlf": "91477249b093bd6bc8795888a4333530797e59e67fa014213aedb27c46e7c388"
+    },
+    "results/study__full_rulebook__RR__withdrawal_cadence__monthly_purchases/report_breakdown.txt": {
+      "renamed_to": "results/study__full_rulebook__RR__withdrawal_cadence__monthly_purchases/report_breakdown.txt",
+      "old_sha256": "d00ac984f97f2e9fe8e070eb3a16ab9f9ecaa0509c42f22b2dc566ccc28bb335",
+      "new_sha256": "feeddea96023e57a99e4bdfdb8c98ddc1fe654e3cd49fa8e7c0ac5e5e49d3519",
+      "old_sha256_crlf": "e95d42f913e0f1ba2859cf5d13a6fbbcce95c53be1505c21149839e44f60295c"
+    },
+    "results/study__full_rulebook__RR__withdrawal_cadence__monthly_purchases__cap_20__cash_budgets/START_HERE.txt": {
+      "renamed_to": "results/study__full_rulebook__RR__withdrawal_cadence__monthly_purchases__cap_20__cash_budgets/START_HERE.txt",
+      "old_sha256": "282c73179b0f2a0927ebc58496600ea0b4327925875978160afee022f48db7c0",
+      "new_sha256": "5c81343f37a8a6e65831be2f952e778b8e082a78fbec49143f2a43febd1bb651",
+      "old_sha256_crlf": "87ba2fc56e79042af242e784fd94c50bec4c2d0a50e7b088aca4ba34820864b1"
+    }
+  },
+  "scripts": {
+    "scripts/audit_blocked_optimization.py": {
+      "old_sha256": "dfb2fcd05258a1f3bb2c2876ab2cce2d7848eb59ca710d0aeaa93d7b784ecd7a",
+      "new_sha256": "c14c5770e505847c64d1d273a5952726f190618593afc1e228601e473b74bf89",
+      "change": "Report file names only: writers, readers and links use report_names; audits accept ledger-recorded changes."
+    },
+    "scripts/audit_blocked_pipeline.py": {
+      "old_sha256": "083e03cb7b2af7d118b4f5a39ee71b4cbbaddaf8e97057577bbd97c37babc35d",
+      "new_sha256": "39d0469b37c99b624a9407e3d8ad75a78a519b9ce05d0fe24335adc7c7bcc323",
+      "change": "Report file names only: writers, readers and links use report_names; audits accept ledger-recorded changes."
+    },
+    "scripts/audit_pipeline_capacity.py": {
+      "old_sha256": "e707c24598dff91f60eb7bcc843c2fd27ed1dcdb2daefc6f2f88bf40601bdb2e",
+      "new_sha256": "edf7b6deed33918138d4735691ad490c19f091371ee4d16d5ca73666c446f688",
+      "change": "Report file names only: writers, readers and links use report_names; audits accept ledger-recorded changes."
+    },
+    "scripts/audit_routing_hybrid.py": {
+      "old_sha256": "2b7a72b020e597332d21a33b828095ebb0cf20f8d613d02f63768f13b85a9028",
+      "new_sha256": "c1459d0ea434655ad2c9fe3824d11ac2acc938b20c60369ecf2c6f9ee2a88ca4",
+      "change": "Report file names only: writers, readers and links use report_names; audits accept ledger-recorded changes."
+    },
+    "scripts/audit_study_results.py": {
+      "old_sha256": "cad624055c92a8a0c16fd069c556f7a6f847b5064e98b9ac50f6b8ab55cc3c69",
+      "new_sha256": "a9b68fdb76755d960470a243a3894f3d1da9fa8b2aeb4403e3c7771c4023418c",
+      "change": "Report file names only: writers, readers and links use report_names; audits accept ledger-recorded changes."
+    },
+    "scripts/explain_legacy_minimum_frontier.py": {
+      "old_sha256": "06c49b43e0bb42e362cc4ccdf925920417a74ead690c66915473efefd3333aac",
+      "new_sha256": "e616433cff074726e25bf84a0cc9f7ee08493a4cd1e4185b0939f1ae468d4169",
+      "change": "Report file names only: writers, readers and links use report_names; audits accept ledger-recorded changes."
+    },
+    "scripts/explain_legacy_pipeline_capacity.py": {
+      "old_sha256": "6e965aca61ae87e796d5fbf7ca591120648f62c2348d78d3043e5fac36aee149",
+      "new_sha256": "ba6af4da50c89ab9cbe0cefd25740497e873019a9aab84eedaad8418543387d7",
+      "change": "Report file names only: writers, readers and links use report_names; audits accept ledger-recorded changes."
+    },
+    "scripts/explain_legacy_reserve_comparison.py": {
+      "old_sha256": "befc03334f8d6acfd6d74b8a4692655cbc7d7684bc87559e62dc9c9cfce92283",
+      "new_sha256": "b3a9598c169ac48c8f2d74746e736a4f8715cab69f92c3d38b4f3de4bfbd392e",
+      "change": "Report file names only: writers, readers and links use report_names; audits accept ledger-recorded changes."
+    },
+    "scripts/explain_legacy_reserve_frontier.py": {
+      "old_sha256": "689cb8f3814e020858dbef8c4b868e1430237f1e9ec3df3fca9d7ef824f312f9",
+      "new_sha256": "6ae411d6bbb76e58b73c49635ca006e50f2821330877d8242c78cc76e8e46f89",
+      "change": "Report file names only: writers, readers and links use report_names; audits accept ledger-recorded changes."
+    },
+    "scripts/format_legacy_comparison_reports.py": {
+      "old_sha256": "d2abc7c6e6ed1f6e829ea93c796374ff9f3ecfca1081b870ef5aeee610df19e1",
+      "new_sha256": "b59647567a38b4212f1bf21bdb2564e3972015bc6d232eff6f33a4c3d46d978f",
+      "change": "Report file names only: writers, readers and links use report_names; audits accept ledger-recorded changes."
+    },
+    "scripts/optimize_blocked_copying.py": {
+      "old_sha256": "ce2a3dee038f3b57a5ea10c130e3423df6f85e68d3af9043c227e4e6db1e1e0e",
+      "new_sha256": "531ea3f9044d08343d9cbe7093e5430235d0c5a83c692cf04772f19b8f2b2cb0",
+      "change": "Report file names only: writers, readers and links use report_names; audits accept ledger-recorded changes."
+    },
+    "scripts/report_names.py": {
+      "old_sha256": "82dd70d2ac361d9652d691c39fb188e53a24ced5ef3460eb8784e8ab7fba952e",
+      "new_sha256": "4dc84ebe3d73867dda9235610b17e3fe92563e0209cc61b29b70c567da301044",
+      "change": "Report file names only: writers, readers and links use report_names; audits accept ledger-recorded changes."
+    },
+    "scripts/study_account_purchases.py": {
+      "old_sha256": "50d2a2fdf3ef74b15db907c74d73d96664119b0fab154bba03ce262557b50f64",
+      "new_sha256": "98e60b0679e4faff4e2e27d3f213ece702f46e920689876e6529f0b8e6d7cf02",
+      "change": "Report file names only: writers, readers and links use report_names; audits accept ledger-recorded changes."
+    },
+    "scripts/study_blocked_pipeline.py": {
+      "old_sha256": "3ed4e32d8605b5fe6d4854d99dfad7895ec7bd3af3d1f398194c9819b43c75ce",
+      "new_sha256": "3f5ff0229cb716fa9bbb6503652457fda2900e4b0390ff652223510b151a2186",
+      "change": "Report file names only: writers, readers and links use report_names; audits accept ledger-recorded changes."
+    },
+    "scripts/study_budgeted_withdrawal_cadence.py": {
+      "old_sha256": "de80ce2e72079e6570e7027439d18b85fd9ff163337eba8a1fe77815cacab589",
+      "new_sha256": "d0addcd9c69fdaf8e54003bb748e8a223b845acdc100ff9fe88666752d659bf1",
+      "change": "Report file names only: writers, readers and links use report_names; audits accept ledger-recorded changes."
+    },
+    "scripts/study_fixed_routing_pool.py": {
+      "old_sha256": "755880a6e9ab9eefc1e4cd79fc282a00d8c6110e81abd668596db12a3864fa1f",
+      "new_sha256": "bcb74ebf3125591bb2b1f435777657bea561f76e504888e01b4e1160f3dcaaa6",
+      "change": "Report file names only: writers, readers and links use report_names; audits accept ledger-recorded changes."
+    },
+    "scripts/study_legacy_50k_operating.py": {
+      "old_sha256": "f7f38b0e050f46d1e36438f9d3cb6b5e2260ecd379ded5afdb69d9eca86900cb",
+      "new_sha256": "47a7268c3598f83c0a0b9094254e84771c4ae123ddd35f28e095f770ba37a68a",
+      "change": "Report file names only: writers, readers and links use report_names; audits accept ledger-recorded changes."
+    },
+    "scripts/study_legacy_eval_supply.py": {
+      "old_sha256": "dd7aeca48080b2819e24f0234191b9cfcf20cc012179cad36141d75a6b9b9ea9",
+      "new_sha256": "e673f3d6064f4b17b009d252c4d6519e29d5dd727546c1a7a93673d417561de5",
+      "change": "Report file names only: writers, readers and links use report_names; audits accept ledger-recorded changes."
+    },
+    "scripts/study_legacy_pipeline_capacity.py": {
+      "old_sha256": "3155c4b9952ac653b4b11e9d98c6248da213ed2e8da0ca80ee4f4a9a1ddb16dd",
+      "new_sha256": "af407726643e77d6ee5f810ed2a1eeb3bcd2a44f7e39d0ea5e38749d6ff1cad5",
+      "change": "Report file names only: writers, readers and links use report_names; audits accept ledger-recorded changes."
+    },
+    "scripts/study_legacy_reserve_comparison.py": {
+      "old_sha256": "354fe3ba9da50235f6b606a2a2e2994f20ab3fab0d3b0d118f99b8bf029a050e",
+      "new_sha256": "d2c8b81250883493749aa74021ed06654fc5a1d02102373f5f7dc248b6f6ace3",
+      "change": "Report file names only: writers, readers and links use report_names; audits accept ledger-recorded changes."
+    },
+    "scripts/study_legacy_routing.py": {
+      "old_sha256": "a897b4df4647dc93f1796d05a740e8b7f0047fe8d735d227b922fa9828efffa2",
+      "new_sha256": "42ece0ae48d9e200facd3189bc40ec991613bdf1377651fd389286c4de998de4",
+      "change": "Report file names only: writers, readers and links use report_names; audits accept ledger-recorded changes."
+    },
+    "scripts/study_legacy_spare_shelf.py": {
+      "old_sha256": "2b17b2b6dad585a45520f9650f0da80663ad3417c5aba9f5fdda7831aec28e9f",
+      "new_sha256": "2f25c1f07408bbd963c3b9ed588ee73596e8d6c4bfd563ae1982282049120213",
+      "change": "Report file names only: writers, readers and links use report_names; audits accept ledger-recorded changes."
+    },
+    "scripts/study_monthly_replacements.py": {
+      "old_sha256": "5ff19fad1eb131fecc82ef1fc331d8e0f8df0af19a4ec6700b6bb5fe54bc6d6c",
+      "new_sha256": "8aec191449a56e6c23e0fd3c79ce96ca0d8119b849af6091e3ed8e6f1c486ec4",
+      "change": "Report file names only: writers, readers and links use report_names; audits accept ledger-recorded changes."
+    },
+    "scripts/study_routing_fixed_inventory.py": {
+      "old_sha256": "6b3c9e19277f49ca79cf6c45a5e40bddb6326ea388a915f460a6de0a8c31e682",
+      "new_sha256": "43bc64177ddf5f26ff9b9633a9cacf2a2e63b3b2119c4d773f878c4c7d40330c",
+      "change": "Report file names only: writers, readers and links use report_names; audits accept ledger-recorded changes."
+    },
+    "scripts/study_routing_growth.py": {
+      "old_sha256": "8f80e5d5c6f8afca83f98050a253866c03f3efd6333a4c5ed7029535a29f2016",
+      "new_sha256": "9182c5425109f9ddc5c0602f63c673d5612805655eeadae9c7fa5b9e0deba2d8",
+      "change": "Report file names only: writers, readers and links use report_names; audits accept ledger-recorded changes."
+    },
+    "scripts/study_routing_hybrid.py": {
+      "old_sha256": "e1fdc177a492710e6b9dec614e256b275416510b20997258c8b620f6f57d1cfe",
+      "new_sha256": "99b01d985ba8063602a7e339f285f63d72f261668daa52582f9b8f690c1f0243",
+      "change": "Report file names only: writers, readers and links use report_names; audits accept ledger-recorded changes."
+    },
+    "scripts/study_withdrawal_amount.py": {
+      "old_sha256": "d1fccfdac13e89d92cb3af795d41cd4fc948d8f75cc7c6996d2ef83967ecfad6",
+      "new_sha256": "6de7fc3787684a2f5e45e683a5e235884ddbc4ee1ac47da45ba3b63e9b57465f",
+      "change": "Report file names only: writers, readers and links use report_names; audits accept ledger-recorded changes."
+    },
+    "scripts/study_withdrawal_cadence.py": {
+      "old_sha256": "70468c4b498ef507004688501cfb9a0945674ac733b9878efd08d80d409de844",
+      "new_sha256": "483a1502491818e54a525ec6bdedc6175359918093dd4d781be1d9c4148983c9",
+      "change": "Report file names only: writers, readers and links use report_names; audits accept ledger-recorded changes."
+    },
+    "scripts/summarize_blocked_pipeline.py": {
+      "old_sha256": "5a49c4a9a67fbaba7fadf40e6e323570e6ac36f510b00a9c8ca00ed3c72d3d25",
+      "new_sha256": "994792ad1e70655887546edec2eea5a2d8520f3549110d1429c67f3ef995f3a2",
+      "change": "Report file names only: writers, readers and links use report_names; audits accept ledger-recorded changes."
+    },
+    "scripts/viz/extract_fixed_pool.py": {
+      "old_sha256": "1f3e5c4680c12c6f97e3e2b8b9eaff23e12d52294b08f800434d5d2a82336129",
+      "new_sha256": "e77abc6ecf80a205ec27b4fb4f552ebac0321258cd0c8a8728e217efa166ff6a",
+      "change": "Report file names only: writers, readers and links use report_names; audits accept ledger-recorded changes."
+    },
+    "scripts/viz/extract_funded_growth.py": {
+      "old_sha256": "d6faa64f8fe4f665bdf3094f8b66c2d09588fc5cc5b59976acc15dafd903030f",
+      "new_sha256": "664048b8133284d5472175affa8e80ca4ae14ee59368bc69e5df197ac70b9adf",
+      "change": "Report file names only: writers, readers and links use report_names; audits accept ledger-recorded changes."
+    },
+    "scripts/viz/extract_routing.py": {
+      "old_sha256": "c3a959bb02883a66fe66d49203f54f0911aec67d6cff4b6ca2e8309ad6b7e99f",
+      "new_sha256": "1d26b1c4de836187c403c259c074f2f9684c7a278a5dda1ba1288527386aa2e2",
+      "change": "Report file names only: writers, readers and links use report_names; audits accept ledger-recorded changes."
+    },
+    "scripts/write_results_guides.py": {
+      "old_sha256": "1eb6f681e479a09ff5512ae7de8e11be05d3ad26022fa479836d7a68f9a16f33",
+      "new_sha256": "3ecfd8e5f9f35c39d0f78f0ae346028f9953352389dd4ed077a62fb2774a94ce",
+      "change": "Report file names only: writers, readers and links use report_names; audits accept ledger-recorded changes."
+    }
+  }
+}

@@ -28,8 +28,8 @@ accounts bought.
 
 | Experiment | Trade-copy demand | Initial pool and purchases | Live cap |
 |---|---|---|---|
-| [Corrected matched replay](../../results/legacy_25k/routing_capacity_reuse/REPORT.generated.md) | Identical to each earlier reference run | Start empty; buy only the entry-time shortfall | Relaxed, to preserve the earlier exposure exactly |
-| [Fixed-R shared pool](../../results/legacy_25k/routing_fixed_pool/REPORT.generated.md) | R copies of every exported trade; R=1,2,3,4 | Start once with K=5R; reuse seats and buy only shortfalls | 20 live accounts |
+| [Corrected matched replay](../../results/legacy_25k/routing_capacity_reuse/routing_capacity_reuse__REPORT.generated.md) | Identical to each earlier reference run | Start empty; buy only the entry-time shortfall | Relaxed, to preserve the earlier exposure exactly |
+| [Fixed-R shared pool](../../results/legacy_25k/routing_fixed_pool/routing_fixed_pool__REPORT.generated.md) | R copies of every exported trade; R=1,2,3,4 | Start once with K=5R; reuse seats and buy only shortfalls | 20 live accounts |
 
 The corrected replay isolates the procurement correction. It keeps the same
 frozen trade demand, contract size, commissions and withdrawal settings. The old

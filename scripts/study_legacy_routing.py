@@ -17,6 +17,7 @@ from pa_milky.policy import WithdrawalPolicy
 from pa_milky.provenance import input_digest, engine_digest, sha256_file
 from pa_milky.routing import capacity_audit
 from pa_milky.routing_study import reference_run, replay_run, measure, demand_digest, required_topups
+from report_names import report_path
 
 PROFILE = BASE = TAPE = OUT = None
 
@@ -264,7 +265,7 @@ def main():
     (OUT / 'study.json').write_text(json.dumps(payload, indent=2), encoding='utf-8')
     scalar_rows = [{k: v for k, v in r.items() if not isinstance(v, dict) and k != 'routing'} for r in rows]
     write_csv(OUT / 'comparison.csv', scalar_rows)
-    (OUT / 'REPORT.generated.md').write_text(render_report(rows, capacity, verified), encoding='utf-8')
+    report_path(OUT, 'REPORT.generated.md').write_text(render_report(rows, capacity, verified), encoding='utf-8')
     print(f'Wrote {OUT}', flush=True)
 
 

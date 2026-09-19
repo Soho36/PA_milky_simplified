@@ -12,7 +12,7 @@ historical interval-capacity boundary**, where R means account copies of a
 signal, not reward:risk. Tests cover R=1 and R=2; four initial seats require a
 fifth even when account death is disabled.
 
-Start with the [paired tables](../../results/legacy_25k/routing_matched_exposure/REPORT.generated.md),
+Start with the [paired tables](../../results/legacy_25k/routing_matched_exposure/routing_matched_exposure__REPORT.generated.md),
 [machine-readable comparison](../../results/legacy_25k/routing_matched_exposure/comparison.csv),
 or [independent audit](../../results/legacy_25k/routing_matched_exposure/AUDIT.generated.json).
 

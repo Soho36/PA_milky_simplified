@@ -18,7 +18,7 @@ from pa_milky.policy import WithdrawalPolicy
 from pa_milky.provenance import engine_digest, input_digest, sha256_file
 from pa_milky.routing import RoutingPolicy
 from pa_milky.simulator import run_book
-from pa_milky.study_reports import write_study_report
+from report_names import write_study_report
 from study_legacy_pipeline_capacity import csv_write, pipeline_label
 from study_legacy_routing import write_csv, account_rows
 

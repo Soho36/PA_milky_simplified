@@ -6,7 +6,7 @@ start, higher copy caps increase cash substantially. From 2020, those same
 caps concentrate early losses and deplete the account pool. Reserving free
 slots does not protect the accounts already exposed to a losing setup.
 
-[Full tables and copy distributions](../../results/legacy_25k/routing_hybrid/REPORT.generated.md),
+[Full tables and copy distributions](../../results/legacy_25k/routing_hybrid/routing_hybrid__REPORT.generated.md),
 [comparison CSV](../../results/legacy_25k/routing_hybrid/comparison.csv),
 [independent audit](../../results/legacy_25k/routing_hybrid/AUDIT.generated.json).
 

@@ -21,7 +21,7 @@ from pa_milky.policy import WithdrawalPolicy
 from pa_milky.provenance import engine_digest, input_digest, sha256_file
 from pa_milky.report import write_outputs
 from pa_milky.simulator import run_book
-from pa_milky.study_reports import write_study_report
+from report_names import write_study_report
 
 SPEC_PATH = PROJECT_ROOT / 'config/studies/legacy_eval_supply.json'
 PRIOR = PROJECT_ROOT / 'results/comparisons/legacy_25k_vs_50k/reserve_by_policy'

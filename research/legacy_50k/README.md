@@ -1,7 +1,7 @@
 # Legacy 50K research
 
 For the paired evaluation-supply follow-up, see the
-[pipeline-capacity findings](../../results/comparisons/legacy_25k_vs_50k/pipeline_capacity/FINDINGS.generated.md).
+[pipeline-capacity findings](../../results/comparisons/legacy_25k_vs_50k/pipeline_capacity/pipeline_capacity__FINDINGS.generated.md).
 The experiment varies persistent demand, evaluation start spacing, concurrency
 and spare inventory, then retunes reserves on a shared pipeline shortlist.
 

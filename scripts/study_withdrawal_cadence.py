@@ -13,7 +13,7 @@ from pa_milky.policy import WithdrawalPolicy
 from pa_milky.policy_study import policies,measure,annotate_against_benchmark
 from pa_milky.provenance import input_digest,engine_digest,git_revision,sha256_file
 from pa_milky.report import write_outputs
-from pa_milky.study_reports import write_study_report
+from report_names import write_study_report
 from pa_milky.study_config import load_study_profile, study_path, study_policies, profile_provenance
 STUDY = load_study_profile()
 from pa_milky.simulator import run_book

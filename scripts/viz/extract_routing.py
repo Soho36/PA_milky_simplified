@@ -1,6 +1,6 @@
 """Flatten a matched-exposure routing study into one JSON for its page.
 
-Reads comparison.csv, study.json and REPORT.generated.md. No re-simulation.
+Reads comparison.csv, study.json and <folder>__REPORT.generated.md. No re-simulation.
 
 Usage: extract_routing.py <study folder name> <dest json>
    e.g. extract_routing.py routing_capacity_reuse routing.json
@@ -38,7 +38,7 @@ with (STUDY / 'comparison.csv').open(encoding='utf-8') as f:
         rows.append(row)
 
 study = json.loads((STUDY / 'study.json').read_text(encoding='utf-8'))
-report = (STUDY / 'REPORT.generated.md').read_text(encoding='utf-8')
+report = (STUDY / f'{STUDY.name}__REPORT.generated.md').read_text(encoding='utf-8')
 title_line = report.splitlines()[0].lstrip('# ').strip()
 intro = report.split('\n## ', 1)[0].split('\n', 1)[1]
 paras = [' '.join(p.split()) for p in intro.split('\n\n') if p.strip()]

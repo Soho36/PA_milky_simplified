@@ -7,6 +7,7 @@ import json
 from pa_milky.config import PROJECT_ROOT, load_config, to_payload
 from pa_milky.provenance import sha256_file, engine_digest, input_digest
 from audit_legacy_routing import read_csv
+from report_names import verified
 
 
 def cents(value):
@@ -17,11 +18,11 @@ def audit(root):
     data=json.loads((root/'study.json').read_text())
     contract=json.loads((root/'contract.json').read_text())
     assert sha256_file(root/'contract.json')==data['contract_sha256']
-    assert sha256_file(PROJECT_ROOT/'scripts/study_blocked_pipeline.py')==contract['runner_sha256']
+    assert verified(PROJECT_ROOT/'scripts/study_blocked_pipeline.py',contract['runner_sha256'])
     for path,digest in contract['protected'].items():
-        assert sha256_file(PROJECT_ROOT/path)==digest
+        assert verified(PROJECT_ROOT/path,digest),path
     for name,digest in contract['helpers'].items():
-        assert sha256_file(PROJECT_ROOT/'scripts'/name)==digest
+        assert verified(PROJECT_ROOT/'scripts'/name,digest),name
     spec=data['spec']; assert spec==contract['spec']
     config=load_config(PROJECT_ROOT/spec['scenario'])
     assert to_payload(config)==contract['config']

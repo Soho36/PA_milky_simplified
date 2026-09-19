@@ -7,7 +7,7 @@ cash ranking: blocked copying earns more with the same 20 initial accounts.
 The matched-exposure comparison also confirms that identical trade copies
 can produce different cash extraction because profits reside in different accounts.
 
-[Full tables](../../results/legacy_25k/routing_fixed_inventory/REPORT.generated.md),
+[Full tables](../../results/legacy_25k/routing_fixed_inventory/routing_fixed_inventory__REPORT.generated.md),
 [comparison CSV](../../results/legacy_25k/routing_fixed_inventory/comparison.csv),
 [independent audit](../../results/legacy_25k/routing_fixed_inventory/AUDIT.generated.json).
 

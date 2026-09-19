@@ -2,6 +2,7 @@
 from pathlib import Path
 import csv
 import json
+from report_names import report_path
 
 ROOT = Path(__file__).resolve().parents[1]
 OUT = ROOT/'results/comparisons/legacy_25k_vs_50k/reserve_frontier'
@@ -196,8 +197,8 @@ def main():
         'Files: [complete frontier](frontier.csv), [window boundaries](boundaries.csv), '
         '[machine-readable study](study.json), [audit](AUDIT.json). Detail folders contain the March trade '
         'trace, PA deaths, evaluation histories, replacement waits and daily pipeline states.\n')
-    (OUT/'REPORT.md').write_text(text, encoding='utf-8')
-    print(OUT/'REPORT.md')
+    report_path(OUT, 'REPORT.md').write_text(text, encoding='utf-8')
+    print(report_path(OUT, 'REPORT.md'))
 
 
 if __name__ == '__main__':

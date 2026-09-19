@@ -11,7 +11,8 @@ sys.path.insert(0, str(Path(__file__).resolve().parents[1] / 'src'))
 import study_legacy_50k_operating as sim
 from pa_milky.config import PROJECT_ROOT, to_payload
 from pa_milky.provenance import engine_digest, input_digest, sha256_file
-from pa_milky.study_reports import write_study_report
+from report_names import write_study_report
+from report_names import report_path
 
 SPEC_PATH = PROJECT_ROOT / 'config/studies/legacy_reserve_comparison.json'
 SCORES = ('ongoing', 'total')
@@ -133,7 +134,7 @@ def render(rows, selected, spec, controls):
         text += ('**Execution: blocked copying.** Each funded account holds at most one position. '
                  'A signal is copied by every live account that is flat at its entry; an account still '
                  'in an earlier trade skips it. Everything else matches the '
-                 '[non-blocking comparison](../../../comparisons/legacy_25k_vs_50k/reserve_by_policy/REPORT.md), '
+                 '[non-blocking comparison](../../../comparisons/legacy_25k_vs_50k/reserve_by_policy/reserve_by_policy__REPORT.md), '
                  'where every live account copies every signal: same tape, grid, budgets, fees and rules.\n\n')
     text += ('## How to read this comparison\n\n'
              'These are in-sample best tested settings, not global optima or expected future earnings. '
@@ -171,7 +172,8 @@ def render(rows, selected, spec, controls):
              '- [Best reserves by family and objective](best_by_policy.csv), including exact ties, tested bounds '
              'and the explicit list of tested reserves within 1% of the best positive score. '
              'Those lists need not be continuous bands and are not confidence intervals.\n'
-             '- [Research contract and evidence](study.json). [Operating notes](HOW_THIS_STUDY_WORKS.md).\n\n')
+             '- [Research contract and evidence](study.json). '
+             f'[Operating notes]({report_path(Path(spec["output"]), "HOW_THIS_STUDY_WORKS.md").name}).\n\n')
     for i, m in spec['budgets']:
         text += f'## ${i:,} initial; ${m:,}/month\n\n'
         group = [r for r in rows if (r['initial_cash'], r['monthly_funding']) == (i, m)]

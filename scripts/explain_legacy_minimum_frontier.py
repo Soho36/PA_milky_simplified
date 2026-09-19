@@ -1,6 +1,7 @@
 """Readable paired-policy interpretation from the completed frontier."""
 from pathlib import Path
 import json
+from report_names import report_path
 
 ROOT = Path(__file__).resolve().parents[1]
 OUT = ROOT/'results/comparisons/legacy_25k_vs_50k/reserve_frontier_minimum'
@@ -191,8 +192,8 @@ def main():
         '[similar-capital comparisons](similar_capital.csv), [window summaries](window_summaries.csv), '
         '[complete study](study.json), [audit](AUDIT.json). The detailed run folders hold March traces, '
         'account deaths, replacement waits and daily pipeline states. Each has a START_HERE.txt guide.\n')
-    (OUT/'REPORT.md').write_text(text, encoding='utf-8')
-    print(OUT/'REPORT.md')
+    report_path(OUT, 'REPORT.md').write_text(text, encoding='utf-8')
+    print(report_path(OUT, 'REPORT.md'))
 
 
 if __name__ == '__main__':

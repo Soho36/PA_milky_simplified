@@ -16,6 +16,7 @@ from pa_milky.provenance import engine_digest, input_digest, sha256_file
 from pa_milky.routing import RoutingPolicy
 from pa_milky.simulator import run_book
 from study_legacy_routing import write_csv, account_rows
+from report_names import report_path
 
 SPEC_PATH = PROJECT_ROOT/'config/studies/legacy_25k_blocked_optimization.json'
 SPEC = BASE = TAPES = ACQUISITIONS = None
@@ -253,7 +254,7 @@ def main():
     data['evidence_files'] = {str(p.relative_to(out)).replace('\\','/'):sha256_file(p)
                               for label in details for p in sorted((out/label).iterdir()) if p.is_file()}
     json_write(out/'study.json',data)
-    (out/'REPORT.generated.md').write_text(render(data),encoding='utf-8')
+    report_path(out, 'REPORT.generated.md').write_text(render(data),encoding='utf-8')
     assert all(sha256_file(control_root/name) == digest for name,digest in protected.items())
     print(f'Completed {len(rows)} search settings, {len(control_rows)} controls, {len(transfers)} transfers. {out}',flush=True)
 

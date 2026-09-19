@@ -9,7 +9,8 @@ import study_account_purchases as purchases
 from pa_milky.acquisition import AcquisitionPolicy
 from pa_milky.provenance import input_digest,engine_digest,sha256_file
 from pa_milky.config import to_payload
-from pa_milky.study_reports import write_study_report
+from report_names import write_study_report
+from report_names import report_path
 
 OUT=purchases.study_path(purchases.STUDY, 'replacements')
 NAMES=('monthly_one','weekly_one','monthly_current_slot_replacements','monthly_plus_replacements')
@@ -95,7 +96,7 @@ def main():
     report+='## Reading the diagnostics\n\nAverage live accounts and days below cap integrate account births/deaths in event time from the common opening calendar-month boundary to tape end. They include ramp-up. Death-to-purchase waits pair each purchase with the oldest unmatched prior death (FIFO). For scheduled controls this is a descriptive vacancy measure, not a claim the purchase was caused by that death. Unmatched deaths are censored at the endpoint; their aggregate unresolved wait is in CSV, so a short matched mean alone cannot establish prompt replacement. Same-timestamp deaths are processed before purchases.\n\n'
     report+='All results use the existing Legacy 25K rules, no processing delay, and one permitted terminal request. Net cash excludes contributions and deducts fees. These variants change replacement timing or expand buying; neither guarantees the same total purchases or cohort exposure as monthly-one. Historical in-sample results only.\n'
     write_study_report(OUT,report)
-    print(f'All {controls} shared controls matched. {OUT}/REPORT.md',flush=True)
+    print(f'All {controls} shared controls matched. {report_path(OUT, "REPORT.md")}',flush=True)
 
 
 if __name__=='__main__':main()

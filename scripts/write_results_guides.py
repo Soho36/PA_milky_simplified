@@ -4,6 +4,7 @@ import hashlib
 import json
 import sys
 import textwrap
+from report_names import report_path
 
 ROOT = Path(__file__).resolve().parents[1]/'results'
 NAME = 'START_HERE.txt'
@@ -46,11 +47,14 @@ GUIDES = {
         'legacy_25k_vs_50k here repeats comparisons/legacy_25k_vs_50k with blocked copying: an account copies a signal only while flat, instead of adding every signal on top of open positions. Each study keeps its non-blocking grid, budgets, fees and rules.',
         'The non-blocking tree is the preserved reference. Compare matching folders; only the execution rule differs. Studies are rerun in chain order, so a folder missing here has not been rerun yet.'),
     COMPARE_BLOCKED: ('Which account size and withdrawal/replacement approach works best when each account holds one position?',
-        'So far reserve_by_policy has been rerun. Blocking lowers cash in most matched settings, but the instant-supply winners keep their shape: prompt replacement, maximum withdrawals and little or no voluntary reserve. 25K still leads 50K in every funded budget.',
-        'Remaining reruns, in order: spare_shelf, eval_supply, pipeline_capacity, reserve_frontier, reserve_frontier_minimum, march_failure_review. Each blocked study reads its predecessor from this tree, never from the non-blocking one.'),
+        'So far reserve_by_policy and spare_shelf have been rerun. Blocking lowers cash in most matched settings. With instant supply the winners keep their shape (prompt replacement, maximum withdrawals, little or no reserve) and 25K leads 50K in every funded budget. Once supply is limited, winners switch to minimum withdrawals and buy far fewer accounts, and at 1–2 passes a month 50K leads in every budget.',
+        'Remaining reruns, in order: eval_supply, pipeline_capacity, reserve_frontier, reserve_frontier_minimum, march_failure_review. Each blocked study reads its predecessor from this tree, never from the non-blocking one.'),
     COMPARE_BLOCKED+'/reserve_by_policy': ('What reserve works best for each withdrawal and purchase policy when each account holds one position?',
         'Across 2,936 settings run in both modes, blocking lowers total cash in 2,334 and raises it in 188; the other 414 lose the whole seed either way. Headline winners fall 11–49%. 25K with $1,000 + $200/month drops from $749,859 to $665,421 and still buys 531 PAs. 50K with $1,000 and no contributions falls from $530,386 to $268,478, and its winner switches to monthly purchases with maximum weekly withdrawals.',
         'There is no evaluation delay here: seats cost $200 / $250 and are available at once, so the high-turnover winners depend on that supply. 206 settings shared with the 25K blocked-copying optimization reproduce exactly, and no replayed winner account ever held two trades at once.'),
+    COMPARE_BLOCKED+'/spare_shelf': ('How much does a limited monthly replacement supply hurt when each account holds one position, and do spare accounts help?',
+        'Across 10,840 settings run in both modes, blocking lowers total cash in 7,468 and raises it in 1,832; the other 1,540 lose the seed either way. Limited supply cuts turnover sharply: 25K with $1,000 + $200/month earns $473,076 at 3 passes a month with 96 PAs bought, against $665,421 and 531 PAs with unlimited supply. At 1–2 passes a month 50K leads 25K in every budget; 25K catches up at 10 passes in the funded budgets and at 3 with $5,000 and no contributions, later than without blocking. Most winners hold no spares.',
+        'Passes arrive at an assumed fixed monthly rate; evaluations are not traded here, which flatters replacement policies. 1,280 rows whose supply cannot bind reproduce the blocked reserve comparison exactly, including per-trade account assignments.'),
     'legacy_50k': ('What changed when the earlier 25K model was extended to 50K?',
         'operating_policies contains the first 50K operating search and matched 25K controls. The later comparisons/legacy_25k_vs_50k studies provide a broader paired search and introduce replacement supply.',
         'This is a navigation folder, not a separate simulation. Its operating study predates actual evaluation supply.'),
@@ -234,7 +238,8 @@ def build(folder):
             best = max(rows, key=lambda r: r['pocket_usd'])
             text += f"- {p.name}: {dollars(best['pocket_usd'])} net at {dollars(best['cushion_usd'])} retained balance.\n"
         text += '\n'
-    choices = [n for n in ('REPORT.generated.md', 'REPORT.md', 'report.txt', 'frontier.csv',
+    choices = [n for n in (report_path(folder, 'REPORT.generated.md').name, report_path(folder, 'REPORT.md').name,
+        'report.txt', 'frontier.csv',
         'baselines.csv', 'all_settings.csv', 'candidates.csv', 'summary.json', 'snapshots.json',
         'march_trade_trace.csv', 'replacement_waits.csv', 'pipeline_daily.csv') if (folder/n).exists()]
     if choices:

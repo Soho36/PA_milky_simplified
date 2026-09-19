@@ -7,6 +7,7 @@ import json
 from pa_milky.config import PROJECT_ROOT
 from pa_milky.provenance import sha256_file
 from audit_legacy_routing import read_csv
+from report_names import verified
 
 
 def cents(value):
@@ -18,13 +19,13 @@ def audit(root):
     contract_path = root/'contract.json'
     assert sha256_file(contract_path) == data['contract_sha256']
     contract = json.loads(contract_path.read_text(encoding='utf-8'))
-    assert sha256_file(PROJECT_ROOT/'scripts/optimize_blocked_copying.py') == contract['runner_sha256']
+    assert verified(PROJECT_ROOT/'scripts/optimize_blocked_copying.py', contract['runner_sha256'])
     spec = data['spec']
     assert spec == contract['spec']
     for name,digest in contract['protected_controls'].items():
-        assert sha256_file(PROJECT_ROOT/spec['control_output']/name) == digest
+        assert verified(PROJECT_ROOT/spec['control_output']/name, digest), name
     for name,digest in data['evidence_files'].items():
-        assert sha256_file(root/name) == digest
+        assert verified(root/name, digest), name
     initial, monthly = spec['budget']
     expected = {(2020,initial,monthly,a['id'],seed,rule,cadence,h,0)
                 for a,seed,rule,cadence,h in product(spec['acquisitions'],spec['initial_accounts'],

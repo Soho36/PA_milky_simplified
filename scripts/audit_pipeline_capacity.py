@@ -8,6 +8,7 @@ import sys
 sys.path.insert(0,str(Path(__file__).resolve().parents[1]/'src'))
 from pa_milky.config import PROJECT_ROOT, config_from_payload
 from pa_milky.provenance import engine_digest, input_digest, sha256_file
+from report_names import report_path, verified
 
 OUT=PROJECT_ROOT/'results/comparisons/legacy_25k_vs_50k/pipeline_capacity'
 
@@ -35,7 +36,7 @@ def main():
     assert contract['engine']==engine_digest()
     for payload in contract['configs'].values():
         assert input_digest(config_from_payload(payload))==contract['inputs']
-    assert sha256_file(PROJECT_ROOT/'scripts/study_legacy_pipeline_capacity.py')==contract['runner_sha256']
+    assert verified(PROJECT_ROOT/'scripts/study_legacy_pipeline_capacity.py',contract['runner_sha256'])
     for name,digest in contract['prior_checkpoints'].items():
         assert sha256_file(OUT.parent/name/'checkpoint.jsonl')==digest
     preserved=json.loads((OUT/'preservation_check.json').read_text(encoding='utf-8'))
@@ -46,7 +47,7 @@ def main():
         old=OUT/'runner_before_csv_header_fix.py'
         current=PROJECT_ROOT/'scripts/study_legacy_pipeline_capacity.py'
         assert sha256_file(old)==record['old_runner_sha256']
-        assert sha256_file(current)==record['new_runner_sha256']
+        assert verified(current,record['new_runner_sha256'])
         def numerical_ast(path):
             tree=ast.parse(path.read_text(encoding='utf-8'))
             tree.body=[n for n in tree.body if not isinstance(n,ast.FunctionDef) or n.name!='csv_write']
@@ -57,8 +58,8 @@ def main():
              'current_engine_and_inputs_match':True,
              'presentation_sources':{p.name:sha256_file(p) for p in [PROJECT_ROOT/'scripts/explain_legacy_pipeline_capacity.py',
                                        PROJECT_ROOT/'scripts/plot_legacy_pipeline_capacity.py']},
-             'generated_artifacts':{p.name:sha256_file(p) for name in ('FINDINGS.generated.md','capacity_frontier.svg','capacity_frontier.png')
-                                    if (p:=OUT/name).exists()}}
+             'generated_artifacts':{p.name:sha256_file(p) for p in (report_path(OUT,'FINDINGS.generated.md'),OUT/'capacity_frontier.svg',OUT/'capacity_frontier.png')
+                                    if p.exists()}}
     (OUT/'AUDIT.json').write_text(json.dumps(summary,indent=2),encoding='utf-8')
     print(json.dumps(summary,indent=2))
 

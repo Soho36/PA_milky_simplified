@@ -9,6 +9,7 @@ import study_legacy_reserve_comparison as study
 from pa_milky.config import PROJECT_ROOT, to_payload
 from pa_milky.provenance import sha256_file, engine_digest, input_digest
 from pa_milky.report import write_outputs
+from report_names import report_path
 
 PRODUCT_LABEL = {'legacy_25k': '25K', 'legacy_50k': '50K'}
 PURCHASE_LABEL = {'monthly_one': 'Monthly', 'weekly_one': 'Weekly',
@@ -36,6 +37,7 @@ def main(spec_path=study.SPEC_PATH):
     spec = json.loads(Path(spec_path).read_text(encoding='utf-8'))
     blocking = study.sim.execution_of(spec) == 'blocking'
     out = PROJECT_ROOT / spec['output']
+    findings, findings_generated = report_path(out, 'FINDINGS.md'), report_path(out, 'FINDINGS.generated.md')
     payload = json.loads((out/'study.json').read_text(encoding='utf-8'))
     assert spec == payload['spec']
     study.sim.initialize(study.sim.execution_of(spec))
@@ -74,12 +76,12 @@ def main(spec_path=study.SPEC_PATH):
                  'accounts still in an earlier trade skip a new signal. Replaying every headline winner '
                  f'confirmed that none of their {sum(c["accounts_checked"] for c in position_checks.values()):,} '
                  'accounts ever held two trades at once. Compare the '
-                 '[non-blocking findings](../../../comparisons/legacy_25k_vs_50k/reserve_by_policy/FINDINGS.md), '
+                 '[non-blocking findings](../../../comparisons/legacy_25k_vs_50k/reserve_by_policy/reserve_by_policy__FINDINGS.md), '
                  'where every live account copies every signal.\n\n')
     text += ('' if blocking else 'The earlier $31,900 reserve was conditional on the tested operating setup. ')
     text += ('This paired search allows each purchase/withdrawal/cadence family to choose '
              'its own reserve, with identical headroom coverage for the two account sizes. '
-             'Use the [complete policy tables](REPORT.generated.md) for every family; '
+             f'Use the [complete policy tables]({report_path(out, "REPORT.generated.md").name}) for every family; '
              'this page explains the headline winners and their turnover.\n\n'
              '**These are in-sample results under the inherited payout model.** '
              'They do not establish future returns or an optimum under the optional stricter '
@@ -176,7 +178,7 @@ def main(spec_path=study.SPEC_PATH):
         text += ('The old daily-minimum study tested up to $32,100. Reserves $31,900, $32,000 '
                  'and $32,100 tied on total cash; $31,900 had the highest ongoing cash among '
                  'those ties. It was not a uniquely optimal balance. See the '
-                 '[historical table and operating notes](HOW_THIS_STUDY_WORKS.md).\n\n')
+                 f'[historical table and operating notes]({report_path(out, "HOW_THIS_STUDY_WORKS.md").name}).\n\n')
     text += ('The new [best-by-policy file](best_by_policy.csv) records exact ties and '
              'explicit tested reserves within 1% of each best positive score. These need '
              'not form a continuous band. A boundary winner is conditional on the tested '
@@ -191,10 +193,10 @@ def main(spec_path=study.SPEC_PATH):
              '`scripts/explain_legacy_reserve_comparison.py'
              + (' config/studies/legacy_reserve_comparison_blocking.json' if blocking else '')
              + '` after the main study. Existing '
-             '`FINDINGS.md` remains reader-owned; `FINDINGS.generated.md` is refreshed.\n')
-    (out/'FINDINGS.generated.md').write_text(text, encoding='utf-8')
-    if not (out/'FINDINGS.md').exists():
-        (out/'FINDINGS.md').write_text(text, encoding='utf-8')
+             f'`{findings.name}` remains reader-owned; `{findings_generated.name}` is refreshed.\n')
+    findings_generated.write_text(text, encoding='utf-8')
+    if not findings.exists():
+        findings.write_text(text, encoding='utf-8')
     analysis = {
         'study_sha256': sha256_file(out/'study.json'),
         'explainer_sha256': sha256_file(Path(__file__)),

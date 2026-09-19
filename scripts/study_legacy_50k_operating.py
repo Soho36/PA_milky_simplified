@@ -16,7 +16,7 @@ from pa_milky.economics import Economics
 from pa_milky.provenance import input_digest,engine_digest,sha256_file
 from pa_milky.report import write_outputs
 from pa_milky.routing import RoutingPolicy
-from pa_milky.study_reports import write_study_report
+from report_names import write_study_report
 P=None;C=None;T=None;ROUTING=None
 # Non-blocking: every live account copies every signal, even while already in a
 # position. Blocking: an account copies a signal only while flat (one position).
@@ -29,6 +29,21 @@ def execution_of(spec):
     mode=spec.get('execution','non_blocking')
     assert mode in ROUTINGS,('Unknown execution mode',mode)
     return mode
+
+
+def prior_folder(spec,key,default):
+    """A study's predecessor must come from its own execution tree."""
+    mode=execution_of(spec);folder=(PROJECT_ROOT/spec.get(key,default)).resolve()
+    assert folder.is_relative_to(PROJECT_ROOT/RESULT_ROOTS[mode]),('prior from another execution tree',folder)
+    return folder
+
+
+def blocking_fields(result):
+    """Copy-participation measures. Non-blocking rows keep their original fields, so either tree regenerates unchanged."""
+    if ROUTING is None:return {}
+    signals=sum(bool(f['accounts']) for f in result.routing_fills)
+    return {'execution':'blocking','copies':result.copies_filled,'signals_executed':signals,
+            'signal_participation':signals/len(T),'allocation_sha256':result.routing['allocation_sha256']}
 
 
 def initialize(execution='non_blocking'):
@@ -64,12 +79,7 @@ def evaluate(j,detail=False):
          'strict_post_payout_balance':strict,'fee':base.purchase_fee_usd,'accounts':len(result.accounts),
          'alive':result.alive_at_horizon,'ongoing':round(result.pocket_usd-terminal,2),
          'terminal':terminal,'total':result.pocket_usd,'contributions':cash['owner_contributions_usd'],
-         'ending_owner_cash':cash['ending_owner_cash_usd']}
-    if ROUTING is not None:
-        # Non-blocking rows keep their original fields, so either tree can be regenerated unchanged.
-        signals=sum(bool(f['accounts']) for f in result.routing_fills)
-        row.update(execution='blocking',copies=result.copies_filled,signals_executed=signals,
-                   signal_participation=signals/len(T),allocation_sha256=result.routing['allocation_sha256'])
+         'ending_owner_cash':cash['ending_owner_cash_usd'],**blocking_fields(result)}
     row.update(economics=e.to_payload(),job=j)
     return (row,result) if detail else row
 

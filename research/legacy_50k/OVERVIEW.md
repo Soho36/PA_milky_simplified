@@ -1,6 +1,6 @@
 # Legacy 50K: initial operating-policy findings
 
-**Extension:** the [paired reserve findings](../../results/comparisons/legacy_25k_vs_50k/reserve_by_policy/FINDINGS.generated.md)
+**Extension:** the [paired reserve findings](../../results/comparisons/legacy_25k_vs_50k/reserve_by_policy/reserve_by_policy__FINDINGS.generated.md)
 give both products equal reserve coverage within each budget and operating-policy
 family. Read them for best-tested reserve comparisons; the initial matched controls
 and monthly-purchase-led shortlist below retain their original scope.
@@ -43,4 +43,4 @@ We did not repeat rule ablations. Similar rule-effect rankings are still a hypot
 
 Validation: 36 saved 25K controls reproduce exactly; 296 50K reserve/cadence settings, 60 purchase-shortlist settings, and 96 paired sensitivity runs. The preservation check confirms 177 existing result files unchanged. Full regression suite: 200 passing tests.
 
-See the [study guide](STUDIES.md), [generated report](../../results/legacy_50k/operating_policies/REPORT.generated.md), and [source/interpretation record](SOURCES.md).
+See the [study guide](STUDIES.md), [generated report](../../results/legacy_50k/operating_policies/operating_policies__REPORT.generated.md), and [source/interpretation record](SOURCES.md).

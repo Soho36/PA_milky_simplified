@@ -1,6 +1,6 @@
 """Flatten the funded-growth routing study into one JSON for its page.
 
-Reads comparison.csv and REPORT.generated.md. No re-simulation.
+Reads comparison.csv and <folder>__REPORT.generated.md. No re-simulation.
 
 Usage: extract_funded_growth.py <dest json>
 """
@@ -53,7 +53,7 @@ for case, arms in cases.items():
         assert r['peak_live'] <= r['max_live_accounts'], case
         assert r['accounts'] == r['alive'] + r['deaths'], case
 
-report = (STUDY / 'REPORT.generated.md')
+report = (STUDY / f'{STUDY.name}__REPORT.generated.md')
 paras = []
 if report.exists():
     text = report.read_text(encoding='utf-8')

@@ -5,7 +5,7 @@ Run the existing `--ablate` command. Each arm in `ablation.json` now has
 and timing summary, also saved in `report.txt`. Historical saved outputs must be regenerated to gain these fields.
 
 The canonical results for this experiment are in
-`results/full_rulebook__monthly_500__no_cushion__no_terminal/`, including `INTERPRETATION.md`. Regenerate with:
+`results/full_rulebook__monthly_500__no_cushion__no_terminal/`, including `full_rulebook__monthly_500__no_cushion__no_terminal__INTERPRETATION.md`. Regenerate with:
 
 ```powershell
 $env:PYTHONPATH = "src"

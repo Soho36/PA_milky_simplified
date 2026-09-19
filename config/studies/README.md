@@ -45,8 +45,9 @@ The loader rejects output overlap across ready product profiles. See
 Run `venv/Scripts/python.exe scripts/study_legacy_50k_operating.py` for the
 focused search and matched comparisons, rather than repeating every historical study.
 
-Reader-maintained REPORT.md and report_breakdown.txt are not replaced by runs.
-Current generated reports live in REPORT.generated.md. Budgeted cadence's
+Reports are named after their folder (`<folder>__REPORT.md`; see `scripts/report_names.py`).
+Reader-maintained `<folder>__REPORT.md` and report_breakdown.txt are not replaced by runs.
+Current generated reports live in `<folder>__REPORT.generated.md`. Budgeted cadence's
 `--refresh-purchase-tables` refreshes presentation from saved cadence rows and
 rechecks purchase controls; it is not a new cadence simulation.
 
@@ -73,10 +74,10 @@ directory; stale checkpoints are rejected rather than silently mixed.
 
 After the search, run
 `venv/Scripts/python.exe scripts/explain_legacy_reserve_comparison.py` to replay
-the headline winners and refresh the shorter `FINDINGS.generated.md`, including
+the headline winners and refresh the shorter `reserve_by_policy__FINDINGS.generated.md`, including
 account turnover, purchase fees, owner-excluded account deficits and detailed
 winner ledgers. It also checks the selected winners under the stricter later-payout
-minimum, without re-optimizing them. Existing `FINDINGS.md` is kept as reader-maintained commentary.
+minimum, without re-optimizing them. Existing `reserve_by_policy__FINDINGS.md` is kept as reader-maintained commentary.
 
 For side-by-side presentation, run `venv/Scripts/python.exe scripts/format_legacy_comparison_reports.py`
 after generating the reports. It pairs 25K on the left with 50K on the right,
@@ -99,6 +100,16 @@ the preserved reference and is not rerun.
 .\venv\Scripts\python.exe scripts/explain_legacy_reserve_comparison.py config/studies/legacy_reserve_comparison_blocking.json
 .\venv\Scripts\python.exe scripts/format_legacy_comparison_reports.py results/comparisons_blocking/legacy_25k_vs_50k/reserve_by_policy
 ```
+
+Then the spare shelf, which reads the blocked reserve comparison through its
+`prior` key (a study may only read a predecessor from its own tree):
+
+```powershell
+.\venv\Scripts\python.exe scripts/study_legacy_spare_shelf.py config/studies/legacy_spare_shelf_blocking.json
+```
+
+Its unlimited-supply anchors and unbound rows must reproduce the blocked
+reserve comparison, including per-trade account assignments.
 
 `legacy_reserve_comparison_blocking.json` keeps the non-blocking grid. Its
 controls are the settings it shares with the 25K blocked-copying optimization,

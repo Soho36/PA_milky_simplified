@@ -153,7 +153,7 @@ no closing withdrawal; the two hold benchmarks are the same with one.
 
 ## Result folders
 
-See [the results index](../../results/README.md) for descriptive folder names, report
+See [the results index](../../results/results__README.md) for descriptive folder names, report
 links, original scenario IDs, and regeneration commands. Config filenames and
 sealed baseline names remain stable.
 

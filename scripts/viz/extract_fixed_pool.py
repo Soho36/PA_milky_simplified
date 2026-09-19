@@ -1,6 +1,6 @@
 """Flatten the fixed-R shared routing pool study into one JSON for its page.
 
-Reads comparison.csv, study.json and REPORT.generated.md. No re-simulation.
+Reads comparison.csv, study.json and <folder>__REPORT.generated.md. No re-simulation.
 
 Usage: extract_fixed_pool.py <dest json>
 """
@@ -41,7 +41,7 @@ for r in rows:
     assert round(r['initial_seat_funding_usd'] + r['additional_external_funding_usd'], 2) == r['total_owner_funding_usd'], r['case']
 
 study = json.loads((STUDY / 'study.json').read_text(encoding='utf-8'))
-report = (STUDY / 'REPORT.generated.md').read_text(encoding='utf-8')
+report = (STUDY / f'{STUDY.name}__REPORT.generated.md').read_text(encoding='utf-8')
 intro = report.split('\n## ', 1)[0].split('\n', 1)[1]
 paras = [' '.join(p.split()) for p in intro.split('\n\n') if p.strip()]
 
