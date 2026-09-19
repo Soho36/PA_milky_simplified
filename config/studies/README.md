@@ -153,6 +153,29 @@ controls replay every saved pipeline row that uses it. The explainer computes
 every result sentence for the blocked frontier and still reproduces the saved
 non-blocking report exactly.
 
+Then the March 2026 failure review and its recovery stress, which take the
+same small spec. Its frozen cases stay as in the non-blocking review; the two
+minimum winners come from the blocked pipeline study. The stress controls apply
+wherever a book runs no evaluations after the event:
+
+```powershell
+.\venv\Scripts\python.exe scripts/review_march_failure.py config/studies/legacy_march_failure_review_blocking.json
+.\venv\Scripts\python.exe scripts/stress_march_recovery.py config/studies/legacy_march_failure_review_blocking.json
+```
+
+Finally the paired minimum/maximum frontier. It must run after the March
+review, because its frozen March cases must reproduce the review's baselines:
+
+```powershell
+.\venv\Scripts\python.exe scripts/study_legacy_minimum_frontier.py config/studies/legacy_minimum_reserve_frontier_blocking.json
+.\venv\Scripts\python.exe scripts/explain_legacy_minimum_frontier.py results/comparisons_blocking/legacy_25k_vs_50k/reserve_frontier_minimum
+```
+
+The March review's report is hand-written from its outputs, as in the
+non-blocking tree. `plot_legacy_minimum_frontier.py --out <folder>` needs
+ReportLab. The frontier page builds with `scripts/viz/extract_frontier.py <json> <folder>`
+and `build_frontier.py <dir> "blocked copying"`.
+
 `legacy_reserve_comparison_blocking.json` keeps the non-blocking grid. Its
 controls are the settings it shares with the 25K blocked-copying optimization,
 which must reproduce exactly, including per-trade account assignments. The

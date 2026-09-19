@@ -23,11 +23,13 @@ SPEC_PATH = PROJECT_ROOT/'config/studies/legacy_minimum_reserve_frontier.json'
 SPEC = None
 
 
-def initialize():
+def initialize(spec_path=SPEC_PATH):
     global SPEC
-    reference.initialize()
-    SPEC = json.loads(SPEC_PATH.read_text())
-    assert PROJECT_ROOT/SPEC['reference_spec'] == reference.SPEC_PATH
+    SPEC = json.loads(Path(spec_path).read_text())
+    # The reference frontier fixes the pipelines, windows and the execution tree.
+    reference.initialize(PROJECT_ROOT/SPEC['reference_spec'])
+    execution = reference.prior.sim.execution_of
+    assert execution(reference.SPEC) == execution(SPEC), 'reference frontier from another tree'
 
 
 def grid():
@@ -56,7 +58,8 @@ def evaluate(job, detail=False):
     tape = reference.TAPES[window]
     first, last = min(t.entry_at for t in tape), max(t.exit_at for t in tape)
     observer = DispersionObserver(first, last, trace=detail)
-    result = run_book(tape, replace(base, policy=policy), acquisition=acquisition, observer=observer)
+    result = run_book(tape, replace(base, policy=policy), acquisition=acquisition, observer=observer,
+                      routing=reference.prior.sim.ROUTING)
     ledger = result.acquisition
     cash = ledger.summary()
     terminal = round(sum(p.received_usd for p in result.terminal_payouts), 2)
@@ -96,11 +99,12 @@ def evaluate(job, detail=False):
         'deaths_2026_03_30': sum(a.died_at.date().isoformat() == '2026-03-30' for a in deaths),
         'last_death': max((a.died_at.isoformat() for a in deaths), default=None),
         'largest_simultaneous_deaths': max(Counter(a.died_at for a in deaths).values(), default=0),
-        **measure_pipeline(result), **observer.summary(), 'job': list(job)}
+        **measure_pipeline(result), **observer.summary(), **reference.prior.sim.blocking_fields(result),
+        'job': list(job)}
     return (row, result, observer) if detail else row
 
 
-def outputs(out, rows):
+def outputs(out, rows, position_checks=None):
     write = reference.prior.csv_write
     write(out/'frontier.csv', rows)
     lookup = {tuple(r['job']): r for r in rows}
@@ -172,6 +176,8 @@ def outputs(out, rows):
         row, result, observer = evaluate(job, True)
         assert row == lookup[job]
         folder = out/f'{job[0]}__{job[2]}__reserve_{job[3]}'
+        if position_checks is not None:
+            position_checks[folder.name] = reference.prior.sim.one_position_check(result)
         folder.mkdir(exist_ok=True)
         reference.write_json(folder/'summary.json', row)
         reference.write_json(folder/'march30_balances.json', observer.snapshots)
@@ -184,12 +190,14 @@ def outputs(out, rows):
     return len(selected)
 
 
-def main():
-    initialize()
+def main(spec_path=SPEC_PATH):
+    initialize(spec_path)
+    blocking = reference.prior.sim.ROUTING is not None
     out = PROJECT_ROOT/SPEC['output']
+    assert out.resolve().is_relative_to(PROJECT_ROOT/reference.prior.sim.RESULT_ROOTS[reference.prior.sim.execution_of(SPEC)])
     out.mkdir(parents=True, exist_ok=True)
-    files = [Path(__file__), SPEC_PATH, reference.SPEC_PATH, Path(reference.__file__),
-             Path(reference.prior.__file__), Path(reference.prior.sim.__file__)]
+    files = [Path(__file__), (PROJECT_ROOT/spec_path).resolve(), (PROJECT_ROOT/SPEC['reference_spec']).resolve(),
+             Path(reference.__file__), Path(reference.prior.__file__), Path(reference.prior.sim.__file__)]
     contract = {'schema': 'pa_milky.minimum_frontier.v1', 'spec': SPEC,
         'reference_spec': reference.SPEC, 'engine': engine_digest(),
         'inputs': input_digest(reference.prior.sim.C['legacy_25k']),
@@ -214,7 +222,8 @@ def main():
     all_jobs = jobs()
     missing = [j for j in all_jobs if j not in completed]
     print(f'Paired frontier: {len(all_jobs)} settings; {len(missing)} remaining', flush=True)
-    with ProcessPoolExecutor(max_workers=SPEC['workers'], initializer=initialize) as pool:
+    with ProcessPoolExecutor(max_workers=SPEC['workers'], initializer=initialize,
+                             initargs=(str(spec_path),)) as pool:
         pending = {pool.submit(evaluate, j): j for j in missing}
         with checkpoint.open('a', encoding='utf-8') as log:
             for i, future in enumerate(as_completed(pending), 1):
@@ -226,6 +235,7 @@ def main():
                     print(f'Completed {i}/{len(missing)} new runs', flush=True)
     rows = [completed[j] for j in all_jobs]
     comparisons = []
+    march_matches = 0
     for r in rows:
         prior_key = (r['product'], r['window'], r['headroom'])
         if r['withdrawal'] == 'maximum' and prior_key in historical:
@@ -239,14 +249,19 @@ def main():
                     old['product'], old['rule'], old['reserve']) == (r['product'], r['withdrawal'], r['headroom']):
                     assert (r['ongoing'], r['total'], r['accounts'], r['alive']) == (
                         old['ongoing'], old['total'], old['accounts'], old['alive_at_end'])
-    details = outputs(out, rows)
+                    # Blocked rows must also assign every trade to the same accounts.
+                    assert not blocking or r['allocation_sha256'] == old['allocation_sha256']
+                    march_matches += 1
+    position_checks = {} if blocking else None
+    details = outputs(out, rows, position_checks)
     assert all(sha256_file(PROJECT_ROOT/p) == digest for p, digest in contract['protected_results'].items())
     reference.write_json(out/'AUDIT.json', {'completed_utc': datetime.now(timezone.utc).isoformat(),
         'runs': len(rows), 'maximum_controls': comparisons, 'detail_replays_matched': details,
         'prior_result_files_unchanged': len(contract['protected_results']),
-        'all_cash_and_capacity_checks_passed': True, 'contract_sha256': sha256_file(path)})
+        'all_cash_and_capacity_checks_passed': True, 'contract_sha256': sha256_file(path),
+        **({'march_review_matches': march_matches, 'one_position_checks': position_checks} if blocking else {})})
     print(f'Complete: {out}', flush=True)
 
 
 if __name__ == '__main__':
-    main()
+    main(*sys.argv[1:])

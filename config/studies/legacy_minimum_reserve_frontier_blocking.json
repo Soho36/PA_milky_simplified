@@ -1,0 +1,32 @@
+{
+  "execution": "blocking",
+  "output": "results/comparisons_blocking/legacy_25k_vs_50k/reserve_frontier_minimum",
+  "reference_spec": "config/studies/legacy_reserve_frontier_blocking.json",
+  "amount_rules": [
+    "minimum",
+    "maximum"
+  ],
+  "reserve_ranges": [
+    [
+      0,
+      10000,
+      1000
+    ],
+    [
+      3000,
+      4500,
+      100
+    ],
+    [
+      6000,
+      7500,
+      100
+    ]
+  ],
+  "extra_reserves": [
+    5700
+  ],
+  "capital_match_tolerance_fraction": 0.05,
+  "workers": 7,
+  "design": "Blocked-copying counterpart of legacy_minimum_reserve_frontier.json: identical reserve grid, $5,700 probe, pipelines, budgets, first-check activation and windows; the reference is the blocked maximum frontier, and matching settings must reproduce it and the blocked March review, including per-trade account assignments. Paired minimum/maximum daily withdrawal frontier on exactly the same reserve grid, product-specific frozen pipelines, budgets, first-check activation policy and eight historical windows as the prior maximum frontier. Both mechanisms are rerun to collect passive dispersion metrics. Common reserves compare policies; nearest realized average-capital matches are descriptive, not a causal isolation of dispersion. No pipeline retuning. All results are historical and in sample."
+}

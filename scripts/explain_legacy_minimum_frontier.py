@@ -1,6 +1,7 @@
 """Readable paired-policy interpretation from the completed frontier."""
 from pathlib import Path
 import json
+import sys
 from report_names import report_path
 
 ROOT = Path(__file__).resolve().parents[1]
@@ -19,18 +20,40 @@ def table(rows, cols):
     return text+'\n'
 
 
-def main():
-    study = json.loads((OUT/'study.json').read_text())
-    audit = json.loads((OUT/'AUDIT.json').read_text())
+def stable_zero(family, key):
+    # Lowest tested reserve from which this and every higher tested reserve has none.
+    family = sorted(family, key=lambda r: r['headroom'])
+    return next((r['headroom'] for i, r in enumerate(family) if all(x[key] == 0 for x in family[i:])), None)
+
+
+def main(folder=OUT):
+    out = ROOT/folder
+    study = json.loads((out/'study.json').read_text())
+    audit = json.loads((out/'AUDIT.json').read_text())
+    blocking = study['spec'].get('execution') == 'blocking'
     rows = study['rows']
     full = [r for r in rows if r['window'] == 'full']
     summaries = study['window_summaries']
     full_summary = [s for s in summaries if s['window'] == 'full']
-    text = '# Daily minimum versus maximum: matched reserve frontier\n\n'
+    products = list(study['reference_spec']['pipelines'])
+    text = '# Daily minimum versus maximum: matched reserve frontier' + (' — blocked copying' if blocking else '') + '\n\n'
     text += (f"Completed {len(rows):,} simulations, equally split between daily minimum and maximum withdrawals, "
         'on identical reserve grids and eight historical windows. Product-specific pipelines and owner funding '
         'are frozen to the prior maximum-frontier settings.\n\n')
-    text += ('The main finding is two different reserve regions. Daily minimum has a broad full-history '
+    if blocking:
+        text += ('**Execution: blocked copying.** Each funded account holds at most one position; an account still in an '
+            'earlier trade skips a new signal. Grid, pipelines and windows match the [non-blocking paired frontier]'
+            '(../../../comparisons/legacy_25k_vs_50k/reserve_frontier_minimum/reserve_frontier_minimum__REPORT.md).\n\n')
+        for prod in products:
+            s = {x['withdrawal']: x for x in full_summary if x['product'] == prod}
+            text += (f"{prod}: daily minimum's best tested ongoing cash is {cash(s['minimum']['best_ongoing'])} at a "
+                f"{cash(s['minimum']['best_ongoing_headroom'])} reserve ({s['minimum']['best_ongoing_alive']} PAs alive); "
+                f"daily maximum's is {cash(s['maximum']['best_ongoing'])} at {cash(s['maximum']['best_ongoing_headroom'])}. "
+                'The full-history aged-PA survival boundary is '
+                + ' and '.join(f"{'not reached' if s[rule]['aged_pa_survival_boundary'] is None else cash(s[rule]['aged_pa_survival_boundary'])} "
+                               f'under {rule}' for rule in ('minimum', 'maximum')) + '.\n\n')
+    else:
+        text += ('The main finding is two different reserve regions. Daily minimum has a broad full-history '
         'ongoing-cash plateau around $4,000, but accounts still die there and the book ends partly empty. '
         'Preserving established accounts instead requires roughly $6,700–$7,000 in the windows that include '
         'the March 2026 losses. Minimum does preserve different account balances, but it does not remove '
@@ -43,18 +66,30 @@ def main():
     for p in study['reference_spec']['pipelines']:
         a = next(s for s in full_summary if s['product'] == p and s['withdrawal'] == 'minimum')
         b = next(s for s in full_summary if s['product'] == p and s['withdrawal'] == 'maximum')
-        text += (f"For {p}, the best tested minimum-policy ongoing cash exceeds the best tested maximum-policy "
-            f"ongoing cash by {cash(a['best_ongoing']-b['best_ongoing'])}. Their winning reserves and survival "
+        gap = a['best_ongoing']-b['best_ongoing']
+        text += (f"For {p}, the best tested minimum-policy ongoing cash {'exceeds' if gap >= 0 else 'trails'} the best tested maximum-policy "
+            f"ongoing cash by {cash(abs(gap))}. Their winning reserves and survival "
             'outcomes differ; this is a comparison of the best settings on the common grid, not a same-reserve effect.\n\n')
     text += ('The aged-PA boundary is the lowest tested reserve from which that reserve and all higher tested '
         'reserves have zero deaths of accounts at least 365 days old, with positive exposure of such accounts. '
         'It is not a no-failure boundary for new PAs, which must first earn their cushion. A missing value '
-        'means the tested grid does not establish that condition.\n\n'
-        'These pipelines differ from some winners in the broader pipeline search. In particular, the old '
-        '25K daily-minimum winner used batched starts, concurrency 10 and a spare target of 10. Here 25K '
-        'keeps the maximum study’s seven-day start spacing, concurrency 20 and spare target 2. The old '
-        '$597,317 result should not be treated as a control for this different pipeline.\n\n')
-    text += '![Paired reserve curves](paired_reserve_frontier.png)\n\n'
+        'means the tested grid does not establish that condition.\n\n')
+    if blocking:
+        review = {r['label']: r for r in json.loads((out.parent/'march_failure_review'/'baselines.json').read_text())}
+        w = review['legacy_25k_minimum_winner_first_check']
+        persistent, interval, concurrency, spares = w['job'][6:10]
+        starts = 'batched starts' if interval == 0 else f'one start every {interval} days'
+        text += ('These pipelines differ from some winners in the broader blocked pipeline search. The 25K daily-minimum '
+            f'winner there used {starts}, concurrency {concurrency} and a spare target of {spares} '
+            f"({cash(w['ongoing'])} ongoing). Here 25K keeps the maximum study’s seven-day start spacing, "
+            'concurrency 20 and spare target 2, so that result is not a control for this pipeline.\n\n')
+    else:
+        text += ('These pipelines differ from some winners in the broader pipeline search. In particular, the old '
+            '25K daily-minimum winner used batched starts, concurrency 10 and a spare target of 10. Here 25K '
+            'keeps the maximum study’s seven-day start spacing, concurrency 20 and spare target 2. The old '
+            '$597,317 result should not be treated as a control for this different pipeline.\n\n')
+    if (out/'paired_reserve_frontier.png').exists():
+        text += '![Paired reserve curves](paired_reserve_frontier.png)\n\n'
     text += '## Fixed-reserve comparisons\n\n'
     selected_h = (3700, 3900, 4000, 5700, 6000, 6500, 6600, 6700, 6800, 7100, 7500)
     for p in study['reference_spec']['pipelines']:
@@ -94,11 +129,21 @@ def main():
         'brand-new accounts. Periods with fewer than two qualifying PAs are excluded from the spread and '
         'synchronization denominators, and their exposure days are reported. The age-based survival measure '
         'and frozen-floor dispersion group are deliberately different concepts. All PAs still share the same '
-        'trades; different balances do not create independent trading returns.\n\n'
-        'The March 30 final trade’s adverse excursion was $81.50. The previously measured $6,780.10–$6,780.11 '
-        'cliff reflects earlier accumulated losses plus that last excursion, not a single huge trade. Zero '
-        'deaths on March 30 can also mean the book died earlier; read the pre-trade live count and lifetime '
-        'death measures together.\n\n')
+        'trades; different balances do not create independent trading returns.\n\n')
+    if blocking:
+        clear = {(prod, rule): stable_zero([r for r in full if r['product'] == prod and r['withdrawal'] == rule],
+                                           'deaths_2026_03_30') for prod in products for rule in ('minimum', 'maximum')}
+        text += ('The March 30 final trade’s adverse excursion was $81.50. Without blocking it killed every daily-maximum '
+            'PA up to a $6,780.10 reserve. With blocking, no PA dies on March 30 from '
+            + '; '.join(f"{cash(clear[(prod, 'maximum')])} under maximum and {cash(clear[(prod, 'minimum')])} under "
+                        f'minimum for {prod}' for prod in products)
+            + '. Zero deaths on March 30 can also mean the book died earlier; read the pre-trade live count and '
+            'lifetime death measures together.\n\n')
+    else:
+        text += ('The March 30 final trade’s adverse excursion was $81.50. The previously measured $6,780.10–$6,780.11 '
+            'cliff reflects earlier accumulated losses plus that last excursion, not a single huge trade. Zero '
+            'deaths on March 30 can also mean the book died earlier; read the pre-trade live count and lifetime '
+            'death measures together.\n\n')
     text += '## Comparison at similar actual retained capital\n\n'
     matches = [r for r in study['similar_capital'] if r['window'] == 'full' and
                r['minimum_reserve'] in (3700, 3900, 4000, 6000, 6500, 6700, 6800, 7100, 7500)]
@@ -117,7 +162,19 @@ def main():
         'ages, or the same payout history. It can show whether a difference persists at roughly similar '
         'retention, but cannot assign a percentage of the benefit to desynchronization.\n\n')
     for p in study['reference_spec']['pipelines']:
-        m = next(r for r in matches if r['product'] == p and r['minimum_reserve'] == 6800)
+        m = next((r for r in matches if r['product'] == p and r['minimum_reserve'] == 6800), None)
+        if m is None:
+            text += f'For {p}, minimum at $6,800 has no maximum setting with comparable positive retained capital.\n\n'
+            continue
+        if blocking:
+            gap = m['minimum_ongoing']-m['maximum_ongoing']
+            text += (f"For {p}, minimum at $6,800 matches maximum at {cash(m['maximum_reserve'])} within "
+                f"{m['per_pa_capital_gap_pct']:.2f}% per PA and {m['book_capital_gap_pct']:.2f}% for the book"
+                + ('' if m['within_tolerance'] else ', outside the 5% tolerance') + '. '
+                f"Minimum delivers {cash(abs(gap))} {'more' if gap >= 0 else 'less'} ongoing net cash; it finishes "
+                f"with {m['minimum_alive']} live PAs against {m['maximum_alive']}. Average-capital matching keeps "
+                'its limitations.\n\n')
+            continue
         text += (f"For {p}, minimum at $6,800 matches maximum at {cash(m['maximum_reserve'])} within "
             f"{m['per_pa_capital_gap_pct']:.2f}% per PA and {m['book_capital_gap_pct']:.2f}% for the book. "
             f"Minimum delivers {cash(m['minimum_ongoing']-m['maximum_ongoing'])} more ongoing net cash; "
@@ -146,11 +203,25 @@ def main():
         wins = sum(a['best_ongoing'] > b['best_ongoing'] for a, b in pairs)
         losses = ', '.join(a['window'] for a, b in pairs if a['best_ongoing'] < b['best_ongoing'])
         text += (f"For {p}, minimum wins on best tested ongoing cash in {wins} of {len(pairs)} windows. "
-            f"Maximum wins in {losses}. These are comparisons after separately selecting each mechanism's "
+            f"Maximum wins in {losses or 'none'}. These are comparisons after separately selecting each mechanism's "
             'best reserve within each window, not the performance of one fixed reserve across all windows.\n\n')
-    text += ('In the January 2023 cold start, both products need $7,000 under minimum versus $6,800 '
-        'under maximum to meet the aged-PA survival criterion. Consequently, the full-history 50K '
-        '$6,700 minimum-policy boundary is not stable across starting dates.\n\n')
+    if blocking:
+        higher = []
+        for a in summaries:
+            if a['withdrawal'] != 'minimum':
+                continue
+            b = next(b for b in summaries if (b['product'], b['window'], b['withdrawal']) == (a['product'], a['window'], 'maximum'))
+            if None not in (a['aged_pa_survival_boundary'], b['aged_pa_survival_boundary']) and \
+                    a['aged_pa_survival_boundary'] > b['aged_pa_survival_boundary']:
+                higher.append(f"{a['product']} {a['window']} ({cash(a['aged_pa_survival_boundary'])} versus "
+                              f"{cash(b['aged_pa_survival_boundary'])})")
+        text += (('Minimum needs a higher aged-PA survival reserve than maximum in: ' + '; '.join(higher) + '. '
+                  if higher else 'In no window does minimum need a higher aged-PA survival reserve than maximum. ')
+                 + 'A boundary from one window is not stable across starting dates.\n\n')
+    else:
+        text += ('In the January 2023 cold start, both products need $7,000 under minimum versus $6,800 '
+            'under maximum to meet the aged-PA survival criterion. Consequently, the full-history 50K '
+            '$6,700 minimum-policy boundary is not stable across starting dates.\n\n')
     text += table(summaries, [('product', 'Product', str), ('window', 'Window', str),
         ('withdrawal', 'Daily rule', str), ('best_ongoing_headroom', 'Best ongoing reserve', cash),
         ('best_ongoing', 'Best ongoing net', cash),
@@ -165,7 +236,11 @@ def main():
         'historical sensitivity, not independent validation or future survival probabilities. No new market '
         'paths or replacement-supply outages are generated in this frontier; those require a separate paired '
         'stress experiment.\n\n')
-    text += ('The useful next comparison is a small, preselected stress set: minimum at $4,000 for cash '
+    text += ('The useful next comparison is a small, preselected stress set around each mechanism’s best cash '
+        'reserve and its established-account survival reserve, with matched controls. Apply the same replacement '
+        'interruptions and adverse trade sequences to both mechanisms, and compare cash, book recovery and capital '
+        'immediately before each shock. This frontier alone does not answer that counterfactual or establish a '
+        'live trading reserve.\n\n') if blocking else ('The useful next comparison is a small, preselected stress set: minimum at $4,000 for cash '
         'extraction and around $7,000–$7,500 for established-account survival, with matched maximum controls. '
         'Apply the same replacement interruptions and adverse trade sequences to both mechanisms, and '
         'compare cash, book recovery and capital immediately before each shock. That would test whether '
@@ -179,7 +254,8 @@ def main():
         'The study keeps the earlier Legacy fees, exposure, payout interpretation and trade-path convention. '
         'This is an operating model, not a reconstruction of all historical firm rules.\n\n'
         'The common grid is $0–$10,000 in $1,000 steps, with $100 steps from $3,000–$4,500 and '
-        '$6,000–$7,500, plus the earlier $5,700 maximum-policy winner. The grid has 40 reserves for '
+        '$6,000–$7,500, plus ' + ('the $5,700 probe kept from the non-blocking study, where it was the '
+        'maximum-policy winner' if blocking else 'the earlier $5,700 maximum-policy winner') + '. The grid has 40 reserves for '
         'each of two products, two mechanisms and eight windows. There is no pipeline retuning or '
         'post-result expansion of the grid.\n\n')
     text += (f"All {audit['runs']:,} runs reconcile economic and owner-cash identities and obey the seat cap. "
@@ -188,13 +264,18 @@ def main():
         f"results. {audit['detail_replays_matched']} detailed replays match their frontier rows. "
         f"{audit['prior_result_files_unchanged']} prior result files are unchanged; plain-language navigation "
         'guides may be refreshed separately.\n\n')
+    if blocking:
+        checks = audit['one_position_checks']
+        text += (f"{audit['march_review_matches']} settings shared with the blocked March review reproduce it, including "
+                 f"per-trade account assignments. Across the {len(checks)} detailed replays, none of "
+                 f"{sum(c['accounts_checked'] for c in checks.values()):,} PA histories held two trades at once.\n\n")
     text += ('Files: [all settings](frontier.csv), [same-reserve differences](matched_reserves.csv), '
         '[similar-capital comparisons](similar_capital.csv), [window summaries](window_summaries.csv), '
         '[complete study](study.json), [audit](AUDIT.json). The detailed run folders hold March traces, '
         'account deaths, replacement waits and daily pipeline states. Each has a START_HERE.txt guide.\n')
-    report_path(OUT, 'REPORT.md').write_text(text, encoding='utf-8')
-    print(report_path(OUT, 'REPORT.md'))
+    report_path(out, 'REPORT.md').write_text(text, encoding='utf-8')
+    print(report_path(out, 'REPORT.md'))
 
 
 if __name__ == '__main__':
-    main()
+    main(*sys.argv[1:])

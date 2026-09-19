@@ -1,0 +1,53 @@
+START HERE — Does daily minimum improve the reserve cash/survival trade-off when each account holds one position?
+
+Question answered
+Does daily minimum improve the reserve cash/survival trade-off when each account holds one
+position?
+
+What we learned
+Blocking lowers total cash in 880 of the 1,280 settings run in both modes and raises it in 400.
+Minimum still leads on best tested ongoing cash: $329,932 at $3,500 against $319,487 at $4,000
+for 25K, and $440,140 at $3,000 against $337,153 at $1,000 for 50K. At $6,700–$6,800 both rules
+keep all 20 PAs, where non-blocking maximum lost most of its book at $6,700. Blocking itself
+spreads balances — the mean spread among frozen-floor PAs is two to three times larger — so
+maximum is no longer synchronized. Aged-PA deaths stop from $6,400 under minimum against $6,200
+under maximum for 25K, and at no tested reserve for 50K.
+
+How to interpret it
+Same grid, $5,700 probe, pipelines and windows as the non-blocking study. 416 maximum rows
+reproduce the blocked frontier and 10 settings reproduce the blocked March review, including
+per-trade account assignments; none of the replayed PA histories held two trades at once. The
+paired chart is not drawn here: it needs ReportLab, which the venv lacks.
+
+Files to open first
+- reserve_frontier_minimum__REPORT.md
+- frontier.csv
+
+Subfolders
+- legacy_25k__maximum__reserve_4000 (has its own START_HERE.txt)
+- legacy_25k__maximum__reserve_6200 (has its own START_HERE.txt)
+- legacy_25k__maximum__reserve_6700 (has its own START_HERE.txt)
+- legacy_25k__maximum__reserve_6800 (has its own START_HERE.txt)
+- legacy_25k__maximum__reserve_7100 (has its own START_HERE.txt)
+- legacy_25k__maximum__reserve_7500 (has its own START_HERE.txt)
+- legacy_25k__minimum__reserve_3500 (has its own START_HERE.txt)
+- legacy_25k__minimum__reserve_3600 (has its own START_HERE.txt)
+- legacy_25k__minimum__reserve_6700 (has its own START_HERE.txt)
+- legacy_25k__minimum__reserve_6800 (has its own START_HERE.txt)
+- legacy_25k__minimum__reserve_7100 (has its own START_HERE.txt)
+- legacy_25k__minimum__reserve_7500 (has its own START_HERE.txt)
+- legacy_50k__maximum__reserve_1000 (has its own START_HERE.txt)
+- legacy_50k__maximum__reserve_6400 (has its own START_HERE.txt)
+- legacy_50k__maximum__reserve_6700 (has its own START_HERE.txt)
+- legacy_50k__maximum__reserve_6800 (has its own START_HERE.txt)
+- legacy_50k__maximum__reserve_7100 (has its own START_HERE.txt)
+- legacy_50k__maximum__reserve_7500 (has its own START_HERE.txt)
+- legacy_50k__minimum__reserve_3000 (has its own START_HERE.txt)
+- legacy_50k__minimum__reserve_6700 (has its own START_HERE.txt)
+- legacy_50k__minimum__reserve_6800 (has its own START_HERE.txt)
+- legacy_50k__minimum__reserve_7100 (has its own START_HERE.txt)
+- legacy_50k__minimum__reserve_7500 (has its own START_HERE.txt)
+
+For the surrounding study, open ../START_HERE.txt.
+
+Reading note: ongoing cash is received during trading, after costs. Total cash also includes any closing withdrawal. These are historical simulations, not forecasts.

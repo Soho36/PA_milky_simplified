@@ -1,0 +1,44 @@
+START HERE — Does minimum withdrawal reduce synchronized failure when each account holds one position, and did replacements really restore the book quickly?
+
+Question answered
+Does minimum withdrawal reduce synchronized failure when each account holds one position, and
+did replacements really restore the book quickly?
+
+What we learned
+The March 30, 2026 trade kills no PA in any of the 14 replays: blocked books enter it with
+$696–$810 of profit equity instead of $101, so the non-blocking cliff came from stacked
+overlapping losses. Synchronized failure remains at lower reserves — the $5,700 daily-maximum
+books lose all 20 PAs together on March 26, and the daily-minimum winners lose theirs on March
+5–6, ending with 10 (25K) and 16 (50K). The $6,700 maximum books keep earning after the event,
+$18,933 and $19,047, where the non-blocking ones received nothing.
+
+How to interpret it
+Reserves and pipelines are frozen as in the non-blocking review; the two minimum winners come
+from the blocked pipeline study and reproduce it, including per-trade account assignments. Four
+daily-maximum books are unchanged by the evaluation pause, against two without blocking. The
+minimum runs receive no closing withdrawal: their PAs had just been paid, so the firm’s
+minimum-trading-days rule denies the request.
+
+Files to open first
+- march_failure_review__REPORT.md
+- baselines.csv
+
+Subfolders
+- legacy_25k_maximum_5700 (has its own START_HERE.txt)
+- legacy_25k_maximum_6700 (has its own START_HERE.txt)
+- legacy_25k_maximum_6800 (has its own START_HERE.txt)
+- legacy_25k_minimum_6700 (has its own START_HERE.txt)
+- legacy_25k_minimum_6800 (has its own START_HERE.txt)
+- legacy_25k_minimum_winner_first_check (has its own START_HERE.txt)
+- legacy_25k_minimum_winner_legacy (has its own START_HERE.txt)
+- legacy_50k_maximum_5700 (has its own START_HERE.txt)
+- legacy_50k_maximum_6700 (has its own START_HERE.txt)
+- legacy_50k_maximum_6800 (has its own START_HERE.txt)
+- legacy_50k_minimum_6700 (has its own START_HERE.txt)
+- legacy_50k_minimum_6800 (has its own START_HERE.txt)
+- legacy_50k_minimum_winner_first_check (has its own START_HERE.txt)
+- legacy_50k_minimum_winner_legacy (has its own START_HERE.txt)
+
+For the surrounding study, open ../START_HERE.txt.
+
+Reading note: ongoing cash is received during trading, after costs. Total cash also includes any closing withdrawal. These are historical simulations, not forecasts.

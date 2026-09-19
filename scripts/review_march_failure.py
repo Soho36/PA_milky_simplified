@@ -21,8 +21,22 @@ from pa_milky.pipeline_metrics import measure_pipeline, replacement_records
 from pa_milky.economics import Economics
 from pa_milky.provenance import engine_digest, input_digest, sha256_file
 
+# Non-blocking default at import; initialize() moves it into the spec's execution tree.
 OUT = prior.ROOT/'march_failure_review'
 EVENT = datetime(2026, 3, 30, 6)
+
+
+def initialize(spec_path=None):
+    """Without a spec this is the non-blocking review; a spec names the pipeline study to follow."""
+    global OUT
+    spec = json.loads(Path(spec_path).read_text(encoding='utf-8')) if spec_path else {}
+    if spec:
+        prior.initialize(prior.PROJECT_ROOT/spec['pipeline_spec'])
+        assert prior.sim.execution_of(prior.SPEC) == prior.sim.execution_of(spec), 'pipeline study from another tree'
+    else:
+        prior.initialize()
+    OUT = prior.ROOT/'march_failure_review'
+    return spec
 
 
 class Snapshot:
@@ -73,7 +87,7 @@ def evaluate(label, job, first_check, pause_days=0, pause_start=EVENT):
     observer = Snapshot()
     with patch.object(simulator, 'AcquisitionLedger', PausedLedger):
         result = simulator.run_book(prior.sim.T, replace(base, policy=policy),
-                                    acquisition=acquisition, observer=observer)
+                                    acquisition=acquisition, observer=observer, routing=prior.sim.ROUTING)
     ledger = result.acquisition
     terminal = round(sum(p.received_usd for p in result.terminal_payouts), 2)
     assert Economics.measure(result).residual_usd == ledger.summary()['cash_identity_residual_usd'] == 0
@@ -99,12 +113,13 @@ def evaluate(label, job, first_check, pause_days=0, pause_start=EVENT):
             if p.at > EVENT and p not in result.terminal_payouts), 2),
         'spend_after_event': round(-sum(e['amount_usd'] for e in ledger.cash_events
             if e['at'] > EVENT.isoformat() and e['amount_usd'] < 0), 2),
-        **measure_pipeline(result), 'job': list(job)}
+        **measure_pipeline(result), **prior.sim.blocking_fields(result), 'job': list(job)}
     return row, result, observer
 
 
-def main():
-    prior.initialize()
+def main(spec_path=None):
+    spec = initialize(spec_path)
+    blocking = prior.sim.ROUTING is not None
     OUT.mkdir(exist_ok=True)
     protected = {str(p): sha256_file(p) for p in (prior.PROJECT_ROOT/'results').rglob('*')
                  if p.is_file() and OUT not in p.parents}
@@ -112,6 +127,7 @@ def main():
            and r['initial_cash'] == 5000 and r['monthly_funding'] == 200]
     ranking = []
     cases = []
+    position_checks = {}
     for product in ('legacy_25k', 'legacy_50k'):
         family = [r for r in old if r['product'] == product]
         for score in ('ongoing', 'total'):
@@ -137,6 +153,10 @@ def main():
             saved = next(r for r in old if r['job'] == list(job))
             assert (row['ongoing'], row['total'], row['accounts'], row['alive_at_end']) == (
                 saved['ongoing'], saved['total'], saved['accounts'], saved['alive'])
+            # Blocked replays must also assign every trade to the same accounts.
+            assert not blocking or row['allocation_sha256'] == saved['allocation_sha256']
+        if blocking:
+            position_checks[label] = prior.sim.one_position_check(result)
         summaries.append(row)
         folder = OUT/label
         folder.mkdir(exist_ok=True)
@@ -167,8 +187,9 @@ def main():
     (OUT/'AUDIT.json').write_text(json.dumps({'engine': engine_digest(),
         'inputs': input_digest(prior.sim.C['legacy_25k']), 'runner_sha256': sha256_file(Path(__file__)),
         'prior_files_unchanged': len(protected), 'baselines': len(summaries),
-        'historical_minimum_winners_reproduced': 2}, indent=2))
+        'historical_minimum_winners_reproduced': 2,
+        **({'spec': spec, 'one_position_checks': position_checks} if blocking else {})}, indent=2))
 
 
 if __name__ == '__main__':
-    main()
+    main(*sys.argv[1:])

@@ -3,13 +3,14 @@
 Reads the saved study files only (no re-simulation) and cross-checks the 20
 detailed run folders against their frontier rows.
 
-Usage: extract_frontier.py <dest json>
+Usage: extract_frontier.py <dest json> [study folder, e.g. the blocked-copying twin]
 """
 from pathlib import Path
 import csv, json, sys
 
-STUDY = Path(r'I:\PycharmProjects\PA_milky_simplified\results\comparisons'
-             r'\legacy_25k_vs_50k\reserve_frontier_minimum')
+STUDY = Path(sys.argv[2]) if len(sys.argv) > 2 else Path(
+    r'I:\PycharmProjects\PA_milky_simplified\results\comparisons'
+    r'\legacy_25k_vs_50k\reserve_frontier_minimum')
 DEST = Path(sys.argv[1])
 
 NUM = {'headroom', 'retained_balance_target', 'ongoing', 'terminal', 'total', 'accounts', 'alive',
