@@ -111,6 +111,19 @@ Then the spare shelf, which reads the blocked reserve comparison through its
 Its unlimited-supply anchors and unbound rows must reproduce the blocked
 reserve comparison, including per-trade account assignments.
 
+Then evaluation supply, which also reads the blocked reserve comparison:
+
+```powershell
+.\venv\Scripts\python.exe scripts/study_legacy_eval_supply.py config/studies/legacy_eval_supply_blocking.json
+```
+
+Evaluations already trade one position at a time, so its EODMAE reconciliation
+must equal the non-blocking one (`reconciliation_reference`). Settings it shares
+with the 25K blocked-pipeline study must reproduce that study exactly. The
+`short_months` columns cannot be compared with the saved non-blocking study:
+a later engine change altered how supply-limited days are logged, although
+cash, accounts and economics still reproduce.
+
 `legacy_reserve_comparison_blocking.json` keeps the non-blocking grid. Its
 controls are the settings it shares with the 25K blocked-copying optimization,
 which must reproduce exactly, including per-trade account assignments. The

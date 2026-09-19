@@ -31,8 +31,8 @@ SPEC = None
 
 def initialize(spec_path=SPEC_PATH):
     global SPEC
-    sim.initialize()
     SPEC = json.loads(Path(spec_path).read_text(encoding='utf-8'))
+    sim.initialize(sim.execution_of(SPEC))
 
 
 def evaluation_spec(product):
@@ -52,7 +52,7 @@ def evaluate(j, detail=False):
     acquisition = AcquisitionPolicy(acq, initial, monthly, max_live_accounts=sim.P[product]['max_live_accounts'],
                                     spare_capacity=spares, evaluation=evaluation_spec(product),
                                     evaluations_at_once=SPEC['evaluations_at_once'])
-    result = run_book(sim.T, replace(base, policy=pol), acquisition=acquisition)
+    result = run_book(sim.T, replace(base, policy=pol), acquisition=acquisition, routing=sim.ROUTING)
     e = Economics.measure(result)
     ledger = result.acquisition
     cash = ledger.summary()
@@ -76,8 +76,33 @@ def evaluate(j, detail=False):
            'spares_unused': cash['spares_unused_at_end'], 'in_flight_at_end': cash['evaluations_in_flight_at_end'],
            'ongoing': round(result.pocket_usd - terminal, 2), 'terminal': terminal, 'total': result.pocket_usd,
            'contributions': cash['owner_contributions_usd'], 'ending_owner_cash': cash['ending_owner_cash_usd'],
-           'economics': e.to_payload(), 'job': j}
+           **sim.blocking_fields(result), 'economics': e.to_payload(), 'job': j}
     return (row, result) if detail else row
+
+
+def blocked_pipeline_controls(cache, spec):
+    """Settings the 25K blocked-pipeline study shares with this one must reproduce it exactly.
+
+    That study traded the same evaluations with blocked funded accounts; its batch-started,
+    expiring, shared-seat rows at this study's concurrency are the same simulations.
+    """
+    source = spec['blocked_pipeline_controls']
+    verified = 0
+    for line in (PROJECT_ROOT / source['checkpoint']).read_text(encoding='utf-8').splitlines():
+        r = json.loads(line)
+        if (r['mode'], r['start_year'], r['amount'], r['persistent'], r['interval'], r['concurrency'],
+                r['reserve_seats']) != ('blocked', 2020, 0, False, 0, spec['evaluations_at_once'], True):
+            continue
+        key = job(source['product'], r['initial_cash'], r['monthly_funding'], REPLACE, r['withdrawal'],
+                  r['cadence'], r['headroom'], r['spares'])
+        if key not in cache:
+            continue
+        actual = cache[key]
+        assert all(actual[k] == r[k] for k in ('ongoing', 'total', 'accounts', 'alive', 'evaluations',
+                                               'allocation_sha256')), ('blocked pipeline drift', key)
+        verified += 1
+    assert verified >= source['minimum_matches'], ('too few blocked-pipeline controls', verified)
+    return verified
 
 
 def combos(spec):
@@ -158,10 +183,22 @@ def combo_label(acq, k):
     return f'{LABEL[acq]}, {k} spares'
 
 
-def render(rows, spec, prior_best, recon, deltas, controls):
-    text = '# Legacy 25K versus 50K when funded accounts come from evaluations\n\n'
+def render(rows, spec, prior_best, recon, deltas, controls, pipeline_controls=0):
+    blocking = sim.execution_of(spec) == 'blocking'
+    text = ('# Legacy 25K versus 50K when funded accounts come from evaluations'
+            + (' — blocked copying' if blocking else '') + '\n\n')
     text += (f'{len(rows):,} simulations. With evaluations switched off, the engine still reproduces the '
-             f'{controls} headline winners of the unlimited-supply study exactly.\n\n')
+             f'{controls} headline winners of the unlimited-supply study exactly'
+             + (', including per-trade account assignments' if blocking else '') + '.\n\n')
+    if blocking:
+        text += ('**Execution: blocked copying.** Each funded account holds at most one position; an account '
+                 'still in an earlier trade skips a new signal. Evaluations already traded one position at a '
+                 'time, so the evaluation check below is unchanged from the '
+                 '[non-blocking study](../../../comparisons/legacy_25k_vs_50k/eval_supply/eval_supply__REPORT.md). '
+                 f'The {pipeline_controls} settings shared with the 25K '
+                 '[blocked-pipeline study](../../../legacy_25k/blocked_pipeline/blocked_pipeline__REPORT.generated.md) '
+                 'reproduce it exactly, including per-trade account assignments. The unlimited-supply reference is '
+                 'the [blocked reserve comparison](../reserve_by_policy/reserve_by_policy__REPORT.md).\n\n')
     text += ('## How supply works here\n\nEvery funded account comes from an evaluation traded on the same RR '
              'signals, one position at a time, so the target-to-drawdown ratio plays out on the actual trades.\n\n'
              '| Product | Evaluation size | Target / drawdown | Ratio | Monthly fee | Activation |\n'
@@ -181,7 +218,8 @@ def render(rows, spec, prior_best, recon, deltas, controls):
              '- A pass is activated at the next daily check and joins the spare shelf; the purchase policy '
              'deploys it from there.\n'
              '- Fees and pass timing come from the tape instead of the $200 / $250 average. Funded accounts keep '
-             'every earlier convention, including taking every overlapping signal.\n\n')
+             + ('every earlier convention, and copy a signal only while flat.\n\n' if blocking else
+                'every earlier convention, including taking every overlapping signal.\n\n'))
     text += ('## Check against EODMAE\n\nOne evaluation started on every weekday with a full '
              f"{spec['reconciliation']['horizon_days']}-day horizon, renewed until it passes.\n\n"
              '| Evaluation | Starts | Passed in 180 days | EODMAE, worst point first | Passed in the first month | '
@@ -235,9 +273,11 @@ def render(rows, spec, prior_best, recon, deltas, controls):
         text += f'| {combo_label(acq, k)} | {share} |\n'
     text += ('\n## Limits\n\nIn-sample best tested settings on one historical tape, not forecasts. Evaluations '
              'assume the worst point of each trade comes first, like the funded accounts; EODMAE shows the '
-             'favourable-first bound 2–3 points lower. Evaluations trade one position at a time while funded '
-             'accounts take every overlapping signal, as the owner trades them. All other limits of the earlier '
-             'studies apply.\n')
+             'favourable-first bound 2–3 points lower. '
+             + ('Evaluations and funded accounts both trade one position at a time. ' if blocking else
+                'Evaluations trade one position at a time while funded accounts take every overlapping signal, '
+                'as the owner trades them. ')
+             + 'All other limits of the earlier studies apply.\n')
     return text
 
 
@@ -253,8 +293,10 @@ def main(spec_path=SPEC_PATH):
     initialize(spec_path)
     spec = SPEC
     assert input_digest(sim.C['legacy_25k']) == input_digest(sim.C['legacy_50k'])
+    execution = sim.execution_of(spec)
     out = (PROJECT_ROOT / spec['output']).resolve()
-    assert out.is_relative_to(PROJECT_ROOT / 'results/comparisons')
+    assert out.is_relative_to(PROJECT_ROOT / sim.RESULT_ROOTS[execution])
+    prior_folder = sim.prior_folder(spec, 'prior', PRIOR)
     out.mkdir(parents=True, exist_ok=True)
     # Office lock files (~$name) exist only while a workbook is open and are unreadable then.
     protected = {str(f): sha256_file(f) for f in (PROJECT_ROOT / 'results').rglob('*')
@@ -273,7 +315,7 @@ def main(spec_path=SPEC_PATH):
         for line in checkpoint.read_text(encoding='utf-8').splitlines():
             r = json.loads(line)
             cache[tuple(r['job'])] = r
-    prior = [json.loads(line) for line in (PRIOR / 'checkpoint.jsonl').read_text(encoding='utf-8').splitlines()]
+    prior = [json.loads(line) for line in (prior_folder / 'checkpoint.jsonl').read_text(encoding='utf-8').splitlines()]
     prior_best = {}
     for r in prior:
         key = (r['product'], r['initial_cash'], r['monthly_funding'])
@@ -305,22 +347,30 @@ def main(spec_path=SPEC_PATH):
                           if [r['initial_cash'], r['monthly_funding']] in spec['budgets']})
         replays = list(pool.map(sim.evaluate, winners))
         by_job = {tuple(r['job']): r for r in prior}
-        assert all(all(x[k] == by_job[tuple(x['job'])][k] for k in ('ongoing', 'total', 'accounts', 'alive'))
+        # Blocked replays must also assign every trade to the same accounts.
+        matched = ('ongoing', 'total', 'accounts', 'alive') + (('allocation_sha256',) if execution == 'blocking' else ())
+        assert all(all(x[k] == by_job[tuple(x['job'])][k] for k in matched)
                    for x in replays), 'the engine no longer reproduces the unlimited-supply winners'
         print(f'Unlimited-supply winners reproduced: {len(replays)}', flush=True)
         recon = reconciliation(spec)
+        if 'reconciliation_reference' in spec:
+            # Evaluations never depend on how funded accounts copy, so the calibration cannot move.
+            reference = json.loads((PROJECT_ROOT / spec['reconciliation_reference']).read_text(encoding='utf-8'))
+            assert recon == reference, 'evaluation reconciliation changed'
         print('Reconciliation:', json.dumps({k: {x: v[x] for x in ('activation_rate', 'median_days')}
                                              for k, v in recon.items()}), flush=True)
         coarse_rows = run(pool, coarse, 'Coarse grid')
         refined = refinement_jobs(coarse_rows, spec)
         run(pool, refined, 'Refinement')
     rows = [cache[j] for j in sorted(set(coarse) | set(refined))]
+    pipeline_controls = blocked_pipeline_controls(cache, spec) if execution == 'blocking' else 0
     deltas = matched_deltas(rows)
     write_csv(out / 'all_settings.csv', rows)
     write_csv(out / 'matched_deltas.csv', deltas)
     (out / 'reconciliation.json').write_text(json.dumps(recon, indent=2), encoding='utf-8')
     (out / 'study.json').write_text(json.dumps({**contract, 'generated_utc': datetime.now(timezone.utc).isoformat(),
-        'verified_controls': len(replays), 'reconciliation': recon, 'rows': rows}, indent=2, default=str),
+        'verified_controls': len(replays), 'reconciliation': recon, 'rows': rows,
+        **({'blocked_pipeline_controls': pipeline_controls} if execution == 'blocking' else {})}, indent=2, default=str),
         encoding='utf-8')
     for budget, prod in product(spec['budgets'], spec['products']):
         w = best([r for r in rows if r['product'] == prod and [r['initial_cash'], r['monthly_funding']] == budget], 'total')
@@ -331,7 +381,7 @@ def main(spec_path=SPEC_PATH):
         write_evaluations(folder / 'evaluations.csv', result.acquisition)
         (folder / 'experiment.json').write_text(json.dumps({'run_config': to_payload(result.config),
             'acquisition': asdict(result.acquisition.policy)}, indent=2), encoding='utf-8')
-    write_study_report(out, render(rows, spec, prior_best, recon, deltas, len(replays)))
+    write_study_report(out, render(rows, spec, prior_best, recon, deltas, len(replays), pipeline_controls))
     assert all(Path(f).is_file() and sha256_file(Path(f)) == h for f, h in protected.items())
     (out / 'preservation_check.json').write_text(json.dumps({'protected_files': len(protected),
         'all_unchanged': True}, indent=2), encoding='utf-8')

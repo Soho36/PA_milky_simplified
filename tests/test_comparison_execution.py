@@ -69,6 +69,28 @@ class ExecutionModeTests(unittest.TestCase):
             with self.assertRaises(AssertionError):
                 study.blocked_controls(cache, spec)
 
+    def test_blocked_pipeline_controls_use_only_matching_supply_and_detect_drift(self):
+        import study_legacy_eval_supply as supply
+
+        def source(concurrency=5, ongoing=10.0):
+            return {'mode': 'blocked', 'start_year': 2020, 'amount': 0, 'persistent': False, 'interval': 0,
+                    'concurrency': concurrency, 'reserve_seats': True, 'initial_cash': 1000,
+                    'monthly_funding': 200, 'withdrawal': 'minimum', 'cadence': 'daily', 'headroom': 0,
+                    'spares': 5, 'ongoing': ongoing, 'total': 10.0, 'accounts': 3, 'alive': 1,
+                    'evaluations': 4, 'allocation_sha256': 'x'}
+        ours = {k: source()[k] for k in ('ongoing', 'total', 'accounts', 'alive', 'evaluations', 'allocation_sha256')}
+        cache = {supply.job('legacy_25k', 1000, 200, supply.REPLACE, 'minimum', 'daily', 0, 5): ours}
+        with tempfile.TemporaryDirectory() as tmp:
+            path = Path(tmp)/'checkpoint.jsonl'
+            spec = {'evaluations_at_once': 5, 'blocked_pipeline_controls': {
+                'checkpoint': str(path), 'product': 'legacy_25k', 'minimum_matches': 1}}
+            path.write_text('\n'.join(map(json.dumps, [source(), source(concurrency=10, ongoing=99.0)])),
+                            encoding='utf-8')
+            self.assertEqual(supply.blocked_pipeline_controls(cache, spec), 1)
+            path.write_text(json.dumps(source(ongoing=11.0)), encoding='utf-8')
+            with self.assertRaises(AssertionError):
+                supply.blocked_pipeline_controls(cache, spec)
+
     @unittest.skipUnless(NON_BLOCKING_ROWS.exists() and BLOCKED_ROWS.exists(), 'saved results absent')
     def test_one_evaluator_reproduces_saved_rows_in_both_modes(self):
         job = ('legacy_25k', 1000, 200, 'monthly_current_slot_replacements', 'maximum', 'weekly', 0, False)

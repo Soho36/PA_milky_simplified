@@ -1,0 +1,40 @@
+START HERE — Can evaluations traded on the strategy supply enough replacement PAs when each account holds one position?
+
+Question answered
+Can evaluations traded on the strategy supply enough replacement PAs when each account holds
+one position?
+
+What we learned
+Across 4,912 settings run in both modes, blocking lowers total cash in 3,030 and raises it in
+1,478; the other 404 lose the seed either way. Best tested totals fall 19–25% for every product
+and budget. Evaluation supply removes the churn: 25K with $1,000 + $200/month earns $445,315
+with 66 funded PAs, against $665,421 and 531 PAs with instant $200 seats. 50K now leads 25K in
+three of the four budgets; 25K leads only with $1,000 and no contributions. All eight winners
+keep five spares, seven take the minimum checked monthly, and a funded PA costs about
+$186–$266.
+
+How to interpret it
+Evaluations trade one position at a time in both trees, so the EODMAE check is identical to the
+non-blocking study. 123 settings shared with the 25K blocked-pipeline study reproduce it
+exactly, including per-trade account assignments. The short-month columns are not comparable
+with the saved non-blocking study: a later engine change altered how supply-limited days are
+logged.
+
+Files to open first
+- eval_supply__REPORT.generated.md
+- eval_supply__REPORT.md
+- all_settings.csv
+
+Subfolders
+- legacy_25k__budget_1000_0__best_total (has its own START_HERE.txt)
+- legacy_25k__budget_1000_200__best_total (has its own START_HERE.txt)
+- legacy_25k__budget_5000_0__best_total (has its own START_HERE.txt)
+- legacy_25k__budget_5000_200__best_total (has its own START_HERE.txt)
+- legacy_50k__budget_1000_0__best_total (has its own START_HERE.txt)
+- legacy_50k__budget_1000_200__best_total (has its own START_HERE.txt)
+- legacy_50k__budget_5000_0__best_total (has its own START_HERE.txt)
+- legacy_50k__budget_5000_200__best_total (has its own START_HERE.txt)
+
+For the surrounding study, open ../START_HERE.txt.
+
+Reading note: ongoing cash is received during trading, after costs. Total cash also includes any closing withdrawal. These are historical simulations, not forecasts.
