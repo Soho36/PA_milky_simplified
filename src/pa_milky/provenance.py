@@ -4,7 +4,8 @@ A sealed baseline is three things at once:
 
 1. the exact config that produced it, embedded rather than referenced, so a
    later edit to ``config/runtime.json`` cannot retroactively rewrite history;
-2. digests of every input file, every engine module, and every output file;
+2. digests of every input file, every engine module, and every output file,
+   plus the span each input window actually covered;
 3. the headline numbers, written out in full.
 
 Verification re-runs the sealed config against *today's* engine and compares
@@ -24,7 +25,7 @@ from pathlib import Path
 import subprocess
 
 from .config import PROJECT_ROOT, RunConfig, config_from_payload, to_payload
-from .loader import WINDOWS, load_trades
+from .loader import WINDOWS, load_trades, read_coverage
 
 MANIFEST_SCHEMA = "pa_milky_simplified.baseline.v1"
 BASELINE_ROOT = PROJECT_ROOT / "baselines"
@@ -84,6 +85,38 @@ def input_digest(config: RunConfig) -> dict:
         files[f"{config.strategy}/{window}"] = trades
         files[f"{config.strategy}_stats/{window}"] = stats
     return _digest_tree(files)
+
+
+def tape_coverage(trades) -> dict:
+    """How far each window of a loaded tape actually reached.
+
+    Recorded next to the input digest so a sealed run states its own history,
+    not just the bytes it read. The digest proves the files did not change; this
+    proves they were not short to begin with. ``load_trades`` already refuses a
+    tape that falls short of ``config/tape_coverage.json``, so this is the
+    record, not the check.
+
+    Forward-only: manifests sealed before this field existed do not carry it,
+    and verification does not require it.
+    """
+
+    per_window: dict[str, dict] = {}
+    for window in WINDOWS:
+        rows = [t for t in trades if t.window_id == window]
+        if not rows:
+            continue
+        per_window[window] = {
+            "first_entry": min(t.entry_at for t in rows).isoformat(),
+            "last_exit": max(t.exit_at for t in rows).isoformat(),
+            "trades": len(rows),
+        }
+    pinned = read_coverage()
+    return {
+        "windows": per_window,
+        "trades": len(trades),
+        "pinned_reference_risk_reward": (pinned or {}).get("reference_risk_reward"),
+        "pinned_tolerance_days": (pinned or {}).get("tolerance_days"),
+    }
 
 
 def engine_digest() -> dict:
@@ -158,6 +191,13 @@ def seal(name: str, config: RunConfig, summary: dict, output_dir: Path) -> Path:
         "git_revision": git_revision(),
         "config": to_payload(config),
         "inputs": input_digest(config),
+        "coverage": tape_coverage(
+            load_trades(
+                config.sweeps_root,
+                strategy=config.strategy,
+                risk_reward=config.risk_reward,
+            )
+        ),
         "engine": engine_digest(),
         "outputs": _digest_tree({n: destination / n for n in sealed_names}),
         "headline": headline(summary),

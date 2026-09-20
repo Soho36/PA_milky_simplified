@@ -2,11 +2,21 @@
 
 The sweep files are UTF-16, tab separated, headerless, and carry seven fields
 per completed trade. Every dollar figure is stated for one MNQ contract.
+
+Per-window reconciliation against each ``_stats`` file catches a damaged export
+but not a *short* one. When an MT5 test ends early -- most often because the
+test account was wiped -- the exporter writes a faithful record of the run it
+actually had, and its stats are generated from that same short run, so counts
+and P&L sums reconcile and nothing looks wrong. That truncation is not neutral:
+it removes history at the moment of the worst drawdown, so the setting looks
+better than it was. ``config/tape_coverage.json`` pins how far every window
+reaches, and ``load_trades`` refuses a tape that falls short of it.
 """
 
 from __future__ import annotations
 
 import csv
+import json
 from dataclasses import dataclass
 from datetime import datetime
 from decimal import Decimal
@@ -30,6 +40,9 @@ STATS_COLUMNS = (
 )
 SOURCE_TIME_FORMAT = "%Y.%m.%d %H:%M:%S"
 WINDOWS = tuple(f"{hour}-{hour + 1}" for hour in range(1, 24))
+# Committed alongside the code because 1_sweeps/ is not committed.
+COVERAGE_SCHEMA = "pa_milky_simplified.tape_coverage.v1"
+COVERAGE_PATH = Path(__file__).resolve().parents[2] / "config" / "tape_coverage.json"
 
 
 @dataclass(frozen=True, slots=True)
@@ -75,17 +88,89 @@ def _read_stats(path: Path) -> dict[str, str]:
     return rows[0]
 
 
+def read_coverage(path: Path = COVERAGE_PATH) -> dict | None:
+    """The pinned per-window reach of the tape, or None when it is not recorded."""
+
+    if not path.is_file():
+        return None
+    payload = json.loads(path.read_text(encoding="utf-8"))
+    if payload.get("schema") != COVERAGE_SCHEMA:
+        raise ValueError(f"{path}: coverage schema {payload.get('schema')!r} unsupported")
+    return payload
+
+
+def coverage_shortfalls(
+    strategy: str, last_exits: dict[str, datetime], coverage: dict | None
+) -> list[tuple[str, datetime, datetime, float]]:
+    """Windows ending earlier than pinned, as (window, reached, required, days_short).
+
+    A window may legitimately end a little early: a different risk/reward exits
+    the same entries at different moments, so the final trade can settle either
+    side of the reference. It may not end *months* early. Measured across the
+    whole grid, a complete window is never more than a day off its reference and
+    a truncated one is at least sixteen days short, so the tolerance separates
+    them with room to spare.
+    """
+
+    if coverage is None:
+        return []
+    windows = coverage.get("strategies", {}).get(strategy)
+    if windows is None:
+        return []  # a strategy nobody has measured yet is not a failure
+    tolerance = float(coverage.get("tolerance_days", 0))
+    shortfalls = []
+    for window, reached in sorted(last_exits.items()):
+        pinned = windows.get(window)
+        if pinned is None:
+            continue
+        required = datetime.fromisoformat(pinned["last_exit"])
+        days_short = (required - reached).total_seconds() / 86400
+        if days_short > tolerance:
+            shortfalls.append((window, reached, required, days_short))
+    return shortfalls
+
+
+def _coverage_error(strategy: str, risk_reward: str, shortfalls, coverage: dict) -> str:
+    worst = max(shortfalls, key=lambda row: row[3])
+    lines = [
+        f"{strategy} @ {risk_reward}: {len(shortfalls)} of {len(WINDOWS)} windows stop "
+        f"short of the coverage pinned in {COVERAGE_PATH.name} "
+        f"(reference risk/reward {coverage.get('reference_risk_reward')}, "
+        f"tolerance {coverage.get('tolerance_days')} days). "
+        "A short export is usually an MT5 test that ended early because the test "
+        "account was wiped; its stats come from the same short run, so counts and "
+        "P&L reconcile and the gap is otherwise invisible. Re-exporting reproduces "
+        "it -- raise the test deposit and re-run the backtest.",
+        f"  worst: window {worst[0]} reached {worst[1].isoformat()}, "
+        f"needs {worst[2].isoformat()} ({worst[3]:.0f} days short)",
+    ]
+    for window, reached, required, days_short in shortfalls[:8]:
+        lines.append(
+            f"  {window}: {reached.date()} vs {required.date()} ({days_short:.0f} days short)"
+        )
+    if len(shortfalls) > 8:
+        lines.append(f"  ... and {len(shortfalls) - 8} more")
+    return "\n".join(lines)
+
+
 def load_trades(
     sweeps_root: str | Path,
     *,
     strategy: str = "RR",
     risk_reward: str = "1.00",
+    check_coverage: bool = True,
 ) -> list[Trade]:
-    """Load all 23 hourly windows, reconciled against the tester's own stats."""
+    """Load all 23 hourly windows, reconciled against the tester's own stats.
+
+    ``check_coverage`` is for the two callers that must read a tape without
+    judging it: the generator that measures the reference, and tests that load a
+    deliberately short one.
+    """
 
     root = Path(sweeps_root)
     paths = _window_paths(root, strategy, risk_reward)
     trades: list[Trade] = []
+    last_exits: dict[str, datetime] = {}
 
     for order, window in enumerate(WINDOWS, start=1):
         trades_path, stats_path = paths[window]
@@ -126,6 +211,8 @@ def load_trades(
 
                 pnl_sum += Decimal(pnl_text)
                 row_count += 1
+                if window not in last_exits or exit_at > last_exits[window]:
+                    last_exits[window] = exit_at
                 trades.append(
                     Trade(
                         trade_key=f"{strategy}{risk_reward}:{window}:{source_row}:{ticket}",
@@ -156,6 +243,12 @@ def load_trades(
                 f"{trades_path}: P&L sum {pnl_sum} disagrees with tester stats "
                 f"{stats['net_profit']}"
             )
+
+    if check_coverage:
+        coverage = read_coverage()
+        shortfalls = coverage_shortfalls(strategy, last_exits, coverage)
+        if shortfalls:
+            raise ValueError(_coverage_error(strategy, risk_reward, shortfalls, coverage))
 
     # Settlement order. Realized P&L lands at the exit, so the book is walked by
     # exit time; the remaining keys only make ties deterministic.

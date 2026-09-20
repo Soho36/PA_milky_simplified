@@ -17,6 +17,8 @@ PROJECT_ROOT = Path(__file__).resolve().parents[1]
 LEDGER = PROJECT_ROOT/'results/RENAMES.json'
 # Later edits to scripts that saved audits pin, each with its verification.
 SCRIPT_EDITS = PROJECT_ROOT/'results/SCRIPT_EDITS.json'
+# Deliberate src/pa_milky changes, old engine digest to new. See its own purpose text.
+ENGINE_CHANGES = PROJECT_ROOT/'results/ENGINE_CHANGES.json'
 
 
 def report_path(folder, kind):
@@ -76,3 +78,31 @@ def verified(path, digest):
     # because earlier pins hashed whichever form the working copy happened to have.
     before = {record['old_sha256'], record.get('old_sha256_crlf')}
     return digest in before and current.is_file() and record['new_sha256'] in _shas(current)
+
+
+@lru_cache(maxsize=None)
+def _engine_changes():
+    if not ENGINE_CHANGES.exists():
+        return []
+    return json.loads(ENGINE_CHANGES.read_text(encoding='utf-8'))['transitions']
+
+
+def engine_accepted(pinned, current):
+    """True if `pinned` is `current`, or reaches it through recorded engine changes.
+
+    A saved contract pins the engine digest of the day it ran. Editing src changes
+    that digest without necessarily changing a single number, so an audit would
+    fail on the fingerprint alone. results/ENGINE_CHANGES.json records each such
+    change; this follows the chain from the pinned digest forward. A digest that
+    is not in the chain is still a failure -- unrecorded drift is exactly what the
+    assertion is for.
+    """
+    pinned_sha = pinned['combined_sha256'] if isinstance(pinned, dict) else pinned
+    current_sha = current['combined_sha256'] if isinstance(current, dict) else current
+    if pinned_sha == current_sha:
+        return True
+    reached = pinned_sha
+    for change in _engine_changes():
+        if change['old_combined_sha256'] == reached:
+            reached = change['new_combined_sha256']
+    return reached == current_sha
