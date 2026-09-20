@@ -3,7 +3,7 @@
   "transitions": [
     {
       "old_combined_sha256": "a9b27513b590334f5754502037571b44ba7efac55574ea4ee29bea02408b9c6c",
-      "new_combined_sha256": "95355e8ab6428387a2e185c60738169f04c94f0cca3ad20076070a86b9bddfe1",
+      "new_combined_sha256": "64a11414117974b8771f01e324f8877bdf27fc35c5d4de8f50c27081a2dcca38",
       "recorded_utc": "2026-09-20T10:42:14+00:00",
       "git_revision_before": "d5fc4116d90b9a07ca5658012def301cea0805a9",
       "changed": [
@@ -14,8 +14,9 @@
       "files_after": 25,
       "reason": "Added the tape coverage guard. loader.load_trades now refuses a tape whose windows stop short of config/tape_coverage.json, and provenance records the span each window covered. 303 of 13,846 sweep exports were truncated by an MT5 test that wiped a ~$5,000 deposit; their stats were generated from the same short run, so they reconciled and loaded silently. R:R 1.00 is complete in all 46 tapes, so no saved study read a short tape and no saved number moves.",
       "outputs_unchanged": true,
-      "evidence": "291 pre-existing tests plus tests/test_tape_coverage.py pass; all sealed baselines re-verify."
+      "evidence": "291 pre-existing tests plus tests/test_tape_coverage.py pass; all sealed baselines re-verify.",
+      "line_endings": "Both digests are of the working copy as git checks it out: core.autocrlf is true, so src/pa_milky arrives CRLF. The old digest here is the one the saved contracts pinned, which confirms CRLF is the reproducible form."
     }
   ],
-  "caveat": "engine_digest() hashes file bytes, and core.autocrlf is true with no .gitattributes, so the digest depends on the line endings of the working copy that computed it. src/pa_milky is already a mix of LF, CRLF and mixed-ending files, because tools write LF after git checks out CRLF. Every digest recorded here or in a saved contract therefore describes one particular working copy and is not reproducible from a clean clone. That predates this ledger and is not repaired by it: the pinned side of each transition is itself unreproducible, so normalizing only the new side would not close the chain. Treat an engine assertion as a guard against local drift, and rely on the re-run comparisons and sealed baselines for the claim that no number moved."
+  "caveat": "engine_digest() hashes file bytes, and core.autocrlf is true with no .gitattributes, so a digest describes the line endings of the working copy that produced it. The reproducible form is the checkout form, CRLF, and that is what the saved contracts pinned and what this ledger records. The hazard is local: an editor or script that rewrites a src file with LF endings changes the engine digest without changing a line of code, and every engine assertion then fails until the file is restored to its checked-out form (git checkout -- src/pa_milky, or a fresh checkout). Adding a .gitattributes to fix the convention outright would change the checkout form of every src file and so require re-recording every pinned engine digest; that is a separate change."
 }
