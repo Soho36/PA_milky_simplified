@@ -4,85 +4,34 @@
 <style>
   :root {
     color-scheme: light;
-    --plane:#f4f6f8;
-    --surface:#fcfcfb;
-    --ink:#0b0b0b;
-    --ink-2:#52514e;
-    --muted:#898781;
-    --grid:#e1e0d9;
-    --axis:#c3c2b7;
-    --hair:rgba(11,11,11,0.10);
-    --rr-1:#86b6ef;
-    --rr-2:#5598e7;
-    --rr-3:#2a78d6;
-    --rr-4:#184f95;
-    --dead:#d03b3b;
-    --s1:#2a78d6;
-    --s2:#eb6834;
-    --s3:#1baf7a;
-    --heat-0:#eef1f4;
-    --heat-1:#cde2fb;
-    --heat-2:#9ec5f4;
-    --heat-3:#6da7ec;
-    --heat-4:#3987e5;
-    --heat-5:#256abf;
-    --heat-6:#0d366b;
+    --plane:#f4f6f8; --surface:#fcfcfb; --ink:#0b0b0b; --ink-2:#52514e; --muted:#898781;
+    --grid:#e1e0d9; --axis:#c3c2b7; --hair:rgba(11,11,11,0.10);
+    --rr-1:#86b6ef; --rr-2:#5598e7; --rr-3:#2a78d6; --rr-4:#184f95;
+    --dead:#d03b3b; --s1:#2a78d6; --s2:#eb6834; --s3:#1baf7a;
+    --heat-0:#eef1f4; --heat-1:#cde2fb; --heat-2:#9ec5f4; --heat-3:#6da7ec;
+    --heat-4:#3987e5; --heat-5:#256abf; --heat-6:#0d366b;
     --sans:"IBM Plex Sans",system-ui,-apple-system,"Segoe UI",sans-serif;
     --mono:"IBM Plex Mono",ui-monospace,"SF Mono",Menlo,monospace;
   }
   @media (prefers-color-scheme: dark) {
     :root:not([data-theme="light"]) {
       color-scheme: dark;
-      --plane:#0d0d0d;
-      --surface:#1a1a19;
-      --ink:#ffffff;
-      --ink-2:#c3c2b7;
-      --muted:#898781;
-      --grid:#2c2c2a;
-      --axis:#383835;
-      --hair:rgba(255,255,255,0.10);
-      --rr-1:#184f95;
-      --rr-2:#256abf;
-      --rr-3:#3987e5;
-      --rr-4:#86b6ef;
-      --dead:#d03b3b;
-      --s1:#3987e5;
-      --s2:#d95926;
-      --s3:#199e70;
-      --heat-0:#212120;
-      --heat-1:#0d366b;
-      --heat-2:#184f95;
-      --heat-3:#256abf;
-      --heat-4:#3987e5;
-      --heat-5:#6da7ec;
-      --heat-6:#b7d3f6;
+      --plane:#0d0d0d; --surface:#1a1a19; --ink:#ffffff; --ink-2:#c3c2b7; --muted:#898781;
+      --grid:#2c2c2a; --axis:#383835; --hair:rgba(255,255,255,0.10);
+      --rr-1:#184f95; --rr-2:#256abf; --rr-3:#3987e5; --rr-4:#86b6ef;
+      --dead:#d03b3b; --s1:#3987e5; --s2:#d95926; --s3:#199e70;
+      --heat-0:#212120; --heat-1:#0d366b; --heat-2:#184f95; --heat-3:#256abf;
+      --heat-4:#3987e5; --heat-5:#6da7ec; --heat-6:#b7d3f6;
     }
   }
   :root[data-theme="dark"] {
     color-scheme: dark;
-    --plane:#0d0d0d;
-    --surface:#1a1a19;
-    --ink:#ffffff;
-    --ink-2:#c3c2b7;
-    --muted:#898781;
-    --grid:#2c2c2a;
-    --axis:#383835;
-    --hair:rgba(255,255,255,0.10);
-    --rr-1:#184f95;
-    --rr-2:#256abf;
-    --rr-3:#3987e5;
-    --rr-4:#86b6ef;
-    --dead:#d03b3b;
-    --s1:#3987e5;
-    --s2:#d95926;
-    --s3:#199e70;
-    --heat-0:#212120;
-    --heat-1:#0d366b;
-    --heat-2:#184f95;
-    --heat-3:#256abf;
-    --heat-4:#3987e5;
-    --heat-5:#6da7ec;
-    --heat-6:#b7d3f6;
+    --plane:#0d0d0d; --surface:#1a1a19; --ink:#ffffff; --ink-2:#c3c2b7; --muted:#898781;
+    --grid:#2c2c2a; --axis:#383835; --hair:rgba(255,255,255,0.10);
+    --rr-1:#184f95; --rr-2:#256abf; --rr-3:#3987e5; --rr-4:#86b6ef;
+    --dead:#d03b3b; --s1:#3987e5; --s2:#d95926; --s3:#199e70;
+    --heat-0:#212120; --heat-1:#0d366b; --heat-2:#184f95; --heat-3:#256abf;
+    --heat-4:#3987e5; --heat-5:#6da7ec; --heat-6:#b7d3f6;
   }
 
   body { background: var(--plane); color: var(--ink); font-family: var(--sans); line-height:1.55; }
@@ -98,12 +47,11 @@
   p  { margin:0 0 14px; max-width:68ch; color:var(--ink-2); }
   p.lead { font-size:17px; color:var(--ink); max-width:62ch; }
   strong { color: var(--ink); font-weight:600; }
-  a { color: var(--s1); }
 
   section { margin-top:52px; }
   .sec-head { border-top:1px solid var(--hair); padding-top:22px; margin-bottom:20px; }
   .sec-head .n { font-family:var(--mono); font-size:11px; color:var(--muted); letter-spacing:.1em; }
-  .sub { font-size:13.5px; color:var(--muted); margin:0; max-width:70ch; }
+  .sub { font-size:13.5px; color:var(--muted); margin:0; max-width:72ch; }
 
   .panel { background:var(--surface); border:1px solid var(--hair); border-radius:6px; padding:20px 18px 16px; }
   .two { display:grid; grid-template-columns:1fr 1fr; gap:18px; }
@@ -113,7 +61,7 @@
             font-size:12px; color:var(--ink-2); }
   .legend .k { display:inline-flex; align-items:center; gap:6px; }
   .sw { width:11px; height:11px; border-radius:2px; display:inline-block; flex:none; }
-  .sw.line { height:3px; border-radius:2px; width:16px; }
+  .sw.tick { width:3px; height:14px; border-radius:1px; }
 
   svg { display:block; width:100%; height:auto; overflow:visible; }
   .scroller { overflow-x:auto; }
@@ -128,7 +76,7 @@
   .tip { position:fixed; z-index:50; pointer-events:none; opacity:0; transition:opacity .09s;
          background:var(--surface); color:var(--ink); border:1px solid var(--hair);
          border-radius:5px; padding:7px 9px; font-size:12px; line-height:1.4;
-         box-shadow:0 4px 16px rgba(0,0,0,.14); max-width:250px; }
+         box-shadow:0 4px 16px rgba(0,0,0,.14); max-width:260px; }
   .tip b { font-weight:600; }
   .tip .m { font-family:var(--mono); font-size:11px; color:var(--ink-2); }
 
@@ -139,8 +87,8 @@
   .f .tag { font-family:var(--mono); font-size:10px; letter-spacing:.08em; text-transform:uppercase;
             padding:3px 7px; border-radius:3px; white-space:nowrap; }
   .tag.holds { background:color-mix(in srgb, var(--s3) 16%, transparent); color:var(--ink); }
+  .tag.dose  { background:color-mix(in srgb, var(--s1) 16%, transparent); color:var(--ink); }
   .tag.caution { background:color-mix(in srgb, var(--s2) 18%, transparent); color:var(--ink); }
-  .tag.gap { background:color-mix(in srgb, var(--dead) 15%, transparent); color:var(--ink); }
   .f p { margin:0; font-size:14px; }
 
   table { border-collapse:collapse; width:100%; font-size:12px; }
@@ -154,7 +102,14 @@
   tbody tr.mix { background:color-mix(in srgb, var(--s1) 6%, transparent); }
   td.zero { color:var(--muted); }
 
-  .note { font-size:12px; color:var(--muted); margin-top:10px; max-width:74ch; }
+  .corr { display:grid; gap:0; }
+  .corr .c { padding:14px 0; border-bottom:1px solid var(--hair); }
+  .corr .c:last-child { border-bottom:0; }
+  .corr h3 { color:var(--ink); }
+  .corr p { font-size:13.5px; margin:0; }
+  .was { font-family:var(--mono); font-size:11.5px; color:var(--muted); display:block; margin-bottom:5px; }
+
+  .note { font-size:12px; color:var(--muted); margin-top:10px; max-width:76ch; }
   footer { margin-top:56px; border-top:1px solid var(--hair); padding-top:18px;
            font-size:12px; color:var(--muted); }
   code { font-family:var(--mono); font-size:0.92em; background:var(--surface);
@@ -167,62 +122,82 @@
 
   <p class="eyebrow">Apex Legacy 25K PA &middot; 286 frozen runs &middot; results/legacy_25k/rr_diversification</p>
   <h1>Partition, not dispersion</h1>
-  <p class="lead">The RR mixtures do something real, but it is not what the study set out to find.
-  They shrink the <strong>size</strong> of a synchronized failure. They do not spread deaths
-  across the calendar &mdash; every sleeve still dies as one block, on one day.</p>
+  <p class="lead">Across the whole dataset, RR mixing <strong>does</strong> reduce death clustering. Not by
+  staggering deaths through time &mdash; each sleeve still dies as one block on one day &mdash; but by
+  cutting the block into pieces. The dose is the width of the spread, and a narrow spread buys nothing.</p>
 
   <div class="findings">
     <div class="f"><span class="tag holds">Holds</span>
-      <p><strong>wide</strong> is the only portfolio of the thirteen with zero empty-book episodes in
-      all six operating starts. Its own four constituents run up to six.</p></div>
-    <div class="f"><span class="tag caution">Reframe</span>
-      <p>Every March death in every mixture is an account on a doomed setting, and they all die on the
-      same day. Blast radius falls; timing is untouched.</p></div>
-    <div class="f"><span class="tag gap">Confound</span>
-      <p>Five of nine single-RR books took <em>zero</em> March damage. The mixtures did worse than those
-      five &mdash; and the one mixture without RR&nbsp;0.50 is also the one that behaves like a single book.</p></div>
+      <p>Over 11 operating cells, the worst single day costs a mixture <strong>67%</strong> of its live book
+      against <strong>82%</strong> for a single-RR book. <code>wide</code> is lowest of all thirteen at 47%,
+      and beats RR&nbsp;1.00 in <strong>11 of 11</strong> cells.</p></div>
+    <div class="f"><span class="tag dose">Dose</span>
+      <p>Spread width drives <em>when</em> sleeves are hit; sleeve count drives <em>how many</em> die together.
+      <code>near</code> has neither &mdash; 0.5 of width, two sleeves &mdash; and beats RR&nbsp;1.00 in only 1 of 11.</p></div>
+    <div class="f"><span class="tag caution">Open</span>
+      <p>Composition, width and sleeve count are still confounded, the eleven cells are one history rather
+      than eleven, and no mixture beats the <em>best</em> single RR chosen with hindsight in more than 5 of 11.</p></div>
   </div>
 
   <section>
     <div class="sec-head">
       <span class="n">01</span>
-      <h2>The March 2026 event, account by account</h2>
-      <p class="sub">Twenty funded seats per portfolio on 1 March 2026, grouped into RR sleeves.
-      Red cells died during March. The $5,700 daily-maximum stress policy &mdash; not the primary
-      $6,800 baseline, which has no March deaths at all.</p>
+      <h2>Worst-day loss across the whole dataset</h2>
+      <p class="sub">Share of the live book lost in the worst single trading day, averaged over 11 operating
+      cells &mdash; six fresh starts crossed with the daily-maximum and MFE-first sensitivities. The lighter
+      tick is the same figure with the 2020 start removed, which takes COVID out of the window.</p>
     </div>
     <div class="panel">
-      <div class="legend" id="lg-units"></div>
-      <div class="scroller"><div id="c-units"></div></div>
-      <p class="note">Deaths per mixture equal the sleeve size exactly: <code>wide</code> loses its five
-      RR&nbsp;1.50 seats and nothing else; <code>four</code> loses its RR&nbsp;1.00 and RR&nbsp;1.50 fives.
-      A pure RR&nbsp;2.50 or RR&nbsp;3.50 book walks through the event untouched. RR&nbsp;0.75 is the only
-      portfolio whose losses land on two different days.</p>
+      <div class="legend" id="lg-cluster"></div>
+      <div id="c-cluster"></div>
+      <p class="note">Mixtures average <strong>0.668</strong> against <strong>0.815</strong> for single-RR books, on
+      slightly <em>fewer</em> deaths (32.6 against 34.3), so the improvement is not bought by dying more often.
+      Dropping 2020 narrows the gap to 0.685 against 0.746 but does not close it &mdash; COVID amplifies the
+      effect rather than creating it.</p>
     </div>
   </section>
 
   <section>
     <div class="sec-head">
       <span class="n">02</span>
-      <h2>How many distinct balances each book actually held</h2>
-      <p class="sub">Distinct profit-equity values across the twenty live seats on 1 March 2026, four
-      weeks before the event. Identical balances are what turns an $81.50 adverse excursion into
-      twenty simultaneous deaths.</p>
+      <h2>The dose: how wide, and how many sleeves</h2>
+      <p class="sub">Each mixture against the single-RR average, on the two clustering measures that move
+      independently.</p>
     </div>
-    <div class="panel">
-      <div class="legend" id="lg-disp"></div>
-      <div id="c-disp"></div>
-      <p class="note">Six of the nine single-RR books sat at <strong>one</strong> distinct balance &mdash; all
-      twenty seats at the same headroom to the dollar. Mixing lifts that to the number of sleeves, no
-      further. But RR&nbsp;0.75 alone reached <strong>seven</strong> distinct balances spanning $4,414, and
-      RR&nbsp;0.50 reached five spanning $2,633 &mdash; both more dispersed than any tested mixture, and
-      both homogeneous.</p>
+    <div class="two">
+      <div class="panel">
+        <h3>Worst-day share of book &mdash; set by spread width</h3>
+        <div id="c-dose-w"></div>
+        <p class="note">0.5 of width buys nothing. 1.0 and above works.</p>
+      </div>
+      <div class="panel">
+        <h3>Largest same-signal loss &mdash; set by sleeve count</h3>
+        <div id="c-dose-s"></div>
+        <p class="note">Two sleeves of ten still lose ten at once. Four sleeves halve it.</p>
+      </div>
     </div>
+    <p class="note">This is why <code>modest</code> and <code>four</code> each win one measure and lose the other:
+    <code>modest</code> is wide but coarse, <code>four</code> is fine but narrow. <code>wide</code> is the only tested
+    portfolio that is both, and it leads both columns.</p>
   </section>
 
   <section>
     <div class="sec-head">
       <span class="n">03</span>
+      <h2>Head to head, cell by cell</h2>
+      <p class="sub">Averages can hide a portfolio that wins big once and loses often. Count of the 11
+      operating cells in which each mixture beats the named benchmark on worst-day share.</p>
+    </div>
+    <div class="panel"><div class="scroller"><table id="t-h2h"></table></div>
+      <p class="note">Beating the homogeneous <em>median</em> is the operationally meaningful test: you do not know
+      in advance which single RR will turn out best. <code>wide</code> clears it every time. Beating the
+      <em>best</em> homogeneous is hindsight, and nothing clears that reliably.</p>
+    </div>
+  </section>
+
+  <section>
+    <div class="sec-head">
+      <span class="n">04</span>
       <h2>Empty-book episodes across six operating starts</h2>
       <p class="sub">Times the book fell to zero live accounts after first activation. Daily minimum
       withdrawals, $6,800 headroom, $5,000 owner cash plus $200/month, shared 20-seat cap, MAE-first.</p>
@@ -230,106 +205,158 @@
     <div class="panel">
       <div class="legend" id="lg-heat"></div>
       <div class="scroller"><div id="c-heat"></div></div>
-      <p class="note">This is the finding that survives scrutiny. <code>wide</code> holds a clean zero row
-      while RR&nbsp;2.50 alone &mdash; the best single setting on cash &mdash; empties its book twelve times, six
-      of them in the 2021 start. Continuity and cash pull in opposite directions here.</p>
+      <p class="note"><code>wide</code> holds a clean zero row. <code>modest</code> has one episode and
+      <code>four</code> has two, so it is not the case that only <code>near</code> retains them &mdash; but every
+      one of the nine single-RR books has more, including twelve across the six RR&nbsp;2.50 runs.</p>
     </div>
-  </section>
-
-  <section>
-    <div class="sec-head">
-      <span class="n">04</span>
-      <h2>What the continuity costs</h2>
-      <p class="sub">The mixture against the inherited baseline and against the strongest single
-      setting, on the two measures that trade off.</p>
-    </div>
-    <div class="two">
-      <div class="panel">
-        <h3>Lifetime deaths</h3>
-        <div class="legend" id="lg-d"></div>
-        <div id="c-deaths"></div>
-      </div>
-      <div class="panel">
-        <h3>Net operating cash</h3>
-        <div class="legend" id="lg-c"></div>
-        <div id="c-cash"></div>
-      </div>
-    </div>
-    <p class="note">RR&nbsp;2.50 beats <code>wide</code> on cash in all six starts and on deaths in three.
-    In the 2023 start it dominates outright &mdash; 17 deaths against 28, zero empty books either way,
-    and $263,867 against $188,417. The mixture is not better than its best constituent; it is
-    insurance against not knowing in advance which constituent that will be.</p>
   </section>
 
   <section>
     <div class="sec-head">
       <span class="n">05</span>
-      <h2>The control that is missing</h2>
-      <p class="sub">Isolation phase, 2023 start, no replacements &mdash; the cleanest read in the study.</p>
+      <h2>The mechanism, close up</h2>
+      <p class="sub">One event, account by account: twenty funded seats on 1 March 2026 under the
+      $5,700 daily-maximum stress policy. Illustrative of how the partition works &mdash; not the basis for
+      the general claim above, which comes from all eleven cells.</p>
     </div>
     <div class="panel">
-      <div class="scroller"><table id="t-iso"></table></div>
-      <p class="note">Eight of nine single-RR books lost <strong>nothing</strong>. Every death in every
-      mixture was an RR&nbsp;0.50 account. The improvement from twenty same-signal deaths down to five is
-      the RR&nbsp;0.50 allocation shrinking from twenty seats to five &mdash; arithmetic, not diversification.
-      Three of the four tested mixtures contain RR&nbsp;0.50; the fourth, <code>near</code>, is the one that
-      keeps its empty-book episodes. Spread and &ldquo;contains a weak setting&rdquo; are confounded across
-      the whole design.</p>
+      <div class="legend" id="lg-units"></div>
+      <div class="scroller"><div id="c-units"></div></div>
+      <p class="note">Deaths per mixture equal sleeve size exactly, and land on a single day.
+      <code>wide</code> loses its five RR&nbsp;1.50 seats; <code>four</code> loses its RR&nbsp;1.00 and RR&nbsp;1.50
+      fives. Nothing is desynchronized <em>within</em> a sleeve &mdash; what the mixture buys is that the other
+      sleeves are untouched.</p>
     </div>
   </section>
 
   <section>
     <div class="sec-head">
       <span class="n">06</span>
+      <h2>How concentrated each book was before the event</h2>
+      <p class="sub">Accounts sharing an identical headroom value on 1 March 2026. The largest such group
+      is the number that can die on one signal &mdash; the count of <em>distinct</em> values is not, because a book
+      can hold six singletons and one large clump.</p>
+    </div>
+    <div class="panel">
+      <div class="legend" id="lg-grp"></div>
+      <div id="c-grp"></div>
+      <p class="note">Six of the nine single-RR books sat at one balance &mdash; twenty seats at the same headroom
+      to the dollar. RR&nbsp;0.75 holds seven distinct values, which looks dispersed until you see that
+      <strong>13 of its 20</strong> share one. <code>wide</code> and <code>four</code> hold four groups of five:
+      fewer distinct values, a far smaller worst case.</p>
+    </div>
+  </section>
+
+  <section>
+    <div class="sec-head">
+      <span class="n">07</span>
+      <h2>What the continuity costs</h2>
+      <p class="sub">The mixture against the inherited baseline and against the strongest single setting.</p>
+    </div>
+    <div class="two">
+      <div class="panel">
+        <h3>Lifetime deaths</h3><div class="legend" id="lg-d"></div><div id="c-deaths"></div>
+      </div>
+      <div class="panel">
+        <h3>Net operating cash</h3><div class="legend" id="lg-c"></div><div id="c-cash"></div>
+      </div>
+    </div>
+    <p class="note">RR&nbsp;2.50 beats <code>wide</code> on cash in all six starts. In the 2023 start it also beats it
+    on deaths &mdash; 17 against 28, zero empty books either way. The mixture is not better than its best
+    constituent; it is insurance against not knowing in advance which constituent that will be, and the
+    head-to-head counts are the price of that insurance.</p>
+  </section>
+
+  <section>
+    <div class="sec-head">
+      <span class="n">08</span>
+      <h2>Isolation: what happens with no replacements</h2>
+      <p class="sub">Same portfolios, replacement supply switched off, averaged over 11 cells. Everything
+      eventually exhausts, so the question is not whether but how.</p>
+    </div>
+    <div class="panel"><div class="scroller"><table id="t-iso"></table></div>
+      <p class="note">A single-RR book loses its entire remaining book in <strong>one</strong> same-signal event:
+      12.9 deaths on average, 12.93 of them simultaneous. Mixtures cap that at 6.6, and stay alive about
+      240 days longer. This is the clearest statement of the mechanism in the whole study.</p>
+    </div>
+  </section>
+
+  <section>
+    <div class="sec-head">
+      <span class="n">09</span>
       <h2>Primary operating grid</h2>
-      <p class="sub">All thirteen portfolios across six fresh starts. Deaths / empty-book episodes /
-      net operating cash. Mixtures shaded.</p>
+      <p class="sub">All thirteen portfolios across six fresh starts, daily minimum / $6,800 / MAE-first.
+      Deaths / empty-book episodes / net operating cash. Mixtures shaded.</p>
     </div>
     <div class="panel"><div class="scroller"><table id="t-main"></table></div></div>
   </section>
 
   <section>
     <div class="sec-head">
-      <span class="n">07</span>
-      <h2>What would actually test the idea</h2>
+      <span class="n">10</span>
+      <h2>Three corrections to the earlier reading</h2>
     </div>
-    <p>The goal was to spread deaths through time. Nothing here does that: within a sleeve, deaths are
-    perfectly coincident, and which day a sleeve dies is chosen by the market, not staggered by design.
-    Three things would separate the mechanism from the confound.</p>
-    <p><strong>A mixture of only strong settings.</strong> Something like 1.25&thinsp;/&thinsp;1.50&thinsp;/&thinsp;2.00&thinsp;/&thinsp;2.50,
-    with no RR&nbsp;0.50 sleeve to carry the losses. If that still clears the empty-book episodes, the
-    spread is doing the work. If it does not, the weak sleeve was.</p>
-    <p><strong>More sleeves, thinner.</strong> Blast radius is sleeve size, so twenty sleeves of one seat
-    is the limit case. That is the version of this idea worth pricing, and it needs no new mechanism &mdash;
-    only more distinct RR values in the book.</p>
-    <p><strong>A staggered-reserve arm as the cheap control.</strong> If the aim is simply that seats do not
-    sit at one headroom, a per-account reserve ladder &mdash; $6,200, $6,400, $6,600 &mdash; disperses balances
-    directly. RR&nbsp;0.75 already reached seven distinct balances on its own, which suggests the dispersion
-    channel is not really RR at all.</p>
+    <div class="corr">
+      <div class="c">
+        <h3>Distinct balances was the wrong metric</h3>
+        <span class="was">was: &ldquo;RR 0.75 is more dispersed than any tested mixture&rdquo;</span>
+        <p>Counting distinct values rewarded RR&nbsp;0.75 for a tail of singletons while hiding a 13-account
+        clump. By largest-group share &mdash; what actually sets how many die together &mdash; the mixtures are the
+        better instrument at 25%, not the worse one. This reverses the earlier conclusion.</p>
+      </div>
+      <div class="c">
+        <h3>RR 0.50 is not generally weak</h3>
+        <span class="was">was: &ldquo;the mixtures dilute a weak constituent&rdquo;</span>
+        <p>It is the sole source of mixture deaths in the 2023 isolation run, but it takes zero damage in
+        March 2026 and sits mid-field on whole-dataset clustering. Its weakness is period-specific. The
+        composition confound stands; the characterisation of RR&nbsp;0.50 does not.</p>
+      </div>
+      <div class="c">
+        <h3><code>near</code> is not the only mixture with empty books</h3>
+        <span class="was">was: &ldquo;the fourth, near, is the one that keeps its empty-book episodes&rdquo;</span>
+        <p><code>modest</code> has one and <code>four</code> has two across the six primary starts. <code>wide</code>
+        alone has none. The heatmap was right; the sentence beside it was not.</p>
+      </div>
+    </div>
+  </section>
+
+  <section>
+    <div class="sec-head">
+      <span class="n">11</span>
+      <h2>What would sharpen this</h2>
+    </div>
+    <p><strong>Separate width from composition.</strong> <code>wide</code> is simultaneously the widest spread, a
+    four-sleeve book, and the only one holding both RR&nbsp;0.50 and RR&nbsp;3.50. A 1.25&thinsp;/&thinsp;1.75&thinsp;/&thinsp;2.25&thinsp;/&thinsp;2.75
+    arm holds sleeve count and width roughly fixed while changing the constituents; a 0.50&thinsp;/&thinsp;3.50 two-sleeve
+    arm holds width fixed while halving the count. Those two runs would decide which factor is doing the work.</p>
+    <p><strong>Push the sleeve count.</strong> Largest same-signal loss tracks sleeve size almost exactly, so
+    twenty sleeves of one seat is the limit case. That needs no new mechanism, only more distinct RR values
+    in the book, and it is the cheapest way to find where the benefit flattens.</p>
+    <p><strong>Run the reserve-ladder control.</strong> If the aim is that seats do not share a headroom value,
+    a per-account reserve ladder disperses balances directly and costs nothing to test. Until it is run, the
+    claim that RR is the right instrument for this is unproven &mdash; only that it is <em>an</em> instrument.</p>
   </section>
 
   <footer>
-    Historical simulation on one symbol's exported tape, 2020&ndash;2026. Deaths are exported-exit proxies,
-    not exact intratrade crossings. Starts overlap, every run is in sample, and no reserve, pipeline or
-    mixture weight was optimized. Figures read from <code>comparison.csv</code>,
-    <code>march_stress/</code> and the per-portfolio snapshots.
+    Historical simulation on one symbol's exported tape, 2020&ndash;2026. Deaths are exported-exit proxies, not
+    exact intratrade crossings. The eleven operating cells share one underlying history and overlapping
+    starts, so they are not eleven independent confirmations. No reserve, pipeline or mixture weight was
+    optimized. Figures read from <code>comparison.csv</code> and <code>march_stress/</code>.
   </footer>
 </div>
 
 <div class="tip" id="tip" role="status" aria-live="polite"></div>
 
 <script>
-const D = {"order":["rr_0.50","rr_0.75","rr_1.00","rr_1.25","rr_1.50","rr_2.00","rr_2.50","rr_3.00","rr_3.50","near","modest","four","wide"],"years":["2020","2021","2022","2023","2024","2025"],"composition":{"rr_0.50":["0.50"],"rr_0.75":["0.75"],"rr_1.00":["1.00"],"rr_1.25":["1.25"],"rr_1.50":["1.50"],"rr_2.00":["2.00"],"rr_2.50":["2.50"],"rr_3.00":["3.00"],"rr_3.50":["3.50"],"near":["0.75","1.25"],"modest":["0.50","1.50"],"four":["0.50","1.00","1.50","2.00"],"wide":["0.50","1.50","2.50","3.50"]},"march":{"rr_0.50":{"alive1":20,"deaths":0,"total":0,"samepeak":0,"alive31":20,"cash_after":87940.8,"dead_by_sleeve":{},"dates":[],"pre_at":"2026-03-01T00:00:00","distinct":5},"rr_0.75":{"alive1":20,"deaths":3,"total":3,"samepeak":2,"alive31":17,"cash_after":54005.15,"dead_by_sleeve":{"0.75":3},"dates":["2026-03-20","2026-03-23"],"pre_at":"2026-03-01T00:00:00","distinct":7},"rr_1.00":{"alive1":20,"deaths":20,"total":20,"samepeak":20,"alive31":0,"cash_after":795.85,"dead_by_sleeve":{"1.00":20},"dates":["2026-03-26"],"pre_at":"2026-03-01T00:00:00","distinct":1},"rr_1.25":{"alive1":20,"deaths":20,"total":20,"samepeak":20,"alive31":0,"cash_after":-558.2,"dead_by_sleeve":{"1.25":20},"dates":["2026-03-27"],"pre_at":"2026-03-01T00:00:00","distinct":1},"rr_1.50":{"alive1":20,"deaths":20,"total":20,"samepeak":20,"alive31":0,"cash_after":-719.35,"dead_by_sleeve":{"1.50":20},"dates":["2026-03-26"],"pre_at":"2026-03-01T00:00:00","distinct":1},"rr_2.00":{"alive1":20,"deaths":0,"total":0,"samepeak":0,"alive31":20,"cash_after":39018.08,"dead_by_sleeve":{},"dates":[],"pre_at":"2026-03-01T00:00:00","distinct":1},"rr_2.50":{"alive1":20,"deaths":0,"total":0,"samepeak":0,"alive31":20,"cash_after":63904.6,"dead_by_sleeve":{},"dates":[],"pre_at":"2026-03-01T00:00:00","distinct":1},"rr_3.00":{"alive1":20,"deaths":0,"total":0,"samepeak":0,"alive31":20,"cash_after":79426.31,"dead_by_sleeve":{},"dates":[],"pre_at":"2026-03-01T00:00:00","distinct":2},"rr_3.50":{"alive1":20,"deaths":0,"total":0,"samepeak":0,"alive31":20,"cash_after":87599.81,"dead_by_sleeve":{},"dates":[],"pre_at":"2026-03-01T00:00:00","distinct":1},"near":{"alive1":20,"deaths":10,"total":10,"samepeak":10,"alive31":10,"cash_after":32407.8,"dead_by_sleeve":{"1.25":10},"dates":["2026-03-27"],"pre_at":"2026-03-01T00:00:00","distinct":2},"modest":{"alive1":20,"deaths":10,"total":10,"samepeak":10,"alive31":10,"cash_after":48068.65,"dead_by_sleeve":{"1.50":10},"dates":["2026-03-26"],"pre_at":"2026-03-01T00:00:00","distinct":2},"four":{"alive1":20,"deaths":10,"total":10,"samepeak":5,"alive31":10,"cash_after":34935.74,"dead_by_sleeve":{"1.00":5,"1.50":5},"dates":["2026-03-26"],"pre_at":"2026-03-01T00:00:00","distinct":4},"wide":{"alive1":20,"deaths":5,"total":5,"samepeak":5,"alive31":15,"cash_after":62412.91,"dead_by_sleeve":{"1.50":5},"dates":["2026-03-26"],"pre_at":"2026-03-01T00:00:00","distinct":4}},"primary":{"rr_0.50":{"2020":{"deaths":78,"wipeouts":1,"same":10,"cash":137320,"alive":20,"accounts":98,"cluster20":10,"empty":32.9},"2021":{"deaths":65,"wipeouts":1,"same":11,"cash":152468,"alive":20,"accounts":85,"cluster20":13,"empty":25.3},"2022":{"deaths":32,"wipeouts":0,"same":11,"cash":198870,"alive":20,"accounts":52,"cluster20":12,"empty":0.0},"2023":{"deaths":16,"wipeouts":1,"same":6,"cash":158459,"alive":20,"accounts":36,"cluster20":6,"empty":69.5},"2024":{"deaths":19,"wipeouts":0,"same":3,"cash":84485,"alive":16,"accounts":35,"cluster20":5,"empty":0.0},"2025":{"deaths":9,"wipeouts":0,"same":3,"cash":949,"alive":7,"accounts":16,"cluster20":4,"empty":0.0}},"rr_0.75":{"2020":{"deaths":67,"wipeouts":3,"same":7,"cash":222784,"alive":20,"accounts":87,"cluster20":10,"empty":40.7},"2021":{"deaths":38,"wipeouts":2,"same":6,"cash":250120,"alive":20,"accounts":58,"cluster20":10,"empty":24.4},"2022":{"deaths":22,"wipeouts":1,"same":6,"cash":224011,"alive":20,"accounts":42,"cluster20":9,"empty":19.9},"2023":{"deaths":20,"wipeouts":1,"same":6,"cash":149629,"alive":20,"accounts":40,"cluster20":6,"empty":47.2},"2024":{"deaths":30,"wipeouts":0,"same":3,"cash":77247,"alive":16,"accounts":46,"cluster20":7,"empty":0.0},"2025":{"deaths":20,"wipeouts":1,"same":2,"cash":-5039,"alive":5,"accounts":25,"cluster20":7,"empty":6.3}},"rr_1.00":{"2020":{"deaths":63,"wipeouts":2,"same":7,"cash":312147,"alive":20,"accounts":83,"cluster20":13,"empty":0.3},"2021":{"deaths":39,"wipeouts":2,"same":5,"cash":321830,"alive":20,"accounts":59,"cluster20":8,"empty":23.2},"2022":{"deaths":20,"wipeouts":2,"same":5,"cash":285959,"alive":20,"accounts":40,"cluster20":6,"empty":23.7},"2023":{"deaths":19,"wipeouts":1,"same":5,"cash":176775,"alive":19,"accounts":38,"cluster20":6,"empty":42.2},"2024":{"deaths":25,"wipeouts":0,"same":2,"cash":89136,"alive":16,"accounts":41,"cluster20":7,"empty":0.0},"2025":{"deaths":20,"wipeouts":1,"same":2,"cash":-5171,"alive":5,"accounts":25,"cluster20":8,"empty":12.2}},"rr_1.25":{"2020":{"deaths":52,"wipeouts":2,"same":5,"cash":370314,"alive":20,"accounts":72,"cluster20":9,"empty":0.5},"2021":{"deaths":45,"wipeouts":2,"same":4,"cash":325651,"alive":20,"accounts":65,"cluster20":8,"empty":10.1},"2022":{"deaths":21,"wipeouts":3,"same":2,"cash":295301,"alive":20,"accounts":41,"cluster20":6,"empty":29.1},"2023":{"deaths":19,"wipeouts":1,"same":2,"cash":176669,"alive":18,"accounts":37,"cluster20":6,"empty":46.1},"2024":{"deaths":23,"wipeouts":0,"same":2,"cash":83978,"alive":15,"accounts":38,"cluster20":6,"empty":0.0},"2025":{"deaths":16,"wipeouts":0,"same":2,"cash":-4098,"alive":6,"accounts":22,"cluster20":7,"empty":0.0}},"rr_1.50":{"2020":{"deaths":50,"wipeouts":2,"same":7,"cash":397579,"alive":20,"accounts":70,"cluster20":10,"empty":0.5},"2021":{"deaths":44,"wipeouts":0,"same":7,"cash":363474,"alive":20,"accounts":64,"cluster20":8,"empty":0.0},"2022":{"deaths":20,"wipeouts":1,"same":5,"cash":329195,"alive":20,"accounts":40,"cluster20":7,"empty":55.7},"2023":{"deaths":22,"wipeouts":1,"same":5,"cash":206563,"alive":18,"accounts":40,"cluster20":6,"empty":53.1},"2024":{"deaths":22,"wipeouts":0,"same":2,"cash":103485,"alive":13,"accounts":35,"cluster20":5,"empty":0.0},"2025":{"deaths":15,"wipeouts":0,"same":2,"cash":-1249,"alive":5,"accounts":20,"cluster20":6,"empty":0.0}},"rr_2.00":{"2020":{"deaths":51,"wipeouts":2,"same":7,"cash":379572,"alive":20,"accounts":71,"cluster20":8,"empty":0.3},"2021":{"deaths":67,"wipeouts":1,"same":7,"cash":257383,"alive":20,"accounts":87,"cluster20":8,"empty":0.3},"2022":{"deaths":31,"wipeouts":2,"same":4,"cash":283693,"alive":20,"accounts":51,"cluster20":6,"empty":57.1},"2023":{"deaths":25,"wipeouts":0,"same":2,"cash":209228,"alive":19,"accounts":44,"cluster20":6,"empty":0.0},"2024":{"deaths":29,"wipeouts":0,"same":2,"cash":100964,"alive":15,"accounts":44,"cluster20":6,"empty":0.0},"2025":{"deaths":11,"wipeouts":0,"same":2,"cash":2659,"alive":6,"accounts":17,"cluster20":4,"empty":0.0}},"rr_2.50":{"2020":{"deaths":56,"wipeouts":2,"same":7,"cash":437322,"alive":20,"accounts":76,"cluster20":8,"empty":0.5},"2021":{"deaths":70,"wipeouts":6,"same":6,"cash":260074,"alive":20,"accounts":90,"cluster20":8,"empty":54.2},"2022":{"deaths":26,"wipeouts":4,"same":3,"cash":360549,"alive":20,"accounts":46,"cluster20":7,"empty":34.1},"2023":{"deaths":17,"wipeouts":0,"same":2,"cash":263867,"alive":20,"accounts":37,"cluster20":4,"empty":0.0},"2024":{"deaths":22,"wipeouts":0,"same":2,"cash":131669,"alive":15,"accounts":37,"cluster20":4,"empty":0.0},"2025":{"deaths":10,"wipeouts":0,"same":1,"cash":6258,"alive":7,"accounts":17,"cluster20":3,"empty":0.0}},"rr_3.00":{"2020":{"deaths":61,"wipeouts":2,"same":7,"cash":365267,"alive":20,"accounts":81,"cluster20":7,"empty":0.4},"2021":{"deaths":54,"wipeouts":4,"same":7,"cash":309135,"alive":20,"accounts":74,"cluster20":7,"empty":11.4},"2022":{"deaths":26,"wipeouts":3,"same":2,"cash":316214,"alive":20,"accounts":46,"cluster20":4,"empty":32.1},"2023":{"deaths":20,"wipeouts":0,"same":3,"cash":241058,"alive":20,"accounts":40,"cluster20":6,"empty":0.0},"2024":{"deaths":29,"wipeouts":0,"same":3,"cash":127813,"alive":17,"accounts":46,"cluster20":6,"empty":0.0},"2025":{"deaths":12,"wipeouts":0,"same":3,"cash":10475,"alive":7,"accounts":19,"cluster20":4,"empty":0.0}},"rr_3.50":{"2020":{"deaths":67,"wipeouts":2,"same":6,"cash":356135,"alive":20,"accounts":87,"cluster20":10,"empty":1.1},"2021":{"deaths":56,"wipeouts":2,"same":5,"cash":297786,"alive":20,"accounts":76,"cluster20":9,"empty":2.0},"2022":{"deaths":46,"wipeouts":2,"same":5,"cash":248262,"alive":20,"accounts":66,"cluster20":7,"empty":65.7},"2023":{"deaths":36,"wipeouts":1,"same":3,"cash":180528,"alive":19,"accounts":55,"cluster20":6,"empty":46.1},"2024":{"deaths":34,"wipeouts":0,"same":3,"cash":90490,"alive":13,"accounts":47,"cluster20":6,"empty":0.0},"2025":{"deaths":10,"wipeouts":0,"same":2,"cash":12850,"alive":6,"accounts":16,"cluster20":4,"empty":0.0}},"near":{"2020":{"deaths":51,"wipeouts":2,"same":5,"cash":315873,"alive":20,"accounts":71,"cluster20":9,"empty":0.3},"2021":{"deaths":40,"wipeouts":1,"same":4,"cash":297238,"alive":20,"accounts":60,"cluster20":8,"empty":19.4},"2022":{"deaths":21,"wipeouts":1,"same":4,"cash":261400,"alive":20,"accounts":41,"cluster20":7,"empty":4.9},"2023":{"deaths":22,"wipeouts":1,"same":4,"cash":173275,"alive":20,"accounts":42,"cluster20":6,"empty":9.2},"2024":{"deaths":25,"wipeouts":0,"same":3,"cash":68320,"alive":14,"accounts":39,"cluster20":6,"empty":0.0},"2025":{"deaths":18,"wipeouts":1,"same":2,"cash":-4822,"alive":5,"accounts":23,"cluster20":8,"empty":6.2}},"modest":{"2020":{"deaths":61,"wipeouts":0,"same":8,"cash":307712,"alive":20,"accounts":81,"cluster20":12,"empty":0.0},"2021":{"deaths":53,"wipeouts":0,"same":7,"cash":286057,"alive":20,"accounts":73,"cluster20":11,"empty":0.0},"2022":{"deaths":30,"wipeouts":0,"same":6,"cash":253818,"alive":20,"accounts":50,"cluster20":9,"empty":0.0},"2023":{"deaths":20,"wipeouts":1,"same":3,"cash":177787,"alive":19,"accounts":39,"cluster20":6,"empty":55.1},"2024":{"deaths":20,"wipeouts":0,"same":3,"cash":89735,"alive":13,"accounts":33,"cluster20":4,"empty":0.0},"2025":{"deaths":11,"wipeouts":0,"same":2,"cash":-216,"alive":5,"accounts":16,"cluster20":4,"empty":0.0}},"four":{"2020":{"deaths":54,"wipeouts":0,"same":4,"cash":330034,"alive":20,"accounts":74,"cluster20":8,"empty":0.0},"2021":{"deaths":42,"wipeouts":1,"same":4,"cash":308427,"alive":20,"accounts":62,"cluster20":8,"empty":23.6},"2022":{"deaths":29,"wipeouts":0,"same":2,"cash":264641,"alive":20,"accounts":49,"cluster20":7,"empty":0.0},"2023":{"deaths":24,"wipeouts":1,"same":3,"cash":178787,"alive":19,"accounts":43,"cluster20":6,"empty":48.2},"2024":{"deaths":21,"wipeouts":0,"same":2,"cash":105143,"alive":17,"accounts":38,"cluster20":4,"empty":0.0},"2025":{"deaths":17,"wipeouts":0,"same":2,"cash":-2723,"alive":6,"accounts":23,"cluster20":6,"empty":0.0}},"wide":{"2020":{"deaths":48,"wipeouts":0,"same":3,"cash":375816,"alive":20,"accounts":68,"cluster20":7,"empty":0.0},"2021":{"deaths":57,"wipeouts":0,"same":4,"cash":303562,"alive":20,"accounts":77,"cluster20":10,"empty":0.0},"2022":{"deaths":28,"wipeouts":0,"same":3,"cash":301200,"alive":20,"accounts":48,"cluster20":7,"empty":0.0},"2023":{"deaths":28,"wipeouts":0,"same":4,"cash":188417,"alive":18,"accounts":46,"cluster20":6,"empty":0.0},"2024":{"deaths":20,"wipeouts":0,"same":2,"cash":112150,"alive":15,"accounts":35,"cluster20":3,"empty":0.0},"2025":{"deaths":11,"wipeouts":0,"same":1,"cash":4199,"alive":7,"accounts":18,"cluster20":3,"empty":0.0}}},"iso":{"rr_0.50":{"deaths":20,"alive":0,"per_rr":{"0.50":20},"cash":-4000},"rr_0.75":{"deaths":0,"alive":20,"per_rr":{},"cash":266000},"rr_1.00":{"deaths":0,"alive":20,"per_rr":{},"cash":356000},"rr_1.25":{"deaths":0,"alive":20,"per_rr":{},"cash":366000},"rr_1.50":{"deaths":0,"alive":20,"per_rr":{},"cash":376000},"rr_2.00":{"deaths":0,"alive":20,"per_rr":{},"cash":366000},"rr_2.50":{"deaths":0,"alive":20,"per_rr":{},"cash":466000},"rr_3.00":{"deaths":0,"alive":20,"per_rr":{},"cash":416000},"rr_3.50":{"deaths":0,"alive":20,"per_rr":{},"cash":386000},"near":{"deaths":0,"alive":20,"per_rr":{},"cash":316000},"modest":{"deaths":10,"alive":10,"per_rr":{"0.50":10},"cash":186000},"four":{"deaths":5,"alive":15,"per_rr":{"0.50":5},"cash":273500},"wide":{"deaths":5,"alive":15,"per_rr":{"0.50":5},"cash":306000}},"spread":{"rr_0.50":2633,"rr_0.75":4414,"rr_1.00":0,"rr_1.25":0,"rr_1.50":0,"rr_2.00":0,"rr_2.50":0,"rr_3.00":394,"rr_3.50":0,"near":95,"modest":651,"four":824,"wide":1208},"minhead":{"rr_0.50":1852,"rr_0.75":1389,"rr_1.00":3703,"rr_1.25":4042,"rr_1.50":3834,"rr_2.00":3661,"rr_2.50":4580,"rr_3.00":4325,"rr_3.50":5041,"near":4042,"modest":3834,"four":3661,"wide":3834}};
-
-const RR_ORDER = ["0.50","0.75","1.00","1.25","1.50","2.00","2.50","3.00","3.50"];
+const D = {"order":["rr_0.50","rr_0.75","rr_1.00","rr_1.25","rr_1.50","rr_2.00","rr_2.50","rr_3.00","rr_3.50","near","modest","four","wide"],"years":["2020","2021","2022","2023","2024","2025"],"composition":{"rr_0.50":["0.50"],"rr_0.75":["0.75"],"rr_1.00":["1.00"],"rr_1.25":["1.25"],"rr_1.50":["1.50"],"rr_2.00":["2.00"],"rr_2.50":["2.50"],"rr_3.00":["3.00"],"rr_3.50":["3.50"],"near":["0.75","1.25"],"modest":["0.50","1.50"],"four":["0.50","1.00","1.50","2.00"],"wide":["0.50","1.50","2.50","3.50"]},"march":{"rr_0.50":{"alive1":20,"deaths":0,"total":0,"samepeak":0,"alive31":20,"cash_after":87940.8,"dead_by_sleeve":{},"dates":[],"pre_at":"2026-03-01T00:00:00","distinct":5},"rr_0.75":{"alive1":20,"deaths":3,"total":3,"samepeak":2,"alive31":17,"cash_after":54005.15,"dead_by_sleeve":{"0.75":3},"dates":["2026-03-20","2026-03-23"],"pre_at":"2026-03-01T00:00:00","distinct":7},"rr_1.00":{"alive1":20,"deaths":20,"total":20,"samepeak":20,"alive31":0,"cash_after":795.85,"dead_by_sleeve":{"1.00":20},"dates":["2026-03-26"],"pre_at":"2026-03-01T00:00:00","distinct":1},"rr_1.25":{"alive1":20,"deaths":20,"total":20,"samepeak":20,"alive31":0,"cash_after":-558.2,"dead_by_sleeve":{"1.25":20},"dates":["2026-03-27"],"pre_at":"2026-03-01T00:00:00","distinct":1},"rr_1.50":{"alive1":20,"deaths":20,"total":20,"samepeak":20,"alive31":0,"cash_after":-719.35,"dead_by_sleeve":{"1.50":20},"dates":["2026-03-26"],"pre_at":"2026-03-01T00:00:00","distinct":1},"rr_2.00":{"alive1":20,"deaths":0,"total":0,"samepeak":0,"alive31":20,"cash_after":39018.08,"dead_by_sleeve":{},"dates":[],"pre_at":"2026-03-01T00:00:00","distinct":1},"rr_2.50":{"alive1":20,"deaths":0,"total":0,"samepeak":0,"alive31":20,"cash_after":63904.6,"dead_by_sleeve":{},"dates":[],"pre_at":"2026-03-01T00:00:00","distinct":1},"rr_3.00":{"alive1":20,"deaths":0,"total":0,"samepeak":0,"alive31":20,"cash_after":79426.31,"dead_by_sleeve":{},"dates":[],"pre_at":"2026-03-01T00:00:00","distinct":2},"rr_3.50":{"alive1":20,"deaths":0,"total":0,"samepeak":0,"alive31":20,"cash_after":87599.81,"dead_by_sleeve":{},"dates":[],"pre_at":"2026-03-01T00:00:00","distinct":1},"near":{"alive1":20,"deaths":10,"total":10,"samepeak":10,"alive31":10,"cash_after":32407.8,"dead_by_sleeve":{"1.25":10},"dates":["2026-03-27"],"pre_at":"2026-03-01T00:00:00","distinct":2},"modest":{"alive1":20,"deaths":10,"total":10,"samepeak":10,"alive31":10,"cash_after":48068.65,"dead_by_sleeve":{"1.50":10},"dates":["2026-03-26"],"pre_at":"2026-03-01T00:00:00","distinct":2},"four":{"alive1":20,"deaths":10,"total":10,"samepeak":5,"alive31":10,"cash_after":34935.74,"dead_by_sleeve":{"1.00":5,"1.50":5},"dates":["2026-03-26"],"pre_at":"2026-03-01T00:00:00","distinct":4},"wide":{"alive1":20,"deaths":5,"total":5,"samepeak":5,"alive31":15,"cash_after":62412.91,"dead_by_sleeve":{"1.50":5},"dates":["2026-03-26"],"pre_at":"2026-03-01T00:00:00","distinct":4}},"primary":{"rr_0.50":{"2020":{"deaths":78,"wipeouts":1,"same":10,"cash":137320,"alive":20,"accounts":98,"cluster20":10,"empty":32.9},"2021":{"deaths":65,"wipeouts":1,"same":11,"cash":152468,"alive":20,"accounts":85,"cluster20":13,"empty":25.3},"2022":{"deaths":32,"wipeouts":0,"same":11,"cash":198870,"alive":20,"accounts":52,"cluster20":12,"empty":0.0},"2023":{"deaths":16,"wipeouts":1,"same":6,"cash":158459,"alive":20,"accounts":36,"cluster20":6,"empty":69.5},"2024":{"deaths":19,"wipeouts":0,"same":3,"cash":84485,"alive":16,"accounts":35,"cluster20":5,"empty":0.0},"2025":{"deaths":9,"wipeouts":0,"same":3,"cash":949,"alive":7,"accounts":16,"cluster20":4,"empty":0.0}},"rr_0.75":{"2020":{"deaths":67,"wipeouts":3,"same":7,"cash":222784,"alive":20,"accounts":87,"cluster20":10,"empty":40.7},"2021":{"deaths":38,"wipeouts":2,"same":6,"cash":250120,"alive":20,"accounts":58,"cluster20":10,"empty":24.4},"2022":{"deaths":22,"wipeouts":1,"same":6,"cash":224011,"alive":20,"accounts":42,"cluster20":9,"empty":19.9},"2023":{"deaths":20,"wipeouts":1,"same":6,"cash":149629,"alive":20,"accounts":40,"cluster20":6,"empty":47.2},"2024":{"deaths":30,"wipeouts":0,"same":3,"cash":77247,"alive":16,"accounts":46,"cluster20":7,"empty":0.0},"2025":{"deaths":20,"wipeouts":1,"same":2,"cash":-5039,"alive":5,"accounts":25,"cluster20":7,"empty":6.3}},"rr_1.00":{"2020":{"deaths":63,"wipeouts":2,"same":7,"cash":312147,"alive":20,"accounts":83,"cluster20":13,"empty":0.3},"2021":{"deaths":39,"wipeouts":2,"same":5,"cash":321830,"alive":20,"accounts":59,"cluster20":8,"empty":23.2},"2022":{"deaths":20,"wipeouts":2,"same":5,"cash":285959,"alive":20,"accounts":40,"cluster20":6,"empty":23.7},"2023":{"deaths":19,"wipeouts":1,"same":5,"cash":176775,"alive":19,"accounts":38,"cluster20":6,"empty":42.2},"2024":{"deaths":25,"wipeouts":0,"same":2,"cash":89136,"alive":16,"accounts":41,"cluster20":7,"empty":0.0},"2025":{"deaths":20,"wipeouts":1,"same":2,"cash":-5171,"alive":5,"accounts":25,"cluster20":8,"empty":12.2}},"rr_1.25":{"2020":{"deaths":52,"wipeouts":2,"same":5,"cash":370314,"alive":20,"accounts":72,"cluster20":9,"empty":0.5},"2021":{"deaths":45,"wipeouts":2,"same":4,"cash":325651,"alive":20,"accounts":65,"cluster20":8,"empty":10.1},"2022":{"deaths":21,"wipeouts":3,"same":2,"cash":295301,"alive":20,"accounts":41,"cluster20":6,"empty":29.1},"2023":{"deaths":19,"wipeouts":1,"same":2,"cash":176669,"alive":18,"accounts":37,"cluster20":6,"empty":46.1},"2024":{"deaths":23,"wipeouts":0,"same":2,"cash":83978,"alive":15,"accounts":38,"cluster20":6,"empty":0.0},"2025":{"deaths":16,"wipeouts":0,"same":2,"cash":-4098,"alive":6,"accounts":22,"cluster20":7,"empty":0.0}},"rr_1.50":{"2020":{"deaths":50,"wipeouts":2,"same":7,"cash":397579,"alive":20,"accounts":70,"cluster20":10,"empty":0.5},"2021":{"deaths":44,"wipeouts":0,"same":7,"cash":363474,"alive":20,"accounts":64,"cluster20":8,"empty":0.0},"2022":{"deaths":20,"wipeouts":1,"same":5,"cash":329195,"alive":20,"accounts":40,"cluster20":7,"empty":55.7},"2023":{"deaths":22,"wipeouts":1,"same":5,"cash":206563,"alive":18,"accounts":40,"cluster20":6,"empty":53.1},"2024":{"deaths":22,"wipeouts":0,"same":2,"cash":103485,"alive":13,"accounts":35,"cluster20":5,"empty":0.0},"2025":{"deaths":15,"wipeouts":0,"same":2,"cash":-1249,"alive":5,"accounts":20,"cluster20":6,"empty":0.0}},"rr_2.00":{"2020":{"deaths":51,"wipeouts":2,"same":7,"cash":379572,"alive":20,"accounts":71,"cluster20":8,"empty":0.3},"2021":{"deaths":67,"wipeouts":1,"same":7,"cash":257383,"alive":20,"accounts":87,"cluster20":8,"empty":0.3},"2022":{"deaths":31,"wipeouts":2,"same":4,"cash":283693,"alive":20,"accounts":51,"cluster20":6,"empty":57.1},"2023":{"deaths":25,"wipeouts":0,"same":2,"cash":209228,"alive":19,"accounts":44,"cluster20":6,"empty":0.0},"2024":{"deaths":29,"wipeouts":0,"same":2,"cash":100964,"alive":15,"accounts":44,"cluster20":6,"empty":0.0},"2025":{"deaths":11,"wipeouts":0,"same":2,"cash":2659,"alive":6,"accounts":17,"cluster20":4,"empty":0.0}},"rr_2.50":{"2020":{"deaths":56,"wipeouts":2,"same":7,"cash":437322,"alive":20,"accounts":76,"cluster20":8,"empty":0.5},"2021":{"deaths":70,"wipeouts":6,"same":6,"cash":260074,"alive":20,"accounts":90,"cluster20":8,"empty":54.2},"2022":{"deaths":26,"wipeouts":4,"same":3,"cash":360549,"alive":20,"accounts":46,"cluster20":7,"empty":34.1},"2023":{"deaths":17,"wipeouts":0,"same":2,"cash":263867,"alive":20,"accounts":37,"cluster20":4,"empty":0.0},"2024":{"deaths":22,"wipeouts":0,"same":2,"cash":131669,"alive":15,"accounts":37,"cluster20":4,"empty":0.0},"2025":{"deaths":10,"wipeouts":0,"same":1,"cash":6258,"alive":7,"accounts":17,"cluster20":3,"empty":0.0}},"rr_3.00":{"2020":{"deaths":61,"wipeouts":2,"same":7,"cash":365267,"alive":20,"accounts":81,"cluster20":7,"empty":0.4},"2021":{"deaths":54,"wipeouts":4,"same":7,"cash":309135,"alive":20,"accounts":74,"cluster20":7,"empty":11.4},"2022":{"deaths":26,"wipeouts":3,"same":2,"cash":316214,"alive":20,"accounts":46,"cluster20":4,"empty":32.1},"2023":{"deaths":20,"wipeouts":0,"same":3,"cash":241058,"alive":20,"accounts":40,"cluster20":6,"empty":0.0},"2024":{"deaths":29,"wipeouts":0,"same":3,"cash":127813,"alive":17,"accounts":46,"cluster20":6,"empty":0.0},"2025":{"deaths":12,"wipeouts":0,"same":3,"cash":10475,"alive":7,"accounts":19,"cluster20":4,"empty":0.0}},"rr_3.50":{"2020":{"deaths":67,"wipeouts":2,"same":6,"cash":356135,"alive":20,"accounts":87,"cluster20":10,"empty":1.1},"2021":{"deaths":56,"wipeouts":2,"same":5,"cash":297786,"alive":20,"accounts":76,"cluster20":9,"empty":2.0},"2022":{"deaths":46,"wipeouts":2,"same":5,"cash":248262,"alive":20,"accounts":66,"cluster20":7,"empty":65.7},"2023":{"deaths":36,"wipeouts":1,"same":3,"cash":180528,"alive":19,"accounts":55,"cluster20":6,"empty":46.1},"2024":{"deaths":34,"wipeouts":0,"same":3,"cash":90490,"alive":13,"accounts":47,"cluster20":6,"empty":0.0},"2025":{"deaths":10,"wipeouts":0,"same":2,"cash":12850,"alive":6,"accounts":16,"cluster20":4,"empty":0.0}},"near":{"2020":{"deaths":51,"wipeouts":2,"same":5,"cash":315873,"alive":20,"accounts":71,"cluster20":9,"empty":0.3},"2021":{"deaths":40,"wipeouts":1,"same":4,"cash":297238,"alive":20,"accounts":60,"cluster20":8,"empty":19.4},"2022":{"deaths":21,"wipeouts":1,"same":4,"cash":261400,"alive":20,"accounts":41,"cluster20":7,"empty":4.9},"2023":{"deaths":22,"wipeouts":1,"same":4,"cash":173275,"alive":20,"accounts":42,"cluster20":6,"empty":9.2},"2024":{"deaths":25,"wipeouts":0,"same":3,"cash":68320,"alive":14,"accounts":39,"cluster20":6,"empty":0.0},"2025":{"deaths":18,"wipeouts":1,"same":2,"cash":-4822,"alive":5,"accounts":23,"cluster20":8,"empty":6.2}},"modest":{"2020":{"deaths":61,"wipeouts":0,"same":8,"cash":307712,"alive":20,"accounts":81,"cluster20":12,"empty":0.0},"2021":{"deaths":53,"wipeouts":0,"same":7,"cash":286057,"alive":20,"accounts":73,"cluster20":11,"empty":0.0},"2022":{"deaths":30,"wipeouts":0,"same":6,"cash":253818,"alive":20,"accounts":50,"cluster20":9,"empty":0.0},"2023":{"deaths":20,"wipeouts":1,"same":3,"cash":177787,"alive":19,"accounts":39,"cluster20":6,"empty":55.1},"2024":{"deaths":20,"wipeouts":0,"same":3,"cash":89735,"alive":13,"accounts":33,"cluster20":4,"empty":0.0},"2025":{"deaths":11,"wipeouts":0,"same":2,"cash":-216,"alive":5,"accounts":16,"cluster20":4,"empty":0.0}},"four":{"2020":{"deaths":54,"wipeouts":0,"same":4,"cash":330034,"alive":20,"accounts":74,"cluster20":8,"empty":0.0},"2021":{"deaths":42,"wipeouts":1,"same":4,"cash":308427,"alive":20,"accounts":62,"cluster20":8,"empty":23.6},"2022":{"deaths":29,"wipeouts":0,"same":2,"cash":264641,"alive":20,"accounts":49,"cluster20":7,"empty":0.0},"2023":{"deaths":24,"wipeouts":1,"same":3,"cash":178787,"alive":19,"accounts":43,"cluster20":6,"empty":48.2},"2024":{"deaths":21,"wipeouts":0,"same":2,"cash":105143,"alive":17,"accounts":38,"cluster20":4,"empty":0.0},"2025":{"deaths":17,"wipeouts":0,"same":2,"cash":-2723,"alive":6,"accounts":23,"cluster20":6,"empty":0.0}},"wide":{"2020":{"deaths":48,"wipeouts":0,"same":3,"cash":375816,"alive":20,"accounts":68,"cluster20":7,"empty":0.0},"2021":{"deaths":57,"wipeouts":0,"same":4,"cash":303562,"alive":20,"accounts":77,"cluster20":10,"empty":0.0},"2022":{"deaths":28,"wipeouts":0,"same":3,"cash":301200,"alive":20,"accounts":48,"cluster20":7,"empty":0.0},"2023":{"deaths":28,"wipeouts":0,"same":4,"cash":188417,"alive":18,"accounts":46,"cluster20":6,"empty":0.0},"2024":{"deaths":20,"wipeouts":0,"same":2,"cash":112150,"alive":15,"accounts":35,"cluster20":3,"empty":0.0},"2025":{"deaths":11,"wipeouts":0,"same":1,"cash":4199,"alive":7,"accounts":18,"cluster20":3,"empty":0.0}}},"iso":{"rr_0.50":{"deaths":20,"alive":0,"per_rr":{"0.50":20},"cash":-4000},"rr_0.75":{"deaths":0,"alive":20,"per_rr":{},"cash":266000},"rr_1.00":{"deaths":0,"alive":20,"per_rr":{},"cash":356000},"rr_1.25":{"deaths":0,"alive":20,"per_rr":{},"cash":366000},"rr_1.50":{"deaths":0,"alive":20,"per_rr":{},"cash":376000},"rr_2.00":{"deaths":0,"alive":20,"per_rr":{},"cash":366000},"rr_2.50":{"deaths":0,"alive":20,"per_rr":{},"cash":466000},"rr_3.00":{"deaths":0,"alive":20,"per_rr":{},"cash":416000},"rr_3.50":{"deaths":0,"alive":20,"per_rr":{},"cash":386000},"near":{"deaths":0,"alive":20,"per_rr":{},"cash":316000},"modest":{"deaths":10,"alive":10,"per_rr":{"0.50":10},"cash":186000},"four":{"deaths":5,"alive":15,"per_rr":{"0.50":5},"cash":273500},"wide":{"deaths":5,"alive":15,"per_rr":{"0.50":5},"cash":306000}},"spread":{"rr_0.50":2633,"rr_0.75":4414,"rr_1.00":0,"rr_1.25":0,"rr_1.50":0,"rr_2.00":0,"rr_2.50":0,"rr_3.00":394,"rr_3.50":0,"near":95,"modest":651,"four":824,"wide":1208},"minhead":{"rr_0.50":1852,"rr_0.75":1389,"rr_1.00":3703,"rr_1.25":4042,"rr_1.50":3834,"rr_2.00":3661,"rr_2.50":4580,"rr_3.00":4325,"rr_3.50":5041,"near":4042,"modest":3834,"four":3661,"wide":3834},"nCells":11,"nCellsEx":8,"nCellsIso":11,"whole":{"rr_0.50":{"deaths":37.9,"w1":0.842,"w5":0.842,"w20":0.849,"ms":7.18,"wp":9,"ed":31.4},"rr_0.75":{"deaths":36.2,"w1":0.97,"w5":0.97,"w20":0.97,"ms":5.27,"wp":17,"ed":29.1},"rr_1.00":{"deaths":33.1,"w1":0.97,"w5":0.97,"w20":0.97,"ms":4.73,"wp":15,"ed":18.1},"rr_1.25":{"deaths":30.2,"w1":0.848,"w5":0.903,"w20":0.922,"ms":3,"wp":14,"ed":16.3},"rr_1.50":{"deaths":29.8,"w1":0.818,"w5":0.846,"w20":0.861,"ms":4.73,"wp":10,"ed":19.7},"rr_2.00":{"deaths":34.5,"w1":0.679,"w5":0.679,"w20":0.724,"ms":3.91,"wp":9,"ed":5.3},"rr_2.50":{"deaths":32.1,"w1":0.658,"w5":0.679,"w20":0.742,"ms":3.64,"wp":16,"ed":8.2},"rr_3.00":{"deaths":33.8,"w1":0.684,"w5":0.729,"w20":0.729,"ms":4.27,"wp":13,"ed":4.1},"rr_3.50":{"deaths":41.5,"w1":0.866,"w5":0.866,"w20":0.866,"ms":3.91,"wp":13,"ed":19.0},"near":{"deaths":31,"w1":0.939,"w5":0.939,"w20":0.939,"ms":3.82,"wp":13,"ed":5.9},"modest":{"deaths":34.1,"w1":0.614,"w5":0.664,"w20":0.676,"ms":4.82,"wp":3,"ed":15.0},"four":{"deaths":33,"w1":0.652,"w5":0.709,"w20":0.786,"ms":2.91,"wp":4,"ed":15.3},"wide":{"deaths":32.4,"w1":0.469,"w5":0.552,"w20":0.587,"ms":2.73,"wp":0,"ed":0.0}},"ex2020":{"rr_0.50":{"deaths":22.5,"w1":0.783,"w5":0.783,"w20":0.792,"ms":6.12,"wp":4,"ed":29.2},"rr_0.75":{"deaths":24.4,"w1":0.958,"w5":0.958,"w20":0.958,"ms":4.62,"wp":8,"ed":24.8},"rr_1.00":{"deaths":22.9,"w1":0.958,"w5":0.958,"w20":0.958,"ms":3.88,"wp":9,"ed":24.7},"rr_1.25":{"deaths":23.1,"w1":0.792,"w5":0.866,"w20":0.893,"ms":2.38,"wp":8,"ed":22.2},"rr_1.50":{"deaths":23.2,"w1":0.75,"w5":0.789,"w20":0.808,"ms":4.12,"wp":4,"ed":26.9},"rr_2.00":{"deaths":28.6,"w1":0.558,"w5":0.558,"w20":0.621,"ms":2.88,"wp":3,"ed":7.2},"rr_2.50":{"deaths":23.8,"w1":0.53,"w5":0.558,"w20":0.646,"ms":2.38,"wp":10,"ed":11.0},"rr_3.00":{"deaths":23.9,"w1":0.565,"w5":0.628,"w20":0.628,"ms":3.25,"wp":7,"ed":5.4},"rr_3.50":{"deaths":32.2,"w1":0.815,"w5":0.815,"w20":0.815,"ms":3.25,"wp":7,"ed":25.8},"near":{"deaths":23.5,"w1":0.917,"w5":0.917,"w20":0.917,"ms":3.38,"wp":7,"ed":8.0},"modest":{"deaths":23.9,"w1":0.656,"w5":0.698,"w20":0.698,"ms":3.62,"wp":3,"ed":20.7},"four":{"deaths":25.1,"w1":0.708,"w5":0.75,"w20":0.813,"ms":2.62,"wp":4,"ed":21.0},"wide":{"deaths":26.5,"w1":0.457,"w5":0.571,"w20":0.619,"ms":2.62,"wp":0,"ed":0.0}},"isolation":{"rr_0.50":{"deaths":16.4,"w1":0.818,"w5":0.818,"w20":0.818,"ms":16.36,"wp":9,"ed":1110.8},"rr_0.75":{"deaths":10.9,"w1":0.545,"w5":0.545,"w20":0.545,"ms":10.91,"wp":6,"ed":898.9},"rr_1.00":{"deaths":12.7,"w1":0.636,"w5":0.636,"w20":0.636,"ms":12.73,"wp":7,"ed":1032.9},"rr_1.25":{"deaths":12.7,"w1":0.636,"w5":0.636,"w20":0.636,"ms":12.73,"wp":7,"ed":1045.9},"rr_1.50":{"deaths":12.7,"w1":0.636,"w5":0.636,"w20":0.636,"ms":12.73,"wp":7,"ed":1045.6},"rr_2.00":{"deaths":12.7,"w1":0.636,"w5":0.636,"w20":0.636,"ms":12.73,"wp":7,"ed":1033.9},"rr_2.50":{"deaths":12.7,"w1":0.636,"w5":0.636,"w20":0.636,"ms":12.73,"wp":7,"ed":1042.3},"rr_3.00":{"deaths":12.7,"w1":0.636,"w5":0.636,"w20":0.636,"ms":12.73,"wp":7,"ed":1052.7},"rr_3.50":{"deaths":12.7,"w1":0.636,"w5":0.636,"w20":0.636,"ms":12.73,"wp":7,"ed":1062.2},"near":{"deaths":11.8,"w1":0.591,"w5":0.591,"w20":0.591,"ms":6.36,"wp":6,"ed":894.4},"modest":{"deaths":14.5,"w1":0.727,"w5":0.727,"w20":0.727,"ms":9.09,"wp":6,"ed":770.8},"four":{"deaths":13.6,"w1":0.659,"w5":0.659,"w20":0.659,"ms":5.91,"wp":6,"ed":761.3},"wide":{"deaths":13.6,"w1":0.659,"w5":0.659,"w20":0.682,"ms":5,"wp":6,"ed":752.0}},"h2h":{"worst_1d_fraction":{"near":{"vs1":1,"vsMed":1,"vsBest":0,"n":11},"modest":{"vs1":8,"vsMed":8,"vsBest":5,"n":11},"four":{"vs1":7,"vsMed":7,"vsBest":4,"n":11},"wide":{"vs1":11,"vsMed":11,"vsBest":5,"n":11}},"max_same_signal_deaths":{"near":{"vs1":8,"vsMed":5,"vsBest":0,"n":11},"modest":{"vs1":3,"vsMed":0,"vsBest":0,"n":11},"four":{"vs1":8,"vsMed":5,"vsBest":3,"n":11},"wide":{"vs1":10,"vsMed":8,"vsBest":3,"n":11}}},"groups":{"rr_0.50":{"distinct":5,"biggest":9,"n":20},"rr_0.75":{"distinct":7,"biggest":13,"n":20},"rr_1.00":{"distinct":1,"biggest":20,"n":20},"rr_1.25":{"distinct":1,"biggest":20,"n":20},"rr_1.50":{"distinct":1,"biggest":20,"n":20},"rr_2.00":{"distinct":1,"biggest":20,"n":20},"rr_2.50":{"distinct":1,"biggest":20,"n":20},"rr_3.00":{"distinct":2,"biggest":19,"n":20},"rr_3.50":{"distinct":1,"biggest":20,"n":20},"near":{"distinct":2,"biggest":10,"n":20},"modest":{"distinct":2,"biggest":10,"n":20},"four":{"distinct":4,"biggest":5,"n":20},"wide":{"distinct":4,"biggest":5,"n":20}},"design":{"rr_0.50":{"sleeves":1,"width":0.0},"rr_0.75":{"sleeves":1,"width":0.0},"rr_1.00":{"sleeves":1,"width":0.0},"rr_1.25":{"sleeves":1,"width":0.0},"rr_1.50":{"sleeves":1,"width":0.0},"rr_2.00":{"sleeves":1,"width":0.0},"rr_2.50":{"sleeves":1,"width":0.0},"rr_3.00":{"sleeves":1,"width":0.0},"rr_3.50":{"sleeves":1,"width":0.0},"near":{"sleeves":2,"width":0.5},"modest":{"sleeves":2,"width":1.0},"four":{"sleeves":4,"width":1.5},"wide":{"sleeves":4,"width":3.0}}};
+const HOM = ["rr_0.50","rr_0.75","rr_1.00","rr_1.25","rr_1.50","rr_2.00","rr_2.50","rr_3.00","rr_3.50"];
+const MIX = ["near","modest","four","wide"];
 function label(p){ return p.startsWith("rr_") ? "RR " + p.slice(3) : p; }
 function isMix(p){ return !p.startsWith("rr_"); }
 function sleeveVar(i, n){
-  // ordinal blue ramp: low RR light, high RR dark; single-sleeve books take the mid step
   if (n === 1) return "var(--rr-3)";
   const steps = ["var(--rr-1)","var(--rr-2)","var(--rr-3)","var(--rr-4)"];
-  if (n === 2) return [steps[0], steps[3]][i];
-  return steps[i % 4];
+  return n === 2 ? [steps[0], steps[3]][i] : steps[i % 4];
 }
 const tip = document.getElementById("tip");
 function showTip(e, html){
@@ -340,15 +367,13 @@ function showTip(e, html){
   if (y + r.height > window.innerHeight - 8) y = window.innerHeight - r.height - 8;
   tip.style.left = Math.max(8, x) + "px"; tip.style.top = Math.max(8, y) + "px";
 }
-function hideTip(){ tip.style.opacity = "0"; }
+const hideTip = () => { tip.style.opacity = "0"; };
 function bind(el, html){
   el.addEventListener("mousemove", e => showTip(e, html));
   el.addEventListener("mouseleave", hideTip);
   el.setAttribute("tabindex","0");
-  el.addEventListener("focus", e => {
-    const b = el.getBoundingClientRect();
-    showTip({clientX: b.right, clientY: b.top}, html);
-  });
+  el.addEventListener("focus", () => { const b = el.getBoundingClientRect();
+    showTip({clientX: b.right, clientY: b.top}, html); });
   el.addEventListener("blur", hideTip);
 }
 const SVGNS = "http://www.w3.org/2000/svg";
@@ -356,9 +381,7 @@ function svg(w, h){
   const s = document.createElementNS(SVGNS, "svg");
   s.setAttribute("viewBox", `0 0 ${w} ${h}`);
   s.setAttribute("role","img");
-  // never upscale: render at natural size, shrink only when the container is narrower
-  s.style.maxWidth = w + "px";
-  s.style.marginInline = "auto";
+  s.style.maxWidth = w + "px"; s.style.marginInline = "auto";
   return s;
 }
 function el(tag, attrs, parent){
@@ -369,158 +392,216 @@ function el(tag, attrs, parent){
 }
 function legend(host, items){
   host.innerHTML = items.map(i =>
-    `<span class="k"><span class="sw ${i.line?"line":""}" style="background:${i.c}"></span>${i.t}</span>`
-  ).join("");
+    `<span class="k"><span class="sw ${i.cls||""}" style="background:${i.c}"></span>${i.t}</span>`).join("");
 }
 const usd = n => (n<0?"−$":"$") + Math.abs(n).toLocaleString("en-US");
+const pct = v => Math.round(v*100) + "%";
 
-/* ---------- 01 unit chart ---------- */
+/* ---------- 01 whole-dataset worst-day ---------- */
 (function(){
-  const rows = D.order, LW = 128, RW = 96, CELL = 24, GAP = 3, ROWH = 34, TOP = 30;
-  const gridW = 20*CELL + 19*GAP;
-  const W = LW + gridW + RW, H = TOP + rows.length*ROWH + 10;
+  const rows = [...HOM, ...MIX].sort((a,b) => D.whole[a].w1 - D.whole[b].w1);
+  const LW = 128, RW = 150, ROWH = 27, TOP = 24, BARW = 372;
+  const W = LW + BARW + RW, H = TOP + rows.length*ROWH + 46;
   const s = svg(W, H);
-  s.setAttribute("aria-label","Twenty accounts per portfolio; red cells died in March 2026");
-  for (let i=0;i<20;i+=4){
-    el("text",{x:LW + i*(CELL+GAP), y:TOP-12, class:"tick"}, s).textContent = (i+1);
-  }
-  el("text",{x:LW+gridW+10, y:TOP-12, class:"tick"}, s).textContent = "alive 31 Mar";
-  rows.forEach((p, ri) => {
-    const y = TOP + ri*ROWH, m = D.march[p], comp = D.composition[p], n = comp.length;
-    const per = 20 / n;
-    el("text",{x:0, y:y+14, class:"rowlab"}, s).textContent = label(p);
-    el("text",{x:0, y:y+26, class:"rowsub"}, s).textContent =
-      isMix(p) ? comp.join(" / ") : (n===1 ? "20 seats" : "");
-    let idx = 0;
-    comp.forEach((rr, si) => {
-      const deadN = m.dead_by_sleeve[rr] || 0;
-      for (let k=0;k<per;k++, idx++){
-        const dead = k < deadN;
-        const c = el("rect",{
-          x: LW + idx*(CELL+GAP), y: y+4, width: CELL, height: CELL, rx:3,
-          fill: dead ? "var(--dead)" : sleeveVar(si, n), class:"cell"
-        }, s);
-        bind(c, `<b>${label(p)}</b><br><span class="m">sleeve RR ${rr} &middot; seat ${idx+1} of 20</span><br>`
-          + (dead ? `<span class="m">died ${m.dates.join(", ")}</span>` : `<span class="m">survived March</span>`));
-      }
-    });
-    const t = el("text",{x:LW+gridW+10, y:y+21, class:"dlab"}, s);
-    t.textContent = m.alive31 + " / 20";
-    if (m.alive31 === 0) t.setAttribute("fill","var(--dead)");
-  });
-  document.getElementById("c-units").appendChild(s);
-  const lg = document.getElementById("lg-units");
-  lg.innerHTML = `<span class="k">RR sleeve, low to high
-      <span class="sw" style="background:var(--rr-1)"></span>
-      <span class="sw" style="background:var(--rr-2)"></span>
-      <span class="sw" style="background:var(--rr-3)"></span>
-      <span class="sw" style="background:var(--rr-4)"></span></span>
-    <span class="k"><span class="sw" style="background:var(--dead)"></span>died in March 2026</span>`;
-})();
-
-/* ---------- 02 dispersion ---------- */
-(function(){
-  const rows = D.order.slice().sort((a,b)=> D.march[b].distinct - D.march[a].distinct
-    || D.spread[b]-D.spread[a]);
-  const LW = 128, RW = 152, ROWH = 27, TOP = 24, BARW = 372;
-  const maxV = 7;
-  const W = LW + BARW + RW, H = TOP + rows.length*ROWH + 44;
-  const s = svg(W, H);
-  s.setAttribute("aria-label","Distinct account balances held by each portfolio before the event");
-  for (let v=0; v<=maxV; v++){
-    const x = LW + (v/maxV)*BARW;
+  s.setAttribute("aria-label","Worst-day share of book lost, by portfolio, whole dataset");
+  for (let v=0; v<=100; v+=20){
+    const x = LW + (v/100)*BARW;
     el("line",{x1:x,y1:TOP-6,x2:x,y2:TOP+rows.length*ROWH,stroke:"var(--grid)","stroke-width":1}, s);
-    el("text",{x:x, y:TOP+rows.length*ROWH+16, class:"tick","text-anchor":"middle"}, s).textContent = v;
+    el("text",{x:x,y:TOP+rows.length*ROWH+16,class:"tick","text-anchor":"middle"}, s).textContent = v+"%";
   }
   el("text",{x:LW+BARW/2, y:H-6, class:"tick","text-anchor":"middle"}, s)
-    .textContent = "distinct profit balances across 20 live seats";
+    .textContent = "share of the live book lost in the worst single day";
   rows.forEach((p, ri) => {
-    const y = TOP + ri*ROWH, m = D.march[p], v = m.distinct, sp = D.spread[p];
-    const w = Math.max(2, (v/maxV)*BARW);
-    const mix = isMix(p);
-    const hero = (p === "rr_0.75" || p === "rr_0.50");
-    const fill = hero ? "var(--s2)" : (mix ? "var(--s1)" : "var(--axis)");
-    el("text",{x:0, y:y+15, class:"rowlab"}, s).textContent = label(p);
-    const r = el("rect",{x:LW, y:y+5, width:w, height:ROWH-12, rx:3, fill:fill, class:"bar"}, s);
-    bind(r, `<b>${label(p)}</b><br><span class="m">${v} distinct balance${v===1?"":"s"} on 1 Mar 2026`
-      + `<br>spread ${usd(sp)} &middot; weakest seat ${usd(D.minhead[p])} of headroom</span>`);
-    el("text",{x:LW+w+9, y:y+15, class:"dlab"}, s).textContent =
-      v + (sp ? "  · " + usd(sp) + " spread" : "  · all identical");
+    const y = TOP + ri*ROWH, a = D.whole[p], b = D.ex2020[p], mix = isMix(p);
+    const w = Math.max(2, a.w1*BARW);
+    el("text",{x:0,y:y+15,class:"rowlab"}, s).textContent = label(p);
+    const r = el("rect",{x:LW,y:y+5,width:w,height:ROWH-12,rx:3,
+      fill: mix ? "var(--s1)" : "var(--axis)", class:"bar"}, s);
+    bind(r, `<b>${label(p)}</b><br><span class="m">worst day ${pct(a.w1)} of live book`
+      + `<br>worst 5-day ${pct(a.w5)} &middot; worst 20-day ${pct(a.w20)}`
+      + `<br>${a.deaths} deaths &middot; ${a.ms} max same-signal`
+      + `<br>${a.wp} empty-book episodes &middot; ${a.ed} empty days`
+      + `<br>without 2020: ${pct(b.w1)}</span>`);
+    const tx = LW + b.w1*BARW;
+    el("rect",{x:tx-1.5, y:y+2, width:3, height:ROWH-6, rx:1, fill:"var(--s2)"}, s);
+    // the tick can sit right of the bar end, so the label clears whichever is further out
+    el("text",{x:Math.max(LW+w, tx)+9, y:y+15, class:"dlab"}, s).textContent = pct(a.w1);
   });
-  document.getElementById("c-disp").appendChild(s);
-  legend(document.getElementById("lg-disp"), [
-    {c:"var(--s2)", t:"single RR, naturally dispersed"},
-    {c:"var(--s1)", t:"tested mixture"},
-    {c:"var(--axis)", t:"single RR"}
-  ]);
+  document.getElementById("c-cluster").appendChild(s);
+  legend(document.getElementById("lg-cluster"), [
+    {c:"var(--s1)", t:"mixture"}, {c:"var(--axis)", t:"single RR"},
+    {c:"var(--s2)", cls:"tick", t:"same figure excluding the 2020 start"}]);
 })();
 
-/* ---------- 03 heatmap ---------- */
+/* ---------- 02 dose ---------- */
+function dose(hostId, key, fmt, axisLab, sub){
+  const homMean = HOM.reduce((t,p) => t + D.whole[p][key], 0) / HOM.length;
+  const rows = MIX.map(p => ({p, v: D.whole[p][key], d: D.design[p]}))
+                  .sort((a,b) => a.v - b.v);
+  rows.push({p:"__hom", v:homMean, d:null});
+  const LW = 96, RW = 74, ROWH = 32, TOP = 18, BARW = 196;
+  const maxV = Math.max(...rows.map(r => r.v)) * 1.12;
+  const W = LW + BARW + RW, H = TOP + rows.length*ROWH + 30;
+  const s = svg(W, H);
+  s.setAttribute("aria-label", axisLab);
+  rows.forEach((r, ri) => {
+    const y = TOP + ri*ROWH, hom = r.p === "__hom";
+    el("text",{x:0,y:y+14,class:"rowlab"}, s).textContent = hom ? "single RR" : r.p;
+    el("text",{x:0,y:y+25,class:"rowsub"}, s).textContent =
+      hom ? "average of 9" : `width ${r.d.width.toFixed(2)} · ${r.d.sleeves} sleeves`;
+    const w = Math.max(2,(r.v/maxV)*BARW);
+    const b = el("rect",{x:LW,y:y+5,width:w,height:ROWH-16,rx:3,
+      fill: hom ? "var(--axis)" : "var(--s1)", class:"bar"}, s);
+    bind(b, `<b>${hom ? "single-RR average" : r.p}</b><br><span class="m">${sub}: ${fmt(r.v)}`
+      + (hom ? "" : `<br>spread width ${r.d.width.toFixed(2)} &middot; ${r.d.sleeves} sleeves`) + `</span>`);
+    el("text",{x:LW+w+9,y:y+16,class:"dlab"}, s).textContent = fmt(r.v);
+  });
+  el("text",{x:LW,y:H-4,class:"tick"}, s).textContent = axisLab;
+  document.getElementById(hostId).appendChild(s);
+}
+dose("c-dose-w","w1", pct, "worst-day share of live book", "worst day");
+dose("c-dose-s","ms", v => v.toFixed(2), "accounts lost to one signal", "max same-signal");
+
+/* ---------- 03 head to head ---------- */
+(function(){
+  const t = document.getElementById("t-h2h"), m = D.h2h["worst_1d_fraction"], m2 = D.h2h["max_same_signal_deaths"];
+  t.innerHTML = `<caption>Cells won of ${D.nCells}, operating phase. Higher is better.</caption>
+    <thead><tr><th>Mixture</th><th>Width</th><th>Sleeves</th>
+      <th>Worst day: beats RR 1.00</th><th>beats hom. median</th><th>beats best hom.</th>
+      <th>Same-signal: beats RR 1.00</th><th>beats hom. median</th></tr></thead><tbody>` +
+    MIX.map(p => `<tr class="mix"><td>${p}</td>
+      <td class="num">${D.design[p].width.toFixed(2)}</td><td class="num">${D.design[p].sleeves}</td>
+      <td class="num">${m[p].vs1} / ${m[p].n}</td><td class="num">${m[p].vsMed} / ${m[p].n}</td>
+      <td class="num">${m[p].vsBest} / ${m[p].n}</td>
+      <td class="num">${m2[p].vs1} / ${m2[p].n}</td><td class="num">${m2[p].vsMed} / ${m2[p].n}</td></tr>`).join("")
+    + "</tbody>";
+})();
+
+/* ---------- 04 heatmap ---------- */
 (function(){
   const rows = D.order, years = D.years;
   const LW = 128, CW = 84, CH = 28, TOP = 32, RW = 80;
   const W = LW + years.length*CW + RW, H = TOP + rows.length*CH + 10;
   const s = svg(W, H);
   s.setAttribute("aria-label","Empty-book episodes by portfolio and start year");
-  years.forEach((y, i) =>
-    el("text",{x:LW + i*CW + CW/2, y:TOP-11, class:"tick","text-anchor":"middle"}, s).textContent = y);
-  el("text",{x:LW + years.length*CW + 10, y:TOP-11, class:"tick"}, s).textContent = "total";
+  years.forEach((y,i) => el("text",{x:LW+i*CW+CW/2,y:TOP-11,class:"tick","text-anchor":"middle"},s).textContent=y);
+  el("text",{x:LW+years.length*CW+10,y:TOP-11,class:"tick"},s).textContent="total";
   rows.forEach((p, ri) => {
-    const y = TOP + ri*CH;
-    el("text",{x:0, y:y+18, class:"rowlab"}, s).textContent = label(p);
-    let tot = 0;
+    const y = TOP + ri*CH; let tot = 0;
+    el("text",{x:0,y:y+18,class:"rowlab"},s).textContent = label(p);
     years.forEach((yr, ci) => {
-      const v = D.primary[p][yr].wipeouts; tot += v;
-      const c = el("rect",{x:LW+ci*CW+1, y:y+2, width:CW-3, height:CH-4, rx:2,
+      const r = D.primary[p][yr], v = r.wipeouts; tot += v;
+      const c = el("rect",{x:LW+ci*CW+1,y:y+2,width:CW-3,height:CH-4,rx:2,
         fill:`var(--heat-${Math.min(6,v)})`, class:"cell"}, s);
       bind(c, `<b>${label(p)}</b> &middot; ${yr} start<br><span class="m">${v} empty-book episode${v===1?"":"s"}`
-        + ` &middot; ${D.primary[p][yr].empty} empty days<br>${D.primary[p][yr].deaths} deaths`
-        + ` &middot; ${usd(D.primary[p][yr].cash)}</span>`);
-      const t = el("text",{x:LW+ci*CW+CW/2, y:y+19, class:"dlab","text-anchor":"middle"}, s);
+        + ` &middot; ${r.empty} empty days<br>${r.deaths} deaths &middot; ${usd(r.cash)}</span>`);
+      const t = el("text",{x:LW+ci*CW+CW/2,y:y+19,class:"dlab","text-anchor":"middle"}, s);
       t.textContent = v;
-      t.setAttribute("fill", v >= 4 ? "var(--surface)" : (v === 0 ? "var(--muted)" : "var(--ink)"));
+      t.setAttribute("fill", v>=4 ? "var(--surface)" : (v===0 ? "var(--muted)" : "var(--ink)"));
     });
-    const tt = el("text",{x:LW+years.length*CW+10, y:y+19, class:"dlab"}, s);
-    tt.textContent = tot;
-    if (tot === 0) tt.setAttribute("fill","var(--s3)");
+    const tt = el("text",{x:LW+years.length*CW+10,y:y+19,class:"dlab"}, s);
+    tt.textContent = tot; if (tot===0) tt.setAttribute("fill","var(--s3)");
   });
   document.getElementById("c-heat").appendChild(s);
-  legend(document.getElementById("lg-heat"),
-    [0,1,2,3,4,5,6].map(v => ({c:`var(--heat-${v})`, t: v === 6 ? "6+" : String(v)})));
+  legend(document.getElementById("lg-heat"), [0,1,2,3,4,5,6].map(v =>
+    ({c:`var(--heat-${v})`, t: v===6 ? "6+" : String(v)})));
 })();
 
-/* ---------- 04 trade-off ---------- */
+/* ---------- 05 unit chart ---------- */
+(function(){
+  const rows = D.order, LW = 128, RW = 96, CELL = 24, GAP = 3, ROWH = 34, TOP = 30;
+  const gridW = 20*CELL + 19*GAP, W = LW + gridW + RW, H = TOP + rows.length*ROWH + 10;
+  const s = svg(W, H);
+  s.setAttribute("aria-label","Twenty accounts per portfolio; red cells died in March 2026");
+  for (let i=0;i<20;i+=4) el("text",{x:LW+i*(CELL+GAP),y:TOP-12,class:"tick"},s).textContent=(i+1);
+  el("text",{x:LW+gridW+10,y:TOP-12,class:"tick"},s).textContent="alive 31 Mar";
+  rows.forEach((p, ri) => {
+    const y = TOP + ri*ROWH, m = D.march[p], comp = D.composition[p], n = comp.length, per = 20/n;
+    el("text",{x:0,y:y+14,class:"rowlab"},s).textContent = label(p);
+    el("text",{x:0,y:y+26,class:"rowsub"},s).textContent = isMix(p) ? comp.join(" / ") : "20 seats";
+    let idx = 0;
+    comp.forEach((rr, si) => {
+      const deadN = m.dead_by_sleeve[rr] || 0;
+      for (let k=0;k<per;k++, idx++){
+        const dead = k < deadN;
+        const c = el("rect",{x:LW+idx*(CELL+GAP),y:y+4,width:CELL,height:CELL,rx:3,
+          fill: dead ? "var(--dead)" : sleeveVar(si,n), class:"cell"}, s);
+        bind(c, `<b>${label(p)}</b><br><span class="m">sleeve RR ${rr} &middot; seat ${idx+1} of 20</span><br>`
+          + (dead ? `<span class="m">died ${m.dates.join(", ")}</span>`
+                  : `<span class="m">survived March</span>`));
+      }
+    });
+    const t = el("text",{x:LW+gridW+10,y:y+21,class:"dlab"}, s);
+    t.textContent = m.alive31 + " / 20";
+    if (m.alive31 === 0) t.setAttribute("fill","var(--dead)");
+  });
+  document.getElementById("c-units").appendChild(s);
+  document.getElementById("lg-units").innerHTML =
+    `<span class="k">RR sleeve, low to high
+      <span class="sw" style="background:var(--rr-1)"></span>
+      <span class="sw" style="background:var(--rr-2)"></span>
+      <span class="sw" style="background:var(--rr-3)"></span>
+      <span class="sw" style="background:var(--rr-4)"></span></span>
+     <span class="k"><span class="sw" style="background:var(--dead)"></span>died in March 2026</span>`;
+})();
+
+/* ---------- 06 concentration ---------- */
+(function(){
+  const rows = D.order.slice().sort((a,b) => D.groups[a].biggest - D.groups[b].biggest);
+  const LW = 128, RW = 190, ROWH = 27, TOP = 24, BARW = 320;
+  const W = LW + BARW + RW, H = TOP + rows.length*ROWH + 46;
+  const s = svg(W, H);
+  s.setAttribute("aria-label","Largest group of accounts sharing one headroom value");
+  for (let v=0; v<=20; v+=5){
+    const x = LW + (v/20)*BARW;
+    el("line",{x1:x,y1:TOP-6,x2:x,y2:TOP+rows.length*ROWH,stroke:"var(--grid)","stroke-width":1}, s);
+    el("text",{x:x,y:TOP+rows.length*ROWH+16,class:"tick","text-anchor":"middle"}, s).textContent = v;
+  }
+  el("text",{x:LW+BARW/2,y:H-6,class:"tick","text-anchor":"middle"}, s)
+    .textContent = "accounts sharing one headroom value (of 20)";
+  rows.forEach((p, ri) => {
+    const y = TOP + ri*ROWH, g = D.groups[p], mix = isMix(p);
+    const w = Math.max(2,(g.biggest/20)*BARW);
+    el("text",{x:0,y:y+15,class:"rowlab"},s).textContent = label(p);
+    const r = el("rect",{x:LW,y:y+5,width:w,height:ROWH-12,rx:3,
+      fill: mix ? "var(--s1)" : "var(--axis)", class:"bar"}, s);
+    bind(r, `<b>${label(p)}</b><br><span class="m">largest group ${g.biggest} of 20 (${pct(g.biggest/20)})`
+      + `<br>${g.distinct} distinct headroom value${g.distinct===1?"":"s"}</span>`);
+    el("text",{x:LW+w+9,y:y+15,class:"dlab"},s).textContent =
+      `${g.biggest} of 20  · ${g.distinct} distinct`;
+  });
+  document.getElementById("c-grp").appendChild(s);
+  legend(document.getElementById("lg-grp"),
+    [{c:"var(--s1)", t:"mixture"},{c:"var(--axis)", t:"single RR"}]);
+})();
+
+/* ---------- 07 trade-off ---------- */
 function grouped(hostId, legId, key, fmt, title){
   const picks = [["rr_1.00","var(--s1)"],["rr_2.50","var(--s2)"],["wide","var(--s3)"]];
-  const years = D.years;
-  const L = 56, R = 12, TOP = 18, BH = 170, BW = 68, GW = 18;
-  const W = L + years.length*BW + R, H = TOP + BH + 40;
+  const years = D.years, L = 56, R = 12, TOP = 18, BH = 170, BW = 68, GW = 18;
+  const W = L + years.length*BW + R, H = TOP + BH + 42;
   const vals = picks.flatMap(([p]) => years.map(y => D.primary[p][y][key]));
   const lo = Math.min(0, ...vals), hi = Math.max(...vals);
-  const yScale = v => TOP + BH - ((v - lo)/(hi - lo || 1))*BH;
-  const s = svg(W, H);
-  s.setAttribute("aria-label", title);
-  const ticks = 4;
-  for (let i=0;i<=ticks;i++){
-    const v = lo + (hi-lo)*i/ticks, yy = yScale(v);
+  const yS = v => TOP + BH - ((v-lo)/(hi-lo || 1))*BH;
+  const s = svg(W, H); s.setAttribute("aria-label", title);
+  for (let i=0;i<=4;i++){
+    const v = lo + (hi-lo)*i/4, yy = yS(v);
     el("line",{x1:L,y1:yy,x2:W-R,y2:yy,stroke:"var(--grid)","stroke-width":1}, s);
     el("text",{x:L-6,y:yy+3,class:"tick","text-anchor":"end"}, s).textContent = fmt(v);
   }
-  if (lo < 0) el("line",{x1:L,y1:yScale(0),x2:W-R,y2:yScale(0),stroke:"var(--axis)","stroke-width":1}, s);
-  years.forEach((yr, i) => {
+  if (lo < 0) el("line",{x1:L,y1:yS(0),x2:W-R,y2:yS(0),stroke:"var(--axis)","stroke-width":1}, s);
+  years.forEach((yr,i) => {
     const x0 = L + i*BW + (BW-GW*picks.length)/2;
-    el("text",{x:L+i*BW+BW/2, y:TOP+BH+16, class:"tick","text-anchor":"middle"}, s).textContent = yr;
-    picks.forEach(([p, col], j) => {
-      const v = D.primary[p][yr][key];
-      const yTop = Math.min(yScale(v), yScale(0)), hgt = Math.max(2, Math.abs(yScale(v)-yScale(0)));
-      const r = el("rect",{x:x0+j*GW+1, y:yTop, width:GW-3, height:hgt, rx:3,
-        fill:col, class:"bar"}, s);
-      bind(r, `<b>${label(p)}</b> &middot; ${yr} start<br><span class="m">${title}: ${fmt(v)}`
-        + `<br>${D.primary[p][yr].wipeouts} empty-book &middot; ${D.primary[p][yr].deaths} deaths`
-        + ` &middot; ${usd(D.primary[p][yr].cash)}</span>`);
+    el("text",{x:L+i*BW+BW/2,y:TOP+BH+16,class:"tick","text-anchor":"middle"},s).textContent = yr;
+    picks.forEach(([p,col], j) => {
+      const r = D.primary[p][yr], v = r[key];
+      const yTop = Math.min(yS(v), yS(0)), hgt = Math.max(2, Math.abs(yS(v)-yS(0)));
+      const b = el("rect",{x:x0+j*GW+1,y:yTop,width:GW-3,height:hgt,rx:3,fill:col,class:"bar"}, s);
+      bind(b, `<b>${label(p)}</b> &middot; ${yr} start<br><span class="m">${title}: ${fmt(v)}`
+        + `<br>${r.wipeouts} empty-book &middot; ${r.deaths} deaths &middot; ${usd(r.cash)}</span>`);
     });
   });
-  el("text",{x:L, y:H-4, class:"tick"}, s).textContent = "fresh start year";
+  el("text",{x:L,y:H-4,class:"tick"},s).textContent = "fresh start year";
   document.getElementById(hostId).appendChild(s);
   legend(document.getElementById(legId), picks.map(([p,c]) => ({c, t:label(p)})));
 }
@@ -528,31 +609,27 @@ grouped("c-deaths","lg-d","deaths", v => Math.round(v), "Lifetime deaths");
 grouped("c-cash","lg-c","cash", v => (Math.abs(v)>=1000 ? (v/1000).toFixed(0)+"k" : Math.round(v)),
         "Net operating cash");
 
-/* ---------- 05 isolation table ---------- */
+/* ---------- 08 isolation table ---------- */
 (function(){
   const t = document.getElementById("t-iso");
-  t.innerHTML = `<caption>Isolation phase, 2023 start, no replacement accounts. 20 seats, daily minimum, $6,800.</caption>
-    <thead><tr><th>Portfolio</th><th>Composition</th><th>Deaths</th><th>Alive</th>
-    <th>Which sleeve died</th><th>Net cash</th></tr></thead><tbody>` +
-    D.order.map(p => {
-      const r = D.iso[p]; if (!r) return "";
-      const per = Object.entries(r.per_rr).map(([k,v]) => `RR ${k}: ${v}`).join(", ") || "—";
+  t.innerHTML = `<caption>Isolation phase, no replacements, averaged over ${D.nCellsIso} cells.</caption>
+    <thead><tr><th>Portfolio</th><th>Deaths</th><th>Max same-signal</th>
+    <th>Share of deaths simultaneous</th><th>Empty days</th></tr></thead><tbody>` +
+    [...HOM,...MIX].map(p => {
+      const r = D.isolation[p];
       return `<tr class="${isMix(p)?"mix":""}"><td>${label(p)}</td>
-        <td class="num">${D.composition[p].join(" / ")}</td>
-        <td class="num ${r.deaths?"":"zero"}">${r.deaths}</td>
-        <td class="num">${r.alive}</td><td class="num">${per}</td>
-        <td class="num">${usd(r.cash)}</td></tr>`;
+        <td class="num">${r.deaths}</td><td class="num">${r.ms}</td>
+        <td class="num">${pct(r.ms/r.deaths)}</td><td class="num">${r.ed}</td></tr>`;
     }).join("") + "</tbody>";
 })();
 
-/* ---------- 06 main table ---------- */
+/* ---------- 09 main table ---------- */
 (function(){
   const t = document.getElementById("t-main"), years = D.years;
   t.innerHTML = `<caption>Operating phase, daily minimum, $6,800 headroom, MAE-first. deaths / empty-book / net cash.</caption>
     <thead><tr><th>Portfolio</th>` + years.map(y=>`<th>${y}</th>`).join("") + `</tr></thead><tbody>` +
     D.order.map(p => `<tr class="${isMix(p)?"mix":""}"><td>${label(p)}</td>` +
-      years.map(y => {
-        const r = D.primary[p][y];
+      years.map(y => { const r = D.primary[p][y];
         return `<td class="num">${r.deaths} / <span class="${r.wipeouts?"":"zero"}">${r.wipeouts}</span> / ${usd(r.cash)}</td>`;
       }).join("") + `</tr>`).join("") + "</tbody>";
 })();
