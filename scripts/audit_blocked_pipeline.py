@@ -5,7 +5,7 @@ from itertools import product
 import json
 
 from pa_milky.config import PROJECT_ROOT, load_config, to_payload
-from pa_milky.provenance import sha256_file, engine_digest, input_digest
+from pa_milky.provenance import sha256_file, engine_digest, input_digest, inputs_accepted
 from audit_legacy_routing import read_csv
 from report_names import engine_accepted, verified
 
@@ -27,7 +27,7 @@ def audit(root):
     config=load_config(PROJECT_ROOT/spec['scenario'])
     assert to_payload(config)==contract['config']
     assert engine_accepted(contract['engine'],engine_digest()),'unrecorded engine change; see results/ENGINE_CHANGES.json'
-    assert input_digest(config)==contract['inputs']
+    assert inputs_accepted(contract['inputs'], input_digest(config))
     checkpoint={tuple(r['job']):r for r in map(json.loads,(root/'checkpoint.jsonl').read_text().splitlines())}
     assert len(checkpoint)==data['unique_simulations']
     pipes=list(product(spec['persistent_demand'],spec['start_intervals_days'],spec['concurrency'],spec['spares'],(True,False)))

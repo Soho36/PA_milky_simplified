@@ -1,0 +1,29 @@
+{
+  "scenario": "config/scenarios/full_rulebook_monthly_500.json",
+  "output": "results/legacy_25k/rr_diversification",
+  "rr_values": ["0.50", "0.75", "1.00", "1.25", "1.50", "2.00", "2.50", "3.00", "3.50"],
+  "mixtures": {
+    "near": {"0.75": 1, "1.25": 1},
+    "modest": {"0.50": 1, "1.50": 1},
+    "four": {"0.50": 1, "1.00": 1, "1.50": 1, "2.00": 1},
+    "wide": {"0.50": 1, "1.50": 1, "2.50": 1, "3.50": 1}
+  },
+  "starts": [2020, 2021, 2022, 2023, 2024, 2025],
+  "maximum_withdrawal_starts": [2020, 2023, 2025],
+  "mfe_first_starts": [2020, 2023],
+  "isolation_accounts": 20,
+  "headroom": 6800,
+  "operating": {
+    "initial_cash_usd": 5000,
+    "monthly_contribution_usd": 200,
+    "max_live_accounts": 20,
+    "spare_capacity": 2,
+    "evaluations_at_once": 5,
+    "evaluation_start_interval_days": 7,
+    "persistent_demand": false,
+    "evaluations_reserve_seats": true
+  },
+  "evaluation_spec": "config/studies/legacy_eval_supply.json",
+  "workers": 4,
+  "design": "Fixed, unoptimized RR mixes. Isolation: 20 identical fresh accounts, no replacements. Operating: start without PAs; monthly current-slot demand and replacements from shared cash-funded RR1 evaluations. PAs copy every exported signal for their assigned RR while flat. Daily minimum withdrawals and 6800 frozen-floor headroom; maximum withdrawal and MFE-first sensitivities are separately labeled. Historical starts overlap and are not out-of-sample validation. Death dates use exported exits; same-signal deaths and interval-overlap bounds prevent interpreting delayed recording as genuine diversification."
+}

@@ -87,6 +87,19 @@ def input_digest(config: RunConfig) -> dict:
     return _digest_tree(files)
 
 
+def inputs_accepted(pinned: dict, current: dict) -> bool:
+    """Accept only exact inputs or recorded, simulation-equivalent replacements."""
+    reached = pinned["combined_sha256"]
+    if reached == current["combined_sha256"]:
+        return True
+    ledger = PROJECT_ROOT / "results" / "INPUT_CHANGES.json"
+    if ledger.is_file():
+        for change in json.loads(ledger.read_text(encoding="utf-8"))["transitions"]:
+            if change.get("simulation_equivalent") is True and change["old_combined_sha256"] == reached:
+                reached = change["new_combined_sha256"]
+    return reached == current["combined_sha256"]
+
+
 def tape_coverage(trades) -> dict:
     """How far each window of a loaded tape actually reached.
 
@@ -259,12 +272,14 @@ def verify(name: str) -> VerificationResult:
     config = config_from_payload(manifest["config"])
 
     current_inputs = input_digest(config)
-    if current_inputs["combined_sha256"] != manifest["inputs"]["combined_sha256"]:
+    if not inputs_accepted(manifest["inputs"], current_inputs):
         failures.append(
             "the input tape has changed since the baseline was sealed "
             f"({manifest['inputs']['combined_sha256'][:12]} -> "
             f"{current_inputs['combined_sha256'][:12]})"
         )
+    elif current_inputs["combined_sha256"] != manifest["inputs"]["combined_sha256"]:
+        notes.append("simulation-equivalent input replacement recorded in results/INPUT_CHANGES.json")
 
     current_engine = engine_digest()
     if current_engine["combined_sha256"] != manifest["engine"]["combined_sha256"]:

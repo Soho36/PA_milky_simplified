@@ -208,11 +208,16 @@ def decision_boundaries(first: datetime, last: datetime, cadence: str):
 def run_book(trades: list[Trade], config: RunConfig, *, acquisition: AcquisitionPolicy | None = None,
              observer=None, routing: RoutingPolicy | None = None, replay=None,
              initial_accounts: int | None = None, fixed_accounts: int | None = None,
-             routing_demand: list[int] | None = None) -> BookResult:
+             routing_demand: list[int] | None = None, router_factory=None,
+             evaluation_tape: list[Trade] | None = None) -> BookResult:
     """Walk the tape, opening one account a month and asking the firm monthly."""
 
     if not trades:
         raise ValueError("no trades to simulate")
+    if router_factory is not None and routing is None:
+        raise ValueError("A custom router requires an explicit routing policy")
+    if evaluation_tape is not None and (acquisition is None or acquisition.evaluation is None):
+        raise ValueError("A separate evaluation tape requires evaluation supply")
     if fixed_accounts is not None:
         if (not isinstance(fixed_accounts, int) or isinstance(fixed_accounts, bool)
                 or fixed_accounts < 1):
@@ -264,7 +269,8 @@ def run_book(trades: list[Trade], config: RunConfig, *, acquisition: Acquisition
         if count and replay is not None:
             replay.record_purchase(at, count, accounts, emergency=True)
 
-    router = (TradeRouter(trades, routing,
+    router_type = router_factory or TradeRouter
+    router = (router_type(trades, routing,
                           demand=replay.demand if replay is not None else routing_demand,
                           provision=provision if replay is not None else None)
               if routing is not None else None)
@@ -272,9 +278,24 @@ def run_book(trades: list[Trade], config: RunConfig, *, acquisition: Acquisition
     purchasing = AcquisitionLedger(acquisition) if acquisition is not None else None
     settle = None
     if purchasing is not None and purchasing.evaluating:
-        purchasing.attach_tape(trades, commission_per_mnq=config.commission_usd_per_mnq_round_turn,
+        evaluation_trades = trades if evaluation_tape is None else evaluation_tape
+        purchasing.attach_tape(evaluation_trades, commission_per_mnq=config.commission_usd_per_mnq_round_turn,
                                path_order=config.path_order)
         settle = purchasing.settle
+        if evaluation_tape is not None:
+            # PA variants share a clock and cash ledger, but evaluations keep
+            # their fixed reference strategy rather than trading duplicate RR offers.
+            reference = {t.trade_key: (i, t) for i, t in enumerate(evaluation_trades)}
+            if len(reference) != len(evaluation_trades):
+                raise ValueError("Duplicate evaluation trade keys")
+            matched = [t for t in trades if t.trade_key in reference]
+            if matched != evaluation_trades:
+                raise ValueError("Evaluation tape must be an ordered subset of the event tape")
+
+            def settle(index, trade):
+                selected = reference.get(trade.trade_key)
+                if selected is not None:
+                    purchasing.settle(selected[0], trade)
     opened = 0
     for boundary in decision_boundaries(first_entry, last_exit, "daily" if purchasing or replay is not None else config.policy.cadence):
         year, month = boundary.year, boundary.month

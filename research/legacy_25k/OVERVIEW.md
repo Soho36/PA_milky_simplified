@@ -1,5 +1,13 @@
 # Legacy 25K: current findings
 
+**RR diversification:** [new findings](../../results/legacy_25k/rr_diversification/rr_diversification__FINDINGS.generated.md)
+compare nine homogeneous controls and four fixed mixtures across 286 runs,
+plus 26 March stress replays. RR mixtures can spread deaths and preserve
+earning capacity; the wide mix keeps 15 of 20 accounts through the documented
+March wipeout. It does not consistently reduce total deaths or 20-day clusters.
+The 2020 stress start is reported separately from 2021–2025. See the
+[protocol](RR_DIVERSIFICATION.md) for the fixed policies and timing limitations.
+
 **Blocked copying with evaluation supply:** [pipeline study](BLOCKED_PIPELINE.md)
 extends the instant-supply result with paid evaluations, replacement delays,
 spare inventory and a shared 20-seat cap at the same $1,000 + $200/month budget.

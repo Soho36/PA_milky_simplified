@@ -31,6 +31,23 @@
       "outputs_unchanged": true,
       "evidence": "All 311 tests pass, including 20 coverage tests and verification of all five sealed baselines.",
       "line_endings": "Engine digest uses the existing CRLF checkout form; no line-ending convention change."
+    },
+    {
+      "old_combined_sha256": "f9f58415999cd6cd055cc23db0b3a195018ae942e477a904fcfa95778211b385",
+      "new_combined_sha256": "921d623d830b7badafb8a28dc50dab92626da568975ebf058d65df2ecab4a0bd",
+      "recorded_utc": "2026-09-20T17:25:14+00:00",
+      "git_revision_before": "4fecf1b7a2b1edcd6e576756bbbfa772619ade2e",
+      "changed": [
+        "src/pa_milky/provenance.py",
+        "src/pa_milky/simulator.py",
+        "src/pa_milky/rr_diversification.py"
+      ],
+      "files_before": 25,
+      "files_after": 26,
+      "reason": "Added optional per-account RR routing on the shared event/cash clock, with a separate fixed RR1 evaluation tape and mortality metrics. Original run_book paths remain unchanged. Baseline verification accepts only explicitly recorded simulation-equivalent input replacements; the RR1 replacement changed only an unused MT5 Sharpe statistic.",
+      "outputs_unchanged": true,
+      "evidence": "All 317 tests pass, including all five sealed baselines. The new study reproduces 110 homogeneous controls exactly and checks 14,385,023 trade copies. An independent audit reconstructs 6,704 death records across 286 runs. The March RR1 stress control reproduces the previously saved cash, deaths and trade copies.",
+      "line_endings": "Engine remains in its existing CRLF checkout form; new study scripts and evidence have narrowly scoped LF attributes to preserve their hashes."
     }
   ],
   "caveat": "engine_digest() hashes file bytes, and core.autocrlf is true with no .gitattributes, so a digest describes the line endings of the working copy that produced it. The reproducible form is the checkout form, CRLF, and that is what the saved contracts pinned and what this ledger records. The hazard is local: an editor or script that rewrites a src file with LF endings changes the engine digest without changing a line of code, and every engine assertion then fails until the file is restored to its checked-out form (git checkout -- src/pa_milky, or a fresh checkout). Adding a .gitattributes to fix the convention outright would change the checkout form of every src file and so require re-recording every pinned engine digest; that is a separate change."

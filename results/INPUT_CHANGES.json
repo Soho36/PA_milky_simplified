@@ -1,0 +1,13 @@
+{
+  "purpose": "Explicit input replacements with unchanged simulator-consumed values; original inputs remain backed up.",
+  "transitions": [
+    {
+      "old_combined_sha256": "1ab293ed1e4ed016ee963861b5a6a2d11be9e04df1a273cc00c2cd41ad8880a2",
+      "new_combined_sha256": "73391e7fd45a7220f83bad32e334866ffc5c3f7ffd0cc3a4eed8a266ead3f1e9",
+      "simulation_equivalent": true,
+      "reason": "RR 1.00 trade bytes unchanged; only the MT5 Sharpe statistic changed after a larger test deposit. Loader/simulator do not consume Sharpe.",
+      "evidence": "results/legacy_25k/rr_diversification/input_update.json",
+      "backup": "I:\\PycharmProjects\\PA_milky_simplified\\outputs\\sweep_backups\\20260920T144605-19f5dd"
+    }
+  ]
+}
