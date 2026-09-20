@@ -88,11 +88,13 @@ def _read_stats(path: Path) -> dict[str, str]:
     return rows[0]
 
 
-def read_coverage(path: Path = COVERAGE_PATH) -> dict | None:
-    """The pinned per-window reach of the tape, or None when it is not recorded."""
+def read_coverage(path: Path | None = None) -> dict:
+    """Read the required coverage reference; missing pins must not disable checks."""
 
+    if path is None:
+        path = COVERAGE_PATH
     if not path.is_file():
-        return None
+        raise FileNotFoundError(f"Missing tape coverage reference: {path}")
     payload = json.loads(path.read_text(encoding="utf-8"))
     if payload.get("schema") != COVERAGE_SCHEMA:
         raise ValueError(f"{path}: coverage schema {payload.get('schema')!r} unsupported")
@@ -113,17 +115,33 @@ def coverage_shortfalls(
     """
 
     if coverage is None:
-        return []
+        raise ValueError("Missing tape coverage reference")
     windows = coverage.get("strategies", {}).get(strategy)
     if windows is None:
-        return []  # a strategy nobody has measured yet is not a failure
+        raise ValueError(f"Missing tape coverage reference for strategy {strategy}")
+    missing_pins = [
+        window for window in WINDOWS
+        if not isinstance(windows.get(window), dict)
+        or not windows[window].get("last_exit")
+    ]
+    if missing_pins:
+        raise ValueError(
+            f"{strategy}: missing last_exit coverage pins for windows: "
+            + ", ".join(missing_pins)
+        )
+    missing_exits = [window for window in WINDOWS if window not in last_exits]
+    if missing_exits:
+        raise ValueError(
+            f"{strategy}: no trades observed for required windows: "
+            + ", ".join(missing_exits)
+        )
     tolerance = float(coverage.get("tolerance_days", 0))
+    if not math.isfinite(tolerance) or tolerance < 0:
+        raise ValueError("Coverage tolerance_days must be finite and nonnegative")
     shortfalls = []
-    for window, reached in sorted(last_exits.items()):
-        pinned = windows.get(window)
-        if pinned is None:
-            continue
-        required = datetime.fromisoformat(pinned["last_exit"])
+    for window in WINDOWS:
+        reached = last_exits[window]
+        required = datetime.fromisoformat(windows[window]["last_exit"])
         days_short = (required - reached).total_seconds() / 86400
         if days_short > tolerance:
             shortfalls.append((window, reached, required, days_short))

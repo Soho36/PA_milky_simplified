@@ -7,16 +7,26 @@ tests pin the separate coverage guard, and the margin it relies on.
 
 from __future__ import annotations
 
+from copy import deepcopy
+import csv
+from dataclasses import replace
 from datetime import datetime, timedelta
+from decimal import Decimal
 import json
+from pathlib import Path
+import tempfile
 import unittest
+from unittest.mock import patch
 
 from pa_milky.config import load_config
 from pa_milky.loader import (
     COVERAGE_PATH,
     COVERAGE_SCHEMA,
+    SOURCE_TIME_FORMAT,
+    STATS_COLUMNS,
     WINDOWS,
     coverage_shortfalls,
+    load_tape,
     load_trades,
     read_coverage,
 )
@@ -43,20 +53,20 @@ class TestCoverageManifest(unittest.TestCase):
                 )
 
     def test_unsupported_schema_is_rejected(self):
-        import tempfile
-        from pathlib import Path
-
         with tempfile.TemporaryDirectory() as tmp:
             path = Path(tmp) / "coverage.json"
             path.write_text(json.dumps({"schema": "something.else"}), encoding="utf-8")
             with self.assertRaises(ValueError):
                 read_coverage(path)
 
-    def test_absent_manifest_reads_as_none_and_checks_nothing(self):
-        from pathlib import Path
+    def test_absent_manifest_is_rejected(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            with self.assertRaisesRegex(FileNotFoundError, "Missing tape coverage"):
+                read_coverage(Path(tmp) / "coverage.json")
 
-        self.assertIsNone(read_coverage(Path("nowhere") / "coverage.json"))
-        self.assertEqual(coverage_shortfalls("RR", {"1-2": datetime(2020, 1, 1)}, None), [])
+    def test_missing_reference_cannot_disable_shortfall_detection(self):
+        with self.assertRaisesRegex(ValueError, "Missing tape coverage"):
+            coverage_shortfalls("RR", {"1-2": datetime(2020, 1, 1)}, None)
 
 
 class TestShortfallDetection(unittest.TestCase):
@@ -91,8 +101,17 @@ class TestShortfallDetection(unittest.TestCase):
         later = {w: t + timedelta(days=90) for w, t in self.reached.items()}
         self.assertEqual(coverage_shortfalls("RR", later, COVERAGE), [])
 
-    def test_an_unmeasured_strategy_is_not_a_failure(self):
-        self.assertEqual(coverage_shortfalls("ZZ", self.reached, COVERAGE), [])
+    def test_an_unmeasured_strategy_is_rejected(self):
+        with self.assertRaisesRegex(ValueError, "strategy ZZ"):
+            coverage_shortfalls("ZZ", self.reached, COVERAGE)
+
+    def test_invalid_tolerance_cannot_disable_shortfall_detection(self):
+        for tolerance in (float("nan"), float("inf"), -1):
+            with self.subTest(tolerance=tolerance):
+                coverage = deepcopy(COVERAGE)
+                coverage["tolerance_days"] = tolerance
+                with self.assertRaisesRegex(ValueError, "tolerance_days"):
+                    coverage_shortfalls("RR", self.reached, coverage)
 
 
 class TestLoaderEnforcement(unittest.TestCase):
@@ -102,11 +121,66 @@ class TestLoaderEnforcement(unittest.TestCase):
         )
         self.assertEqual(len(trades), CONFIG.expected_trades)
 
+
+class TestSyntheticCoverage(unittest.TestCase):
+    """Coverage regressions independent of the real exports awaiting repair."""
+
+    def setUp(self):
+        temporary = tempfile.TemporaryDirectory()
+        self.addCleanup(temporary.cleanup)
+        self.root = Path(temporary.name)
+        self.coverage_path = self.root / "coverage.json"
+        last_exit = datetime(2026, 7, 10, 12)
+        self.coverage = {
+            "schema": COVERAGE_SCHEMA,
+            "reference_risk_reward": "1.00",
+            "tolerance_days": 7,
+            "strategies": {
+                "RR": {w: {"last_exit": last_exit.isoformat()} for w in WINDOWS}
+            },
+        }
+        self.write_coverage()
+        self.rows = [
+            ["1", "2020.01.02 10:00:00", "2020.01.02 11:00:00", "-1", "2", "2", "10"],
+            ["2", (last_exit - timedelta(hours=1)).strftime(SOURCE_TIME_FORMAT),
+             last_exit.strftime(SOURCE_TIME_FORMAT), "-1", "3", "3", "10"],
+        ]
+        for window in WINDOWS:
+            self.write_window(window, self.rows)
+        guard = patch("pa_milky.loader.COVERAGE_PATH", self.coverage_path)
+        guard.start()
+        self.addCleanup(guard.stop)
+
+    def write_coverage(self):
+        self.coverage_path.write_text(json.dumps(self.coverage), encoding="utf-8")
+
+    def write_window(self, window, rows):
+        trades_path = self.root / "RR" / window / f"{window}_2.50.csv"
+        stats_path = self.root / "RR_stats" / window / f"{window}_2.50_stats.csv"
+        trades_path.parent.mkdir(parents=True, exist_ok=True)
+        stats_path.parent.mkdir(parents=True, exist_ok=True)
+        with trades_path.open("w", encoding="utf-16", newline="") as handle:
+            csv.writer(handle, delimiter="\t").writerows(rows)
+        stats = dict.fromkeys(STATS_COLUMNS, "0")
+        stats.update(
+            run_tag=window, risk_reward="2.50", trades=str(len(rows)),
+            net_profit=str(sum((Decimal(row[5]) for row in rows), Decimal(0))),
+        )
+        with stats_path.open("w", encoding="utf-16", newline="") as handle:
+            writer = csv.DictWriter(handle, fieldnames=STATS_COLUMNS, delimiter="\t")
+            writer.writeheader()
+            writer.writerow(stats)
+
+    def load(self, **kwargs):
+        return load_trades(self.root, strategy="RR", risk_reward="2.50", **kwargs)
+
+    def test_complete_exports_load(self):
+        self.assertEqual(len(self.load()), 2 * len(WINDOWS))
+
     def test_a_truncated_export_is_refused(self):
-        # RR 2.50 stops in May 2022 for window 16-17: the MT5 test account was
-        # wiped at about -$4,917 and the run ended there.
+        self.write_window("16-17", self.rows[:1])
         with self.assertRaises(ValueError) as caught:
-            load_trades(CONFIG.sweeps_root, strategy="RR", risk_reward="2.50")
+            self.load()
         message = str(caught.exception)
         self.assertIn("16-17", message)
         self.assertIn("days short", message)
@@ -114,11 +188,43 @@ class TestLoaderEnforcement(unittest.TestCase):
 
     def test_the_refused_tape_still_reconciles_against_its_own_stats(self):
         # The point of the guard: nothing else about this tape looks wrong.
-        trades = load_trades(
-            CONFIG.sweeps_root, strategy="RR", risk_reward="2.50", check_coverage=False
-        )
-        self.assertEqual(len(trades), 12090)
+        self.write_window("16-17", self.rows[:1])
+        trades = self.load(check_coverage=False)
+        self.assertEqual(len(trades), 2 * len(WINDOWS) - 1)
         self.assertEqual({t.window_id for t in trades}, set(WINDOWS))
+
+    def test_an_empty_window_is_rejected_without_pinned_trade_counts(self):
+        self.write_window("16-17", [])
+        config = replace(CONFIG, sweeps_root=self.root, strategy="RR", risk_reward="2.50",
+                         expected_trades=None, expected_windows=None)
+        with self.assertRaisesRegex(ValueError, "no trades observed.*16-17"):
+            load_tape(config)
+        # Confirm the zero-count, zero-P&L stats reconcile independently.
+        self.assertEqual(len(self.load(check_coverage=False)), 2 * (len(WINDOWS) - 1))
+
+    def test_missing_manifest_is_rejected_unless_explicitly_bypassed(self):
+        self.coverage_path.unlink()
+        with self.assertRaisesRegex(FileNotFoundError, "Missing tape coverage"):
+            self.load()
+        self.assertEqual(len(self.load(check_coverage=False)), 2 * len(WINDOWS))
+
+    def test_missing_strategy_pin_is_rejected(self):
+        del self.coverage["strategies"]["RR"]
+        self.write_coverage()
+        with self.assertRaisesRegex(ValueError, "strategy RR"):
+            self.load()
+
+    def test_missing_window_pin_is_rejected(self):
+        del self.coverage["strategies"]["RR"]["16-17"]
+        self.write_coverage()
+        with self.assertRaisesRegex(ValueError, "missing last_exit coverage pins.*16-17"):
+            self.load()
+
+    def test_missing_last_exit_pin_is_rejected(self):
+        self.coverage["strategies"]["RR"]["16-17"] = {}
+        self.write_coverage()
+        with self.assertRaisesRegex(ValueError, "missing last_exit coverage pins.*16-17"):
+            self.load()
 
 
 if __name__ == "__main__":

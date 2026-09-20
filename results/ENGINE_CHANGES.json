@@ -16,6 +16,21 @@
       "outputs_unchanged": true,
       "evidence": "291 pre-existing tests plus tests/test_tape_coverage.py pass; all sealed baselines re-verify.",
       "line_endings": "Both digests are of the working copy as git checks it out: core.autocrlf is true, so src/pa_milky arrives CRLF. The old digest here is the one the saved contracts pinned, which confirms CRLF is the reproducible form."
+    },
+    {
+      "old_combined_sha256": "64a11414117974b8771f01e324f8877bdf27fc35c5d4de8f50c27081a2dcca38",
+      "new_combined_sha256": "f9f58415999cd6cd055cc23db0b3a195018ae942e477a904fcfa95778211b385",
+      "recorded_utc": "2026-09-20T11:28:24+00:00",
+      "git_revision_before": "171d23562dc2892d266f182b87bb0dda7885ff29",
+      "changed": [
+        "src/pa_milky/loader.py"
+      ],
+      "files_before": 25,
+      "files_after": 25,
+      "reason": "Require a complete coverage reference and an observed exit for every required window. Missing manifests, strategy/window pins and empty internally consistent exports now fail instead of bypassing validation. Explicit check_coverage=False remains available for reference generation. Replaced tests tied to damaged RR 2.50 exports with temporary synthetic tapes; real exports and reference pins are unchanged.",
+      "outputs_unchanged": true,
+      "evidence": "All 311 tests pass, including 20 coverage tests and verification of all five sealed baselines.",
+      "line_endings": "Engine digest uses the existing CRLF checkout form; no line-ending convention change."
     }
   ],
   "caveat": "engine_digest() hashes file bytes, and core.autocrlf is true with no .gitattributes, so a digest describes the line endings of the working copy that produced it. The reproducible form is the checkout form, CRLF, and that is what the saved contracts pinned and what this ledger records. The hazard is local: an editor or script that rewrites a src file with LF endings changes the engine digest without changing a line of code, and every engine assertion then fails until the file is restored to its checked-out form (git checkout -- src/pa_milky, or a fresh checkout). Adding a .gitattributes to fix the convention outright would change the checkout form of every src file and so require re-recording every pinned engine digest; that is a separate change."
