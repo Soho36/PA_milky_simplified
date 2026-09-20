@@ -5,6 +5,7 @@ paths; there is no need to browse the full results tree to follow the research.
 
 | Question | Evidence | Scope |
 |---|---|---|
+| Is RR diversification driven by composition, group count or reserve dispersion? | [Follow-up findings](../../results/legacy_25k/rr_followup/rr_followup__FINDINGS.md) and [protocol](RR_FOLLOWUP.md) | 730 cases; 36 homogeneous controls; 2вЂ“20 RR groups; matched-mean reserve ladders; within/across-group failures and assignment-order checks |
 | Can different RR settings spread account deaths over time? | [RR diversification findings](../../results/legacy_25k/rr_diversification/rr_diversification__FINDINGS.generated.md) and [protocol](RR_DIVERSIFICATION.md) | 286 isolation/operating runs and 26 March stress replays; homogeneous controls, fixed policies and separate 2020 stress interpretation |
 | What changes when blocked copying must obtain PAs through evaluations? | [Blocked pipeline study](BLOCKED_PIPELINE.md) | Same $1,000 + $200/month; frozen policies, capacity sweep, withdrawal retuning, replacement delays and paired execution controls |
 | Which operating policy works best with blocked copying? | [Joint blocked-copying search](BLOCKED_OPTIMIZATION.md) | Primary budget $1,000 + $200/month; initial inventory, purchases, reserves and withdrawals; two cash objectives |

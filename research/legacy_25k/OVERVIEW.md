@@ -1,11 +1,20 @@
 # Legacy 25K: current findings
 
-**RR diversification:** [new findings](../../results/legacy_25k/rr_diversification/rr_diversification__FINDINGS.generated.md)
+**RR composition and reserve ladders:** [730-run follow-up](../../results/legacy_25k/rr_followup/rr_followup__FINDINGS.md)
+finds that composition matters and twenty RR groups do not consistently improve
+on fewer groups. The original wide mix remains the only tested portfolio with
+no primary operating wipeout across all six starts. A twenty-level RR1 reserve
+ladder spreads twelve March deaths across six dates and preserves eight PAs at
+the same pre-event total equity as uniform RR1, but does not improve continuity
+under the primary daily-minimum policy. [Full comparisons](../../results/legacy_25k/rr_followup/rr_followup__REPORT.generated.md)
+separate small startup failures, actual retained capital and policy sensitivities.
+
+**RR diversification:** [first-study findings](../../results/legacy_25k/rr_diversification/rr_diversification__FINDINGS.generated.md)
 compare nine homogeneous controls and four fixed mixtures across 286 runs,
-plus 26 March stress replays. RR mixtures can spread deaths and preserve
-earning capacity; the wide mix keeps 15 of 20 accounts through the documented
+plus 26 March stress replays. RR mixtures can limit how many accounts fail
+together and preserve earning capacity; the wide mix keeps 15 of 20 accounts through the documented
 March wipeout. It does not consistently reduce total deaths or 20-day clusters.
-The 2020 stress start is reported separately from 2021–2025. See the
+The 2020 stress start is reported separately from 2021вЂ“2025. See the
 [protocol](RR_DIVERSIFICATION.md) for the fixed policies and timing limitations.
 
 **Blocked copying with evaluation supply:** [pipeline study](BLOCKED_PIPELINE.md)
@@ -43,7 +52,7 @@ turnover differ. Resource matching is not exposure matching.
 
 **Corrected routing follow-up:** [capacity reuse and fixed-R pools](ROUTING_REUSE.md)
 replace five-per-purchase overbuying with purchases of only the free-slot
-shortfall. The matched replay preserves earlier exposure; the separate R=1–4
+shortfall. The matched replay preserves earlier exposure; the separate R=1вЂ“4
 pools start with K=5R and enforce 20 live accounts. Both attain full historical
 coverage, conditional on immediate funded-seat supply and sufficient funding.
 

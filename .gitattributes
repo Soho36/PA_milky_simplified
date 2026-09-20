@@ -5,6 +5,15 @@
 /scripts/audit_rr_diversification.py text eol=lf
 /scripts/audit_rr_sweep_updates.py text eol=lf
 /scripts/summarize_rr_diversification.py text eol=lf
-/results/legacy_25k/rr_diversification/**/*.json text eol=lf
-/results/legacy_25k/rr_diversification/**/*.csv text eol=lf
-/results/legacy_25k/rr_diversification/**/*.md text eol=lf
+# Python's Windows text writers produced CRLF evidence; preserve those hashed bytes.
+/results/legacy_25k/rr_diversification/**/*.json text eol=crlf
+/results/legacy_25k/rr_diversification/**/*.csv text eol=crlf
+/results/legacy_25k/rr_diversification/**/*.md text eol=crlf
+/scripts/study_rr_followup.py text eol=lf
+/scripts/rr_followup_support.py text eol=lf
+/scripts/audit_rr_followup.py text eol=lf
+/scripts/summarize_rr_followup.py text eol=lf
+/research/legacy_25k/RR_FOLLOWUP.md text eol=lf
+/results/legacy_25k/rr_followup/**/*.json text eol=crlf
+/results/legacy_25k/rr_followup/**/*.csv text eol=crlf
+/results/legacy_25k/rr_followup/**/*.md text eol=crlf

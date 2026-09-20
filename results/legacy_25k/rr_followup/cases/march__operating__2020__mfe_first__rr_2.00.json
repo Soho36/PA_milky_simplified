@@ -1,0 +1,3296 @@
+{
+  "row": {
+    "case": "march__operating__2020__mfe_first__rr_2.00",
+    "experiment": "march",
+    "phase": "operating",
+    "start_year": 2020,
+    "path_order": "mfe_first",
+    "portfolio": "rr_2.00",
+    "nominal_sleeves": 1,
+    "rr_count": 1,
+    "rr_width": 0.0,
+    "mean_target": 5700.0,
+    "net_operating_cash": 457083.38,
+    "receipts": 471811.38,
+    "total_costs": 14728.0,
+    "copies": 125748,
+    "prior_control_reproduced": true,
+    "max_same_signal_deaths": 8,
+    "same_signal_multi_death_events": 13,
+    "worst_1d_cohort_deaths": 8,
+    "worst_1d_fraction": 1.0,
+    "worst_1d_at": "2020-03-12T00:00:00",
+    "half_loss_1d_episodes_min5": 1,
+    "peak_1d_replacement_demand": 8,
+    "possible_1d_death_cluster": 8,
+    "worst_5d_cohort_deaths": 8,
+    "worst_5d_fraction": 1.0,
+    "worst_5d_at": "2020-03-06T00:00:00",
+    "half_loss_5d_episodes_min5": 1,
+    "peak_5d_replacement_demand": 8,
+    "possible_5d_death_cluster": 8,
+    "worst_20d_cohort_deaths": 8,
+    "worst_20d_fraction": 1.0,
+    "worst_20d_at": "2020-02-14T00:00:00",
+    "half_loss_20d_episodes_min5": 1,
+    "peak_20d_replacement_demand": 8,
+    "possible_20d_death_cluster": 8,
+    "book_wipeouts": 1,
+    "days_empty_after_first_activation": 8.1204,
+    "deaths": 54,
+    "accounts": 74,
+    "alive": 20,
+    "largest_within_sleeve_signal_loss": 8,
+    "max_sleeves_lost_same_signal": 1,
+    "multi_sleeve_signal_events": 0,
+    "max_sleeves_lost_same_day": 1,
+    "multi_sleeve_day_events": 0,
+    "sleeve_loss_events": 25,
+    "full_copier_sleeve_loss_events": 1,
+    "observed_live_days": 2341,
+    "mean_live_accounts": 16.127296027338744,
+    "mean_occupied_sleeves": 1.0,
+    "mean_equal_headroom_fraction": 0.5650252557566385,
+    "mean_effective_headroom_groups": 4.012569358393849,
+    "mean_total_headroom": 65320.25472020505,
+    "mean_total_positive_equity": 65793.6072832123,
+    "march1_alive": 20,
+    "march_cohort_deaths": 0,
+    "march_total_deaths": 0,
+    "march31_alive": 20
+  },
+  "definitions": [
+    {
+      "rr": "2.00",
+      "reserve": 5700
+    }
+  ],
+  "accounts": [
+    {
+      "account_id": 1,
+      "sleeve": 0,
+      "rr": "2.00",
+      "reserve": 5700,
+      "activated_at": "2020-02-07T00:00:00",
+      "alive": false,
+      "died_at": "2020-03-12T21:06:40",
+      "death_entry_at": "2020-03-12T18:54:40",
+      "death_window": "18-19",
+      "death_trade_key": "RR2.00:18-19:15:58",
+      "trades": 110,
+      "ending_balance": 23931.55,
+      "ending_headroom": 54.55,
+      "received_payouts": 0.0
+    },
+    {
+      "account_id": 2,
+      "sleeve": 0,
+      "rr": "2.00",
+      "reserve": 5700,
+      "activated_at": "2020-03-03T00:00:00",
+      "alive": false,
+      "died_at": "2020-03-12T21:06:40",
+      "death_entry_at": "2020-03-12T18:54:40",
+      "death_window": "18-19",
+      "death_trade_key": "RR2.00:18-19:15:58",
+      "trades": 32,
+      "ending_balance": 23723.95,
+      "ending_headroom": 54.55,
+      "received_payouts": 0.0
+    },
+    {
+      "account_id": 3,
+      "sleeve": 0,
+      "rr": "2.00",
+      "reserve": 5700,
+      "activated_at": "2020-03-03T00:00:00",
+      "alive": false,
+      "died_at": "2020-03-12T21:06:40",
+      "death_entry_at": "2020-03-12T18:54:40",
+      "death_window": "18-19",
+      "death_trade_key": "RR2.00:18-19:15:58",
+      "trades": 32,
+      "ending_balance": 23723.95,
+      "ending_headroom": 54.55,
+      "received_payouts": 0.0
+    },
+    {
+      "account_id": 4,
+      "sleeve": 0,
+      "rr": "2.00",
+      "reserve": 5700,
+      "activated_at": "2020-03-21T00:00:00",
+      "alive": true,
+      "died_at": null,
+      "death_entry_at": null,
+      "death_window": null,
+      "death_trade_key": null,
+      "trades": 7647,
+      "ending_balance": 29117.55,
+      "ending_headroom": 4017.55,
+      "received_payouts": 29929.85
+    },
+    {
+      "account_id": 5,
+      "sleeve": 0,
+      "rr": "2.00",
+      "reserve": 5700,
+      "activated_at": "2020-05-09T00:00:00",
+      "alive": false,
+      "died_at": "2020-06-18T17:33:40",
+      "death_entry_at": "2020-06-18T15:39:40",
+      "death_window": "15-16",
+      "death_trade_key": "RR2.00:15-16:45:161",
+      "trades": 132,
+      "ending_balance": 24040.95,
+      "ending_headroom": 18.35,
+      "received_payouts": 0.0
+    },
+    {
+      "account_id": 6,
+      "sleeve": 0,
+      "rr": "2.00",
+      "reserve": 5700,
+      "activated_at": "2020-05-09T00:00:00",
+      "alive": false,
+      "died_at": "2020-06-18T17:33:40",
+      "death_entry_at": "2020-06-18T15:39:40",
+      "death_window": "15-16",
+      "death_trade_key": "RR2.00:15-16:45:161",
+      "trades": 132,
+      "ending_balance": 24040.95,
+      "ending_headroom": 18.35,
+      "received_payouts": 0.0
+    },
+    {
+      "account_id": 7,
+      "sleeve": 0,
+      "rr": "2.00",
+      "reserve": 5700,
+      "activated_at": "2020-05-09T00:00:00",
+      "alive": false,
+      "died_at": "2020-06-18T17:33:40",
+      "death_entry_at": "2020-06-18T15:39:40",
+      "death_window": "15-16",
+      "death_trade_key": "RR2.00:15-16:45:161",
+      "trades": 132,
+      "ending_balance": 24040.95,
+      "ending_headroom": 18.35,
+      "received_payouts": 0.0
+    },
+    {
+      "account_id": 8,
+      "sleeve": 0,
+      "rr": "2.00",
+      "reserve": 5700,
+      "activated_at": "2020-06-01T00:00:00",
+      "alive": false,
+      "died_at": "2020-06-18T22:00:40",
+      "death_entry_at": "2020-06-18T17:58:40",
+      "death_window": "17-18",
+      "death_trade_key": "RR2.00:17-18:34:138",
+      "trades": 69,
+      "ending_balance": 23928.1,
+      "ending_headroom": 52.45,
+      "received_payouts": 0.0
+    },
+    {
+      "account_id": 9,
+      "sleeve": 0,
+      "rr": "2.00",
+      "reserve": 5700,
+      "activated_at": "2020-08-01T00:00:00",
+      "alive": true,
+      "died_at": null,
+      "death_entry_at": null,
+      "death_window": null,
+      "death_trade_key": null,
+      "trades": 7221,
+      "ending_balance": 29117.55,
+      "ending_headroom": 4017.55,
+      "received_payouts": 27291.77
+    },
+    {
+      "account_id": 10,
+      "sleeve": 0,
+      "rr": "2.00",
+      "reserve": 5700,
+      "activated_at": "2020-08-08T00:00:00",
+      "alive": true,
+      "died_at": null,
+      "death_entry_at": null,
+      "death_window": null,
+      "death_trade_key": null,
+      "trades": 7200,
+      "ending_balance": 29117.55,
+      "ending_headroom": 4017.55,
+      "received_payouts": 26971.86
+    },
+    {
+      "account_id": 11,
+      "sleeve": 0,
+      "rr": "2.00",
+      "reserve": 5700,
+      "activated_at": "2020-08-08T00:00:00",
+      "alive": true,
+      "died_at": null,
+      "death_entry_at": null,
+      "death_window": null,
+      "death_trade_key": null,
+      "trades": 7200,
+      "ending_balance": 29117.55,
+      "ending_headroom": 4017.55,
+      "received_payouts": 26971.86
+    },
+    {
+      "account_id": 12,
+      "sleeve": 0,
+      "rr": "2.00",
+      "reserve": 5700,
+      "activated_at": "2020-08-22T00:00:00",
+      "alive": true,
+      "died_at": null,
+      "death_entry_at": null,
+      "death_window": null,
+      "death_trade_key": null,
+      "trades": 7154,
+      "ending_balance": 29117.55,
+      "ending_headroom": 4017.55,
+      "received_payouts": 26380.83
+    },
+    {
+      "account_id": 13,
+      "sleeve": 0,
+      "rr": "2.00",
+      "reserve": 5700,
+      "activated_at": "2020-08-22T00:00:00",
+      "alive": true,
+      "died_at": null,
+      "death_entry_at": null,
+      "death_window": null,
+      "death_trade_key": null,
+      "trades": 7154,
+      "ending_balance": 29117.55,
+      "ending_headroom": 4017.55,
+      "received_payouts": 26380.83
+    },
+    {
+      "account_id": 14,
+      "sleeve": 0,
+      "rr": "2.00",
+      "reserve": 5700,
+      "activated_at": "2020-09-01T00:00:00",
+      "alive": true,
+      "died_at": null,
+      "death_entry_at": null,
+      "death_window": null,
+      "death_trade_key": null,
+      "trades": 7121,
+      "ending_balance": 29117.55,
+      "ending_headroom": 4017.55,
+      "received_payouts": 26844.91
+    },
+    {
+      "account_id": 15,
+      "sleeve": 0,
+      "rr": "2.00",
+      "reserve": 5700,
+      "activated_at": "2020-10-01T00:00:00",
+      "alive": true,
+      "died_at": null,
+      "death_entry_at": null,
+      "death_window": null,
+      "death_trade_key": null,
+      "trades": 7013,
+      "ending_balance": 29117.55,
+      "ending_headroom": 4017.55,
+      "received_payouts": 25963.27
+    },
+    {
+      "account_id": 16,
+      "sleeve": 0,
+      "rr": "2.00",
+      "reserve": 5700,
+      "activated_at": "2020-11-05T00:00:00",
+      "alive": true,
+      "died_at": null,
+      "death_entry_at": null,
+      "death_window": null,
+      "death_trade_key": null,
+      "trades": 6903,
+      "ending_balance": 29117.55,
+      "ending_headroom": 4017.55,
+      "received_payouts": 23924.3
+    },
+    {
+      "account_id": 17,
+      "sleeve": 0,
+      "rr": "2.00",
+      "reserve": 5700,
+      "activated_at": "2020-12-01T00:00:00",
+      "alive": true,
+      "died_at": null,
+      "death_entry_at": null,
+      "death_window": null,
+      "death_trade_key": null,
+      "trades": 6820,
+      "ending_balance": 29117.55,
+      "ending_headroom": 4017.55,
+      "received_payouts": 24080.45
+    },
+    {
+      "account_id": 18,
+      "sleeve": 0,
+      "rr": "2.00",
+      "reserve": 5700,
+      "activated_at": "2021-01-01T00:00:00",
+      "alive": false,
+      "died_at": "2021-06-21T09:30:00",
+      "death_entry_at": "2021-06-21T07:07:40",
+      "death_window": "7-8",
+      "death_trade_key": "RR2.00:7-8:137:488",
+      "trades": 536,
+      "ending_balance": 25116.25,
+      "ending_headroom": 16.25,
+      "received_payouts": 0.0
+    },
+    {
+      "account_id": 19,
+      "sleeve": 0,
+      "rr": "2.00",
+      "reserve": 5700,
+      "activated_at": "2021-02-01T00:00:00",
+      "alive": false,
+      "died_at": "2021-06-10T09:37:40",
+      "death_entry_at": "2021-06-10T01:00:40",
+      "death_window": "1-2",
+      "death_trade_key": "RR2.00:1-2:105:385",
+      "trades": 407,
+      "ending_balance": 25111.2,
+      "ending_headroom": 11.2,
+      "received_payouts": 0.0
+    },
+    {
+      "account_id": 20,
+      "sleeve": 0,
+      "rr": "2.00",
+      "reserve": 5700,
+      "activated_at": "2021-03-01T00:00:00",
+      "alive": false,
+      "died_at": "2021-06-09T22:31:20",
+      "death_entry_at": "2021-06-09T19:20:40",
+      "death_window": "19-20",
+      "death_trade_key": "RR2.00:19-20:113:447",
+      "trades": 312,
+      "ending_balance": 25150.95,
+      "ending_headroom": 50.95,
+      "received_payouts": 0.0
+    },
+    {
+      "account_id": 21,
+      "sleeve": 0,
+      "rr": "2.00",
+      "reserve": 5700,
+      "activated_at": "2021-04-01T00:00:00",
+      "alive": false,
+      "died_at": "2021-05-19T10:00:40",
+      "death_entry_at": "2021-05-19T09:49:40",
+      "death_window": "9-10",
+      "death_trade_key": "RR2.00:9-10:111:441",
+      "trades": 153,
+      "ending_balance": 24482.4,
+      "ending_headroom": 30.75,
+      "received_payouts": 0.0
+    },
+    {
+      "account_id": 22,
+      "sleeve": 0,
+      "rr": "2.00",
+      "reserve": 5700,
+      "activated_at": "2021-05-01T00:00:00",
+      "alive": false,
+      "died_at": "2021-06-09T08:35:40",
+      "death_entry_at": "2021-06-09T08:16:40",
+      "death_window": "8-9",
+      "death_trade_key": "RR2.00:8-9:139:500",
+      "trades": 131,
+      "ending_balance": 23625.5,
+      "ending_headroom": 6.35,
+      "received_payouts": 0.0
+    },
+    {
+      "account_id": 23,
+      "sleeve": 0,
+      "rr": "2.00",
+      "reserve": 5700,
+      "activated_at": "2021-05-20T00:00:00",
+      "alive": false,
+      "died_at": "2021-09-30T16:03:40",
+      "death_entry_at": "2021-09-30T15:30:40",
+      "death_window": "15-16",
+      "death_trade_key": "RR2.00:15-16:183:629",
+      "trades": 458,
+      "ending_balance": 24697.15,
+      "ending_headroom": 8.45,
+      "received_payouts": 0.0
+    },
+    {
+      "account_id": 24,
+      "sleeve": 0,
+      "rr": "2.00",
+      "reserve": 5700,
+      "activated_at": "2021-07-03T00:00:00",
+      "alive": false,
+      "died_at": "2021-09-30T16:03:40",
+      "death_entry_at": "2021-09-30T15:30:40",
+      "death_window": "15-16",
+      "death_trade_key": "RR2.00:15-16:183:629",
+      "trades": 301,
+      "ending_balance": 24786.5,
+      "ending_headroom": 8.45,
+      "received_payouts": 0.0
+    },
+    {
+      "account_id": 25,
+      "sleeve": 0,
+      "rr": "2.00",
+      "reserve": 5700,
+      "activated_at": "2021-07-07T00:00:00",
+      "alive": false,
+      "died_at": "2021-09-30T16:03:40",
+      "death_entry_at": "2021-09-30T15:30:40",
+      "death_window": "15-16",
+      "death_trade_key": "RR2.00:15-16:183:629",
+      "trades": 295,
+      "ending_balance": 24711.3,
+      "ending_headroom": 8.45,
+      "received_payouts": 0.0
+    },
+    {
+      "account_id": 26,
+      "sleeve": 0,
+      "rr": "2.00",
+      "reserve": 5700,
+      "activated_at": "2021-07-08T00:00:00",
+      "alive": false,
+      "died_at": "2021-09-30T16:03:40",
+      "death_entry_at": "2021-09-30T15:30:40",
+      "death_window": "15-16",
+      "death_trade_key": "RR2.00:15-16:183:629",
+      "trades": 291,
+      "ending_balance": 24568.0,
+      "ending_headroom": 8.45,
+      "received_payouts": 0.0
+    },
+    {
+      "account_id": 27,
+      "sleeve": 0,
+      "rr": "2.00",
+      "reserve": 5700,
+      "activated_at": "2021-07-08T00:00:00",
+      "alive": false,
+      "died_at": "2021-09-30T16:03:40",
+      "death_entry_at": "2021-09-30T15:30:40",
+      "death_window": "15-16",
+      "death_trade_key": "RR2.00:15-16:183:629",
+      "trades": 291,
+      "ending_balance": 24568.0,
+      "ending_headroom": 8.45,
+      "received_payouts": 0.0
+    },
+    {
+      "account_id": 28,
+      "sleeve": 0,
+      "rr": "2.00",
+      "reserve": 5700,
+      "activated_at": "2021-07-10T00:00:00",
+      "alive": false,
+      "died_at": "2021-09-30T16:03:40",
+      "death_entry_at": "2021-09-30T15:30:40",
+      "death_window": "15-16",
+      "death_trade_key": "RR2.00:15-16:183:629",
+      "trades": 280,
+      "ending_balance": 24587.55,
+      "ending_headroom": 8.45,
+      "received_payouts": 0.0
+    },
+    {
+      "account_id": 29,
+      "sleeve": 0,
+      "rr": "2.00",
+      "reserve": 5700,
+      "activated_at": "2021-08-01T00:00:00",
+      "alive": false,
+      "died_at": "2021-09-30T16:03:40",
+      "death_entry_at": "2021-09-30T15:30:40",
+      "death_window": "15-16",
+      "death_trade_key": "RR2.00:15-16:183:629",
+      "trades": 210,
+      "ending_balance": 24475.55,
+      "ending_headroom": 8.45,
+      "received_payouts": 0.0
+    },
+    {
+      "account_id": 30,
+      "sleeve": 0,
+      "rr": "2.00",
+      "reserve": 5700,
+      "activated_at": "2021-09-01T00:00:00",
+      "alive": false,
+      "died_at": "2021-09-30T16:03:40",
+      "death_entry_at": "2021-09-30T15:30:40",
+      "death_window": "15-16",
+      "death_trade_key": "RR2.00:15-16:183:629",
+      "trades": 104,
+      "ending_balance": 24051.85,
+      "ending_headroom": 8.45,
+      "received_payouts": 0.0
+    },
+    {
+      "account_id": 31,
+      "sleeve": 0,
+      "rr": "2.00",
+      "reserve": 5700,
+      "activated_at": "2021-10-01T00:00:00",
+      "alive": true,
+      "died_at": null,
+      "death_entry_at": null,
+      "death_window": null,
+      "death_trade_key": null,
+      "trades": 5831,
+      "ending_balance": 29117.55,
+      "ending_headroom": 4017.55,
+      "received_payouts": 23420.4
+    },
+    {
+      "account_id": 32,
+      "sleeve": 0,
+      "rr": "2.00",
+      "reserve": 5700,
+      "activated_at": "2021-10-01T00:00:00",
+      "alive": true,
+      "died_at": null,
+      "death_entry_at": null,
+      "death_window": null,
+      "death_trade_key": null,
+      "trades": 5831,
+      "ending_balance": 29117.55,
+      "ending_headroom": 4017.55,
+      "received_payouts": 23420.4
+    },
+    {
+      "account_id": 33,
+      "sleeve": 0,
+      "rr": "2.00",
+      "reserve": 5700,
+      "activated_at": "2021-10-08T00:00:00",
+      "alive": false,
+      "died_at": "2021-12-20T23:30:00",
+      "death_entry_at": "2021-12-20T20:39:40",
+      "death_window": "20-21",
+      "death_trade_key": "RR2.00:20-21:167:601",
+      "trades": 249,
+      "ending_balance": 25104.6,
+      "ending_headroom": 4.6,
+      "received_payouts": 0.0
+    },
+    {
+      "account_id": 34,
+      "sleeve": 0,
+      "rr": "2.00",
+      "reserve": 5700,
+      "activated_at": "2021-10-16T00:00:00",
+      "alive": false,
+      "died_at": "2021-12-03T21:39:20",
+      "death_entry_at": "2021-12-03T21:25:20",
+      "death_window": "21-22",
+      "death_trade_key": "RR2.00:21-22:170:600",
+      "trades": 164,
+      "ending_balance": 25216.85,
+      "ending_headroom": 116.85,
+      "received_payouts": 0.0
+    },
+    {
+      "account_id": 35,
+      "sleeve": 0,
+      "rr": "2.00",
+      "reserve": 5700,
+      "activated_at": "2021-10-28T00:00:00",
+      "alive": false,
+      "died_at": "2021-12-03T21:39:20",
+      "death_entry_at": "2021-12-03T21:25:20",
+      "death_window": "21-22",
+      "death_trade_key": "RR2.00:21-22:170:600",
+      "trades": 131,
+      "ending_balance": 24721.0,
+      "ending_headroom": 77.05,
+      "received_payouts": 0.0
+    },
+    {
+      "account_id": 36,
+      "sleeve": 0,
+      "rr": "2.00",
+      "reserve": 5700,
+      "activated_at": "2021-11-03T00:00:00",
+      "alive": false,
+      "died_at": "2021-12-03T21:39:20",
+      "death_entry_at": "2021-12-03T21:25:20",
+      "death_window": "21-22",
+      "death_trade_key": "RR2.00:21-22:170:600",
+      "trades": 124,
+      "ending_balance": 23952.35,
+      "ending_headroom": 77.05,
+      "received_payouts": 0.0
+    },
+    {
+      "account_id": 37,
+      "sleeve": 0,
+      "rr": "2.00",
+      "reserve": 5700,
+      "activated_at": "2021-11-04T00:00:00",
+      "alive": false,
+      "died_at": "2021-12-03T21:39:20",
+      "death_entry_at": "2021-12-03T21:25:20",
+      "death_window": "21-22",
+      "death_trade_key": "RR2.00:21-22:170:600",
+      "trades": 116,
+      "ending_balance": 23975.75,
+      "ending_headroom": 77.05,
+      "received_payouts": 0.0
+    },
+    {
+      "account_id": 38,
+      "sleeve": 0,
+      "rr": "2.00",
+      "reserve": 5700,
+      "activated_at": "2021-12-11T00:00:00",
+      "alive": false,
+      "died_at": "2022-01-07T23:30:00",
+      "death_entry_at": "2022-01-07T21:39:40",
+      "death_window": "21-22",
+      "death_trade_key": "RR2.00:21-22:180:634",
+      "trades": 90,
+      "ending_balance": 23720.55,
+      "ending_headroom": 9.3,
+      "received_payouts": 0.0
+    },
+    {
+      "account_id": 39,
+      "sleeve": 0,
+      "rr": "2.00",
+      "reserve": 5700,
+      "activated_at": "2021-12-11T00:00:00",
+      "alive": false,
+      "died_at": "2022-01-07T23:30:00",
+      "death_entry_at": "2022-01-07T21:39:40",
+      "death_window": "21-22",
+      "death_trade_key": "RR2.00:21-22:180:634",
+      "trades": 90,
+      "ending_balance": 23720.55,
+      "ending_headroom": 9.3,
+      "received_payouts": 0.0
+    },
+    {
+      "account_id": 40,
+      "sleeve": 0,
+      "rr": "2.00",
+      "reserve": 5700,
+      "activated_at": "2021-12-28T00:00:00",
+      "alive": false,
+      "died_at": "2022-01-07T23:30:00",
+      "death_entry_at": "2022-01-07T21:39:40",
+      "death_window": "21-22",
+      "death_trade_key": "RR2.00:21-22:180:634",
+      "trades": 42,
+      "ending_balance": 23586.45,
+      "ending_headroom": 9.3,
+      "received_payouts": 0.0
+    },
+    {
+      "account_id": 41,
+      "sleeve": 0,
+      "rr": "2.00",
+      "reserve": 5700,
+      "activated_at": "2021-12-28T00:00:00",
+      "alive": false,
+      "died_at": "2022-01-07T23:30:00",
+      "death_entry_at": "2022-01-07T21:39:40",
+      "death_window": "21-22",
+      "death_trade_key": "RR2.00:21-22:180:634",
+      "trades": 42,
+      "ending_balance": 23586.45,
+      "ending_headroom": 9.3,
+      "received_payouts": 0.0
+    },
+    {
+      "account_id": 42,
+      "sleeve": 0,
+      "rr": "2.00",
+      "reserve": 5700,
+      "activated_at": "2022-02-05T00:00:00",
+      "alive": false,
+      "died_at": "2022-05-11T22:15:40",
+      "death_entry_at": "2022-05-11T21:25:40",
+      "death_window": "21-22",
+      "death_trade_key": "RR2.00:21-22:209:746",
+      "trades": 315,
+      "ending_balance": 25120.3,
+      "ending_headroom": 20.3,
+      "received_payouts": 0.0
+    },
+    {
+      "account_id": 43,
+      "sleeve": 0,
+      "rr": "2.00",
+      "reserve": 5700,
+      "activated_at": "2022-02-05T00:00:00",
+      "alive": false,
+      "died_at": "2022-05-11T22:15:40",
+      "death_entry_at": "2022-05-11T21:25:40",
+      "death_window": "21-22",
+      "death_trade_key": "RR2.00:21-22:209:746",
+      "trades": 315,
+      "ending_balance": 25120.3,
+      "ending_headroom": 20.3,
+      "received_payouts": 0.0
+    },
+    {
+      "account_id": 44,
+      "sleeve": 0,
+      "rr": "2.00",
+      "reserve": 5700,
+      "activated_at": "2022-02-11T00:00:00",
+      "alive": false,
+      "died_at": "2022-03-04T23:30:00",
+      "death_entry_at": "2022-03-04T18:39:40",
+      "death_window": "18-19",
+      "death_trade_key": "RR2.00:18-19:151:665",
+      "trades": 77,
+      "ending_balance": 25158.7,
+      "ending_headroom": 58.7,
+      "received_payouts": 0.0
+    },
+    {
+      "account_id": 45,
+      "sleeve": 0,
+      "rr": "2.00",
+      "reserve": 5700,
+      "activated_at": "2022-02-17T00:00:00",
+      "alive": false,
+      "died_at": "2022-03-04T16:46:40",
+      "death_entry_at": "2022-03-04T14:46:40",
+      "death_window": "14-15",
+      "death_trade_key": "RR2.00:14-15:185:711",
+      "trades": 57,
+      "ending_balance": 25046.2,
+      "ending_headroom": 74.05,
+      "received_payouts": 0.0
+    },
+    {
+      "account_id": 46,
+      "sleeve": 0,
+      "rr": "2.00",
+      "reserve": 5700,
+      "activated_at": "2022-02-17T00:00:00",
+      "alive": false,
+      "died_at": "2022-03-04T16:46:40",
+      "death_entry_at": "2022-03-04T14:46:40",
+      "death_window": "14-15",
+      "death_trade_key": "RR2.00:14-15:185:711",
+      "trades": 57,
+      "ending_balance": 25046.2,
+      "ending_headroom": 74.05,
+      "received_payouts": 0.0
+    },
+    {
+      "account_id": 47,
+      "sleeve": 0,
+      "rr": "2.00",
+      "reserve": 5700,
+      "activated_at": "2022-02-23T00:00:00",
+      "alive": false,
+      "died_at": "2022-03-04T16:46:40",
+      "death_entry_at": "2022-03-04T14:46:40",
+      "death_window": "14-15",
+      "death_trade_key": "RR2.00:14-15:185:711",
+      "trades": 39,
+      "ending_balance": 24350.1,
+      "ending_headroom": 74.05,
+      "received_payouts": 0.0
+    },
+    {
+      "account_id": 48,
+      "sleeve": 0,
+      "rr": "2.00",
+      "reserve": 5700,
+      "activated_at": "2022-02-26T00:00:00",
+      "alive": false,
+      "died_at": "2022-03-04T16:46:40",
+      "death_entry_at": "2022-03-04T14:46:40",
+      "death_window": "14-15",
+      "death_trade_key": "RR2.00:14-15:185:711",
+      "trades": 22,
+      "ending_balance": 24385.45,
+      "ending_headroom": 74.05,
+      "received_payouts": 0.0
+    },
+    {
+      "account_id": 49,
+      "sleeve": 0,
+      "rr": "2.00",
+      "reserve": 5700,
+      "activated_at": "2022-03-30T00:00:00",
+      "alive": false,
+      "died_at": "2022-05-02T21:15:40",
+      "death_entry_at": "2022-05-02T21:07:20",
+      "death_window": "21-22",
+      "death_trade_key": "RR2.00:21-22:206:732",
+      "trades": 110,
+      "ending_balance": 24150.05,
+      "ending_headroom": 165.05,
+      "received_payouts": 0.0
+    },
+    {
+      "account_id": 50,
+      "sleeve": 0,
+      "rr": "2.00",
+      "reserve": 5700,
+      "activated_at": "2022-05-05T00:00:00",
+      "alive": false,
+      "died_at": "2022-05-11T20:05:40",
+      "death_entry_at": "2022-05-11T16:51:40",
+      "death_window": "16-17",
+      "death_trade_key": "RR2.00:16-17:341:936",
+      "trades": 23,
+      "ending_balance": 24232.4,
+      "ending_headroom": 516.7,
+      "received_payouts": 0.0
+    },
+    {
+      "account_id": 51,
+      "sleeve": 0,
+      "rr": "2.00",
+      "reserve": 5700,
+      "activated_at": "2022-05-27T00:00:00",
+      "alive": false,
+      "died_at": "2022-06-09T19:11:40",
+      "death_entry_at": "2022-06-09T18:41:20",
+      "death_window": "18-19",
+      "death_trade_key": "RR2.00:18-19:171:759",
+      "trades": 56,
+      "ending_balance": 24350.75,
+      "ending_headroom": 79.15,
+      "received_payouts": 0.0
+    },
+    {
+      "account_id": 52,
+      "sleeve": 0,
+      "rr": "2.00",
+      "reserve": 5700,
+      "activated_at": "2022-06-22T00:00:00",
+      "alive": false,
+      "died_at": "2022-07-01T16:36:20",
+      "death_entry_at": "2022-07-01T15:34:40",
+      "death_window": "15-16",
+      "death_trade_key": "RR2.00:15-16:260:910",
+      "trades": 44,
+      "ending_balance": 24122.85,
+      "ending_headroom": 30.6,
+      "received_payouts": 0.0
+    },
+    {
+      "account_id": 53,
+      "sleeve": 0,
+      "rr": "2.00",
+      "reserve": 5700,
+      "activated_at": "2022-06-22T00:00:00",
+      "alive": false,
+      "died_at": "2022-07-01T16:36:20",
+      "death_entry_at": "2022-07-01T15:34:40",
+      "death_window": "15-16",
+      "death_trade_key": "RR2.00:15-16:260:910",
+      "trades": 44,
+      "ending_balance": 24122.85,
+      "ending_headroom": 30.6,
+      "received_payouts": 0.0
+    },
+    {
+      "account_id": 54,
+      "sleeve": 0,
+      "rr": "2.00",
+      "reserve": 5700,
+      "activated_at": "2022-07-07T00:00:00",
+      "alive": false,
+      "died_at": "2022-12-23T16:02:40",
+      "death_entry_at": "2022-12-23T15:39:40",
+      "death_window": "15-16",
+      "death_trade_key": "RR2.00:15-16:312:1076",
+      "trades": 582,
+      "ending_balance": 25211.45,
+      "ending_headroom": 111.45,
+      "received_payouts": 0.0
+    },
+    {
+      "account_id": 55,
+      "sleeve": 0,
+      "rr": "2.00",
+      "reserve": 5700,
+      "activated_at": "2022-07-07T00:00:00",
+      "alive": false,
+      "died_at": "2022-12-23T16:02:40",
+      "death_entry_at": "2022-12-23T15:39:40",
+      "death_window": "15-16",
+      "death_trade_key": "RR2.00:15-16:312:1076",
+      "trades": 582,
+      "ending_balance": 25211.45,
+      "ending_headroom": 111.45,
+      "received_payouts": 0.0
+    },
+    {
+      "account_id": 56,
+      "sleeve": 0,
+      "rr": "2.00",
+      "reserve": 5700,
+      "activated_at": "2022-07-07T00:00:00",
+      "alive": false,
+      "died_at": "2022-12-23T16:02:40",
+      "death_entry_at": "2022-12-23T15:39:40",
+      "death_window": "15-16",
+      "death_trade_key": "RR2.00:15-16:312:1076",
+      "trades": 582,
+      "ending_balance": 25211.45,
+      "ending_headroom": 111.45,
+      "received_payouts": 0.0
+    },
+    {
+      "account_id": 57,
+      "sleeve": 0,
+      "rr": "2.00",
+      "reserve": 5700,
+      "activated_at": "2022-07-21T00:00:00",
+      "alive": false,
+      "died_at": "2022-09-06T23:30:00",
+      "death_entry_at": "2022-09-06T17:40:40",
+      "death_window": "17-18",
+      "death_trade_key": "RR2.00:17-18:164:822",
+      "trades": 156,
+      "ending_balance": 25202.75,
+      "ending_headroom": 102.75,
+      "received_payouts": 0.0
+    },
+    {
+      "account_id": 58,
+      "sleeve": 0,
+      "rr": "2.00",
+      "reserve": 5700,
+      "activated_at": "2022-07-21T00:00:00",
+      "alive": false,
+      "died_at": "2022-09-06T23:30:00",
+      "death_entry_at": "2022-09-06T17:40:40",
+      "death_window": "17-18",
+      "death_trade_key": "RR2.00:17-18:164:822",
+      "trades": 156,
+      "ending_balance": 25202.75,
+      "ending_headroom": 102.75,
+      "received_payouts": 0.0
+    },
+    {
+      "account_id": 59,
+      "sleeve": 0,
+      "rr": "2.00",
+      "reserve": 5700,
+      "activated_at": "2022-07-29T00:00:00",
+      "alive": false,
+      "died_at": "2022-09-05T08:58:40",
+      "death_entry_at": "2022-09-05T04:00:40",
+      "death_window": "4-5",
+      "death_trade_key": "RR2.00:4-5:228:901",
+      "trades": 128,
+      "ending_balance": 25107.65,
+      "ending_headroom": 61.1,
+      "received_payouts": 0.0
+    },
+    {
+      "account_id": 60,
+      "sleeve": 0,
+      "rr": "2.00",
+      "reserve": 5700,
+      "activated_at": "2022-07-29T00:00:00",
+      "alive": false,
+      "died_at": "2022-09-05T08:58:40",
+      "death_entry_at": "2022-09-05T04:00:40",
+      "death_window": "4-5",
+      "death_trade_key": "RR2.00:4-5:228:901",
+      "trades": 128,
+      "ending_balance": 25107.65,
+      "ending_headroom": 61.1,
+      "received_payouts": 0.0
+    },
+    {
+      "account_id": 61,
+      "sleeve": 0,
+      "rr": "2.00",
+      "reserve": 5700,
+      "activated_at": "2022-07-29T00:00:00",
+      "alive": false,
+      "died_at": "2022-09-05T08:58:40",
+      "death_entry_at": "2022-09-05T04:00:40",
+      "death_window": "4-5",
+      "death_trade_key": "RR2.00:4-5:228:901",
+      "trades": 128,
+      "ending_balance": 25107.65,
+      "ending_headroom": 61.1,
+      "received_payouts": 0.0
+    },
+    {
+      "account_id": 62,
+      "sleeve": 0,
+      "rr": "2.00",
+      "reserve": 5700,
+      "activated_at": "2022-09-13T00:00:00",
+      "alive": false,
+      "died_at": "2022-11-04T14:30:40",
+      "death_entry_at": "2022-11-04T14:30:20",
+      "death_window": "14-15",
+      "death_trade_key": "RR2.00:14-15:243:932",
+      "trades": 193,
+      "ending_balance": 24135.9,
+      "ending_headroom": 22.85,
+      "received_payouts": 0.0
+    },
+    {
+      "account_id": 63,
+      "sleeve": 0,
+      "rr": "2.00",
+      "reserve": 5700,
+      "activated_at": "2022-10-21T00:00:00",
+      "alive": false,
+      "died_at": "2022-11-04T14:30:40",
+      "death_entry_at": "2022-11-04T14:30:20",
+      "death_window": "14-15",
+      "death_trade_key": "RR2.00:14-15:243:932",
+      "trades": 52,
+      "ending_balance": 24118.45,
+      "ending_headroom": 38.75,
+      "received_payouts": 0.0
+    },
+    {
+      "account_id": 64,
+      "sleeve": 0,
+      "rr": "2.00",
+      "reserve": 5700,
+      "activated_at": "2022-11-10T00:00:00",
+      "alive": false,
+      "died_at": "2023-01-05T22:50:40",
+      "death_entry_at": "2023-01-05T17:08:40",
+      "death_window": "17-18",
+      "death_trade_key": "RR2.00:17-18:182:910",
+      "trades": 183,
+      "ending_balance": 24109.4,
+      "ending_headroom": 24.15,
+      "received_payouts": 0.0
+    },
+    {
+      "account_id": 65,
+      "sleeve": 0,
+      "rr": "2.00",
+      "reserve": 5700,
+      "activated_at": "2022-11-18T00:00:00",
+      "alive": false,
+      "died_at": "2023-01-05T22:50:40",
+      "death_entry_at": "2023-01-05T17:08:40",
+      "death_window": "17-18",
+      "death_trade_key": "RR2.00:17-18:182:910",
+      "trades": 155,
+      "ending_balance": 24076.3,
+      "ending_headroom": 24.15,
+      "received_payouts": 0.0
+    },
+    {
+      "account_id": 66,
+      "sleeve": 0,
+      "rr": "2.00",
+      "reserve": 5700,
+      "activated_at": "2023-01-27T00:00:00",
+      "alive": true,
+      "died_at": null,
+      "death_entry_at": null,
+      "death_window": null,
+      "death_trade_key": null,
+      "trades": 4218,
+      "ending_balance": 29117.55,
+      "ending_headroom": 4017.55,
+      "received_payouts": 20768.55
+    },
+    {
+      "account_id": 67,
+      "sleeve": 0,
+      "rr": "2.00",
+      "reserve": 5700,
+      "activated_at": "2023-01-27T00:00:00",
+      "alive": true,
+      "died_at": null,
+      "death_entry_at": null,
+      "death_window": null,
+      "death_trade_key": null,
+      "trades": 4218,
+      "ending_balance": 29117.55,
+      "ending_headroom": 4017.55,
+      "received_payouts": 20768.55
+    },
+    {
+      "account_id": 68,
+      "sleeve": 0,
+      "rr": "2.00",
+      "reserve": 5700,
+      "activated_at": "2023-01-28T00:00:00",
+      "alive": true,
+      "died_at": null,
+      "death_entry_at": null,
+      "death_window": null,
+      "death_trade_key": null,
+      "trades": 4214,
+      "ending_balance": 29117.55,
+      "ending_headroom": 4017.55,
+      "received_payouts": 20571.75
+    },
+    {
+      "account_id": 69,
+      "sleeve": 0,
+      "rr": "2.00",
+      "reserve": 5700,
+      "activated_at": "2023-01-28T00:00:00",
+      "alive": true,
+      "died_at": null,
+      "death_entry_at": null,
+      "death_window": null,
+      "death_trade_key": null,
+      "trades": 4214,
+      "ending_balance": 29117.55,
+      "ending_headroom": 4017.55,
+      "received_payouts": 20571.75
+    },
+    {
+      "account_id": 70,
+      "sleeve": 0,
+      "rr": "2.00",
+      "reserve": 5700,
+      "activated_at": "2023-02-08T00:00:00",
+      "alive": true,
+      "died_at": null,
+      "death_entry_at": null,
+      "death_window": null,
+      "death_trade_key": null,
+      "trades": 4178,
+      "ending_balance": 29117.55,
+      "ending_headroom": 4017.55,
+      "received_payouts": 19682.05
+    },
+    {
+      "account_id": 71,
+      "sleeve": 0,
+      "rr": "2.00",
+      "reserve": 5700,
+      "activated_at": "2023-02-14T00:00:00",
+      "alive": false,
+      "died_at": "2023-11-01T15:00:00",
+      "death_entry_at": "2023-10-30T19:24:40",
+      "death_window": "19-20",
+      "death_trade_key": "RR2.00:19-20:293:1208",
+      "trades": 934,
+      "ending_balance": 25192.85,
+      "ending_headroom": 92.85,
+      "received_payouts": 0.0
+    },
+    {
+      "account_id": 72,
+      "sleeve": 0,
+      "rr": "2.00",
+      "reserve": 5700,
+      "activated_at": "2023-04-13T00:00:00",
+      "alive": true,
+      "died_at": null,
+      "death_entry_at": null,
+      "death_window": null,
+      "death_trade_key": null,
+      "trades": 3972,
+      "ending_balance": 29117.55,
+      "ending_headroom": 4017.55,
+      "received_payouts": 19928.35
+    },
+    {
+      "account_id": 73,
+      "sleeve": 0,
+      "rr": "2.00",
+      "reserve": 5700,
+      "activated_at": "2023-04-14T00:00:00",
+      "alive": true,
+      "died_at": null,
+      "death_entry_at": null,
+      "death_window": null,
+      "death_trade_key": null,
+      "trades": 3967,
+      "ending_balance": 29117.55,
+      "ending_headroom": 4017.55,
+      "received_payouts": 19487.6
+    },
+    {
+      "account_id": 74,
+      "sleeve": 0,
+      "rr": "2.00",
+      "reserve": 5700,
+      "activated_at": "2023-12-12T00:00:00",
+      "alive": true,
+      "died_at": null,
+      "death_entry_at": null,
+      "death_window": null,
+      "death_trade_key": null,
+      "trades": 3098,
+      "ending_balance": 29117.55,
+      "ending_headroom": 4017.55,
+      "received_payouts": 18452.05
+    }
+  ],
+  "signal_losses": [
+    {
+      "window": "1-2",
+      "entry": "2021-06-10T01:00:40",
+      "deaths": {
+        "0": 1
+      },
+      "copiers": {
+        "0": 13
+      }
+    },
+    {
+      "window": "14-15",
+      "entry": "2022-03-04T14:46:40",
+      "deaths": {
+        "0": 4
+      },
+      "copiers": {
+        "0": 19
+      }
+    },
+    {
+      "window": "14-15",
+      "entry": "2022-11-04T14:30:20",
+      "deaths": {
+        "0": 2
+      },
+      "copiers": {
+        "0": 17
+      }
+    },
+    {
+      "window": "15-16",
+      "entry": "2020-06-18T15:39:40",
+      "deaths": {
+        "0": 3
+      },
+      "copiers": {
+        "0": 5
+      }
+    },
+    {
+      "window": "15-16",
+      "entry": "2021-09-30T15:30:40",
+      "deaths": {
+        "0": 8
+      },
+      "copiers": {
+        "0": 18
+      }
+    },
+    {
+      "window": "15-16",
+      "entry": "2022-07-01T15:34:40",
+      "deaths": {
+        "0": 2
+      },
+      "copiers": {
+        "0": 14
+      }
+    },
+    {
+      "window": "15-16",
+      "entry": "2022-12-23T15:39:40",
+      "deaths": {
+        "0": 3
+      },
+      "copiers": {
+        "0": 17
+      }
+    },
+    {
+      "window": "16-17",
+      "entry": "2022-05-11T16:51:40",
+      "deaths": {
+        "0": 1
+      },
+      "copiers": {
+        "0": 15
+      }
+    },
+    {
+      "window": "17-18",
+      "entry": "2020-06-18T17:58:40",
+      "deaths": {
+        "0": 1
+      },
+      "copiers": {
+        "0": 2
+      }
+    },
+    {
+      "window": "17-18",
+      "entry": "2022-09-06T17:40:40",
+      "deaths": {
+        "0": 2
+      },
+      "copiers": {
+        "0": 17
+      }
+    },
+    {
+      "window": "17-18",
+      "entry": "2023-01-05T17:08:40",
+      "deaths": {
+        "0": 2
+      },
+      "copiers": {
+        "0": 14
+      }
+    },
+    {
+      "window": "18-19",
+      "entry": "2020-03-12T18:54:40",
+      "deaths": {
+        "0": 3
+      },
+      "copiers": {
+        "0": 3
+      }
+    },
+    {
+      "window": "18-19",
+      "entry": "2022-03-04T18:39:40",
+      "deaths": {
+        "0": 1
+      },
+      "copiers": {
+        "0": 15
+      }
+    },
+    {
+      "window": "18-19",
+      "entry": "2022-06-09T18:41:20",
+      "deaths": {
+        "0": 1
+      },
+      "copiers": {
+        "0": 13
+      }
+    },
+    {
+      "window": "19-20",
+      "entry": "2021-06-09T19:20:40",
+      "deaths": {
+        "0": 1
+      },
+      "copiers": {
+        "0": 14
+      }
+    },
+    {
+      "window": "19-20",
+      "entry": "2023-10-30T19:24:40",
+      "deaths": {
+        "0": 1
+      },
+      "copiers": {
+        "0": 20
+      }
+    },
+    {
+      "window": "20-21",
+      "entry": "2021-12-20T20:39:40",
+      "deaths": {
+        "0": 1
+      },
+      "copiers": {
+        "0": 15
+      }
+    },
+    {
+      "window": "21-22",
+      "entry": "2021-12-03T21:25:20",
+      "deaths": {
+        "0": 4
+      },
+      "copiers": {
+        "0": 17
+      }
+    },
+    {
+      "window": "21-22",
+      "entry": "2022-01-07T21:39:40",
+      "deaths": {
+        "0": 4
+      },
+      "copiers": {
+        "0": 16
+      }
+    },
+    {
+      "window": "21-22",
+      "entry": "2022-05-02T21:07:20",
+      "deaths": {
+        "0": 1
+      },
+      "copiers": {
+        "0": 15
+      }
+    },
+    {
+      "window": "21-22",
+      "entry": "2022-05-11T21:25:40",
+      "deaths": {
+        "0": 2
+      },
+      "copiers": {
+        "0": 14
+      }
+    },
+    {
+      "window": "4-5",
+      "entry": "2022-09-05T04:00:40",
+      "deaths": {
+        "0": 3
+      },
+      "copiers": {
+        "0": 20
+      }
+    },
+    {
+      "window": "7-8",
+      "entry": "2021-06-21T07:07:40",
+      "deaths": {
+        "0": 1
+      },
+      "copiers": {
+        "0": 12
+      }
+    },
+    {
+      "window": "8-9",
+      "entry": "2021-06-09T08:16:40",
+      "deaths": {
+        "0": 1
+      },
+      "copiers": {
+        "0": 15
+      }
+    },
+    {
+      "window": "9-10",
+      "entry": "2021-05-19T09:49:40",
+      "deaths": {
+        "0": 1
+      },
+      "copiers": {
+        "0": 15
+      }
+    }
+  ],
+  "day_losses": {
+    "2020-03-12": {
+      "0": 3
+    },
+    "2020-06-18": {
+      "0": 4
+    },
+    "2021-06-21": {
+      "0": 1
+    },
+    "2021-06-10": {
+      "0": 1
+    },
+    "2021-06-09": {
+      "0": 2
+    },
+    "2021-05-19": {
+      "0": 1
+    },
+    "2021-09-30": {
+      "0": 8
+    },
+    "2021-12-20": {
+      "0": 1
+    },
+    "2021-12-03": {
+      "0": 4
+    },
+    "2022-01-07": {
+      "0": 4
+    },
+    "2022-05-11": {
+      "0": 3
+    },
+    "2022-03-04": {
+      "0": 5
+    },
+    "2022-05-02": {
+      "0": 1
+    },
+    "2022-06-09": {
+      "0": 1
+    },
+    "2022-07-01": {
+      "0": 2
+    },
+    "2022-12-23": {
+      "0": 3
+    },
+    "2022-09-06": {
+      "0": 2
+    },
+    "2022-09-05": {
+      "0": 3
+    },
+    "2022-11-04": {
+      "0": 2
+    },
+    "2023-01-05": {
+      "0": 2
+    },
+    "2023-11-01": {
+      "0": 1
+    }
+  },
+  "snapshots": [
+    {
+      "at": "2020-03-01T00:00:00",
+      "alive": 1,
+      "occupied_sleeves": 1,
+      "distinct_headrooms": 1,
+      "largest_equal_headroom": 1,
+      "effective_headroom_groups": 1.0,
+      "total_headroom": 358.0,
+      "total_positive_equity": 0
+    },
+    {
+      "at": "2020-04-01T00:00:00",
+      "alive": 1,
+      "occupied_sleeves": 1,
+      "distinct_headrooms": 1,
+      "largest_equal_headroom": 1,
+      "effective_headroom_groups": 1.0,
+      "total_headroom": 818.1,
+      "total_positive_equity": 918.1
+    },
+    {
+      "at": "2020-05-01T00:00:00",
+      "alive": 1,
+      "occupied_sleeves": 1,
+      "distinct_headrooms": 1,
+      "largest_equal_headroom": 1,
+      "effective_headroom_groups": 1.0,
+      "total_headroom": 2072.05,
+      "total_positive_equity": 2172.05
+    },
+    {
+      "at": "2020-06-01T00:00:00",
+      "alive": 5,
+      "occupied_sleeves": 1,
+      "distinct_headrooms": 3,
+      "largest_equal_headroom": 3,
+      "effective_headroom_groups": 2.272727,
+      "total_headroom": 7616.25,
+      "total_positive_equity": 3284.05
+    },
+    {
+      "at": "2020-07-01T00:00:00",
+      "alive": 1,
+      "occupied_sleeves": 1,
+      "distinct_headrooms": 1,
+      "largest_equal_headroom": 1,
+      "effective_headroom_groups": 1.0,
+      "total_headroom": 1641.35,
+      "total_positive_equity": 1741.35
+    },
+    {
+      "at": "2020-08-01T00:00:00",
+      "alive": 2,
+      "occupied_sleeves": 1,
+      "distinct_headrooms": 2,
+      "largest_equal_headroom": 1,
+      "effective_headroom_groups": 2.0,
+      "total_headroom": 4331.2,
+      "total_positive_equity": 2931.2
+    },
+    {
+      "at": "2020-09-01T00:00:00",
+      "alive": 7,
+      "occupied_sleeves": 1,
+      "distinct_headrooms": 3,
+      "largest_equal_headroom": 5,
+      "effective_headroom_groups": 1.814815,
+      "total_headroom": 8979.95,
+      "total_positive_equity": 4206.3
+    },
+    {
+      "at": "2020-10-01T00:00:00",
+      "alive": 8,
+      "occupied_sleeves": 1,
+      "distinct_headrooms": 4,
+      "largest_equal_headroom": 5,
+      "effective_headroom_groups": 2.285714,
+      "total_headroom": 13199.15,
+      "total_positive_equity": 10032.2
+    },
+    {
+      "at": "2020-11-01T00:00:00",
+      "alive": 8,
+      "occupied_sleeves": 1,
+      "distinct_headrooms": 5,
+      "largest_equal_headroom": 3,
+      "effective_headroom_groups": 4.0,
+      "total_headroom": 15586.65,
+      "total_positive_equity": 15501.8
+    },
+    {
+      "at": "2020-12-01T00:00:00",
+      "alive": 10,
+      "occupied_sleeves": 1,
+      "distinct_headrooms": 8,
+      "largest_equal_headroom": 2,
+      "effective_headroom_groups": 7.142857,
+      "total_headroom": 27026.1,
+      "total_positive_equity": 25197.7
+    },
+    {
+      "at": "2021-01-01T00:00:00",
+      "alive": 11,
+      "occupied_sleeves": 1,
+      "distinct_headrooms": 8,
+      "largest_equal_headroom": 2,
+      "effective_headroom_groups": 7.117647,
+      "total_headroom": 30238.3,
+      "total_positive_equity": 27317.05
+    },
+    {
+      "at": "2021-02-01T00:00:00",
+      "alive": 12,
+      "occupied_sleeves": 1,
+      "distinct_headrooms": 8,
+      "largest_equal_headroom": 3,
+      "effective_headroom_groups": 6.545455,
+      "total_headroom": 30613.5,
+      "total_positive_equity": 29531.9
+    },
+    {
+      "at": "2021-03-01T00:00:00",
+      "alive": 13,
+      "occupied_sleeves": 1,
+      "distinct_headrooms": 8,
+      "largest_equal_headroom": 4,
+      "effective_headroom_groups": 5.827586,
+      "total_headroom": 31382.15,
+      "total_positive_equity": 29913.5
+    },
+    {
+      "at": "2021-04-01T00:00:00",
+      "alive": 14,
+      "occupied_sleeves": 1,
+      "distinct_headrooms": 11,
+      "largest_equal_headroom": 2,
+      "effective_headroom_groups": 9.8,
+      "total_headroom": 44566.55,
+      "total_positive_equity": 43834.05
+    },
+    {
+      "at": "2021-05-01T00:00:00",
+      "alive": 15,
+      "occupied_sleeves": 1,
+      "distinct_headrooms": 13,
+      "largest_equal_headroom": 2,
+      "effective_headroom_groups": 11.842105,
+      "total_headroom": 49517.0,
+      "total_positive_equity": 48768.65
+    },
+    {
+      "at": "2021-06-01T00:00:00",
+      "alive": 15,
+      "occupied_sleeves": 1,
+      "distinct_headrooms": 13,
+      "largest_equal_headroom": 2,
+      "effective_headroom_groups": 11.842105,
+      "total_headroom": 33565.9,
+      "total_positive_equity": 33729.1
+    },
+    {
+      "at": "2021-07-01T00:00:00",
+      "alive": 11,
+      "occupied_sleeves": 1,
+      "distinct_headrooms": 9,
+      "largest_equal_headroom": 2,
+      "effective_headroom_groups": 8.066667,
+      "total_headroom": 32006.9,
+      "total_positive_equity": 32133.6
+    },
+    {
+      "at": "2021-08-01T00:00:00",
+      "alive": 17,
+      "occupied_sleeves": 1,
+      "distinct_headrooms": 10,
+      "largest_equal_headroom": 6,
+      "effective_headroom_groups": 5.666667,
+      "total_headroom": 44484.2,
+      "total_positive_equity": 38042.3
+    },
+    {
+      "at": "2021-09-01T00:00:00",
+      "alive": 18,
+      "occupied_sleeves": 1,
+      "distinct_headrooms": 10,
+      "largest_equal_headroom": 7,
+      "effective_headroom_groups": 5.0625,
+      "total_headroom": 51562.75,
+      "total_positive_equity": 45245.2
+    },
+    {
+      "at": "2021-10-01T00:00:00",
+      "alive": 12,
+      "occupied_sleeves": 1,
+      "distinct_headrooms": 9,
+      "largest_equal_headroom": 2,
+      "effective_headroom_groups": 8.0,
+      "total_headroom": 31636.1,
+      "total_positive_equity": 29636.1
+    },
+    {
+      "at": "2021-11-01T00:00:00",
+      "alive": 15,
+      "occupied_sleeves": 1,
+      "distinct_headrooms": 9,
+      "largest_equal_headroom": 3,
+      "effective_headroom_groups": 7.758621,
+      "total_headroom": 58732.0,
+      "total_positive_equity": 58071.65
+    },
+    {
+      "at": "2021-12-01T00:00:00",
+      "alive": 17,
+      "occupied_sleeves": 1,
+      "distinct_headrooms": 11,
+      "largest_equal_headroom": 3,
+      "effective_headroom_groups": 9.322581,
+      "total_headroom": 57005.5,
+      "total_positive_equity": 56507.65
+    },
+    {
+      "at": "2022-01-01T00:00:00",
+      "alive": 16,
+      "occupied_sleeves": 1,
+      "distinct_headrooms": 9,
+      "largest_equal_headroom": 4,
+      "effective_headroom_groups": 7.111111,
+      "total_headroom": 49245.35,
+      "total_positive_equity": 46457.55
+    },
+    {
+      "at": "2022-02-01T00:00:00",
+      "alive": 12,
+      "occupied_sleeves": 1,
+      "distinct_headrooms": 8,
+      "largest_equal_headroom": 2,
+      "effective_headroom_groups": 7.2,
+      "total_headroom": 60924.65,
+      "total_positive_equity": 62124.65
+    },
+    {
+      "at": "2022-03-01T00:00:00",
+      "alive": 19,
+      "occupied_sleeves": 1,
+      "distinct_headrooms": 10,
+      "largest_equal_headroom": 4,
+      "effective_headroom_groups": 8.022222,
+      "total_headroom": 79053.8,
+      "total_positive_equity": 79085.55
+    },
+    {
+      "at": "2022-04-01T00:00:00",
+      "alive": 15,
+      "occupied_sleeves": 1,
+      "distinct_headrooms": 9,
+      "largest_equal_headroom": 3,
+      "effective_headroom_groups": 7.758621,
+      "total_headroom": 68101.6,
+      "total_positive_equity": 68460.5
+    },
+    {
+      "at": "2022-05-01T00:00:00",
+      "alive": 15,
+      "occupied_sleeves": 1,
+      "distinct_headrooms": 7,
+      "largest_equal_headroom": 6,
+      "effective_headroom_groups": 4.411765,
+      "total_headroom": 61000.2,
+      "total_positive_equity": 61985.55
+    },
+    {
+      "at": "2022-06-01T00:00:00",
+      "alive": 13,
+      "occupied_sleeves": 1,
+      "distinct_headrooms": 6,
+      "largest_equal_headroom": 6,
+      "effective_headroom_groups": 3.595745,
+      "total_headroom": 46701.7,
+      "total_positive_equity": 47173.3
+    },
+    {
+      "at": "2022-07-01T00:00:00",
+      "alive": 14,
+      "occupied_sleeves": 1,
+      "distinct_headrooms": 6,
+      "largest_equal_headroom": 6,
+      "effective_headroom_groups": 3.92,
+      "total_headroom": 14807.45,
+      "total_positive_equity": 15541.95
+    },
+    {
+      "at": "2022-08-01T00:00:00",
+      "alive": 20,
+      "occupied_sleeves": 1,
+      "distinct_headrooms": 7,
+      "largest_equal_headroom": 6,
+      "effective_headroom_groups": 5.0,
+      "total_headroom": 52158.05,
+      "total_positive_equity": 47431.15
+    },
+    {
+      "at": "2022-09-01T00:00:00",
+      "alive": 20,
+      "occupied_sleeves": 1,
+      "distinct_headrooms": 8,
+      "largest_equal_headroom": 6,
+      "effective_headroom_groups": 5.882353,
+      "total_headroom": 58759.5,
+      "total_positive_equity": 60599.15
+    },
+    {
+      "at": "2022-10-01T00:00:00",
+      "alive": 16,
+      "occupied_sleeves": 1,
+      "distinct_headrooms": 7,
+      "largest_equal_headroom": 6,
+      "effective_headroom_groups": 4.571429,
+      "total_headroom": 51194.2,
+      "total_positive_equity": 52132.8
+    },
+    {
+      "at": "2022-11-01T00:00:00",
+      "alive": 17,
+      "occupied_sleeves": 1,
+      "distinct_headrooms": 8,
+      "largest_equal_headroom": 6,
+      "effective_headroom_groups": 5.070175,
+      "total_headroom": 55958.35,
+      "total_positive_equity": 56188.05
+    },
+    {
+      "at": "2022-12-01T00:00:00",
+      "alive": 17,
+      "occupied_sleeves": 1,
+      "distinct_headrooms": 7,
+      "largest_equal_headroom": 6,
+      "effective_headroom_groups": 4.898305,
+      "total_headroom": 39063.75,
+      "total_positive_equity": 38382.15
+    },
+    {
+      "at": "2023-01-01T00:00:00",
+      "alive": 14,
+      "occupied_sleeves": 1,
+      "distinct_headrooms": 6,
+      "largest_equal_headroom": 6,
+      "effective_headroom_groups": 3.92,
+      "total_headroom": 23763.85,
+      "total_positive_equity": 24412.35
+    },
+    {
+      "at": "2023-02-01T00:00:00",
+      "alive": 16,
+      "occupied_sleeves": 1,
+      "distinct_headrooms": 7,
+      "largest_equal_headroom": 6,
+      "effective_headroom_groups": 4.740741,
+      "total_headroom": 39755.45,
+      "total_positive_equity": 35844.35
+    },
+    {
+      "at": "2023-03-01T00:00:00",
+      "alive": 18,
+      "occupied_sleeves": 1,
+      "distinct_headrooms": 7,
+      "largest_equal_headroom": 6,
+      "effective_headroom_groups": 4.909091,
+      "total_headroom": 45033.65,
+      "total_positive_equity": 45200.55
+    },
+    {
+      "at": "2023-04-01T00:00:00",
+      "alive": 18,
+      "occupied_sleeves": 1,
+      "distinct_headrooms": 7,
+      "largest_equal_headroom": 6,
+      "effective_headroom_groups": 4.909091,
+      "total_headroom": 51909.65,
+      "total_positive_equity": 51341.4
+    },
+    {
+      "at": "2023-05-01T00:00:00",
+      "alive": 20,
+      "occupied_sleeves": 1,
+      "distinct_headrooms": 8,
+      "largest_equal_headroom": 6,
+      "effective_headroom_groups": 5.714286,
+      "total_headroom": 58868.55,
+      "total_positive_equity": 55749.7
+    },
+    {
+      "at": "2023-06-01T00:00:00",
+      "alive": 20,
+      "occupied_sleeves": 1,
+      "distinct_headrooms": 7,
+      "largest_equal_headroom": 6,
+      "effective_headroom_groups": 4.651163,
+      "total_headroom": 58550.95,
+      "total_positive_equity": 56145.85
+    },
+    {
+      "at": "2023-07-01T00:00:00",
+      "alive": 20,
+      "occupied_sleeves": 1,
+      "distinct_headrooms": 10,
+      "largest_equal_headroom": 6,
+      "effective_headroom_groups": 6.666667,
+      "total_headroom": 65802.45,
+      "total_positive_equity": 67419.25
+    },
+    {
+      "at": "2023-08-01T00:00:00",
+      "alive": 20,
+      "occupied_sleeves": 1,
+      "distinct_headrooms": 11,
+      "largest_equal_headroom": 6,
+      "effective_headroom_groups": 6.896552,
+      "total_headroom": 82379.25,
+      "total_positive_equity": 84379.25
+    },
+    {
+      "at": "2023-09-01T00:00:00",
+      "alive": 20,
+      "occupied_sleeves": 1,
+      "distinct_headrooms": 10,
+      "largest_equal_headroom": 6,
+      "effective_headroom_groups": 6.451613,
+      "total_headroom": 93478.2,
+      "total_positive_equity": 95478.2
+    },
+    {
+      "at": "2023-10-01T00:00:00",
+      "alive": 20,
+      "occupied_sleeves": 1,
+      "distinct_headrooms": 10,
+      "largest_equal_headroom": 6,
+      "effective_headroom_groups": 6.451613,
+      "total_headroom": 82006.1,
+      "total_positive_equity": 84006.1
+    },
+    {
+      "at": "2023-11-01T00:00:00",
+      "alive": 20,
+      "occupied_sleeves": 1,
+      "distinct_headrooms": 10,
+      "largest_equal_headroom": 6,
+      "effective_headroom_groups": 6.451613,
+      "total_headroom": 49922.1,
+      "total_positive_equity": 51922.1
+    },
+    {
+      "at": "2023-12-01T00:00:00",
+      "alive": 19,
+      "occupied_sleeves": 1,
+      "distinct_headrooms": 9,
+      "largest_equal_headroom": 6,
+      "effective_headroom_groups": 5.918033,
+      "total_headroom": 52895.85,
+      "total_positive_equity": 54795.85
+    },
+    {
+      "at": "2024-01-01T00:00:00",
+      "alive": 20,
+      "occupied_sleeves": 1,
+      "distinct_headrooms": 10,
+      "largest_equal_headroom": 6,
+      "effective_headroom_groups": 6.451613,
+      "total_headroom": 75978.85,
+      "total_positive_equity": 77215.65
+    },
+    {
+      "at": "2024-02-01T00:00:00",
+      "alive": 20,
+      "occupied_sleeves": 1,
+      "distinct_headrooms": 10,
+      "largest_equal_headroom": 6,
+      "effective_headroom_groups": 6.451613,
+      "total_headroom": 87153.65,
+      "total_positive_equity": 89153.65
+    },
+    {
+      "at": "2024-03-01T00:00:00",
+      "alive": 20,
+      "occupied_sleeves": 1,
+      "distinct_headrooms": 10,
+      "largest_equal_headroom": 6,
+      "effective_headroom_groups": 6.451613,
+      "total_headroom": 103115.4,
+      "total_positive_equity": 105115.4
+    },
+    {
+      "at": "2024-04-01T00:00:00",
+      "alive": 20,
+      "occupied_sleeves": 1,
+      "distinct_headrooms": 9,
+      "largest_equal_headroom": 7,
+      "effective_headroom_groups": 5.405405,
+      "total_headroom": 105698.5,
+      "total_positive_equity": 107698.5
+    },
+    {
+      "at": "2024-05-01T00:00:00",
+      "alive": 20,
+      "occupied_sleeves": 1,
+      "distinct_headrooms": 8,
+      "largest_equal_headroom": 7,
+      "effective_headroom_groups": 4.651163,
+      "total_headroom": 88910.8,
+      "total_positive_equity": 90910.8
+    },
+    {
+      "at": "2024-06-01T00:00:00",
+      "alive": 20,
+      "occupied_sleeves": 1,
+      "distinct_headrooms": 6,
+      "largest_equal_headroom": 14,
+      "effective_headroom_groups": 1.960784,
+      "total_headroom": 112604.35,
+      "total_positive_equity": 114604.35
+    },
+    {
+      "at": "2024-07-01T00:00:00",
+      "alive": 20,
+      "occupied_sleeves": 1,
+      "distinct_headrooms": 4,
+      "largest_equal_headroom": 15,
+      "effective_headroom_groups": 1.694915,
+      "total_headroom": 115173.9,
+      "total_positive_equity": 117173.9
+    },
+    {
+      "at": "2024-08-01T00:00:00",
+      "alive": 20,
+      "occupied_sleeves": 1,
+      "distinct_headrooms": 4,
+      "largest_equal_headroom": 15,
+      "effective_headroom_groups": 1.694915,
+      "total_headroom": 65268.05,
+      "total_positive_equity": 67268.05
+    },
+    {
+      "at": "2024-09-01T00:00:00",
+      "alive": 20,
+      "occupied_sleeves": 1,
+      "distinct_headrooms": 4,
+      "largest_equal_headroom": 15,
+      "effective_headroom_groups": 1.694915,
+      "total_headroom": 92791.05,
+      "total_positive_equity": 94791.05
+    },
+    {
+      "at": "2024-10-01T00:00:00",
+      "alive": 20,
+      "occupied_sleeves": 1,
+      "distinct_headrooms": 4,
+      "largest_equal_headroom": 15,
+      "effective_headroom_groups": 1.694915,
+      "total_headroom": 95266.05,
+      "total_positive_equity": 97266.05
+    },
+    {
+      "at": "2024-11-01T00:00:00",
+      "alive": 20,
+      "occupied_sleeves": 1,
+      "distinct_headrooms": 4,
+      "largest_equal_headroom": 15,
+      "effective_headroom_groups": 1.694915,
+      "total_headroom": 89515.05,
+      "total_positive_equity": 91515.05
+    },
+    {
+      "at": "2024-12-01T00:00:00",
+      "alive": 20,
+      "occupied_sleeves": 1,
+      "distinct_headrooms": 2,
+      "largest_equal_headroom": 18,
+      "effective_headroom_groups": 1.219512,
+      "total_headroom": 100885.5,
+      "total_positive_equity": 102885.5
+    },
+    {
+      "at": "2025-01-01T00:00:00",
+      "alive": 20,
+      "occupied_sleeves": 1,
+      "distinct_headrooms": 2,
+      "largest_equal_headroom": 18,
+      "effective_headroom_groups": 1.219512,
+      "total_headroom": 116665.5,
+      "total_positive_equity": 118665.5
+    },
+    {
+      "at": "2025-02-01T00:00:00",
+      "alive": 20,
+      "occupied_sleeves": 1,
+      "distinct_headrooms": 2,
+      "largest_equal_headroom": 18,
+      "effective_headroom_groups": 1.219512,
+      "total_headroom": 128615.9,
+      "total_positive_equity": 130615.9
+    },
+    {
+      "at": "2025-03-01T00:00:00",
+      "alive": 20,
+      "occupied_sleeves": 1,
+      "distinct_headrooms": 2,
+      "largest_equal_headroom": 18,
+      "effective_headroom_groups": 1.219512,
+      "total_headroom": 97974.5,
+      "total_positive_equity": 99974.5
+    },
+    {
+      "at": "2025-04-01T00:00:00",
+      "alive": 20,
+      "occupied_sleeves": 1,
+      "distinct_headrooms": 2,
+      "largest_equal_headroom": 18,
+      "effective_headroom_groups": 1.219512,
+      "total_headroom": 92719.5,
+      "total_positive_equity": 94719.5
+    },
+    {
+      "at": "2025-05-01T00:00:00",
+      "alive": 20,
+      "occupied_sleeves": 1,
+      "distinct_headrooms": 1,
+      "largest_equal_headroom": 20,
+      "effective_headroom_groups": 1.0,
+      "total_headroom": 142689.0,
+      "total_positive_equity": 144689.0
+    },
+    {
+      "at": "2025-06-01T00:00:00",
+      "alive": 20,
+      "occupied_sleeves": 1,
+      "distinct_headrooms": 1,
+      "largest_equal_headroom": 20,
+      "effective_headroom_groups": 1.0,
+      "total_headroom": 106130.0,
+      "total_positive_equity": 108130.0
+    },
+    {
+      "at": "2025-07-01T00:00:00",
+      "alive": 20,
+      "occupied_sleeves": 1,
+      "distinct_headrooms": 1,
+      "largest_equal_headroom": 20,
+      "effective_headroom_groups": 1.0,
+      "total_headroom": 127131.0,
+      "total_positive_equity": 129131.0
+    },
+    {
+      "at": "2025-08-01T00:00:00",
+      "alive": 20,
+      "occupied_sleeves": 1,
+      "distinct_headrooms": 1,
+      "largest_equal_headroom": 20,
+      "effective_headroom_groups": 1.0,
+      "total_headroom": 97650.0,
+      "total_positive_equity": 99650.0
+    },
+    {
+      "at": "2025-09-01T00:00:00",
+      "alive": 20,
+      "occupied_sleeves": 1,
+      "distinct_headrooms": 1,
+      "largest_equal_headroom": 20,
+      "effective_headroom_groups": 1.0,
+      "total_headroom": 109514.0,
+      "total_positive_equity": 111514.0
+    },
+    {
+      "at": "2025-10-01T00:00:00",
+      "alive": 20,
+      "occupied_sleeves": 1,
+      "distinct_headrooms": 1,
+      "largest_equal_headroom": 20,
+      "effective_headroom_groups": 1.0,
+      "total_headroom": 119329.0,
+      "total_positive_equity": 121329.0
+    },
+    {
+      "at": "2025-11-01T00:00:00",
+      "alive": 20,
+      "occupied_sleeves": 1,
+      "distinct_headrooms": 1,
+      "largest_equal_headroom": 20,
+      "effective_headroom_groups": 1.0,
+      "total_headroom": 114000.0,
+      "total_positive_equity": 116000.0
+    },
+    {
+      "at": "2025-12-01T00:00:00",
+      "alive": 20,
+      "occupied_sleeves": 1,
+      "distinct_headrooms": 1,
+      "largest_equal_headroom": 20,
+      "effective_headroom_groups": 1.0,
+      "total_headroom": 112023.0,
+      "total_positive_equity": 114023.0
+    },
+    {
+      "at": "2026-01-01T00:00:00",
+      "alive": 20,
+      "occupied_sleeves": 1,
+      "distinct_headrooms": 1,
+      "largest_equal_headroom": 20,
+      "effective_headroom_groups": 1.0,
+      "total_headroom": 95352.0,
+      "total_positive_equity": 97352.0
+    },
+    {
+      "at": "2026-02-01T00:00:00",
+      "alive": 20,
+      "occupied_sleeves": 1,
+      "distinct_headrooms": 1,
+      "largest_equal_headroom": 20,
+      "effective_headroom_groups": 1.0,
+      "total_headroom": 108889.0,
+      "total_positive_equity": 110889.0
+    },
+    {
+      "at": "2026-03-01T00:00:00",
+      "alive": 20,
+      "occupied_sleeves": 1,
+      "distinct_headrooms": 1,
+      "largest_equal_headroom": 20,
+      "effective_headroom_groups": 1.0,
+      "total_headroom": 73218.0,
+      "total_positive_equity": 75218.0,
+      "accounts": [
+        {
+          "id": 4,
+          "sleeve": 0,
+          "rr": "2.00",
+          "headroom": 3660.9,
+          "reserve": 5700
+        },
+        {
+          "id": 9,
+          "sleeve": 0,
+          "rr": "2.00",
+          "headroom": 3660.9,
+          "reserve": 5700
+        },
+        {
+          "id": 10,
+          "sleeve": 0,
+          "rr": "2.00",
+          "headroom": 3660.9,
+          "reserve": 5700
+        },
+        {
+          "id": 11,
+          "sleeve": 0,
+          "rr": "2.00",
+          "headroom": 3660.9,
+          "reserve": 5700
+        },
+        {
+          "id": 12,
+          "sleeve": 0,
+          "rr": "2.00",
+          "headroom": 3660.9,
+          "reserve": 5700
+        },
+        {
+          "id": 13,
+          "sleeve": 0,
+          "rr": "2.00",
+          "headroom": 3660.9,
+          "reserve": 5700
+        },
+        {
+          "id": 14,
+          "sleeve": 0,
+          "rr": "2.00",
+          "headroom": 3660.9,
+          "reserve": 5700
+        },
+        {
+          "id": 15,
+          "sleeve": 0,
+          "rr": "2.00",
+          "headroom": 3660.9,
+          "reserve": 5700
+        },
+        {
+          "id": 16,
+          "sleeve": 0,
+          "rr": "2.00",
+          "headroom": 3660.9,
+          "reserve": 5700
+        },
+        {
+          "id": 17,
+          "sleeve": 0,
+          "rr": "2.00",
+          "headroom": 3660.9,
+          "reserve": 5700
+        },
+        {
+          "id": 31,
+          "sleeve": 0,
+          "rr": "2.00",
+          "headroom": 3660.9,
+          "reserve": 5700
+        },
+        {
+          "id": 32,
+          "sleeve": 0,
+          "rr": "2.00",
+          "headroom": 3660.9,
+          "reserve": 5700
+        },
+        {
+          "id": 66,
+          "sleeve": 0,
+          "rr": "2.00",
+          "headroom": 3660.9,
+          "reserve": 5700
+        },
+        {
+          "id": 67,
+          "sleeve": 0,
+          "rr": "2.00",
+          "headroom": 3660.9,
+          "reserve": 5700
+        },
+        {
+          "id": 68,
+          "sleeve": 0,
+          "rr": "2.00",
+          "headroom": 3660.9,
+          "reserve": 5700
+        },
+        {
+          "id": 69,
+          "sleeve": 0,
+          "rr": "2.00",
+          "headroom": 3660.9,
+          "reserve": 5700
+        },
+        {
+          "id": 70,
+          "sleeve": 0,
+          "rr": "2.00",
+          "headroom": 3660.9,
+          "reserve": 5700
+        },
+        {
+          "id": 72,
+          "sleeve": 0,
+          "rr": "2.00",
+          "headroom": 3660.9,
+          "reserve": 5700
+        },
+        {
+          "id": 73,
+          "sleeve": 0,
+          "rr": "2.00",
+          "headroom": 3660.9,
+          "reserve": 5700
+        },
+        {
+          "id": 74,
+          "sleeve": 0,
+          "rr": "2.00",
+          "headroom": 3660.9,
+          "reserve": 5700
+        }
+      ]
+    },
+    {
+      "at": "2026-03-20T00:00:00",
+      "alive": 20,
+      "occupied_sleeves": 1,
+      "distinct_headrooms": 1,
+      "largest_equal_headroom": 20,
+      "effective_headroom_groups": 1.0,
+      "total_headroom": 58292.0,
+      "total_positive_equity": 60292.0,
+      "accounts": [
+        {
+          "id": 4,
+          "sleeve": 0,
+          "rr": "2.00",
+          "headroom": 2914.6,
+          "reserve": 5700
+        },
+        {
+          "id": 9,
+          "sleeve": 0,
+          "rr": "2.00",
+          "headroom": 2914.6,
+          "reserve": 5700
+        },
+        {
+          "id": 10,
+          "sleeve": 0,
+          "rr": "2.00",
+          "headroom": 2914.6,
+          "reserve": 5700
+        },
+        {
+          "id": 11,
+          "sleeve": 0,
+          "rr": "2.00",
+          "headroom": 2914.6,
+          "reserve": 5700
+        },
+        {
+          "id": 12,
+          "sleeve": 0,
+          "rr": "2.00",
+          "headroom": 2914.6,
+          "reserve": 5700
+        },
+        {
+          "id": 13,
+          "sleeve": 0,
+          "rr": "2.00",
+          "headroom": 2914.6,
+          "reserve": 5700
+        },
+        {
+          "id": 14,
+          "sleeve": 0,
+          "rr": "2.00",
+          "headroom": 2914.6,
+          "reserve": 5700
+        },
+        {
+          "id": 15,
+          "sleeve": 0,
+          "rr": "2.00",
+          "headroom": 2914.6,
+          "reserve": 5700
+        },
+        {
+          "id": 16,
+          "sleeve": 0,
+          "rr": "2.00",
+          "headroom": 2914.6,
+          "reserve": 5700
+        },
+        {
+          "id": 17,
+          "sleeve": 0,
+          "rr": "2.00",
+          "headroom": 2914.6,
+          "reserve": 5700
+        },
+        {
+          "id": 31,
+          "sleeve": 0,
+          "rr": "2.00",
+          "headroom": 2914.6,
+          "reserve": 5700
+        },
+        {
+          "id": 32,
+          "sleeve": 0,
+          "rr": "2.00",
+          "headroom": 2914.6,
+          "reserve": 5700
+        },
+        {
+          "id": 66,
+          "sleeve": 0,
+          "rr": "2.00",
+          "headroom": 2914.6,
+          "reserve": 5700
+        },
+        {
+          "id": 67,
+          "sleeve": 0,
+          "rr": "2.00",
+          "headroom": 2914.6,
+          "reserve": 5700
+        },
+        {
+          "id": 68,
+          "sleeve": 0,
+          "rr": "2.00",
+          "headroom": 2914.6,
+          "reserve": 5700
+        },
+        {
+          "id": 69,
+          "sleeve": 0,
+          "rr": "2.00",
+          "headroom": 2914.6,
+          "reserve": 5700
+        },
+        {
+          "id": 70,
+          "sleeve": 0,
+          "rr": "2.00",
+          "headroom": 2914.6,
+          "reserve": 5700
+        },
+        {
+          "id": 72,
+          "sleeve": 0,
+          "rr": "2.00",
+          "headroom": 2914.6,
+          "reserve": 5700
+        },
+        {
+          "id": 73,
+          "sleeve": 0,
+          "rr": "2.00",
+          "headroom": 2914.6,
+          "reserve": 5700
+        },
+        {
+          "id": 74,
+          "sleeve": 0,
+          "rr": "2.00",
+          "headroom": 2914.6,
+          "reserve": 5700
+        }
+      ]
+    },
+    {
+      "at": "2026-03-23T00:00:00",
+      "alive": 20,
+      "occupied_sleeves": 1,
+      "distinct_headrooms": 1,
+      "largest_equal_headroom": 20,
+      "effective_headroom_groups": 1.0,
+      "total_headroom": 47096.0,
+      "total_positive_equity": 49096.0,
+      "accounts": [
+        {
+          "id": 4,
+          "sleeve": 0,
+          "rr": "2.00",
+          "headroom": 2354.8,
+          "reserve": 5700
+        },
+        {
+          "id": 9,
+          "sleeve": 0,
+          "rr": "2.00",
+          "headroom": 2354.8,
+          "reserve": 5700
+        },
+        {
+          "id": 10,
+          "sleeve": 0,
+          "rr": "2.00",
+          "headroom": 2354.8,
+          "reserve": 5700
+        },
+        {
+          "id": 11,
+          "sleeve": 0,
+          "rr": "2.00",
+          "headroom": 2354.8,
+          "reserve": 5700
+        },
+        {
+          "id": 12,
+          "sleeve": 0,
+          "rr": "2.00",
+          "headroom": 2354.8,
+          "reserve": 5700
+        },
+        {
+          "id": 13,
+          "sleeve": 0,
+          "rr": "2.00",
+          "headroom": 2354.8,
+          "reserve": 5700
+        },
+        {
+          "id": 14,
+          "sleeve": 0,
+          "rr": "2.00",
+          "headroom": 2354.8,
+          "reserve": 5700
+        },
+        {
+          "id": 15,
+          "sleeve": 0,
+          "rr": "2.00",
+          "headroom": 2354.8,
+          "reserve": 5700
+        },
+        {
+          "id": 16,
+          "sleeve": 0,
+          "rr": "2.00",
+          "headroom": 2354.8,
+          "reserve": 5700
+        },
+        {
+          "id": 17,
+          "sleeve": 0,
+          "rr": "2.00",
+          "headroom": 2354.8,
+          "reserve": 5700
+        },
+        {
+          "id": 31,
+          "sleeve": 0,
+          "rr": "2.00",
+          "headroom": 2354.8,
+          "reserve": 5700
+        },
+        {
+          "id": 32,
+          "sleeve": 0,
+          "rr": "2.00",
+          "headroom": 2354.8,
+          "reserve": 5700
+        },
+        {
+          "id": 66,
+          "sleeve": 0,
+          "rr": "2.00",
+          "headroom": 2354.8,
+          "reserve": 5700
+        },
+        {
+          "id": 67,
+          "sleeve": 0,
+          "rr": "2.00",
+          "headroom": 2354.8,
+          "reserve": 5700
+        },
+        {
+          "id": 68,
+          "sleeve": 0,
+          "rr": "2.00",
+          "headroom": 2354.8,
+          "reserve": 5700
+        },
+        {
+          "id": 69,
+          "sleeve": 0,
+          "rr": "2.00",
+          "headroom": 2354.8,
+          "reserve": 5700
+        },
+        {
+          "id": 70,
+          "sleeve": 0,
+          "rr": "2.00",
+          "headroom": 2354.8,
+          "reserve": 5700
+        },
+        {
+          "id": 72,
+          "sleeve": 0,
+          "rr": "2.00",
+          "headroom": 2354.8,
+          "reserve": 5700
+        },
+        {
+          "id": 73,
+          "sleeve": 0,
+          "rr": "2.00",
+          "headroom": 2354.8,
+          "reserve": 5700
+        },
+        {
+          "id": 74,
+          "sleeve": 0,
+          "rr": "2.00",
+          "headroom": 2354.8,
+          "reserve": 5700
+        }
+      ]
+    },
+    {
+      "at": "2026-03-26T00:00:00",
+      "alive": 20,
+      "occupied_sleeves": 1,
+      "distinct_headrooms": 1,
+      "largest_equal_headroom": 20,
+      "effective_headroom_groups": 1.0,
+      "total_headroom": 22891.0,
+      "total_positive_equity": 24891.0,
+      "accounts": [
+        {
+          "id": 4,
+          "sleeve": 0,
+          "rr": "2.00",
+          "headroom": 1144.55,
+          "reserve": 5700
+        },
+        {
+          "id": 9,
+          "sleeve": 0,
+          "rr": "2.00",
+          "headroom": 1144.55,
+          "reserve": 5700
+        },
+        {
+          "id": 10,
+          "sleeve": 0,
+          "rr": "2.00",
+          "headroom": 1144.55,
+          "reserve": 5700
+        },
+        {
+          "id": 11,
+          "sleeve": 0,
+          "rr": "2.00",
+          "headroom": 1144.55,
+          "reserve": 5700
+        },
+        {
+          "id": 12,
+          "sleeve": 0,
+          "rr": "2.00",
+          "headroom": 1144.55,
+          "reserve": 5700
+        },
+        {
+          "id": 13,
+          "sleeve": 0,
+          "rr": "2.00",
+          "headroom": 1144.55,
+          "reserve": 5700
+        },
+        {
+          "id": 14,
+          "sleeve": 0,
+          "rr": "2.00",
+          "headroom": 1144.55,
+          "reserve": 5700
+        },
+        {
+          "id": 15,
+          "sleeve": 0,
+          "rr": "2.00",
+          "headroom": 1144.55,
+          "reserve": 5700
+        },
+        {
+          "id": 16,
+          "sleeve": 0,
+          "rr": "2.00",
+          "headroom": 1144.55,
+          "reserve": 5700
+        },
+        {
+          "id": 17,
+          "sleeve": 0,
+          "rr": "2.00",
+          "headroom": 1144.55,
+          "reserve": 5700
+        },
+        {
+          "id": 31,
+          "sleeve": 0,
+          "rr": "2.00",
+          "headroom": 1144.55,
+          "reserve": 5700
+        },
+        {
+          "id": 32,
+          "sleeve": 0,
+          "rr": "2.00",
+          "headroom": 1144.55,
+          "reserve": 5700
+        },
+        {
+          "id": 66,
+          "sleeve": 0,
+          "rr": "2.00",
+          "headroom": 1144.55,
+          "reserve": 5700
+        },
+        {
+          "id": 67,
+          "sleeve": 0,
+          "rr": "2.00",
+          "headroom": 1144.55,
+          "reserve": 5700
+        },
+        {
+          "id": 68,
+          "sleeve": 0,
+          "rr": "2.00",
+          "headroom": 1144.55,
+          "reserve": 5700
+        },
+        {
+          "id": 69,
+          "sleeve": 0,
+          "rr": "2.00",
+          "headroom": 1144.55,
+          "reserve": 5700
+        },
+        {
+          "id": 70,
+          "sleeve": 0,
+          "rr": "2.00",
+          "headroom": 1144.55,
+          "reserve": 5700
+        },
+        {
+          "id": 72,
+          "sleeve": 0,
+          "rr": "2.00",
+          "headroom": 1144.55,
+          "reserve": 5700
+        },
+        {
+          "id": 73,
+          "sleeve": 0,
+          "rr": "2.00",
+          "headroom": 1144.55,
+          "reserve": 5700
+        },
+        {
+          "id": 74,
+          "sleeve": 0,
+          "rr": "2.00",
+          "headroom": 1144.55,
+          "reserve": 5700
+        }
+      ]
+    },
+    {
+      "at": "2026-03-27T00:00:00",
+      "alive": 20,
+      "occupied_sleeves": 1,
+      "distinct_headrooms": 1,
+      "largest_equal_headroom": 20,
+      "effective_headroom_groups": 1.0,
+      "total_headroom": 12425.0,
+      "total_positive_equity": 14425.0,
+      "accounts": [
+        {
+          "id": 4,
+          "sleeve": 0,
+          "rr": "2.00",
+          "headroom": 621.25,
+          "reserve": 5700
+        },
+        {
+          "id": 9,
+          "sleeve": 0,
+          "rr": "2.00",
+          "headroom": 621.25,
+          "reserve": 5700
+        },
+        {
+          "id": 10,
+          "sleeve": 0,
+          "rr": "2.00",
+          "headroom": 621.25,
+          "reserve": 5700
+        },
+        {
+          "id": 11,
+          "sleeve": 0,
+          "rr": "2.00",
+          "headroom": 621.25,
+          "reserve": 5700
+        },
+        {
+          "id": 12,
+          "sleeve": 0,
+          "rr": "2.00",
+          "headroom": 621.25,
+          "reserve": 5700
+        },
+        {
+          "id": 13,
+          "sleeve": 0,
+          "rr": "2.00",
+          "headroom": 621.25,
+          "reserve": 5700
+        },
+        {
+          "id": 14,
+          "sleeve": 0,
+          "rr": "2.00",
+          "headroom": 621.25,
+          "reserve": 5700
+        },
+        {
+          "id": 15,
+          "sleeve": 0,
+          "rr": "2.00",
+          "headroom": 621.25,
+          "reserve": 5700
+        },
+        {
+          "id": 16,
+          "sleeve": 0,
+          "rr": "2.00",
+          "headroom": 621.25,
+          "reserve": 5700
+        },
+        {
+          "id": 17,
+          "sleeve": 0,
+          "rr": "2.00",
+          "headroom": 621.25,
+          "reserve": 5700
+        },
+        {
+          "id": 31,
+          "sleeve": 0,
+          "rr": "2.00",
+          "headroom": 621.25,
+          "reserve": 5700
+        },
+        {
+          "id": 32,
+          "sleeve": 0,
+          "rr": "2.00",
+          "headroom": 621.25,
+          "reserve": 5700
+        },
+        {
+          "id": 66,
+          "sleeve": 0,
+          "rr": "2.00",
+          "headroom": 621.25,
+          "reserve": 5700
+        },
+        {
+          "id": 67,
+          "sleeve": 0,
+          "rr": "2.00",
+          "headroom": 621.25,
+          "reserve": 5700
+        },
+        {
+          "id": 68,
+          "sleeve": 0,
+          "rr": "2.00",
+          "headroom": 621.25,
+          "reserve": 5700
+        },
+        {
+          "id": 69,
+          "sleeve": 0,
+          "rr": "2.00",
+          "headroom": 621.25,
+          "reserve": 5700
+        },
+        {
+          "id": 70,
+          "sleeve": 0,
+          "rr": "2.00",
+          "headroom": 621.25,
+          "reserve": 5700
+        },
+        {
+          "id": 72,
+          "sleeve": 0,
+          "rr": "2.00",
+          "headroom": 621.25,
+          "reserve": 5700
+        },
+        {
+          "id": 73,
+          "sleeve": 0,
+          "rr": "2.00",
+          "headroom": 621.25,
+          "reserve": 5700
+        },
+        {
+          "id": 74,
+          "sleeve": 0,
+          "rr": "2.00",
+          "headroom": 621.25,
+          "reserve": 5700
+        }
+      ]
+    },
+    {
+      "at": "2026-03-31T00:00:00",
+      "alive": 20,
+      "occupied_sleeves": 1,
+      "distinct_headrooms": 1,
+      "largest_equal_headroom": 20,
+      "effective_headroom_groups": 1.0,
+      "total_headroom": 14796.0,
+      "total_positive_equity": 16796.0,
+      "accounts": [
+        {
+          "id": 4,
+          "sleeve": 0,
+          "rr": "2.00",
+          "headroom": 739.8,
+          "reserve": 5700
+        },
+        {
+          "id": 9,
+          "sleeve": 0,
+          "rr": "2.00",
+          "headroom": 739.8,
+          "reserve": 5700
+        },
+        {
+          "id": 10,
+          "sleeve": 0,
+          "rr": "2.00",
+          "headroom": 739.8,
+          "reserve": 5700
+        },
+        {
+          "id": 11,
+          "sleeve": 0,
+          "rr": "2.00",
+          "headroom": 739.8,
+          "reserve": 5700
+        },
+        {
+          "id": 12,
+          "sleeve": 0,
+          "rr": "2.00",
+          "headroom": 739.8,
+          "reserve": 5700
+        },
+        {
+          "id": 13,
+          "sleeve": 0,
+          "rr": "2.00",
+          "headroom": 739.8,
+          "reserve": 5700
+        },
+        {
+          "id": 14,
+          "sleeve": 0,
+          "rr": "2.00",
+          "headroom": 739.8,
+          "reserve": 5700
+        },
+        {
+          "id": 15,
+          "sleeve": 0,
+          "rr": "2.00",
+          "headroom": 739.8,
+          "reserve": 5700
+        },
+        {
+          "id": 16,
+          "sleeve": 0,
+          "rr": "2.00",
+          "headroom": 739.8,
+          "reserve": 5700
+        },
+        {
+          "id": 17,
+          "sleeve": 0,
+          "rr": "2.00",
+          "headroom": 739.8,
+          "reserve": 5700
+        },
+        {
+          "id": 31,
+          "sleeve": 0,
+          "rr": "2.00",
+          "headroom": 739.8,
+          "reserve": 5700
+        },
+        {
+          "id": 32,
+          "sleeve": 0,
+          "rr": "2.00",
+          "headroom": 739.8,
+          "reserve": 5700
+        },
+        {
+          "id": 66,
+          "sleeve": 0,
+          "rr": "2.00",
+          "headroom": 739.8,
+          "reserve": 5700
+        },
+        {
+          "id": 67,
+          "sleeve": 0,
+          "rr": "2.00",
+          "headroom": 739.8,
+          "reserve": 5700
+        },
+        {
+          "id": 68,
+          "sleeve": 0,
+          "rr": "2.00",
+          "headroom": 739.8,
+          "reserve": 5700
+        },
+        {
+          "id": 69,
+          "sleeve": 0,
+          "rr": "2.00",
+          "headroom": 739.8,
+          "reserve": 5700
+        },
+        {
+          "id": 70,
+          "sleeve": 0,
+          "rr": "2.00",
+          "headroom": 739.8,
+          "reserve": 5700
+        },
+        {
+          "id": 72,
+          "sleeve": 0,
+          "rr": "2.00",
+          "headroom": 739.8,
+          "reserve": 5700
+        },
+        {
+          "id": 73,
+          "sleeve": 0,
+          "rr": "2.00",
+          "headroom": 739.8,
+          "reserve": 5700
+        },
+        {
+          "id": 74,
+          "sleeve": 0,
+          "rr": "2.00",
+          "headroom": 739.8,
+          "reserve": 5700
+        }
+      ]
+    },
+    {
+      "at": "2026-04-01T00:00:00",
+      "alive": 20,
+      "occupied_sleeves": 1,
+      "distinct_headrooms": 1,
+      "largest_equal_headroom": 20,
+      "effective_headroom_groups": 1.0,
+      "total_headroom": 35759.0,
+      "total_positive_equity": 37759.0
+    },
+    {
+      "at": "2026-05-01T00:00:00",
+      "alive": 20,
+      "occupied_sleeves": 1,
+      "distinct_headrooms": 1,
+      "largest_equal_headroom": 20,
+      "effective_headroom_groups": 1.0,
+      "total_headroom": 73664.0,
+      "total_positive_equity": 75664.0
+    },
+    {
+      "at": "2026-06-01T00:00:00",
+      "alive": 20,
+      "occupied_sleeves": 1,
+      "distinct_headrooms": 1,
+      "largest_equal_headroom": 20,
+      "effective_headroom_groups": 1.0,
+      "total_headroom": 117051.0,
+      "total_positive_equity": 119051.0
+    },
+    {
+      "at": "2026-07-01T00:00:00",
+      "alive": 20,
+      "occupied_sleeves": 1,
+      "distinct_headrooms": 1,
+      "largest_equal_headroom": 20,
+      "effective_headroom_groups": 1.0,
+      "total_headroom": 81400.0,
+      "total_positive_equity": 83400.0
+    }
+  ],
+  "acquisition": {
+    "policy": {
+      "name": "monthly_current_slot_replacements",
+      "initial_cash_usd": 5000,
+      "monthly_contribution_usd": 200,
+      "max_live_accounts": 20,
+      "replacement_target": 1,
+      "reinvest_fraction": 1,
+      "restart_when_empty": false,
+      "spare_capacity": 2,
+      "passes_per_month": 0,
+      "evaluation": {
+        "profit_target_usd": 1500,
+        "trailing_drawdown_usd": 1500,
+        "monthly_fee_usd": 33,
+        "activation_fee_usd": 125,
+        "contracts": 3
+      },
+      "evaluations_at_once": 20,
+      "persistent_demand": true,
+      "evaluation_start_interval_days": 7,
+      "evaluations_reserve_seats": true,
+      "activate_on_first_check": true
+    },
+    "owner_contributions_usd": 20600.0,
+    "payouts_received_usd": 471811.38,
+    "purchase_spend_usd": 14728.0,
+    "ending_owner_cash_usd": 477683.38,
+    "net_cash_created_usd": 457083.38,
+    "cash_limited_decisions": 0,
+    "capacity_limited_decisions": 0,
+    "cash_identity_residual_usd": 0.0,
+    "spares_shelved": 74,
+    "spares_unused_at_end": 0,
+    "supply_limited_decisions": 784,
+    "evaluations_started": 75,
+    "evaluation_months_paid": 166,
+    "evaluation_resets": 86,
+    "evaluations_passed": 74,
+    "evaluations_activated": 74,
+    "evaluations_cancelled": 1,
+    "evaluations_in_flight_at_end": 0,
+    "evaluation_fees_usd": 5478.0,
+    "activation_fees_usd": 9250.0
+  },
+  "audit": {
+    "copies_checked": 125748,
+    "assignment_and_overlap_checked": true,
+    "reserve_enforced_on_payouts": 561,
+    "cash_reconciled": true
+  }
+}
