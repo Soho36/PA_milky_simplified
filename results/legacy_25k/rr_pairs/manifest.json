@@ -1,0 +1,60 @@
+{
+  "spec": {
+    "source": "results/legacy_25k/rr_curves",
+    "output": "results/legacy_25k/rr_pairs",
+    "lower_rr": [
+      "0.50",
+      "0.75",
+      "1.00"
+    ],
+    "higher_rr": [
+      "1.50",
+      "1.75",
+      "2.00",
+      "2.25",
+      "2.50",
+      "2.75",
+      "3.00",
+      "3.25",
+      "3.50"
+    ],
+    "lower_weights": [
+      0.25,
+      0.5,
+      0.75
+    ]
+  },
+  "source_audit_sha256": "609cc5cdc39b4d79add7905756ff2209e62cced4d80d1984f6b5a11f5044aae7",
+  "source_contract_sha256": "a18ab1233d36ff5888cd1c35f2ba8eb2a307a78cf731f7ddcb20638a01b7974a",
+  "source_independent_audit_sha256": "3af45205b64252586b0869c5eb5b5bb98e3529bc68d2a6ef0f4d493aaddb8e10",
+  "code": {
+    "scripts\\study_rr_pairs.py": "4e262d7e83d27ecb97e57f3a8350b8165f53362dc09bebe8707c49b9c7825dec",
+    "scripts\\rr_curve_support.py": "728c04221bd692698dd0b3df9e33dc20c3453f6f51a9c08b23566bcb4cc9f34a",
+    "config\\studies\\legacy_25k_rr_pairs.json": "0e8d2ea986af8d2bd16b01af8cd9cbd0a9c8cbf4f897d5cd453b7fe9d2ae1bcd",
+    "research\\legacy_25k\\RR_PAIRS.md": "3e64a944ad223db5bb172d0e8822a067a985c366ad6a0e7b5af386c7025311be"
+  },
+  "checks": {
+    "weighted_curve_reconstructions": 2726,
+    "source_curve_matches": 1160,
+    "allocation_failure_invariants": 16356,
+    "source_failure_matches": 6960,
+    "weighted_failure_brute_force_matches": 2349,
+    "endpoint_failure_matches": 9396
+  },
+  "cohorts": 29,
+  "portfolios": 94,
+  "comparisons": 2726,
+  "failure_comparisons": 16356,
+  "python_version": "3.12.9 (tags/v3.12.9:fdb8142, Feb  4 2025, 15:27:58) [MSC v.1942 64 bit (AMD64)]",
+  "matplotlib_version": "3.11.2",
+  "files": {
+    "allocation_sensitivity.png": "e81d178d0f97f980c7fb21b257c9eb6ed3a6c657f3fd0d9aa948ea940519a05b",
+    "allocation_sensitivity.svg": "29869bbd2eba246536f2aad14d53e2b29f421305ec884eae677c5a1343ea40ae",
+    "comparison.csv": "ab3cd256424305820b5b086133c8fea67f429910cc60fb7abf35949e885b2517",
+    "failure_comparison.csv": "3c28b3ba219500bde8ef79a47dd8a7bbe5318d2319524b608f93112b6d2a439a",
+    "failure_concentration.png": "fd4432c9fadde30b5348bcfa378836dcbb4d9ed5676ecd45dba10324b7badcbf",
+    "failure_concentration.svg": "ae4604aea4487b9914dd95e8992439c6b526a198d1aadb9753102d09dc7afdb0",
+    "rr_pairs__REPORT.generated.md": "a89db942507a17b6f40c22870b201aae8870acf3f519e090ae4128fdabae347e",
+    "summary.csv": "73fd959a6e0636b2b85f6088bad5df20c74c5084bb8a56b4daa1b85c27b07386"
+  }
+}

@@ -1,5 +1,32 @@
 # Legacy 25K: current findings
 
+**Lower/higher RR allocation sensitivity:** the
+[focused pair study](../../results/legacy_25k/rr_pairs/rr_pairs__REPORT.generated.md)
+tests 81 allocations using the same audited paths. RR2.50 gives the lowest
+mean curve drawdown within all nine lower-RR/allocation groups, but raising
+RR0.50 from 50% to 75% saves only about $54 of average drawdown while increasing
+the mean fraction of failed accounts from 34.8% to 39.1%. RR1.75 alone has
+smaller average five-day failure clusters than every tested mixture; some
+mixtures nevertheless have fewer windows with complete loss. Curve smoothing,
+account losses and continuity remain separate outcomes. A
+[no-TP/session-close MT5 run brief](SESSION_CLOSE_RUN.md) is prepared; the
+closing boundary and native exports are still outstanding.
+
+**Synchronized RR curves, with operating policies removed:** the
+[curve and failure-marker study](../../results/legacy_25k/rr_curves/rr_curves__REPORT.generated.md)
+compares 13 RR settings, all 78 equal-weight pairs and five larger mixtures at
+matched nominal exposure. Across 23 overlapping twelve-month windows, the
+historically screened RR0.50/2.50 pair lowers mean realized maximum drawdown
+14.6% versus RR1, but beats every constituent in only five windows. Wide4's
+drawdown advantage weakens in later windows. At $1,500 fixed starting headroom,
+the pair reduces windows with every constituent breached from 8/23 to 3/23,
+while leaving the mean fraction breached unchanged. Five-day clustering improves
+only slightly. No $6,800 fixed-floor breaches occur, so that budget cannot rank
+failure timing. These are realized paths and interval-based excursion markers,
+not exact combined open equity or fresh-PA trailing-floor outcomes. See the
+[frozen protocol](RR_CURVES.md); the strongest pair is an exploratory candidate,
+not an independently validated optimum.
+
 **RR composition and reserve ladders:** [730-run follow-up](../../results/legacy_25k/rr_followup/rr_followup__FINDINGS.md)
 finds that composition matters and twenty RR groups do not consistently improve
 on fewer groups. The original wide mix remains the only tested portfolio with
