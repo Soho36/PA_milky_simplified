@@ -5,6 +5,7 @@ paths; there is no need to browse the full results tree to follow the research.
 
 | Question | Evidence | Scope |
 |---|---|---|
+| Do RR and GG protect against each other's failures? | [Cross-strategy findings](../../results/legacy_25k/rr_gg_episodes/rr_gg_episodes__FINDINGS.md) and [protocol](RR_GG_EPISODES.md) | 169 RR–GG pairs, 26 homogeneous controls, synchronized quarters and period/grouping sensitivities; validated GG replacements |
 | Do RRs fail in distinct historical episodes? | [Dated episode report](../../results/legacy_25k/rr_episodes/rr_episodes__REPORT.generated.md) and [protocol](RR_EPISODES.md) | 26 non-overlapping quarters, monthly/six-month sensitivities, common dated failure groups, and provisional RR1000 validation |
 | Which lower/higher RR pair and allocation helps? | [Pair sensitivity report](../../results/legacy_25k/rr_pairs/rr_pairs__REPORT.generated.md) and [protocol](RR_PAIRS.md) | 81 mixtures, 13 controls, same 29 synchronized cohorts; 25/50/75% lower-RR allocation; separate curve and first-failure outcomes |
 | Does mixing RR paths help without deployment or withdrawal policies? | [Synchronized curve study](../../results/legacy_25k/rr_curves/rr_curves__REPORT.generated.md) and [protocol](RR_CURVES.md) | 29 common-start cohorts; 13 RRs; 97 portfolios; normalized realized curves and separate fixed-floor failure markers; all pairs screened historically |

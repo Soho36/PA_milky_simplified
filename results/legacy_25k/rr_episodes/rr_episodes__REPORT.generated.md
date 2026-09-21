@@ -24,6 +24,17 @@ The longest hold runs from **2025-03-11 04:07:40 to 2025-03-31 14:29:20**. Other
 - July–August 2024 and April 2025: both breach in the same common episode.
 - May versus June 2022 is less decisive: both fail in the same quarter. A 20-date grouping separates their breaches, while 40 dates merges them. The other examples above do not depend on counting that May/June split as two episodes.
 
+## The primary test used 26 non-overlapping quarters, with identical $1,500 starting headroom and no withdrawals or replacements:
+| Period | RR0.50 | RR2.50 |
+|---|---|---|
+| March 2020 | Survives | Fails |
+| May–June 2021 | Fails | Survives |
+| January 2022 | Survives | Fails |
+| October 2023 | Fails | Survives |
+| July–August 2024 | Fails | Fails |
+| April 2025 | Fails | Fails |
+| March 2026 | Survives | Fails |
+
 ## Individual failures
 
 | RR | Eligible quarters | Failed quarters | Excluded quarters |

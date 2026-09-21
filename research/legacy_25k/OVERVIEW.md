@@ -1,5 +1,22 @@
 # Legacy 25K: current findings
 
+**GG-to-GG independently:** the [GG-only study](../../results/legacy_25k/gg_pairs/gg_pairs__REPORT.md)
+compares all 78 GG pairs and 13 homogeneous GG controls, with GG-only episode
+boundaries. GG r/r 0.50/1.00 shows reciprocal separation but both components
+still fail in 5/26 quarters, the same count as GG 1.25 alone, while losing
+more individual accounts and earning less average P&L. GG 1.25 and 1.50 have
+identical quarterly failure sets. This analysis does not select a combined
+RR/GG allocation.
+
+**RR versus GG:** the [cross-strategy screen](../../results/legacy_25k/rr_gg_episodes/rr_gg_episodes__FINDINGS.md)
+follows validated replacement of GG windows 13-14 and 16-17. All 6,923 effective
+GG trade/stat pairs pass; 233 truncated runs were extended with old trade
+values preserved. Across 169 strategy/setting pairs, RR r/r 0.50 with GG r/r
+1.00–1.50 shows reciprocal protection, but none reduces both-failed quarters
+below the RR 0.50/RR 2.50 benchmark's 3/26. GG 1.25/1.50 has one fewer
+constituent failed quarter and smaller average pair drawdown, with lower
+average P&L. Lower overlap ratios alone can reward extra GG-only failures.
+
 **Dated failure episodes:** the
 [episode study](../../results/legacy_25k/rr_episodes/rr_episodes__REPORT.generated.md)
 uses fresh $1,500-headroom accounts in 26 non-overlapping quarters, with monthly
