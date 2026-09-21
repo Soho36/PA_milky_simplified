@@ -5,6 +5,7 @@ paths; there is no need to browse the full results tree to follow the research.
 
 | Question | Evidence | Scope |
 |---|---|---|
+| Do RRs fail in distinct historical episodes? | [Dated episode report](../../results/legacy_25k/rr_episodes/rr_episodes__REPORT.generated.md) and [protocol](RR_EPISODES.md) | 26 non-overlapping quarters, monthly/six-month sensitivities, common dated failure groups, and provisional RR1000 validation |
 | Which lower/higher RR pair and allocation helps? | [Pair sensitivity report](../../results/legacy_25k/rr_pairs/rr_pairs__REPORT.generated.md) and [protocol](RR_PAIRS.md) | 81 mixtures, 13 controls, same 29 synchronized cohorts; 25/50/75% lower-RR allocation; separate curve and first-failure outcomes |
 | Does mixing RR paths help without deployment or withdrawal policies? | [Synchronized curve study](../../results/legacy_25k/rr_curves/rr_curves__REPORT.generated.md) and [protocol](RR_CURVES.md) | 29 common-start cohorts; 13 RRs; 97 portfolios; normalized realized curves and separate fixed-floor failure markers; all pairs screened historically |
 | Is RR diversification driven by composition, group count or reserve dispersion? | [Follow-up findings](../../results/legacy_25k/rr_followup/rr_followup__FINDINGS.md) and [protocol](RR_FOLLOWUP.md) | 730 cases; 36 homogeneous controls; 2вЂ“20 RR groups; matched-mean reserve ladders; within/across-group failures and assignment-order checks |

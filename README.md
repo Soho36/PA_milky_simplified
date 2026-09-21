@@ -8,6 +8,7 @@ historical trade tapes; it does not establish future returns or a universal opti
 | Read / do | Entry point |
 |---|---|
 | Understand the current conclusions | [Legacy 25K overview](research/legacy_25k/OVERVIEW.md) |
+| Identify distinct RR failure episodes and inspect RR1000 | [Dated episode study](results/legacy_25k/rr_episodes/rr_episodes__REPORT.generated.md), [protocol](research/legacy_25k/RR_EPISODES.md) |
 | Compare lower/higher RR pairs and allocations | [Pair sensitivity report](results/legacy_25k/rr_pairs/rr_pairs__REPORT.generated.md), [session-close MT5 run brief](research/legacy_25k/SESSION_CLOSE_RUN.md) |
 | Isolate RR curve smoothing and coincident failures | [Synchronized curve study](results/legacy_25k/rr_curves/rr_curves__REPORT.generated.md), [protocol](research/legacy_25k/RR_CURVES.md) |
 | Separate RR composition, group count and reserve ladders | [730-run follow-up findings](results/legacy_25k/rr_followup/rr_followup__FINDINGS.md), [protocol](research/legacy_25k/RR_FOLLOWUP.md) |

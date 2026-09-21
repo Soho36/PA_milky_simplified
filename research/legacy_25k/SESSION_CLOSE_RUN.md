@@ -1,10 +1,15 @@
 # Additional MT5 experiment: no take-profit, session-close exit
 
-Status: run brief prepared; no EA source, tester settings or session-close
-exports were found in this repository. No MT5 run has been launched here.
-The closing boundary still needs clarification: the existing per-window
-forced close, or the final close of the trading day. The repository's modelled
-01:00-23:59 session is descriptive and is not evidence of the EA's close rule.
+Status updated 2026-09-21: the user supplied the all-hours RR1000 export and
+stats and confirmed unchanged entry/stop settings, with intended flattening
+at 23:30. See the [episode study](../../results/legacy_25k/rr_episodes/rr_episodes__REPORT.generated.md)
+and [validation evidence](../../results/legacy_25k/rr_episodes/session_validation.json).
+All 5,430 trades reconcile; maximum MFE is 79.07R, so the distant TP is not
+observed to fire. However, 73 positions cross dates, including a 20-day hold
+in March 2025. The tape is usable as an observed alternative, provisionally;
+it does not verify unconditional daily flattening. EA session-clock handling
+and tester logs need investigation before calling it a clean daily-close arm.
+No source data were replaced. The original desired experiment remains below.
 
 ## Experimental change
 
@@ -26,11 +31,14 @@ unintended changes. Use ample starting balance to complete the entire history
 without tester account failure; preserve fixed sizing rather than scaling
 lots with that larger balance.
 
-Run all 23 source windows (1-2 through 23-24) over the same historical interval
-as the corrected sweeps. GG exports are not needed for this study. Longer
-holding changes which later entries a single account can accept: retain
-native entry/exit timestamps so the existing while-flat routing can make
-that decision. Do not reuse finite-RR accepted trades with altered exit P&L.
+For the clean follow-up to the supplied all-hours run, export RR1.00 and
+RR1000 with the same all-hours setup and historical interval. This provides
+a direct control for the different entry opportunity set; the current finite
+RR controls were assembled from 23 separate source-window runs. GG exports
+are not needed. Longer holding changes which later entries a single account
+can accept: retain native entry/exit timestamps. Do not reuse finite-RR
+accepted trades with altered exit P&L, and do not force the single all-hours
+tape into 23 fictitious window exports.
 
 ## Deliverables and checks
 

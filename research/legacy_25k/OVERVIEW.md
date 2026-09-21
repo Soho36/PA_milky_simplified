@@ -1,5 +1,16 @@
 # Legacy 25K: current findings
 
+**Dated failure episodes:** the
+[episode study](../../results/legacy_25k/rr_episodes/rr_episodes__REPORT.generated.md)
+uses fresh $1,500-headroom accounts in 26 non-overlapping quarters, with monthly
+and six-month sensitivities. RR0.50 and RR2.50 fail in different historical
+periods on both sides: the primary dated grouping yields two shared episodes,
+three RR0.50-only and four RR2.50-only episodes. Reciprocal separation remains
+under wider grouping and the alternative period lengths. Shared crises remain.
+The new all-hours RR1000 export reconciles internally and never reaches its
+target, but has 73 cross-date positions (one lasting 20 days); it remains a
+provisional observed alternative pending checks of the intended daily close.
+
 **Lower/higher RR allocation sensitivity:** the
 [focused pair study](../../results/legacy_25k/rr_pairs/rr_pairs__REPORT.generated.md)
 tests 81 allocations using the same audited paths. RR2.50 gives the lowest
@@ -9,8 +20,8 @@ the mean fraction of failed accounts from 34.8% to 39.1%. RR1.75 alone has
 smaller average five-day failure clusters than every tested mixture; some
 mixtures nevertheless have fewer windows with complete loss. Curve smoothing,
 account losses and continuity remain separate outcomes. A
-[no-TP/session-close MT5 run brief](SESSION_CLOSE_RUN.md) is prepared; the
-closing boundary and native exports are still outstanding.
+[no-TP/session-close MT5 run brief](SESSION_CLOSE_RUN.md) now links the supplied
+RR1000 export validation and the unresolved multi-day holding behavior.
 
 **Synchronized RR curves, with operating policies removed:** the
 [curve and failure-marker study](../../results/legacy_25k/rr_curves/rr_curves__REPORT.generated.md)
