@@ -5,6 +5,7 @@ paths; there is no need to browse the full results tree to follow the research.
 
 | Question | Evidence | Scope |
 |---|---|---|
+| Can any RR or GG setting survive the three common failed quarters? | [Full-grid survivor findings](../../results/legacy_25k/common_quarter_survivors/FINDINGS.md) and [design](COMMON_QUARTER_SURVIVORS.md) | 602 settings at 0.01 steps; Q2 2022, Q3 2024 and Q2 2025; all-quarter context for survivors |
 | Can GG settings diversify each other independently? | [GG episode study](GG_EPISODES.md) and [full report](../../results/legacy_25k/gg_pairs/gg_pairs__REPORT.md) | 78 GG-only pairs, 13 individual controls, GG-only episode boundaries; no clearly preferable GG pair established |
 | Which RR setting complements the individual GG benchmark? | [RR-to-GG candidate readout](RR_GG_CANDIDATES.md) | Re-examination of the existing 169-pair grid, with GG r/r 1.25 controls and the RR-only benchmark; no new simulation |
 | Do RR and GG protect against each other's failures? | [Cross-strategy findings](../../results/legacy_25k/rr_gg_episodes/rr_gg_episodes__FINDINGS.md) and [protocol](RR_GG_EPISODES.md) | 169 RR–GG pairs, 26 homogeneous controls, synchronized quarters and period/grouping sensitivities; validated GG replacements |

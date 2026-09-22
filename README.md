@@ -8,6 +8,7 @@ historical trade tapes; it does not establish future returns or a universal opti
 | Read / do | Entry point |
 |---|---|
 | Understand the current conclusions | [Legacy 25K overview](research/legacy_25k/OVERVIEW.md) |
+| Find settings surviving the three shared failure quarters | [Full-grid survivor findings](results/legacy_25k/common_quarter_survivors/FINDINGS.md), [design](research/legacy_25k/COMMON_QUARTER_SURVIVORS.md) |
 | Find diversification within GG independently | [GG episode study guide](research/legacy_25k/GG_EPISODES.md), [full pair report](results/legacy_25k/gg_pairs/gg_pairs__REPORT.md) |
 | Choose a cross-strategy candidate after the GG study | [RR-to-GG candidate readout](research/legacy_25k/RR_GG_CANDIDATES.md) |
 | Compare RR and GG failure episodes | [Cross-strategy findings](results/legacy_25k/rr_gg_episodes/rr_gg_episodes__FINDINGS.md), [protocol](research/legacy_25k/RR_GG_EPISODES.md) |

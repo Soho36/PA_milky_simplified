@@ -1,5 +1,16 @@
 # Legacy 25K: current findings
 
+**Survivors of the three common failure quarters:** the
+[full-grid search](../../results/legacy_25k/common_quarter_survivors/FINDINGS.md)
+tests 602 RR/GG settings at 0.01 steps. None survives Q2 2022 or Q2 2025
+at $1,500 fixed starting headroom. Only RR survives Q3 2024, at r/r
+0.59–0.61 and 0.77–1.21. The former band retains just $4.55–$8.05 at its
+worst point; RR 1.00 retains $415.65. Adding a surviving component to an
+existing candidate pair reduces the historical common failure set from
+three quarters to two, but replacing a component can merely exchange
+Q3 2024 for Q1 2026. This is a targeted historical screen, not a validated
+operating allocation.
+
 **GG-to-GG independently:** the [GG episode study guide](GG_EPISODES.md) and
 [full GG-only report](../../results/legacy_25k/gg_pairs/gg_pairs__REPORT.md)
 compares all 78 GG pairs and 13 homogeneous GG controls, with GG-only episode
