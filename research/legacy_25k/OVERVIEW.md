@@ -1,6 +1,7 @@
 # Legacy 25K: current findings
 
-**GG-to-GG independently:** the [GG-only study](../../results/legacy_25k/gg_pairs/gg_pairs__REPORT.md)
+**GG-to-GG independently:** the [GG episode study guide](GG_EPISODES.md) and
+[full GG-only report](../../results/legacy_25k/gg_pairs/gg_pairs__REPORT.md)
 compares all 78 GG pairs and 13 homogeneous GG controls, with GG-only episode
 boundaries. GG r/r 0.50/1.00 shows reciprocal separation but both components
 still fail in 5/26 quarters, the same count as GG 1.25 alone, while losing
@@ -8,7 +9,11 @@ more individual accounts and earning less average P&L. GG 1.25 and 1.50 have
 identical quarterly failure sets. This analysis does not select a combined
 RR/GG allocation.
 
-**RR versus GG:** the [cross-strategy screen](../../results/legacy_25k/rr_gg_episodes/rr_gg_episodes__FINDINGS.md)
+**RR versus GG:** the [candidate readout](RR_GG_CANDIDATES.md) revisits the existing grid:
+RR r/r 0.50 + GG r/r 1.25 has reciprocal protection (two unique failed quarters
+per side) and three shared failure quarters, versus five for either setting
+alone. RR r/r 2.50 + GG r/r 1.25 shares every GG-failed quarter.
+The [cross-strategy screen](../../results/legacy_25k/rr_gg_episodes/rr_gg_episodes__FINDINGS.md)
 follows validated replacement of GG windows 13-14 and 16-17. All 6,923 effective
 GG trade/stat pairs pass; 233 truncated runs were extended with old trade
 values preserved. Across 169 strategy/setting pairs, RR r/r 0.50 with GG r/r

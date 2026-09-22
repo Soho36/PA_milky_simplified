@@ -8,7 +8,8 @@ historical trade tapes; it does not establish future returns or a universal opti
 | Read / do | Entry point |
 |---|---|
 | Understand the current conclusions | [Legacy 25K overview](research/legacy_25k/OVERVIEW.md) |
-| Find diversification within GG independently | [GG-only pair study](results/legacy_25k/gg_pairs/gg_pairs__REPORT.md) |
+| Find diversification within GG independently | [GG episode study guide](research/legacy_25k/GG_EPISODES.md), [full pair report](results/legacy_25k/gg_pairs/gg_pairs__REPORT.md) |
+| Choose a cross-strategy candidate after the GG study | [RR-to-GG candidate readout](research/legacy_25k/RR_GG_CANDIDATES.md) |
 | Compare RR and GG failure episodes | [Cross-strategy findings](results/legacy_25k/rr_gg_episodes/rr_gg_episodes__FINDINGS.md), [protocol](research/legacy_25k/RR_GG_EPISODES.md) |
 | Identify distinct RR failure episodes and inspect RR1000 | [Dated episode study](results/legacy_25k/rr_episodes/rr_episodes__REPORT.generated.md), [protocol](research/legacy_25k/RR_EPISODES.md) |
 | Compare lower/higher RR pairs and allocations | [Pair sensitivity report](results/legacy_25k/rr_pairs/rr_pairs__REPORT.generated.md), [session-close MT5 run brief](research/legacy_25k/SESSION_CLOSE_RUN.md) |
