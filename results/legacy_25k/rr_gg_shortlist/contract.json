@@ -1,0 +1,449 @@
+{
+  "arms": {
+    "RR:0.50": [
+      "RR:0.50"
+    ],
+    "RR:1.00": [
+      "RR:1.00"
+    ],
+    "RR:2.50": [
+      "RR:2.50"
+    ],
+    "GG:1.25": [
+      "GG:1.25"
+    ],
+    "rr_pair": [
+      "RR:0.50",
+      "RR:2.50"
+    ],
+    "cross_pair": [
+      "RR:0.50",
+      "GG:1.25"
+    ],
+    "rr_triple": [
+      "RR:0.50",
+      "RR:2.50",
+      "RR:1.00"
+    ],
+    "cross_triple": [
+      "RR:0.50",
+      "GG:1.25",
+      "RR:1.00"
+    ]
+  },
+  "config": {
+    "schema_version": "pa_milky_simplified.scenario.v1",
+    "scenario": "full_rulebook_monthly_500",
+    "brick": null,
+    "brick_name": "full_rulebook_monthly_500",
+    "description": "Headline. Every Apex payout rule switched on, and our own behaviour is to request $500 -- the firm's minimum -- from each account every calendar month, carrying unpayable months as a backlog.",
+    "data": {
+      "sweeps_root": "1_sweeps",
+      "strategy": "RR",
+      "risk_reward": "1.00",
+      "expected_windows": 23,
+      "expected_trades": 12658
+    },
+    "execution": {
+      "contracts_per_copy": 1,
+      "commission_usd_per_mnq_round_turn": 1.05,
+      "slippage_ticks": 0,
+      "concurrency": "unlimited",
+      "path_order": "mae_first",
+      "commission_applies_to_excursions": false
+    },
+    "product": {
+      "product": "Apex Legacy 25K PA",
+      "starting_balance_usd": 25000.0,
+      "trailing_drawdown_usd": 1500.0,
+      "frozen_floor_profit_usd": 100.0,
+      "threshold_touch_fails": true,
+      "purchase_fee_usd": 200.0
+    },
+    "book": {
+      "cadence": "one_new_pa_per_calendar_month",
+      "activation_moment": "first_instant_of_calendar_month",
+      "max_accounts": null,
+      "replace_on_death": false
+    },
+    "firm_rules": {
+      "consistency": {
+        "enabled": true,
+        "max_day_fraction": 0.3,
+        "applies_through_payout": 5
+      },
+      "denial_on_shortfall": {
+        "enabled": true
+      },
+      "maximum_payout": {
+        "enabled": true,
+        "amount_usd": 1500.0,
+        "applies_through_payout": 5
+      },
+      "minimum_balance": {
+        "enabled": true,
+        "balance_usd": 26600.0
+      },
+      "minimum_payout": {
+        "enabled": true,
+        "amount_usd": 500.0
+      },
+      "processing_delay": {
+        "enabled": false,
+        "days": 0
+      },
+      "profit_split": {
+        "enabled": true,
+        "mode": "cumulative_threshold",
+        "full_rate_threshold_usd": 25000.0,
+        "reduced_rate": 0.9,
+        "full_rate_from_payout": 6
+      },
+      "profitable_days": {
+        "enabled": true,
+        "required_days": 5,
+        "profit_threshold_usd": 50.0
+      },
+      "safety_net": {
+        "enabled": true,
+        "net_balance_usd": 26600.0,
+        "encroachment_allowance_usd": 500.0,
+        "applies_through_payout": 3
+      },
+      "trading_days": {
+        "enabled": true,
+        "required_days": 8
+      }
+    },
+    "policy": {
+      "name": "monthly_500",
+      "cadence": "calendar_month",
+      "amount_usd": 500.0,
+      "amount_rule": "fixed",
+      "shortfall": "accrue_backlog",
+      "quantize_to_amount": true,
+      "min_retained_balance_usd": null,
+      "terminal_withdrawal": "none"
+    }
+  },
+  "operating": {
+    "initial_cash_usd": 5000,
+    "monthly_contribution_usd": 200,
+    "max_live_accounts": 20,
+    "spare_capacity": 2,
+    "evaluations_at_once": 5,
+    "evaluation_start_interval_days": 7,
+    "persistent_demand": false,
+    "evaluations_reserve_seats": true
+  },
+  "engine": {
+    "files": {
+      "__init__.py": {
+        "sha256": "708d97868064b3f2b9b1579a5aa7c65d8406931f1e655d27e40781e64ad163ea",
+        "bytes": 222
+      },
+      "__main__.py": {
+        "sha256": "e34737246c4338a78411d7cac39a3a03c13fae12bd7c5bfc01896677e9e0b5c2",
+        "bytes": 119
+      },
+      "ablation.py": {
+        "sha256": "84b62115c67e6505160050bff261816ac37468142c727e3f097a726fa87f01ff",
+        "bytes": 10620
+      },
+      "account.py": {
+        "sha256": "3b3a1111cf49501aae0ebf1ee4c4c63645ac4292b6e30dd0529557b33b1143ea",
+        "bytes": 9545
+      },
+      "acquisition.py": {
+        "sha256": "cda87ee356fbd756af2e2c1dd1c2f9d5a060a5fc37e25804f6511160c404d176",
+        "bytes": 22871
+      },
+      "cli.py": {
+        "sha256": "46a4ac9bfc589e1a54c6bb48ed597737d2426efcb6d1a69dc239965ab9940a88",
+        "bytes": 6658
+      },
+      "clock.py": {
+        "sha256": "4cc55b459f517b680d005214ab6e2a3cdc5a9fd09af2d633e2c0ed90336a9e21",
+        "bytes": 4320
+      },
+      "config.py": {
+        "sha256": "4731799f81b58ef9e5a7222fbd3f9283ff7a43439c16a761af427125ef24f9ec",
+        "bytes": 12447
+      },
+      "dispersion_metrics.py": {
+        "sha256": "cd952d642e788e94f681fb28560964d4b2a469e87bd89add050cc4e695d96a25",
+        "bytes": 3493
+      },
+      "economics.py": {
+        "sha256": "1cea28f76ff21589b3a2e419e4f8bebe4694496162e2746a5db93259ed2c7606",
+        "bytes": 7309
+      },
+      "evaluation.py": {
+        "sha256": "e72abe2761b776be94f633d6e58b0664c175042832d050000f91656c8fb72591",
+        "bytes": 6039
+      },
+      "firm.py": {
+        "sha256": "32e22903cd1d48055b8bdb85372e11bcf04b839f01bd14ae65adc21edc0b6cae",
+        "bytes": 13722
+      },
+      "loader.py": {
+        "sha256": "caa9a3025006b9ef5be60c2d68e77f04564713c19c69a14f0d8fefffc2618279",
+        "bytes": 13098
+      },
+      "payouts.py": {
+        "sha256": "213f32082007f3196baaf034cc83c9445587b503fc8df39bce6c0143bcb10195",
+        "bytes": 9044
+      },
+      "pipeline_metrics.py": {
+        "sha256": "794cfbc5cdcd00be8ab9829a6ea570df3db99ae551d7a6d160ec877c020d8f47",
+        "bytes": 3570
+      },
+      "policy.py": {
+        "sha256": "5d317393ad4c749413ddc3c49cd74fb51dd3a998d290218252919a08dd4e89c8",
+        "bytes": 5093
+      },
+      "policy_study.py": {
+        "sha256": "d80da1117fcdbf31a13d4e87249dcd6857117b43722a501b1a3e97dd167a9a3f",
+        "bytes": 5502
+      },
+      "provenance.py": {
+        "sha256": "dbc42fd3777dd7e061ac5ae1ae5a53d6692eb6badf4810a5537b8e74e0b68e91",
+        "bytes": 12665
+      },
+      "report.py": {
+        "sha256": "a1fd78ce9e3a561e187b32d39ab04c7b88d083ba153d2e39cbff460f9c5e9724",
+        "bytes": 26277
+      },
+      "reserve_metrics.py": {
+        "sha256": "b8387587558205c9d99e99f78e2dd61878396d6c7885705b5e7087eaefa96789",
+        "bytes": 3234
+      },
+      "routing.py": {
+        "sha256": "a6a41339ae70ed22cb97d8324eacf4b48b5353a06b8b48e109eb646077a43ce5",
+        "bytes": 8612
+      },
+      "routing_study.py": {
+        "sha256": "d7f387dc974f8915e291fbf24ea3f188a6e43429b6e00e8546890060549b8169",
+        "bytes": 6532
+      },
+      "rr_diversification.py": {
+        "sha256": "14abb6d04aadba4a5b4eb61cfa6fb015bea8b63b94e964140ecabb4012346a0e",
+        "bytes": 7025
+      },
+      "simulator.py": {
+        "sha256": "b55a9ac81d47aff29cb6ba4a8976257907a943139118772200467033dc28e3e7",
+        "bytes": 18949
+      },
+      "study_config.py": {
+        "sha256": "210c1e8c215603c3b77b5e0ffb9893cdae08357773bcc0670dfee51722e058cd",
+        "bytes": 2678
+      },
+      "study_reports.py": {
+        "sha256": "7a6d6875348ce84eed6ac1f54fad86adc008c5d23cf26d7921c79f769362979c",
+        "bytes": 459
+      }
+    },
+    "combined_sha256": "921d623d830b7badafb8a28dc50dab92626da568975ebf058d65df2ecab4a0bd",
+    "count": 26,
+    "bytes": 220103
+  },
+  "inputs": {
+    "1_sweeps/RR/1-2/1-2_0.50.csv": "53f7b98f2c9afd4206b80c70ee986bca891179e97a6f0b2e65756dc82da9d553",
+    "1_sweeps/RR_stats/1-2/1-2_0.50_stats.csv": "fed20f850d192cd000194fca1e34032997bb4564b481f3add8207be3b571e091",
+    "1_sweeps/RR/2-3/2-3_0.50.csv": "944b27b4fe841b011b388d983085dd05751dcd42e1f9cc9851b6b867d3c4bc78",
+    "1_sweeps/RR_stats/2-3/2-3_0.50_stats.csv": "7259d5b9b02d1bf848c61c0b2289a43d24e3771fa54bbece0fba5e756c04bce5",
+    "1_sweeps/RR/3-4/3-4_0.50.csv": "eb4f17d87659cc55f2357ce5788481f83d540efb18e6e38868a5b6cfbd5552cf",
+    "1_sweeps/RR_stats/3-4/3-4_0.50_stats.csv": "1a7f473aa88a5d6e34d29a9c5b111cee1ecf027ee167000050c72440194ce7ba",
+    "1_sweeps/RR/4-5/4-5_0.50.csv": "b3b250bf50df12346b365174ef7918286f4974660681c0c9b4948b9447caf68a",
+    "1_sweeps/RR_stats/4-5/4-5_0.50_stats.csv": "8fa5046aeb40ad047516a3642738e92649ab9e8ecbe428803b62413d76507e37",
+    "1_sweeps/RR/5-6/5-6_0.50.csv": "fad9751b6631cebf33097d8775d44f2fbe96f31266f2e1820a11c6f32793ccb9",
+    "1_sweeps/RR_stats/5-6/5-6_0.50_stats.csv": "57cbdeae37b2988df9d12520a8e5811eaf8ddb52ece5c1fd304f27b78136eaff",
+    "1_sweeps/RR/6-7/6-7_0.50.csv": "1aaeed35007530ae9b82140c7223b841f7e926781728f996567bc210a6d49dc6",
+    "1_sweeps/RR_stats/6-7/6-7_0.50_stats.csv": "9aee1c330cdb09dacd457bc821bdeba9ae1849da2b6c2031cd6ebd6d808ef2a0",
+    "1_sweeps/RR/7-8/7-8_0.50.csv": "4c7a3c555ec293beb5822cc49bea9fff8fb05a90ef8d9e6ce73adf784c1b2abc",
+    "1_sweeps/RR_stats/7-8/7-8_0.50_stats.csv": "cc9e79b9eeb62f545189247c013bae2a516e304f6e872d482771af4e6de3b74f",
+    "1_sweeps/RR/8-9/8-9_0.50.csv": "8cafb5868ceca88cc7cbe20f994d3b8b6d190c749da3791d8d55c6cf6b21af71",
+    "1_sweeps/RR_stats/8-9/8-9_0.50_stats.csv": "f27a9ee05777c7e4d6a224252493f317ed31db8f420aa6cb7c18b2e6c27d338b",
+    "1_sweeps/RR/9-10/9-10_0.50.csv": "c2d5a791340159b5ccbaf2fd7eab4a0589356108b3275e215c7ad1f06fd6660d",
+    "1_sweeps/RR_stats/9-10/9-10_0.50_stats.csv": "fe1d6a7a7e77e2cd1204b0efa7146a4e65826eebec969c0a3c13754b436e79e8",
+    "1_sweeps/RR/10-11/10-11_0.50.csv": "09f28d85e60109f8799515e8f701d9ffdadf6078642a31b0fd7f7d46756109e5",
+    "1_sweeps/RR_stats/10-11/10-11_0.50_stats.csv": "ff90e79069c0fa7a9aedc618832c2e28d17fa149edd8fe0df968a33b3e9fe8e4",
+    "1_sweeps/RR/11-12/11-12_0.50.csv": "747fbe33dbd1b6fdab0280f39cfcbca25794c5eb404f5976dfe915ec666ea1a5",
+    "1_sweeps/RR_stats/11-12/11-12_0.50_stats.csv": "0c73b7283172bcf4423d2df4e8e0cdaee4d1e1d5b5b21b2a871bcb56e1ae6186",
+    "1_sweeps/RR/12-13/12-13_0.50.csv": "9e4b4941c3b94267a6f76662105f79b4638e000ebe2214afa0c58826ed1888ac",
+    "1_sweeps/RR_stats/12-13/12-13_0.50_stats.csv": "1343c5b197911756618ab51335239ce88b757de8cc1e284747096264764d5ff6",
+    "1_sweeps/RR/13-14/13-14_0.50.csv": "fd0f9b445289b3143df23b24507d371ddd1f2a6fc40768422568730851874019",
+    "1_sweeps/RR_stats/13-14/13-14_0.50_stats.csv": "c89b6a11b064e4c9d0928d56dbdbcfeff105d923d31b49abecffe628c6a930d1",
+    "1_sweeps/RR/14-15/14-15_0.50.csv": "e20e4daa0064fea638d5738c7380e22e3f3083e12bb56e270528e3112f50443f",
+    "1_sweeps/RR_stats/14-15/14-15_0.50_stats.csv": "1f3f91cd34f0e06540a3ed6e8f74e9f4c9ab202e88c93722eaf62532227329d4",
+    "1_sweeps/RR/15-16/15-16_0.50.csv": "4c1a7165d49efbb7c6d4047e1d9e2cdc331903350afc37129438ef339e4ad822",
+    "1_sweeps/RR_stats/15-16/15-16_0.50_stats.csv": "e87c67d951759d1937536fdd0656cdf5b1c9ef29cbbd786dd07e4914f502bb34",
+    "1_sweeps/RR/16-17/16-17_0.50.csv": "a61d849dc6a8dac209e6bc7cefea110e8ab733672e12dac143cb714be940a681",
+    "1_sweeps/RR_stats/16-17/16-17_0.50_stats.csv": "0a853b47eca0c9f9fa7453ae6828475f1b9ec73631edd49f0ebd5732cbdf302d",
+    "1_sweeps/RR/17-18/17-18_0.50.csv": "32ba7da06009ff943bdb7947d5588bff3a6a5d753751fad05952dac58f4e555b",
+    "1_sweeps/RR_stats/17-18/17-18_0.50_stats.csv": "a44f23b199dbc875706ad309b04aaa60f1deb121b3c9b217bc1de05cab6c156b",
+    "1_sweeps/RR/18-19/18-19_0.50.csv": "ec1003c17240f915386351d2bdfea02d435bbacd973ffab5f119188cc9e5e015",
+    "1_sweeps/RR_stats/18-19/18-19_0.50_stats.csv": "e8e4a27c6a7de217982dc1200206fd6eee31d35886f06eecfad662369fad560c",
+    "1_sweeps/RR/19-20/19-20_0.50.csv": "8c4a4a44f81d2cef4c14be30457b9a578e82f92fc7bae117203d7c7786ed7c60",
+    "1_sweeps/RR_stats/19-20/19-20_0.50_stats.csv": "10086bfa669d61678b25504784bdd8fd043e407922c1493db930a7483054b6a0",
+    "1_sweeps/RR/20-21/20-21_0.50.csv": "c76eda3a935df51a73b117bf3e074b8729608e71220752f1853edad52a8c9ed3",
+    "1_sweeps/RR_stats/20-21/20-21_0.50_stats.csv": "dc6cd3422ca07fa1d257687a4b3989097fdafc171bd65cfd2143c1959359a8d6",
+    "1_sweeps/RR/21-22/21-22_0.50.csv": "18afe9933ede519861f7af36787a40ed0e74f64819864382fdcfb514a16e5f8c",
+    "1_sweeps/RR_stats/21-22/21-22_0.50_stats.csv": "159b0e9c41fc590d899aae46fd025ec8d9a5632b2b18355b19e5ae6fd2777a74",
+    "1_sweeps/RR/22-23/22-23_0.50.csv": "05b7c9cfc36c917f038acd1ea97f2e90009247fd8993de6ba737545d94ac975f",
+    "1_sweeps/RR_stats/22-23/22-23_0.50_stats.csv": "de7daed0fc746b3aeb9db8090f63d44ea700628b5c5fde11bdaef4970c1280e2",
+    "1_sweeps/RR/23-24/23-24_0.50.csv": "732eacc917979ec3f85187df3dbc831cc4f67994035d9987b0e549c27b432553",
+    "1_sweeps/RR_stats/23-24/23-24_0.50_stats.csv": "c022bae684fc324f152c6324838237abafc45b13cf03b486be4ffc4456553326",
+    "1_sweeps/RR/1-2/1-2_1.00.csv": "41633d9fc0c8d1c6b3af629c1f40ae364892d576e290e9ef591f83bfe9271b5f",
+    "1_sweeps/RR_stats/1-2/1-2_1.00_stats.csv": "8e01aa42db675d8feb12b820b35d3dd33806d3c6761a49318b661392c80d2993",
+    "1_sweeps/RR/2-3/2-3_1.00.csv": "393a7930a0d2eec4038850daf34d01a619e0328001f0df5c88c1e15d3ee76a49",
+    "1_sweeps/RR_stats/2-3/2-3_1.00_stats.csv": "2258ca13c3450b9e070b3d0b731ec0c0016c843526531712ca74e3e22f072912",
+    "1_sweeps/RR/3-4/3-4_1.00.csv": "f248f2d8f72c5fc1c28b3eaef918c6f08e19269122df853dcd414339ecc46aa0",
+    "1_sweeps/RR_stats/3-4/3-4_1.00_stats.csv": "96c5cebc42ccac519bf367daf716b8a708c560dd25c18dadd2e650ea9c7b1ab7",
+    "1_sweeps/RR/4-5/4-5_1.00.csv": "4c74cf1ca20737b3b22022e0e0a5b13fb0daa37a58dd610dffa3b4f8a854ad74",
+    "1_sweeps/RR_stats/4-5/4-5_1.00_stats.csv": "14d02993ec9929c308115c0cef11b1a3315fe7f7d31199a4cdc37408ac6ab5ed",
+    "1_sweeps/RR/5-6/5-6_1.00.csv": "6fb6ba95f3015305087d325e2e22a4e947a3ce291628155eb5f82fa0a8a79631",
+    "1_sweeps/RR_stats/5-6/5-6_1.00_stats.csv": "14da92cbc51c5f51fa75f05f0d896825cb072a817496fd4b507c68c19d2f3893",
+    "1_sweeps/RR/6-7/6-7_1.00.csv": "c5b88fbbc6b004f8019fe025db21dbda32eb28263072d855e17a9d8a0a618b08",
+    "1_sweeps/RR_stats/6-7/6-7_1.00_stats.csv": "cd68ebba92516a6edefd7f6dad8765fb7db5f97cb938821098e570a7a56220d6",
+    "1_sweeps/RR/7-8/7-8_1.00.csv": "d5e97c976371b8c89f9d762e76970663e32270e02d05badfa3c7fd001bd0e152",
+    "1_sweeps/RR_stats/7-8/7-8_1.00_stats.csv": "ae09227a6bc6fc2b75325f770f2599f0e8888bac6d8cf5fd6dc26e5624267932",
+    "1_sweeps/RR/8-9/8-9_1.00.csv": "f138bb453cd2be8e303d621b63f303b11c1ff76dd50974c6eb97db0b3de26eab",
+    "1_sweeps/RR_stats/8-9/8-9_1.00_stats.csv": "a822ef4284466dd8ea4c3245a375f42eb18b44f127153c54b28690cd82b384ee",
+    "1_sweeps/RR/9-10/9-10_1.00.csv": "22239e14a762a209a8dfb3744ec90d57fae2421f867a989dcfd9d40652324cf8",
+    "1_sweeps/RR_stats/9-10/9-10_1.00_stats.csv": "0bc3e50966f2d869b92227c93ba392cee117d52418a2f0660e80eb21ee5cdbea",
+    "1_sweeps/RR/10-11/10-11_1.00.csv": "806df46a9d4a6140441805d266f2b91131ee469af7c4a2d7c42c721bbc97ff12",
+    "1_sweeps/RR_stats/10-11/10-11_1.00_stats.csv": "6c0be088c9eb1b3a456f850dd4e942028e518af0af36304eddd38adee16801b8",
+    "1_sweeps/RR/11-12/11-12_1.00.csv": "ca048710779a3862840f2c5d43492bf2c6fb31487ee46845150dd3ef24d2002e",
+    "1_sweeps/RR_stats/11-12/11-12_1.00_stats.csv": "170f45bdf78ff7318d1582f04cdb5de8e6351b558072d54888eb1d3320a4eb02",
+    "1_sweeps/RR/12-13/12-13_1.00.csv": "f485ce347458732e9c391de3b268147864c2e10b4b6b7fb51d6587c40867cef4",
+    "1_sweeps/RR_stats/12-13/12-13_1.00_stats.csv": "859e453be64ce084bfa05bc0bb0eef9dc39131a9c2cc8ba3d1301b12d06bd446",
+    "1_sweeps/RR/13-14/13-14_1.00.csv": "22efb7b02000f7aafffcfb05e5ba6b4a86b7489dbc57c815107fdf3b1abded12",
+    "1_sweeps/RR_stats/13-14/13-14_1.00_stats.csv": "113e05afc6a5b2ea2c62ba02a7dba3105cfa8224a7faeebd6f5fab66c87144ee",
+    "1_sweeps/RR/14-15/14-15_1.00.csv": "dc2fff2b3a9c4b814c4785f98e26c9da5a4e2d6ee3e073c61e45181dd10cfb0a",
+    "1_sweeps/RR_stats/14-15/14-15_1.00_stats.csv": "a3640134b50bcf1de44200b7576f7fd8f5141b3ed9e63809effd262f094228d5",
+    "1_sweeps/RR/15-16/15-16_1.00.csv": "584ef37a815ad06d73127117ecad3c24016fe46e766a3af14d17b6e7678a3e4a",
+    "1_sweeps/RR_stats/15-16/15-16_1.00_stats.csv": "74215e67ca8dce4f5e0352389d3e2aaaf63a12390760d97f72226386f4fb090f",
+    "1_sweeps/RR/16-17/16-17_1.00.csv": "4af26c2753bb3bbae98d0d81584611c97db72f5b08d6af1afdd9914db8a1cc13",
+    "1_sweeps/RR_stats/16-17/16-17_1.00_stats.csv": "aa94d8afb32421fea1a8192859cdf4c4e311be8d0605bc4cd137102485850178",
+    "1_sweeps/RR/17-18/17-18_1.00.csv": "59a063ac8650dfdf2f3698f62cbb12cba5301c7bbf92db1ca0c5bb896b368b49",
+    "1_sweeps/RR_stats/17-18/17-18_1.00_stats.csv": "59c2f124006a50521d6fee1aefcbd3971db8d50a4ee9f3e632ecd2a3a4ab6380",
+    "1_sweeps/RR/18-19/18-19_1.00.csv": "d8ef1874840cce38d08de2c7a01eb0cf5a992556ca60136a02e82433eb068aaf",
+    "1_sweeps/RR_stats/18-19/18-19_1.00_stats.csv": "dc68aefdab6390385f181f7979febf742e592012640c1b027e2505aa10ffa2cc",
+    "1_sweeps/RR/19-20/19-20_1.00.csv": "fab4ddecad65cdb5f4a63a9b10bb4a37e3cdca7e1c3ffc9637bcb30debf2ac93",
+    "1_sweeps/RR_stats/19-20/19-20_1.00_stats.csv": "fba381474e8b68da5959bdffb3030489040844470bd77896b2d749867c6aa2d2",
+    "1_sweeps/RR/20-21/20-21_1.00.csv": "12afe56ccac6e78d766534f65b81cc981824582d462546bfc0818830efbf6b46",
+    "1_sweeps/RR_stats/20-21/20-21_1.00_stats.csv": "67538b23c601aea2e3b07c1af0c68bc40aee4f5cb9dfab25ecbb5b269af60dc3",
+    "1_sweeps/RR/21-22/21-22_1.00.csv": "96227ec738fd119ed92fcb9c683bfae1674740fddebdfa8b08794302fd33d274",
+    "1_sweeps/RR_stats/21-22/21-22_1.00_stats.csv": "5f46561ea4c81e4b04d8a78e809f0c12924c737a598fe09485227aefbd5e9dcd",
+    "1_sweeps/RR/22-23/22-23_1.00.csv": "193fd4af0b9a56ddb6e47c266c3345e3c2e23559fdf54aa20f2167a3ca3cce83",
+    "1_sweeps/RR_stats/22-23/22-23_1.00_stats.csv": "4d0dc1e10a7d6228a387810c3f4100d6005dc6aeb34ea1ecb3edca578723536c",
+    "1_sweeps/RR/23-24/23-24_1.00.csv": "732eacc917979ec3f85187df3dbc831cc4f67994035d9987b0e549c27b432553",
+    "1_sweeps/RR_stats/23-24/23-24_1.00_stats.csv": "eb82880563b6d4e4eece4a63ab76954bb2e9f40385583f941c8b829db0a10065",
+    "1_sweeps/RR/1-2/1-2_2.50.csv": "44a6236da9528f1e20240f8cfbaf5f71b57a25158562f456688ee763c164ac97",
+    "1_sweeps/RR_stats/1-2/1-2_2.50_stats.csv": "70d08be4ad48282513f3970d11c48d5b5d50ab1541d4313064908a9bd168a10b",
+    "1_sweeps/RR/2-3/2-3_2.50.csv": "2f1dd7936424145f99e24000ab2339b5c4e0cdd09df2787f971b4f4213bc430d",
+    "1_sweeps/RR_stats/2-3/2-3_2.50_stats.csv": "ef93f35bc5e5f0bc2fe7b8dc4d1e7478e16275a1dd9e36c978e19b4b27d40dc4",
+    "1_sweeps/RR/3-4/3-4_2.50.csv": "f8594b70a61f1514eb66cb5de76aa83de100a1dd0872f4882c8fdb8beb3e4adb",
+    "1_sweeps/RR_stats/3-4/3-4_2.50_stats.csv": "ef130438cd7c16f348700008f97e567c91cb689b48f0379a1beec5b01fa2b1ed",
+    "1_sweeps/RR/4-5/4-5_2.50.csv": "8029beb2bc187d67add31ff8626cda348b5aa59222d302c15acfc91e430a5e5a",
+    "1_sweeps/RR_stats/4-5/4-5_2.50_stats.csv": "ac259b7b301b4e298e5a66f1101dca8021786422a56d0ba7e63fffe5e277b36a",
+    "1_sweeps/RR/5-6/5-6_2.50.csv": "7dd29a35a80088c5f2f73762f4d5469bd9a3f4e1473731294da20d9d9f7bfc90",
+    "1_sweeps/RR_stats/5-6/5-6_2.50_stats.csv": "8a1a57b91ad826aaf51bb5349ab9ac530650d3355ed9f29d972f45bb206bb64a",
+    "1_sweeps/RR/6-7/6-7_2.50.csv": "fb38c7781fb26cfda33752b924e19a9b14df756ccfa5f92519739935cc014a70",
+    "1_sweeps/RR_stats/6-7/6-7_2.50_stats.csv": "dcd4bfcecd46ac35c81f040e5cd1284a7166fe5603f75f0d44a9c578703eefe8",
+    "1_sweeps/RR/7-8/7-8_2.50.csv": "c5a65501b3c6866b6eaa0ab3cd8d3a8f9c61e932252c55f33a7be06281128894",
+    "1_sweeps/RR_stats/7-8/7-8_2.50_stats.csv": "1ce56f8b8afe571fd60496cee5e1e7ada30fd4154312602611b7b93b8c60e74f",
+    "1_sweeps/RR/8-9/8-9_2.50.csv": "eaa755963e463f035518cd3f732fcc7f9c7b1669a95713ba38bdf833382b9111",
+    "1_sweeps/RR_stats/8-9/8-9_2.50_stats.csv": "2b8aaa7644c1dcd3a79b89cc89256f04e379158dad5888bbd656a0b794260e86",
+    "1_sweeps/RR/9-10/9-10_2.50.csv": "592d5d597d43b72950730fad4b86250d75d7be6f227f4de9d814bcc9ba13fbe6",
+    "1_sweeps/RR_stats/9-10/9-10_2.50_stats.csv": "ba62d3531af12138a473e6abe08edf1105cf6cd2f5bcc0020739a5855925d139",
+    "1_sweeps/RR/10-11/10-11_2.50.csv": "f579cb1456eef4e5c4c4a6635017ad18250979bc3ec4dd599a379097bf3605ca",
+    "1_sweeps/RR_stats/10-11/10-11_2.50_stats.csv": "bc84ee34cb8a4ab495c8bdbbf308d6444cf328ffc78e016d1e4d0688f3233f7f",
+    "1_sweeps/RR/11-12/11-12_2.50.csv": "709039cf3a8079e7c637433597e19903b80bf82569f4a3db48ea733eaa7b580e",
+    "1_sweeps/RR_stats/11-12/11-12_2.50_stats.csv": "bbcd5226b11975e018f4e5fea7fcb67b4afc89b99fb0127ed38474751e7676da",
+    "1_sweeps/RR/12-13/12-13_2.50.csv": "44dcbcae4cb5eeb03474d83f28627075e31e35a5f51692dc3a105bc967b0317b",
+    "1_sweeps/RR_stats/12-13/12-13_2.50_stats.csv": "515e14f41c5ed0fdbff6f3939b9b7c8971ec01c4f20764abce850e83d0cf14f1",
+    "1_sweeps/RR/13-14/13-14_2.50.csv": "16dcd7692e01b394800514ff25d3c9e1230e9a3335e09968046b34ab374d880b",
+    "1_sweeps/RR_stats/13-14/13-14_2.50_stats.csv": "68c0a000c7145611d53a3f8666ae4559e52858562cd4ee1720c6394e71571f2d",
+    "1_sweeps/RR/14-15/14-15_2.50.csv": "7053273e5511ab689fbf9d7bd7853dd32da898dd34da03fa442c8bcf2d92640b",
+    "1_sweeps/RR_stats/14-15/14-15_2.50_stats.csv": "5d72bcd25b7935bb3d1e5a1e950d2c031513f42dbdfe62c4f93a1e35f8037a9e",
+    "1_sweeps/RR/15-16/15-16_2.50.csv": "54cc13df8ef559b0506a661f7ab46ec6142df44cca15204f71feba1112d2ee5f",
+    "1_sweeps/RR_stats/15-16/15-16_2.50_stats.csv": "ee8b05cf7aeb774bae403e818cd1ab78748111e607830bf605c573c9ece79cd1",
+    "1_sweeps/RR/16-17/16-17_2.50.csv": "2f62711fbfb29bd1d0af4af48cd95832b1a58f94b2cbd43ce3585dca9879bbd2",
+    "1_sweeps/RR_stats/16-17/16-17_2.50_stats.csv": "a9dfb26493e24a202cab74c5bf5704821cdd1945c1ee9679c493904d6719858a",
+    "1_sweeps/RR/17-18/17-18_2.50.csv": "04406924a777a02cdf679317cbae0e8ad6cd193bf9ab51097bf42d66f2667ebf",
+    "1_sweeps/RR_stats/17-18/17-18_2.50_stats.csv": "23f8138cc1c5a3f5d40e9c0137abd80a5d6dd250b63de4e7f6c37c9d0b827781",
+    "1_sweeps/RR/18-19/18-19_2.50.csv": "b628060975917c81f5ff5a499411ba97cc0d65a0da7a2abff4b414309ea1580e",
+    "1_sweeps/RR_stats/18-19/18-19_2.50_stats.csv": "1ca98e7efbdbcc901a4746cd4b0fba8614b00b83aaf0c74f759c0a2a093cf009",
+    "1_sweeps/RR/19-20/19-20_2.50.csv": "1f5a4580df7b0d58c1fadbd39622b966485fd4fb13b330f8a24bd7ce4f391bfe",
+    "1_sweeps/RR_stats/19-20/19-20_2.50_stats.csv": "5431c631df898b2f85f36d7e7355b431a4456998cbe2a31240f909ddc5ef7893",
+    "1_sweeps/RR/20-21/20-21_2.50.csv": "37b0be130ac2e831a4b12af9fed31bf2114bd7d14c68029add3abe60fa2c9750",
+    "1_sweeps/RR_stats/20-21/20-21_2.50_stats.csv": "1338e519c8c896ea2801f2557adc270e8c547e39ae5abfbdc2fa4f1bd4e6f8e6",
+    "1_sweeps/RR/21-22/21-22_2.50.csv": "346666f7dd09fcb641d3f94a76fc58d4abd1154639bd295a7bd7754a1289f685",
+    "1_sweeps/RR_stats/21-22/21-22_2.50_stats.csv": "581da2ea9d4418fb47148993d57788e02d39e6d2a85c78c01d29af640ce3a9eb",
+    "1_sweeps/RR/22-23/22-23_2.50.csv": "b8a4eb99982eb02b933e56724c408a4bae7a5839457d353b97d9a20eab25d447",
+    "1_sweeps/RR_stats/22-23/22-23_2.50_stats.csv": "4e0ffb3f95c4a1bd708b0f2bd722c448a3be5a00b7081faba21d6e43085a6756",
+    "1_sweeps/RR/23-24/23-24_2.50.csv": "732eacc917979ec3f85187df3dbc831cc4f67994035d9987b0e549c27b432553",
+    "1_sweeps/RR_stats/23-24/23-24_2.50_stats.csv": "91b020ca7567d3917be3ef4e521882121069440f8b7619570cc2197d98a3dca9",
+    "1_sweeps/GG/1-2/1-2_1.25.csv": "eb54489621b1ca5f700ddb7df481352e479f5319395ae447fda4fc1ced10c068",
+    "1_sweeps/GG_stats/1-2/1-2_1.25_stats.csv": "97362f1896106b057dd688b9f33d8a284bd22e7c2be7bfa188081bd2c62bff03",
+    "1_sweeps/GG/2-3/2-3_1.25.csv": "5683fb91d57d7b7033c6fd9650acf60921d9bea0f8ccb5a2b37a44f6f81a7456",
+    "1_sweeps/GG_stats/2-3/2-3_1.25_stats.csv": "8495e3e5d601503de3aee44710c2d4c5e67c5938ea2fc2bc5a8d4a861d84d058",
+    "1_sweeps/GG/3-4/3-4_1.25.csv": "c959c7e3292ed969138b57d4d97d2694da4965ea3b6371ab9922dcd83882cade",
+    "1_sweeps/GG_stats/3-4/3-4_1.25_stats.csv": "9b491036e113b48c8e9a05f808cd4f4d7254ece9b2df2226b7c83656c4a0cb16",
+    "1_sweeps/GG/4-5/4-5_1.25.csv": "8bf325a45b088165b60d55cbbc0bf1bc9a0b883cf379c46fc646c0f35af605d6",
+    "1_sweeps/GG_stats/4-5/4-5_1.25_stats.csv": "bd855889dbf1a13298f2a30ef9ef739c08267646374fda8f98a1fb7e3e5fba33",
+    "1_sweeps/GG/5-6/5-6_1.25.csv": "a7f084f82ef8ec6bb3937d87497c7e8e45184f6a5ea6eae7607089be257b79cc",
+    "1_sweeps/GG_stats/5-6/5-6_1.25_stats.csv": "172af534f1cb4dfcfe4a029a5cd7cbf6f06363139de06519beb8163fbc45055e",
+    "1_sweeps/GG/6-7/6-7_1.25.csv": "4a8b01bc03fd4ca200c787a7e301e718c169f4d704c3a3824e502c675092d437",
+    "1_sweeps/GG_stats/6-7/6-7_1.25_stats.csv": "ae2f5b3ddec948c643489a44936bf81c2ed29cf3263af86ba31a9e78483411ad",
+    "1_sweeps/GG/7-8/7-8_1.25.csv": "42f183fc10d2b426c56cf2853d306775cb12dfc4157095dde6245cdc77c01e66",
+    "1_sweeps/GG_stats/7-8/7-8_1.25_stats.csv": "0db43f2fc73060e37c5940e1608ffdf83b5a655456f84716b435da6952740c04",
+    "1_sweeps/GG/8-9/8-9_1.25.csv": "bdacfcce1dd50f72aaf1d806e4a444bfef730bddc0fa26cb7425ca81fc04a9b1",
+    "1_sweeps/GG_stats/8-9/8-9_1.25_stats.csv": "c4ac60e246aff1da664524f4a0f75342cb9e64988478922887f81972e53b3e81",
+    "1_sweeps/GG/9-10/9-10_1.25.csv": "91ecde4589b3856010e502059a46fea13caba1b6ffa80e0a929a75d59cc1c443",
+    "1_sweeps/GG_stats/9-10/9-10_1.25_stats.csv": "01c5ffc55a9e4e90ef3c943bdd0f08787df3fc1820d41dd511760051c0cb96bc",
+    "1_sweeps/GG/10-11/10-11_1.25.csv": "5df975c84b558b5f6859b5a826ad6be74bdfe24f20e3813d1523402aad23e8fa",
+    "1_sweeps/GG_stats/10-11/10-11_1.25_stats.csv": "e0c8c2e2f853c1756220dda62c8e9b5d3bf736dc11f62ae4364f1a8ce39c9517",
+    "1_sweeps/GG/11-12/11-12_1.25.csv": "1e342867542e24aba54b033d07e4154acf75f84682cf3097a9cdddd1a9ced926",
+    "1_sweeps/GG_stats/11-12/11-12_1.25_stats.csv": "a9cead77b627fdd07956fb7e61e129a74f1170b4b7a9be9e6192e4bfd573713c",
+    "1_sweeps/GG/12-13/12-13_1.25.csv": "80d8b5f00ebeff9bb6561f7c709b3b2a1ff1172081907cf78dec49b6d8de9afe",
+    "1_sweeps/GG_stats/12-13/12-13_1.25_stats.csv": "364bb292eec84cb025ecbaa95a4a35740d3d16efee2ebf3ef0c4acc5f536aa55",
+    "1_sweeps/GG/13-14/13-14_1.25.csv": "59e193ca6ab69546580485742e7a1043859beaeffa41e3729399570331f2ad24",
+    "1_sweeps/GG_stats/13-14/13-14_1.25_stats.csv": "d24f1b7b4fd1dda86efc2b43fb9fc81b9f57d903a1834e50ef1e6076d9a3c190",
+    "1_sweeps/GG/14-15/14-15_1.25.csv": "34eb4597b7e71106e17d4ec57073759c8afc84dd360fa3cbbf0bf37ef7928691",
+    "1_sweeps/GG_stats/14-15/14-15_1.25_stats.csv": "d0e1c8ae52d5779961de0aefff5145ec21c6e99252128ac8487952609727d5b6",
+    "1_sweeps/GG/15-16/15-16_1.25.csv": "d7b38eddfc668eaef0bcb48b942be67554c00808dd11d19f72fde8c342842ef4",
+    "1_sweeps/GG_stats/15-16/15-16_1.25_stats.csv": "0fff6864560a9c32a714c74bf969f9ab356ddb0e38befb6ac4dddfd1f6fe1693",
+    "1_sweeps/GG/16-17/16-17_1.25.csv": "7c3ae5a10d0ea5f8a5307c3e99c58f6e79a4ee2cb2c10514f5680e9dbe2415e1",
+    "1_sweeps/GG_stats/16-17/16-17_1.25_stats.csv": "ad267abd18a8e19c308c79b0dd2f1028fa5966893d58410a58610561e129ff42",
+    "1_sweeps/GG/17-18/17-18_1.25.csv": "242cfe422e5d8404ad1e8743ea9546235f3785d568f71215726a4e513b23fc6b",
+    "1_sweeps/GG_stats/17-18/17-18_1.25_stats.csv": "340e1ed73746cb238c615021c1e7eb99aeb4eefb713c2a84ffc6cde014e22f5d",
+    "1_sweeps/GG/18-19/18-19_1.25.csv": "7b0525b4a42277eba1ab4dac0313198854e6c0eec2b858d243f0f51e54d62362",
+    "1_sweeps/GG_stats/18-19/18-19_1.25_stats.csv": "4bed771d0fcb05cacb6374e3c2845ba4d480672b00bebe6d6f6fd28ab04c55ef",
+    "1_sweeps/GG/19-20/19-20_1.25.csv": "2efff18e9c3082840522dc0e5fc7f27a4924789dff55c8580152ba64e973d06b",
+    "1_sweeps/GG_stats/19-20/19-20_1.25_stats.csv": "f449fffcf0c679a11f73dd6703f07142274c0740efb933788e68742462e7fec9",
+    "1_sweeps/GG/20-21/20-21_1.25.csv": "bc4d07435607d5bed7f6bdd75a8322d0b089a5a692a305d278f4ae306a186fc6",
+    "1_sweeps/GG_stats/20-21/20-21_1.25_stats.csv": "fb4ae59685b69432ac711249bfd22e326da83bbead1fa61d099bcb712b965fa6",
+    "1_sweeps/GG/21-22/21-22_1.25.csv": "0c4c3a563c85d2153e5a04dbefce3e9e3c74687b9d69de0b2ca67012407410e1",
+    "1_sweeps/GG_stats/21-22/21-22_1.25_stats.csv": "5b298161c2b7e2f107071077173b98f5e914f08f1911d60602cc15535438a152",
+    "1_sweeps/GG/22-23/22-23_1.25.csv": "5d07dc95abbb6978626ec3adbd4b8a982dc86c4e2947c196d4b9990360d50340",
+    "1_sweeps/GG_stats/22-23/22-23_1.25_stats.csv": "c3b63035b14f8a77caddaa73ee3698cd6ca06dcdf2de5eb48c12fd1e29d4735e",
+    "1_sweeps/GG/23-24/23-24_1.25.csv": "3d6bf72d4364328b03187fd0ee41d3e66559361dd1cea440fd5d08f3a082178e",
+    "1_sweeps/GG_stats/23-24/23-24_1.25_stats.csv": "146a95ae2deac1411edcdc13eb5bf88703c6b1b70855fdd587d0125678d0ac42"
+  },
+  "code": {
+    "scripts/study_rr_gg_shortlist.py": "0c3cf4a6f9e702c90bcb3f8f5919227d53a1d3e3209ba95fc1aea4716f510426",
+    "research/legacy_25k/RR_GG_SHORTLIST.md": "31efe497646434cd5cce9ed29b3ae1538b7cb69fcd0c3d4e13f0e7cd65a92e36",
+    "config/studies/legacy_25k_rr_diversification.json": "6e1692de775c3d5263b47d6dd84d227bbf68987bb3bc4510d0fdba71430e7a02",
+    "config/scenarios/full_rulebook_monthly_500.json": "66c8825dfd8e51922c096ddf8ececdd6f3de92d96f0b4c647e5d96506b3a90a3",
+    "config/studies/legacy_eval_supply.json": "2ecd00e3782fa93c63bc9be25b2b452caf898dd7c396881a6154fd0e126ebeba",
+    "config/tape_coverage.json": "696d199c8a48c4910738ef2219b0c3d713dfc41aff77b6a5c3b9b23c5ba949dc",
+    "scripts/rr_curve_support.py": "728c04221bd692698dd0b3df9e33dc20c3453f6f51a9c08b23566bcb4cc9f34a",
+    "scripts/rr_followup_support.py": "c811d76fc0f4a5f82128db3d1fe206138a1a6b31260476ff6c8b260ecda105cf",
+    "scripts/study_rr_curves.py": "51a7d5c26b650e40cbb364c52dacddfc6323ff09dc8bc57606f0ffc68a89740f",
+    "scripts/study_rr_episodes.py": "545d2f0066491534ac63f4264c54f75044314cfdc5375342a4a363c75516c8a3"
+  },
+  "prior_manifest_sha256": "106f92e220c01e134d6a78152cfce92d6c4c8c914dc6125e6395694b80ac2b98"
+}

@@ -1,5 +1,14 @@
 # Legacy 25K: current findings
 
+**Fixed RR/GG shortlist:** the [pair/triple comparison](../../results/legacy_25k/rr_gg_shortlist/FINDINGS.md)
+uses all 26 quarters and 120 operating cases across every assignment order.
+Adding RR 1.00 reduces complete-loss quarters from 3/26 to 2/26, but increases
+the average fraction of accounts lost and worst quarterly drawdown. All four
+mixtures are continuous in every order for the same three operating starts
+(2023–2025); earlier starts remain order-sensitive. RR 0.50 / RR 2.50 has
+the lowest average wipeout count and empty time among the mixtures. Neither
+triple establishes a clear continuity upgrade under the inherited policy.
+
 **Survivors of the three common failure quarters:** the
 [full-grid search](../../results/legacy_25k/common_quarter_survivors/FINDINGS.md)
 tests 602 RR/GG settings at 0.01 steps. None survives Q2 2022 or Q2 2025
