@@ -6,8 +6,14 @@ Adding RR 1.00 reduces complete-loss quarters from 3/26 to 2/26, but increases
 the average fraction of accounts lost and worst quarterly drawdown. All four
 mixtures are continuous in every order for the same three operating starts
 (2023–2025); earlier starts remain order-sensitive. RR 0.50 / RR 2.50 has
-the lowest average wipeout count and empty time among the mixtures. Neither
-triple establishes a clear continuity upgrade under the inherited policy.
+the lowest average wipeout count and empty time under a uniformly chosen
+assignment order, but that average also reflects how often each portfolio
+deploys RR 0.50 first (half of a pair's orders, a third of a triple's). With
+RR 0.50 first, the triples have fewer wipeouts per case (1/12 against 1/6) and
+less empty time. These are establishment failures: 49 of 57 occur before the
+book holds five PAs, and no mixture empties a book that has exceeded nine.
+Operating continuity among the four is not resolved; see the
+[reconciliation](../../results/legacy_25k/rr_gg_shortlist/RECONCILIATION.md).
 
 **Survivors of the three common failure quarters:** the
 [full-grid search](../../results/legacy_25k/common_quarter_survivors/FINDINGS.md)
