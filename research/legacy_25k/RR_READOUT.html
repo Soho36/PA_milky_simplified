@@ -1,0 +1,816 @@
+<meta charset="utf-8">
+<title>Partition, Not Dispersion</title>
+<link rel="preconnect" href="https://fonts.gstatic.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600&display=swap">
+<style>
+  :root {
+    color-scheme: light;
+    --plane:#f4f6f8; --surface:#fcfcfb; --ink:#0b0b0b; --ink-2:#52514e; --muted:#898781;
+    --grid:#e1e0d9; --axis:#c3c2b7; --hair:rgba(11,11,11,0.10);
+    --rr-1:#86b6ef; --rr-2:#5598e7; --rr-3:#2a78d6; --rr-4:#184f95;
+    --dead:#d03b3b; --s1:#2a78d6; --s2:#eb6834; --s3:#1baf7a; --alive:#eef1f4;
+    --sans:"IBM Plex Sans",system-ui,-apple-system,"Segoe UI",sans-serif;
+    --mono:"IBM Plex Mono",ui-monospace,"SF Mono",Menlo,monospace;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root:not([data-theme="light"]) {
+      color-scheme: dark;
+      --plane:#0d0d0d; --surface:#1a1a19; --ink:#ffffff; --ink-2:#c3c2b7; --muted:#898781;
+      --grid:#2c2c2a; --axis:#383835; --hair:rgba(255,255,255,0.10);
+      --rr-1:#184f95; --rr-2:#256abf; --rr-3:#3987e5; --rr-4:#86b6ef;
+      --dead:#d03b3b; --s1:#3987e5; --s2:#d95926; --s3:#199e70; --alive:#212120;
+    }
+  }
+  :root[data-theme="dark"] {
+    color-scheme: dark;
+    --plane:#0d0d0d; --surface:#1a1a19; --ink:#ffffff; --ink-2:#c3c2b7; --muted:#898781;
+    --grid:#2c2c2a; --axis:#383835; --hair:rgba(255,255,255,0.10);
+    --rr-1:#184f95; --rr-2:#256abf; --rr-3:#3987e5; --rr-4:#86b6ef;
+    --dead:#d03b3b; --s1:#3987e5; --s2:#d95926; --s3:#199e70; --alive:#212120;
+  }
+
+  body { background: var(--plane); color: var(--ink); font-family: var(--sans); line-height:1.55; }
+  .wrap { max-width: 1060px; margin: 0 auto; padding-inline: 16px; padding-block: 40px 64px; }
+
+  .eyebrow { font-family: var(--mono); font-size:11px; letter-spacing:.14em; text-transform:uppercase;
+             color: var(--muted); margin:0 0 14px; }
+  h1 { font-size: clamp(28px,5vw,42px); line-height:1.1; letter-spacing:-0.02em; font-weight:600;
+       margin:0 0 18px; text-wrap:balance; max-width:22ch; }
+  h2 { font-size: clamp(19px,2.6vw,24px); font-weight:600; letter-spacing:-0.01em; margin:0 0 6px;
+       text-wrap:balance; }
+  h3 { font-size:14px; font-weight:600; margin:0 0 4px; }
+  p  { margin:0 0 14px; max-width:68ch; color:var(--ink-2); }
+  p.lead { font-size:17px; color:var(--ink); max-width:62ch; }
+  strong { color: var(--ink); font-weight:600; }
+
+  section { margin-top:52px; }
+  .sec-head { border-top:1px solid var(--hair); padding-top:22px; margin-bottom:20px; }
+  .sec-head .n { font-family:var(--mono); font-size:11px; color:var(--muted); letter-spacing:.1em; }
+  .sub { font-size:13.5px; color:var(--muted); margin:0; max-width:72ch; }
+
+  .panel { background:var(--surface); border:1px solid var(--hair); border-radius:6px; padding:20px 18px 16px; }
+  .panel + .panel { margin-top:18px; }
+  .two { display:grid; grid-template-columns:1fr 1fr; gap:18px; align-items:start; }
+  @media (max-width:820px){ .two { grid-template-columns:1fr; } }
+
+  .decision { background:var(--surface); border:1px solid var(--hair); border-radius:6px;
+              padding:18px 20px; margin:6px 0 18px; }
+  .decision h2 { font-size:15px; letter-spacing:.02em; margin:0 0 10px; }
+  .decision ol { margin:0; padding-left:1.3em; display:grid; gap:8px; }
+  .decision li { font-size:15px; color:var(--ink); max-width:66ch; }
+  .decision li span { color:var(--ink-2); font-size:13.5px; display:block; margin-top:2px; }
+
+  .legend { display:flex; flex-wrap:wrap; gap:6px 18px; align-items:center; margin:0 0 14px;
+            font-size:12px; color:var(--ink-2); }
+  .legend .k { display:inline-flex; align-items:center; gap:6px; }
+  .sw { width:11px; height:11px; border-radius:2px; display:inline-block; flex:none; }
+  .sw.dot { border-radius:50%; }
+  .sw.ring { border:1px solid var(--axis); }
+
+  svg { display:block; width:100%; height:auto; overflow:visible; }
+  .scroller { overflow-x:auto; }
+  text { font-family:var(--sans); }
+  .tick { font-family:var(--mono); font-size:10px; fill:var(--muted); }
+  .grp  { font-family:var(--mono); font-size:10px; fill:var(--muted); letter-spacing:.08em; }
+  .rowlab { font-size:11.5px; fill:var(--ink); font-weight:500; }
+  .rowsub { font-family:var(--mono); font-size:9.5px; fill:var(--muted); }
+  .dlab { font-family:var(--mono); font-size:10.5px; fill:var(--ink); font-weight:500; }
+  .cell { cursor:default; }
+  .cell:hover, .bar:hover { filter:brightness(1.12); }
+
+  .tip { position:fixed; z-index:50; pointer-events:none; opacity:0; transition:opacity .09s;
+         background:var(--surface); color:var(--ink); border:1px solid var(--hair);
+         border-radius:5px; padding:7px 9px; font-size:12px; line-height:1.4;
+         box-shadow:0 4px 16px rgba(0,0,0,.14); max-width:280px; }
+  .tip b { font-weight:600; }
+  .tip .m { font-family:var(--mono); font-size:11px; color:var(--ink-2); }
+
+  .ledger { display:grid; gap:0; margin:0 0 6px; }
+  .l { display:grid; grid-template-columns:7.6em 1fr; gap:12px; align-items:start;
+       padding:12px 0; border-bottom:1px solid var(--hair); }
+  .l:last-child { border-bottom:0; }
+  .l .tag { font-family:var(--mono); font-size:10px; letter-spacing:.08em; text-transform:uppercase;
+            padding:3px 7px; border-radius:3px; white-space:nowrap; justify-self:start; }
+  .tag.holds { background:color-mix(in srgb, var(--s3) 16%, transparent); color:var(--ink); }
+  .tag.cond  { background:color-mix(in srgb, var(--s2) 18%, transparent); color:var(--ink); }
+  .tag.expl  { background:color-mix(in srgb, var(--s1) 16%, transparent); color:var(--ink); }
+  .tag.dead  { background:color-mix(in srgb, var(--dead) 15%, transparent); color:var(--ink); }
+  .l p { margin:0; font-size:14px; }
+
+  table { border-collapse:collapse; width:100%; font-size:12px; }
+  caption { text-align:left; font-size:12px; color:var(--muted); padding-bottom:8px; }
+  th, td { padding:5px 8px; text-align:right; border-bottom:1px solid var(--hair); white-space:nowrap; }
+  th:first-child, td:first-child { text-align:left; }
+  td.wrap-cell { white-space:normal; min-width:16em; max-width:34em; color:var(--ink-2); }
+  thead th { font-size:10.5px; letter-spacing:.06em; text-transform:uppercase; color:var(--muted);
+             font-weight:500; border-bottom:1px solid var(--axis); }
+  td.num { font-family:var(--mono); font-variant-numeric:tabular-nums; }
+  tbody tr.rr td:first-child, tbody tr.hi td:first-child { font-weight:600; }
+  tbody tr.rr, tbody tr.hi { background:color-mix(in srgb, var(--s1) 6%, transparent); }
+  td.zero { color:var(--muted); }
+
+  .retired { display:grid; gap:0; }
+  .retired .r { padding:13px 0; border-bottom:1px solid var(--hair); }
+  .retired .r:last-child { border-bottom:0; }
+  .retired h3 { color:var(--ink); }
+  .retired p { font-size:13.5px; margin:0; }
+  .was { font-family:var(--mono); font-size:11.5px; color:var(--muted); display:block; margin-bottom:5px; }
+
+  .note { font-size:12px; color:var(--muted); margin-top:10px; max-width:76ch; }
+  .traps { display:grid; gap:0; }
+  .traps .t { padding:12px 0; border-bottom:1px solid var(--hair); }
+  .traps .t:last-child { border-bottom:0; }
+  .traps p { margin:0; font-size:13.5px; }
+  footer { margin-top:56px; border-top:1px solid var(--hair); padding-top:18px;
+           font-size:12px; color:var(--muted); }
+  code { font-family:var(--mono); font-size:0.92em; background:var(--surface);
+         border:1px solid var(--hair); border-radius:3px; padding:1px 4px; }
+  @media (prefers-reduced-motion: reduce) { * { transition:none !important; } }
+  :focus-visible { outline:2px solid var(--s1); outline-offset:2px; }
+</style>
+
+<div class="wrap">
+
+  <p class="eyebrow">Apex Legacy 25K PA &middot; RR and GG studies through 2026-09-24 &middot; decision and evidence</p>
+  <h1>Partition, not dispersion</h1>
+  <p class="lead">The decision has held up through every study: split the book across RR groups,
+  keep RR&nbsp;0.50&nbsp;+&nbsp;RR&nbsp;2.50 as the reference pair, and deploy RR&nbsp;0.50 first. What the
+  evidence supports is narrower than the early headlines. Grouping cuts the risk of a book emptying while
+  it is being built; once a book is built, headroom is what protects it; and 0.50/2.50 is in the top group of
+  pairs, not proven best.</p>
+
+  <div class="decision">
+    <h2>What to do</h2>
+    <ol>
+      <li>Split the book across RR groups rather than running a single RR setting.
+        <span>Grouped books emptied 2.2 times per portfolio across six starts; RR&nbsp;1.00 books, uniform or with reserve ladders, 8.5.</span></li>
+      <li>Use RR&nbsp;0.50 + RR&nbsp;2.50 as the reference pair.
+        <span>It ties for the fewest shared failed quarters among the 78 ordinary RR pairs. In a capitalised book both of its sleeves kept $2,400 or more of headroom through the worst event, while the RR&nbsp;1.00 sleeve the triples add fell to $741.</span></li>
+      <li>Deploy RR&nbsp;0.50 first when starting a book.
+        <span>It had the fewest startup failures in every design tested. It reduces them; it does not always eliminate them.</span></li>
+      <li>Stop tuning RR values.
+        <span>No pair of any family fails together less often than the product-of-marginals benchmark, and the best RR pairs are tied.</span></li>
+      <li>Treat per-account headroom, not seat count, as the safety milestone.
+        <span>Seeded at $6,800 of frozen headroom, no allocation or single-setting book lost an account in 312 cases; at $1,500, even a full book of twenty could lose everything.</span></li>
+    </ol>
+  </div>
+
+  <div class="ledger">
+    <div class="l"><span class="tag holds">Holds</span>
+      <p>Grouping cuts establishment failures &mdash; the book emptying before it is built &mdash; at both
+      the one-to-four and the five-to-nine PA stage.</p></div>
+    <div class="l"><span class="tag holds">Holds</span>
+      <p>RR&nbsp;0.50/2.50 loses everything in 3 of 26 quarters, against 5 for RR&nbsp;0.50 alone and 6 for
+      RR&nbsp;2.50 alone: partial diversification with strong shared vulnerability.</p></div>
+    <div class="l"><span class="tag expl">Answered</span>
+      <p>What protects a full book is headroom. At $6,800 per account nothing died, mixed or not; at $1,500 a
+      full book can still fail completely.</p></div>
+    <div class="l"><span class="tag cond">Caution</span>
+      <p>Those zero deaths hide uneven margins. In March 2026 RR&nbsp;1.00 fell to $741 of headroom, against
+      $2,416 for RR&nbsp;2.50 and $2,787 for RR&nbsp;0.50 at their worst.</p></div>
+    <div class="l"><span class="tag cond">Open</span>
+      <p>The ranking among the shortlisted pairs and triples. It depends on which component deploys first;
+      with RR&nbsp;0.50 first, the triples edge ahead.</p></div>
+  </div>
+
+  <section>
+    <div class="sec-head">
+      <span class="n">01</span>
+      <h2>Grouping cuts establishment risk</h2>
+      <p class="sub">Every empty-book episode in <code>rr_followup</code>'s primary operating runs, split by the
+      largest book size reached before it emptied. Daily minimum withdrawals, $6,800 mean reserve, $5,000 owner
+      cash plus $200/month, 20-seat cap, six starts, MAE-first.</p>
+    </div>
+    <div class="panel">
+      <div class="legend" id="lg-band"></div>
+      <div id="c-band"></div>
+      <p class="note">RR-grouped arms lose fewer books at both early stages: 12 against 24 at one to four PAs,
+      8 against 24 at five to nine, across 9 and 6 arms. Among these fifteen arms, the only books emptied after
+      holding ten or more PAs are three <code>uniform_low</code> runs &mdash; a $5,300 reserve &mdash; on 2026-03-24, losing six to ten accounts
+      at once. That is a reserve effect in the March event, not an RR effect.</p>
+    </div>
+  </section>
+
+  <section>
+    <div class="sec-head">
+      <span class="n">02</span>
+      <h2>What protects a full book: headroom, not seat count</h2>
+      <p class="sub"><code>mature_rr_book</code>: 624 cases that start with twenty pre-owned PAs over a frozen
+      $25,100 floor, at $6,800 or $1,500 of headroom each. Hold runs trade each of 26 quarters with no withdrawals or
+      replacements; recovery runs follow up to twelve months under the daily-minimum policy with normal replacements.
+      The starting equity is an endowment for the test, not earned profit.</p>
+    </div>
+    <div class="panel">
+      <div class="scroller"><table id="t-mature"></table></div>
+      <p class="note">At $6,800 not one of 312 cases loses an account, mixed or single-setting, so this state cannot
+      rank the allocations by survival. At $1,500 a full book can still lose every account in a quarter. Adding
+      RR&nbsp;1.00 at 10% or 20% turns three complete-loss quarters into two and cuts time below five PAs, but those
+      books then spend <em>more</em> time below ten and twenty.</p>
+    </div>
+    <div class="panel">
+      <h3>Zero deaths is not the same margin for every sleeve</h3>
+      <div class="legend" id="lg-slide"></div>
+      <div id="c-slide"></div>
+      <p class="note">Per-account headroom of each single-setting book from the same July 2025 start, withdrawals on.
+      All twenty accounts in a book are identical, so each line is every one of them. RR&nbsp;1.00 falls from $6,422 at
+      the start of February to $741 in the 28 March snapshot, after the 27 March session; a &minus;$171.50 trade on 31 March could have taken it near
+      $570 mid-trade. That is the same March 2026 event behind the earlier $6,800 cliff.</p>
+    </div>
+    <div class="panel">
+      <h3>Lowest headroom reached from a $6,800 start, all starts</h3>
+      <div class="legend" id="lg-marg"></div>
+      <div id="c-marg"></div>
+      <p class="note">With no failures to count, the lowest point reached is the way to rank the settings. Withdrawals
+      make every margin thinner, because daily-minimum payouts keep pulling headroom back toward the reserve before a
+      crash arrives. In a capitalised book the mix is only as safe as its weakest sleeve, and here that is RR&nbsp;1.00,
+      the one the 10% and 20% allocations add. Daily snapshots miss intratrade dips, so each true low is somewhat lower.</p>
+    </div>
+  </section>
+
+  <section>
+    <div class="sec-head">
+      <span class="n">03</span>
+      <h2>The reference pair, quarter by quarter</h2>
+      <p class="sub">26 synchronized fresh-start quarters, January 2020 to June 2026. Each account starts with
+      $1,500 above a fixed floor, one MNQ; no withdrawals or replacements. A marked quarter is one in which every
+      account of that setting failed.</p>
+    </div>
+    <div class="panel">
+      <div class="legend" id="lg-q"></div>
+      <div class="scroller"><div id="c-q"></div></div>
+      <p class="note">The pair loses everything only when both do: Q2 2022, Q3 2024 and Q2 2025. RR&nbsp;0.50
+      carries it through Q1 2020, Q1 2022 and Q1 2026; RR&nbsp;2.50 through Q2 2021 and Q4 2023. Two independent
+      books failing this often would share about 1.15 quarters, not 3 &mdash; so the two are strongly associated,
+      and the protection is partial. Two other ordinary RR pairs also share exactly three &mdash;
+      RR&nbsp;0.50/2.25 and RR&nbsp;1.00/2.25 &mdash; so it ties rather than leads.</p>
+    </div>
+  </section>
+
+  <section>
+    <div class="sec-head">
+      <span class="n">04</span>
+      <h2>Why more RR tuning will not separate candidates</h2>
+      <p class="sub">Quarterly failure overlap for every pair in each family, same fixed-headroom quarters.</p>
+    </div>
+    <div class="panel">
+      <div class="scroller"><table id="t-fam"></table></div>
+      <p class="note">No pair in any family falls below the product-of-marginals benchmark, so every pair shares
+      vulnerability. The raw ratio depends on how often each setting fails on its own &mdash; GG settings fail in
+      7.46 of 26 quarters on average, RR in 6.31 &mdash; which lowers GG's ratio mechanically. Phi adjusts for that,
+      and puts GG pairs as the <em>most</em> associated: for the median GG pair, whenever the less-failing setting
+      fails, the other fails too. That supports the GG-only finding that no GG pair improves on GG&nbsp;1.25 alone.
+      Cross-strategy pairs are lowest on phi but level with RR pairs on the conditional measure &mdash; directionally
+      interesting, not evidence that different signals cause better diversification. These counts are not a
+      significance test.</p>
+    </div>
+  </section>
+
+  <section>
+    <div class="sec-head">
+      <span class="n">05</span>
+      <h2>The shortlist ranking depends on which component deploys first</h2>
+      <p class="sub"><code>rr_gg_shortlist</code>: two pairs and two triples in the operating model, every assignment
+      order, 2020&ndash;2025 starts. Averaging every order gives each component the first seat in 1/n of cases.</p>
+    </div>
+    <div class="panel">
+      <div class="scroller"><table id="t-short"></table></div>
+      <p class="note">The uniform-order average ranks the RR pair first, but a pair deploys RR&nbsp;0.50 first in
+      half its orders and a triple in a third. With RR&nbsp;0.50 first, the triples have fewer wipeouts per case and
+      less empty time &mdash; weakly, one event each, and the four are separate dates in the 2021 start. The average
+      is not only a proportion effect: the two pairs have identical proportions and still differ, because RR&nbsp;2.50
+      first did better than GG&nbsp;1.25 first. 49 of the 57 wipeouts happen before the book holds five PAs, and none
+      after nine, so this measures establishment risk.</p>
+    </div>
+  </section>
+
+  <section>
+    <div class="sec-head">
+      <span class="n">06</span>
+      <h2>The first seat, in all 24 orders of one four-group book</h2>
+      <p class="sub"><code>wide4_permutations</code>: RR 0.50, 1.50, 2.50 and 3.50, identical in every run except
+      the order in which seats join groups. Grouped by the value that takes the first seat.</p>
+    </div>
+    <div class="panel">
+      <div class="legend" id="lg-perm"></div>
+      <div id="c-perm"></div>
+      <p class="note">Every order with RR&nbsp;0.50 first reaches 5/6 or 6/6 clean starts; no other first value
+      exceeds 4/6. Here RR&nbsp;0.50 first had no startup failures at all &mdash; the shortlist shows that does not
+      carry over to every composition. Isolation runs are identical across all 24 orders.</p>
+    </div>
+  </section>
+
+  <section>
+    <div class="sec-head">
+      <span class="n">07</span>
+      <h2>Why RR&nbsp;0.50 first helped: it outlived the early shocks</h2>
+      <p class="sub">When each single-RR book lost its last account in the isolation phase &mdash; no replacements,
+      bit-identical under permutation. Darker means earlier within that column.</p>
+    </div>
+    <div class="panel">
+      <div class="legend" id="lg-cal"></div>
+      <div class="scroller"><div id="c-cal"></div></div>
+      <p class="note">In the 2020 start RR&nbsp;0.50 is the only value whose book outlives the crash, by fifteen months.
+      Adjacent RR values agree on 5.29 of 6 starts, so the axis holds about three regimes, not thirty-six. That
+      advantage is a fact about this tape's timing; which value survives the next early shock is not something
+      this history can tell you.</p>
+    </div>
+  </section>
+
+  <section>
+    <div class="sec-head">
+      <span class="n">08</span>
+      <h2>Reserve ladders spread death dates, not failures</h2>
+      <p class="sub">March 2026 under the $5,700 daily-maximum stress policy. Marks are recorded death dates, sized
+      and labelled by accounts lost.</p>
+    </div>
+    <div class="panel">
+      <div class="legend" id="lg-march"></div>
+      <div class="scroller"><div id="c-march"></div></div>
+      <p class="note">Both mechanisms spread dates &mdash; <code>grid20</code> over four, <code>ladder20</code> over six &mdash;
+      and the ladder's control is clean: <code>rr_1.00</code>, <code>ladder4</code> and <code>ladder20</code> all enter
+      March with exactly $76,068 of positive equity. But under the primary policy every ladder reproduces
+      <code>rr_1.00</code>'s continuity to the decimal, and it costs deaths.</p>
+    </div>
+  </section>
+
+  <section>
+    <div class="sec-head">
+      <span class="n">09</span>
+      <h2>Measurement traps met along the way</h2>
+    </div>
+    <div class="traps">
+      <div class="t"><h3>Comparisons with no failures</h3>
+        <p>When nothing dies, counts cannot rank anything. Rank by the lowest headroom reached, intratrade where
+        possible: at $6,800 the three settings bottomed $2,000 apart.</p></div>
+      <div class="t"><h3>Averaging over every assignment order</h3>
+        <p>Valid for a uniformly chosen order, but it does not isolate composition when group size changes how often
+        each component deploys first. Hold the first seat fixed, or report per first seat.</p></div>
+      <div class="t"><h3>A five-PA threshold for &ldquo;grown&rdquo;</h3>
+        <p>Books that clear it had mostly peaked at five to nine of twenty seats. Neither the grouping result nor the
+        shortlist reaches a genuinely established book.</p></div>
+      <div class="t"><h3>Overlap ratios without marginals</h3>
+        <p>A setting that fails often on its own lowers the ratio without reducing shared failures. Read phi or the
+        conditional rate alongside it.</p></div>
+      <div class="t"><h3>Worst-day loss fraction</h3>
+        <p>Its denominator is the cohort alive when the window opens, so a collapsed book scores 1.00 for free &mdash;
+        partly circular with continuity.</p></div>
+      <div class="t"><h3>Counting distinct balances</h3>
+        <p>RR&nbsp;0.75 held seven distinct headroom values with 13 of 20 seats sharing one. Largest same-headroom group
+        is what can die on one signal, and even that is a diagnostic: ladders create balance differences by weakening
+        part of the book.</p></div>
+    </div>
+  </section>
+
+  <section>
+    <div class="sec-head">
+      <span class="n">10</span>
+      <h2>Claims retired</h2>
+    </div>
+    <div class="retired">
+      <div class="r"><h3>&ldquo;RR grouping protects a grown book&rdquo;</h3>
+        <span class="was">this page, previous version</span>
+        <p>The &ldquo;after five PAs&rdquo; wipeouts were books at five to nine of twenty. Grouping cuts establishment risk;
+        the mature-book study then showed a full book is protected by headroom &mdash; at $6,800 even single-setting books
+        lost nothing.</p></div>
+      <div class="r"><h3>&ldquo;RR 0.50 / RR 2.50 has the strongest operating continuity&rdquo;</h3>
+        <span class="was">rr_gg_shortlist transcript</span>
+        <p>It had the lowest average wipeouts and empty time under a uniformly chosen assignment order &mdash; a property of
+        the portfolio with its deployment order, not of composition alone. See the
+        <code>RECONCILIATION.md</code> beside the shortlist findings.</p></div>
+      <div class="r"><h3>&ldquo;With RR 0.50 first, all four mixtures tie on one shared event&rdquo;</h3>
+        <span class="was">first review of the shortlist</span>
+        <p>Different denominators (1/6 against 1/12) and four separate dates. Conditioned on the first seat, the triples
+        edge ahead.</p></div>
+      <div class="r"><h3>&ldquo;Cross-strategy pairs are closest to independence&rdquo;</h3>
+        <span class="was">first review of the shortlist</span>
+        <p>Lowest on phi, level with RR pairs on the conditional measure. Directional, not established.</p></div>
+      <div class="r"><h3>&ldquo;wide4 6/6&rdquo; and &ldquo;spread width is the dose&rdquo;</h3>
+        <span class="was">rr_followup, and this page's first version</span>
+        <p>6/6 holds in 3 of 24 assignment orders, median 3/6. <code>edge4</code> matches <code>wide4</code> on width,
+        group count, endpoints and mean and still loses a start.</p></div>
+    </div>
+  </section>
+
+  <section>
+    <div class="sec-head">
+      <span class="n">11</span>
+      <h2>What would change a decision</h2>
+    </div>
+    <p><strong>Reserves just below $6,800 for a mature book.</strong> Seeded at $6,800 nothing died, but RR&nbsp;1.00
+    came within a few hundred dollars. Runs at $6,000 and $6,500 would show where it starts failing and whether the
+    reference pair still holds.</p>
+    <p><strong>Shortlist comparisons with the first seat held fixed.</strong> That is the only way to rank the pairs and
+    triples on composition. The weighted 45/10/45 triple suggested in the shortlist transcript needs the same control,
+    because weights change which group each new seat joins.</p>
+    <p><strong>New data for the fixed shortlist.</strong> Everything here uses history already examined; a forward check
+    is the only independent test of the reference pair.</p>
+  </section>
+
+  <section>
+    <div class="sec-head">
+      <span class="n">12</span>
+      <h2>Full grids</h2>
+    </div>
+    <div class="panel"><div class="scroller"><table id="t-arms"></table></div></div>
+    <div class="panel"><div class="scroller"><table id="t-perms"></table></div></div>
+  </section>
+
+  <footer>
+    Historical simulation on one symbol's exported tapes, 2020&ndash;2026: <code>rr_diversification</code>,
+    <code>rr_followup</code>, <code>wide4_permutations</code>, <code>rr_episodes</code>, <code>gg_pairs</code>,
+    <code>rr_gg_episodes</code>, <code>rr_gg_shortlist</code> and <code>mature_rr_book</code>. Deaths are exported-exit proxies, not exact intratrade
+    crossings. Start dates overlap and every run is in sample. Dollar figures are descriptive summaries over
+    overlapping histories, not expected returns. No reserve, pipeline or weight was optimised.
+  </footer>
+</div>
+
+<div class="tip" id="tip" role="status" aria-live="polite"></div>
+
+<script>
+const D = {"years":["2020","2021","2022","2023","2024","2025"],"arms":{"wide4":{"kind":"rr","groups":4,"width":3.0,"clean":6,"wipes":[0,0,0,0,0,0],"empty":0.0,"disp":0.213,"cash":214224,"deaths":32,"w1":0.478,"cohort":[[3,6],[4,8],[3,4],[4,8],[2,6],[2,7]],"startup":0,"mature":0,"first":"0.50","b1":0,"b2":0,"b3":0},"grid5":{"kind":"rr","groups":5,"width":3.0,"clean":5,"wipes":[0,0,0,1,0,0],"empty":8.17,"disp":0.19,"cash":203342,"deaths":33.8,"w1":0.609,"cohort":[[6,11],[4,7],[3,4],[3,3],[3,9],[2,4]],"startup":0,"mature":1,"first":"0.50","b1":0,"b2":1,"b3":0},"edge4":{"kind":"rr","groups":4,"width":3.0,"clean":5,"wipes":[0,0,0,1,0,0],"empty":47.23,"disp":0.211,"cash":181494,"deaths":38,"w1":0.606,"cohort":[[4,10],[4,10],[3,4],[3,3],[4,6],[2,4]],"startup":0,"mature":1,"first":"0.50","b1":0,"b2":1,"b3":0},"extremes2":{"kind":"rr","groups":2,"width":3.0,"clean":5,"wipes":[0,0,0,1,0,0],"empty":48.09,"disp":0.244,"cash":168989,"deaths":40,"w1":0.609,"cohort":[[7,12],[6,8],[5,10],[3,3],[3,4],[1,6]],"startup":0,"mature":1,"first":"0.50","b1":0,"b2":1,"b3":0},"grid10":{"kind":"rr","groups":10,"width":3.0,"clean":4,"wipes":[0,1,0,1,0,0],"empty":65.24,"disp":0.18,"cash":228413,"deaths":27.7,"w1":0.59,"cohort":[[3,8],[4,4],[2,4],[2,2],[2,6],[2,6]],"startup":1,"mature":1,"first":"0.50","b1":1,"b2":1,"b3":0},"grid20":{"kind":"rr","groups":20,"width":3.0,"clean":4,"wipes":[0,1,0,1,0,0],"empty":73.53,"disp":0.184,"cash":227606,"deaths":28.3,"w1":0.608,"cohort":[[5,16],[4,4],[2,4],[3,3],[2,6],[2,4]],"startup":1,"mature":1,"first":"0.50","b1":1,"b2":1,"b3":0},"center4":{"kind":"rr","groups":4,"width":1.5,"clean":4,"wipes":[2,0,1,0,0,0],"empty":56.06,"disp":0.187,"cash":226684,"deaths":30.5,"w1":0.653,"cohort":[[7,7],[7,10],[3,3],[2,3],[2,6],[1,4]],"startup":3,"mature":0,"first":"1.25","b1":3,"b2":0,"b3":0},"without050":{"kind":"rr","groups":4,"width":2.75,"clean":4,"wipes":[2,0,1,0,0,0],"empty":20.18,"disp":0.205,"cash":212214,"deaths":33.8,"w1":0.708,"cohort":[[6,6],[4,5],[4,4],[4,6],[2,6],[2,4]],"startup":3,"mature":0,"first":"0.75","b1":3,"b2":0,"b3":0},"grid20_reverse":{"kind":"rr","groups":20,"width":3.0,"clean":2,"wipes":[2,2,2,1,0,0],"empty":75.84,"disp":0.201,"cash":237364,"deaths":28.3,"w1":0.825,"cohort":[[3,3],[6,6],[2,2],[3,3],[2,3],[2,7]],"startup":4,"mature":3,"first":"3.50","b1":4,"b2":3,"b3":0},"rr_1.00":{"kind":"flat","groups":1,"width":0.0,"clean":1,"wipes":[2,2,2,1,0,1],"empty":101.52,"disp":0.361,"cash":196779,"deaths":31,"w1":0.944,"cohort":[[8,8],[5,5],[5,5],[5,5],[2,3],[3,3]],"startup":4,"mature":4,"first":"1.00","b1":4,"b2":4,"b3":0},"ladder4":{"kind":"flat","groups":1,"width":0.0,"clean":1,"wipes":[2,2,2,1,0,1],"empty":101.52,"disp":0.316,"cash":195285,"deaths":37.2,"w1":0.944,"cohort":[[8,8],[5,5],[5,5],[5,5],[2,3],[3,3]],"startup":4,"mature":4,"first":"1.00","b1":4,"b2":4,"b3":0},"ladder20":{"kind":"flat","groups":1,"width":0.0,"clean":1,"wipes":[2,2,2,1,0,1],"empty":101.52,"disp":0.345,"cash":196050,"deaths":37.7,"w1":0.944,"cohort":[[8,8],[5,5],[5,5],[5,5],[4,6],[3,3]],"startup":4,"mature":4,"first":"1.00","b1":4,"b2":4,"b3":0},"ladder20_reverse":{"kind":"flat","groups":1,"width":0.0,"clean":1,"wipes":[2,2,2,1,0,1],"empty":101.52,"disp":0.344,"cash":190612,"deaths":35.5,"w1":0.944,"cohort":[[8,8],[5,5],[5,5],[5,5],[2,3],[3,3]],"startup":4,"mature":4,"first":"1.00","b1":4,"b2":4,"b3":0},"uniform_high":{"kind":"flat","groups":1,"width":0.0,"clean":1,"wipes":[2,2,2,1,0,1],"empty":101.52,"disp":0.355,"cash":173774,"deaths":31,"w1":0.944,"cohort":[[8,8],[5,5],[5,5],[5,5],[2,3],[3,3]],"startup":4,"mature":4,"first":"1.00","b1":4,"b2":4,"b3":0},"uniform_low":{"kind":"flat","groups":1,"width":0.0,"clean":1,"wipes":[3,3,3,1,0,1],"empty":123.0,"disp":0.37,"cash":207031,"deaths":47.5,"w1":0.944,"cohort":[[11,11],[13,13],[11,11],[8,8],[5,7],[3,3]],"startup":4,"mature":7,"first":"1.00","b1":4,"b2":4,"b3":3}},"march":{"wide4":{"deaths":5,"dates":[["2026-03-26",5]],"ndates":1,"survivors":15,"equity":91699},"grid5":{"deaths":4,"dates":[["2026-03-27",4]],"ndates":1,"survivors":16,"equity":87289},"edge4":{"deaths":0,"dates":[],"ndates":0,"survivors":20,"equity":93598},"extremes2":{"deaths":0,"dates":[],"ndates":0,"survivors":20,"equity":97261},"grid10":{"deaths":4,"dates":[["2026-03-26",4]],"ndates":1,"survivors":16,"equity":86742},"grid20":{"deaths":7,"dates":[["2026-03-23",2],["2026-03-24",2],["2026-03-26",1],["2026-03-27",2]],"ndates":4,"survivors":13,"equity":80726},"center4":{"deaths":10,"dates":[["2026-03-26",5],["2026-03-27",5]],"ndates":2,"survivors":10,"equity":77529},"without050":{"deaths":5,"dates":[["2026-03-26",5]],"ndates":1,"survivors":15,"equity":89958},"grid20_reverse":{"deaths":7,"dates":[["2026-03-23",2],["2026-03-24",2],["2026-03-26",1],["2026-03-27",2]],"ndates":4,"survivors":13,"equity":80726},"rr_1.00":{"deaths":20,"dates":[["2026-03-26",20]],"ndates":1,"survivors":0,"equity":76068},"ladder4":{"deaths":10,"dates":[["2026-03-19",5],["2026-03-24",5]],"ndates":2,"survivors":10,"equity":76068},"ladder20":{"deaths":12,"dates":[["2026-03-19",2],["2026-03-20",1],["2026-03-23",4],["2026-03-24",2],["2026-03-26",2],["2026-03-27",1]],"ndates":6,"survivors":8,"equity":76068},"ladder20_reverse":{"deaths":12,"dates":[["2026-03-19",3],["2026-03-23",4],["2026-03-24",2],["2026-03-26",2],["2026-03-27",1]],"ndates":5,"survivors":8,"equity":75726},"uniform_high":{"deaths":0,"dates":[],"ndates":0,"survivors":20,"equity":106068},"uniform_low":{"deaths":20,"dates":[["2026-03-19",20]],"ndates":1,"survivors":0,"equity":46068}},"calendar":{"0.50":{"2020":"2021-06-04","2021":"2021-03-08","2022":null,"2023":"2023-03-01","2024":null,"2025":"2025-03-10"},"0.66":{"2020":null,"2021":"2021-02-23","2022":null,"2023":"2023-10-30","2024":null,"2025":"2025-03-11"},"0.75":{"2020":"2020-03-12","2021":"2021-02-23","2022":null,"2023":null,"2024":null,"2025":"2025-03-11"},"0.82":{"2020":"2020-03-18","2021":"2021-02-22","2022":null,"2023":null,"2024":null,"2025":"2025-03-11"},"0.83":{"2020":"2020-03-18","2021":"2021-02-22","2022":"2022-07-01","2023":null,"2024":null,"2025":"2025-03-11"},"0.97":{"2020":"2020-03-13","2021":"2021-02-18","2022":"2022-05-12","2023":null,"2024":null,"2025":"2025-04-07"},"1.00":{"2020":"2020-03-12","2021":"2021-02-22","2022":"2022-05-12","2023":null,"2024":null,"2025":"2025-04-04"},"1.13":{"2020":"2020-03-02","2021":"2021-02-22","2022":"2022-01-21","2023":null,"2024":null,"2025":null},"1.17":{"2020":"2020-03-02","2021":"2021-02-22","2022":"2022-01-21","2023":null,"2024":null,"2025":"2025-03-11"},"1.25":{"2020":"2020-03-02","2021":"2021-02-22","2022":"2022-01-21","2023":null,"2024":null,"2025":"2025-04-04"},"1.29":{"2020":"2020-03-02","2021":"2021-02-23","2022":"2022-01-24","2023":null,"2024":null,"2025":"2025-04-04"},"1.45":{"2020":"2020-03-02","2021":"2021-02-23","2022":"2022-01-21","2023":null,"2024":null,"2025":"2025-03-11"},"1.50":{"2020":"2020-03-02","2021":"2021-02-23","2022":"2022-01-24","2023":null,"2024":null,"2025":"2025-04-04"},"1.61":{"2020":"2020-03-02","2021":"2021-02-26","2022":"2022-06-13","2023":null,"2024":null,"2025":"2025-01-13"},"1.75":{"2020":"2020-03-12","2021":"2021-03-05","2022":"2022-06-13","2023":null,"2024":null,"2025":"2025-01-13"},"1.76":{"2020":"2020-03-12","2021":"2021-03-05","2022":"2022-06-13","2023":null,"2024":null,"2025":"2025-01-13"},"1.83":{"2020":"2020-03-12","2021":null,"2022":"2022-06-13","2023":null,"2024":null,"2025":"2025-01-13"},"1.92":{"2020":"2020-03-12","2021":null,"2022":"2022-06-13","2023":null,"2024":null,"2025":"2025-01-13"},"2.00":{"2020":"2020-03-12","2021":"2021-06-21","2022":"2022-06-14","2023":null,"2024":null,"2025":"2025-01-13"},"2.08":{"2020":"2020-03-12","2021":"2021-03-05","2022":"2022-01-10","2023":null,"2024":null,"2025":"2025-01-13"},"2.17":{"2020":"2020-03-12","2021":null,"2022":"2022-01-10","2023":null,"2024":null,"2025":"2025-01-13"},"2.24":{"2020":"2020-03-12","2021":null,"2022":"2022-01-10","2023":null,"2024":null,"2025":"2025-01-13"},"2.25":{"2020":"2020-03-12","2021":null,"2022":"2022-01-10","2023":null,"2024":null,"2025":"2025-01-13"},"2.39":{"2020":"2020-02-28","2021":null,"2022":"2022-01-10","2023":null,"2024":null,"2025":"2025-01-13"},"2.50":{"2020":"2020-02-28","2021":"2021-10-01","2022":"2022-01-10","2023":null,"2024":null,"2025":"2025-01-13"},"2.55":{"2020":"2020-02-28","2021":null,"2022":"2022-01-10","2023":null,"2024":null,"2025":"2025-01-13"},"2.71":{"2020":"2020-02-28","2021":"2021-02-26","2022":"2022-01-10","2023":null,"2024":null,"2025":"2025-03-11"},"2.75":{"2020":"2020-02-28","2021":"2021-02-23","2022":"2022-01-10","2023":null,"2024":null,"2025":"2025-03-06"},"2.83":{"2020":"2020-02-28","2021":"2021-02-23","2022":"2022-01-10","2023":null,"2024":null,"2025":"2025-03-07"},"2.87":{"2020":"2020-02-28","2021":"2021-02-23","2022":"2022-01-10","2023":null,"2024":null,"2025":"2025-03-07"},"3.03":{"2020":"2020-02-28","2021":"2021-02-23","2022":"2022-01-10","2023":null,"2024":null,"2025":"2025-03-11"},"3.17":{"2020":"2020-02-28","2021":"2021-02-23","2022":"2022-01-10","2023":null,"2024":null,"2025":"2025-01-13"},"3.18":{"2020":"2020-02-28","2021":"2021-02-23","2022":"2022-01-10","2023":null,"2024":null,"2025":"2025-01-13"},"3.25":{"2020":"2020-02-28","2021":"2021-02-25","2022":"2022-01-10","2023":null,"2024":null,"2025":"2025-01-13"},"3.34":{"2020":"2020-02-28","2021":"2021-02-25","2022":"2022-01-10","2023":null,"2024":null,"2025":"2025-01-13"},"3.50":{"2020":"2020-02-28","2021":"2021-02-25","2022":"2022-01-10","2023":null,"2024":null,"2025":"2025-01-13"}},"rrs":["0.50","0.66","0.75","0.82","0.83","0.97","1.00","1.13","1.17","1.25","1.29","1.45","1.50","1.61","1.75","1.76","1.83","1.92","2.00","2.08","2.17","2.24","2.25","2.39","2.50","2.55","2.71","2.75","2.83","2.87","3.03","3.17","3.18","3.25","3.34","3.50"],"facts":{"quadRank":46256,"quadTotal":58905,"quadTies":484,"quadBetter":46255,"adjSim":5.29,"isoPairSame":5,"totalRuns":1016},"perms":[{"name":"perm01","order":"0.50/1.50/2.50/3.50","first":"0.50","clean":6,"startup":0,"mature":0,"empty":0.0,"deaths":192,"wipes":[0,0,0,0,0,0]},{"name":"perm02","order":"0.50/1.50/3.50/2.50","first":"0.50","clean":5,"startup":0,"mature":1,"empty":41.33,"deaths":196,"wipes":[0,0,0,1,0,0]},{"name":"perm03","order":"0.50/2.50/1.50/3.50","first":"0.50","clean":6,"startup":0,"mature":0,"empty":0.0,"deaths":185,"wipes":[0,0,0,0,0,0]},{"name":"perm04","order":"0.50/2.50/3.50/1.50","first":"0.50","clean":5,"startup":0,"mature":1,"empty":6.31,"deaths":206,"wipes":[0,1,0,0,0,0]},{"name":"perm05","order":"0.50/3.50/1.50/2.50","first":"0.50","clean":5,"startup":0,"mature":1,"empty":41.33,"deaths":202,"wipes":[0,0,0,1,0,0]},{"name":"perm06","order":"0.50/3.50/2.50/1.50","first":"0.50","clean":6,"startup":0,"mature":0,"empty":0.0,"deaths":194,"wipes":[0,0,0,0,0,0]},{"name":"perm07","order":"1.50/0.50/2.50/3.50","first":"1.50","clean":3,"startup":3,"mature":1,"empty":62.28,"deaths":226,"wipes":[2,1,1,0,0,0]},{"name":"perm08","order":"1.50/0.50/3.50/2.50","first":"1.50","clean":3,"startup":3,"mature":1,"empty":98.45,"deaths":208,"wipes":[2,0,1,1,0,0]},{"name":"perm09","order":"1.50/2.50/0.50/3.50","first":"1.50","clean":3,"startup":5,"mature":2,"empty":39.69,"deaths":222,"wipes":[2,2,3,0,0,0]},{"name":"perm10","order":"1.50/2.50/3.50/0.50","first":"1.50","clean":3,"startup":5,"mature":2,"empty":39.85,"deaths":207,"wipes":[2,2,3,0,0,0]},{"name":"perm11","order":"1.50/3.50/0.50/2.50","first":"1.50","clean":2,"startup":3,"mature":2,"empty":99.35,"deaths":204,"wipes":[2,1,1,1,0,0]},{"name":"perm12","order":"1.50/3.50/2.50/0.50","first":"1.50","clean":3,"startup":3,"mature":1,"empty":58.16,"deaths":205,"wipes":[2,1,1,0,0,0]},{"name":"perm13","order":"2.50/0.50/1.50/3.50","first":"2.50","clean":3,"startup":3,"mature":1,"empty":62.28,"deaths":220,"wipes":[2,1,1,0,0,0]},{"name":"perm14","order":"2.50/0.50/3.50/1.50","first":"2.50","clean":3,"startup":3,"mature":1,"empty":63.42,"deaths":228,"wipes":[2,1,1,0,0,0]},{"name":"perm15","order":"2.50/1.50/0.50/3.50","first":"2.50","clean":4,"startup":3,"mature":0,"empty":55.98,"deaths":207,"wipes":[2,0,1,0,0,0]},{"name":"perm16","order":"2.50/1.50/3.50/0.50","first":"2.50","clean":4,"startup":3,"mature":0,"empty":56.98,"deaths":192,"wipes":[2,0,1,0,0,0]},{"name":"perm17","order":"2.50/3.50/0.50/1.50","first":"2.50","clean":3,"startup":3,"mature":1,"empty":62.28,"deaths":216,"wipes":[2,1,1,0,0,0]},{"name":"perm18","order":"2.50/3.50/1.50/0.50","first":"2.50","clean":4,"startup":3,"mature":0,"empty":57.12,"deaths":187,"wipes":[2,0,1,0,0,0]},{"name":"perm19","order":"3.50/0.50/1.50/2.50","first":"3.50","clean":2,"startup":5,"mature":2,"empty":116.88,"deaths":199,"wipes":[2,3,1,1,0,0]},{"name":"perm20","order":"3.50/0.50/2.50/1.50","first":"3.50","clean":3,"startup":5,"mature":1,"empty":80.55,"deaths":199,"wipes":[2,3,1,0,0,0]},{"name":"perm21","order":"3.50/1.50/0.50/2.50","first":"3.50","clean":2,"startup":5,"mature":2,"empty":144.2,"deaths":197,"wipes":[2,3,1,1,0,0]},{"name":"perm22","order":"3.50/1.50/2.50/0.50","first":"3.50","clean":3,"startup":5,"mature":1,"empty":80.55,"deaths":201,"wipes":[2,3,1,0,0,0]},{"name":"perm23","order":"3.50/2.50/0.50/1.50","first":"3.50","clean":3,"startup":6,"mature":1,"empty":74.93,"deaths":193,"wipes":[2,3,2,0,0,0]},{"name":"perm24","order":"3.50/2.50/1.50/0.50","first":"3.50","clean":3,"startup":6,"mature":0,"empty":45.94,"deaths":194,"wipes":[2,2,2,0,0,0]}],"permAudit":13184954,"cross":[{"arm":"edge4","first":"0.50","startup":0,"mature":1,"clean":5},{"arm":"extremes2","first":"0.50","startup":0,"mature":1,"clean":5},{"arm":"grid5","first":"0.50","startup":0,"mature":1,"clean":5},{"arm":"wide4","first":"0.50","startup":0,"mature":0,"clean":6},{"arm":"grid10","first":"0.50","startup":1,"mature":1,"clean":4},{"arm":"grid20","first":"0.50","startup":1,"mature":1,"clean":4},{"arm":"center4","first":"1.25","startup":3,"mature":0,"clean":4},{"arm":"without050","first":"0.75","startup":3,"mature":0,"clean":4},{"arm":"grid20_reverse","first":"3.50","startup":4,"mature":3,"clean":2}],"firstByYear":{"0.50":{"2020":{"startup":0,"mature":0},"2021":{"startup":0,"mature":1},"2022":{"startup":0,"mature":0},"2023":{"startup":0,"mature":2},"2024":{"startup":0,"mature":0},"2025":{"startup":0,"mature":0}},"1.50":{"2020":{"startup":12,"mature":0},"2021":{"startup":0,"mature":7},"2022":{"startup":10,"mature":0},"2023":{"startup":0,"mature":2},"2024":{"startup":0,"mature":0},"2025":{"startup":0,"mature":0}},"2.50":{"2020":{"startup":12,"mature":0},"2021":{"startup":0,"mature":3},"2022":{"startup":6,"mature":0},"2023":{"startup":0,"mature":0},"2024":{"startup":0,"mature":0},"2025":{"startup":0,"mature":0}},"3.50":{"2020":{"startup":12,"mature":0},"2021":{"startup":12,"mature":5},"2022":{"startup":8,"mature":0},"2023":{"startup":0,"mature":2},"2024":{"startup":0,"mature":0},"2025":{"startup":0,"mature":0}}},"permTotals":{"startup":72,"mature":22},"pairQ":{"quarters":["2020-01","2020-04","2020-07","2020-10","2021-01","2021-04","2021-07","2021-10","2022-01","2022-04","2022-07","2022-10","2023-01","2023-04","2023-07","2023-10","2024-01","2024-04","2024-07","2024-10","2025-01","2025-04","2025-07","2025-10","2026-01","2026-04"],"both":["2022-04","2024-07","2025-04"],"onlyA":["2021-04","2023-10"],"onlyB":["2020-01","2022-01","2026-01"],"a":"0.50","b":"2.50"},"families":[{"name":"RR \u00d7 RR","pairs":78,"ratio":3.11,"phi":0.697,"cond":0.82,"below":0,"minjoint":3},{"name":"GG \u00d7 GG","pairs":78,"ratio":2.89,"phi":0.804,"cond":1.0,"below":0,"minjoint":5},{"name":"RR \u00d7 GG","pairs":169,"ratio":2.6,"phi":0.584,"cond":0.8,"below":0,"minjoint":3}],"shortlist":{"rr_pair":{"cases":12,"w":5,"fw":1,"fn":6,"fe":3.67,"ow":4,"on":6,"mean":0.417,"empty":6.94},"cross_pair":{"cases":12,"w":7,"fw":1,"fn":6,"fe":8.17,"ow":6,"on":6,"mean":0.583,"empty":14.36},"rr_triple":{"cases":36,"w":25,"fw":1,"fn":12,"fe":0.35,"ow":24,"on":24,"mean":0.694,"empty":7.17},"cross_triple":{"cases":36,"w":20,"fw":1,"fn":12,"fe":2.75,"ow":19,"on":24,"mean":0.556,"empty":11.9}},"shortlistQuarter":{"rr_pair":[3,21.15],"cross_pair":[3,19.23],"rr_triple":[2,23.08],"cross_triple":[2,21.79]},"mature":{"hold":{"pair|1500":{"label":"10/0/10","complete":3,"survivors":15.77,"n":26},"pair|6800":{"label":"10/0/10","complete":0,"survivors":20,"n":26},"middle10|1500":{"label":"9/2/9","complete":2,"survivors":15.65,"n":26},"middle10|6800":{"label":"9/2/9","complete":0,"survivors":20,"n":26},"middle20|1500":{"label":"8/4/8","complete":2,"survivors":15.54,"n":26},"middle20|6800":{"label":"8/4/8","complete":0,"survivors":20,"n":26}},"recovery":{"pair|1500":{"label":"10/0/10","n":23,"wipe":3,"empty":0.57,"b5":11.19,"b10":22.7,"b20":115.05,"cash":15162,"deaths":267},"pair|6800":{"label":"10/0/10","n":23,"wipe":0,"empty":0.0,"b5":0.0,"b10":0.0,"b20":0.0,"cash":96522,"deaths":0},"middle10|1500":{"label":"9/2/9","n":23,"wipe":2,"empty":0.34,"b5":8.52,"b10":26.61,"b20":123.89,"cash":15471,"deaths":269},"middle10|6800":{"label":"9/2/9","n":23,"wipe":0,"empty":0.0,"b5":0.0,"b10":0.0,"b20":0.0,"cash":96565,"deaths":0},"middle20|1500":{"label":"8/4/8","n":23,"wipe":2,"empty":0.34,"b5":5.05,"b10":28.68,"b20":125.93,"cash":15872,"deaths":266},"middle20|6800":{"label":"8/4/8","n":23,"wipe":0,"empty":0.0,"b5":0.0,"b10":0.0,"b20":0.0,"cash":96609,"deaths":0}}},"margins":{"0.50|hold":[4494.6,"2021-06-30","2021-04"],"0.50|recovery":[2787.45,"2021-06-19","2020-07"],"1.00|hold":[3428.15,"2026-03-31","2026-01"],"1.00|recovery":[740.95,"2026-03-28","2025-07"],"2.50|hold":[3097.95,"2022-06-30","2022-04"],"2.50|recovery":[2416.3,"2026-03-28","2025-07"]},"slide":{"0.50":[["2026-02-01",6255.4],["2026-02-02",6255.4],["2026-02-03",5975.55],["2026-02-04",5813.2],["2026-02-05",6007.95],["2026-02-06",5266.65],["2026-02-07",6004.25],["2026-02-08",6004.25],["2026-02-09",6004.25],["2026-02-10",6084.0],["2026-02-11",6133.0],["2026-02-12",6439.6],["2026-02-13",6133.2],["2026-02-14",5287.9],["2026-02-15",5287.9],["2026-02-16",5287.9],["2026-02-17",5104.7],["2026-02-18",4968.9],["2026-02-19",4823.45],["2026-02-20",4756.15],["2026-02-21",4993.85],["2026-02-22",4993.85],["2026-02-23",4993.85],["2026-02-24",5201.15],["2026-02-25",5549.85],["2026-02-26",5603.95],["2026-02-27",5767.75],["2026-02-28",5336.35],["2026-03-01",5336.35],["2026-03-02",5336.35],["2026-03-03",6350.5],["2026-03-04",5935.7],["2026-03-05",5511.8],["2026-03-06",5779.45],["2026-03-07",5230.2],["2026-03-08",5230.2],["2026-03-09",5230.2],["2026-03-10",6406.85],["2026-03-11",6608.95],["2026-03-12",6389.5],["2026-03-13",6102.75],["2026-03-14",5839.95],["2026-03-15",5839.95],["2026-03-16",5839.95],["2026-03-17",5767.0],["2026-03-18",5819.75],["2026-03-19",5900.5],["2026-03-20",5490.15],["2026-03-21",5094.85],["2026-03-22",5094.85],["2026-03-23",5094.85],["2026-03-24",4556.6],["2026-03-25",4612.3],["2026-03-26",4332.55],["2026-03-27",4280.75],["2026-03-28",4019.9],["2026-03-29",4019.9],["2026-03-30",4019.9],["2026-03-31",4078.1],["2026-04-01",4949.15],["2026-04-02",5151.85],["2026-04-03",5140.65],["2026-04-04",4993.4],["2026-04-05",4993.4],["2026-04-06",4993.4],["2026-04-07",4933.05],["2026-04-08",4424.2],["2026-04-09",4368.8],["2026-04-10",4279.55],["2026-04-11",4432.15],["2026-04-12",4432.15],["2026-04-13",4432.15],["2026-04-14",4850.8],["2026-04-15",5061.0],["2026-04-16",5089.2],["2026-04-17",4989.45],["2026-04-18",4878.2],["2026-04-19",4878.2],["2026-04-20",4878.2],["2026-04-21",5089.95],["2026-04-22",5026.65],["2026-04-23",5223.25],["2026-04-24",5379.95],["2026-04-25",6184.7],["2026-04-26",6184.7],["2026-04-27",6184.7],["2026-04-28",6280.45],["2026-04-29",6454.55],["2026-04-30",6476.9]],"1.00":[["2026-02-01",6422.4],["2026-02-02",6422.4],["2026-02-03",6219.6],["2026-02-04",5941.85],["2026-02-05",6047.6],["2026-02-06",5118.85],["2026-02-07",5907.95],["2026-02-08",5907.95],["2026-02-09",5907.95],["2026-02-10",5939.2],["2026-02-11",5834.75],["2026-02-12",6239.4],["2026-02-13",6041.6],["2026-02-14",4969.3],["2026-02-15",4969.3],["2026-02-16",4969.3],["2026-02-17",4719.6],["2026-02-18",4602.35],["2026-02-19",4418.4],["2026-02-20",4364.1],["2026-02-21",4637.8],["2026-02-22",4637.8],["2026-02-23",4637.8],["2026-02-24",4866.6],["2026-02-25",5035.8],["2026-02-26",5089.9],["2026-02-27",5160.2],["2026-02-28",4734.85],["2026-03-01",4734.85],["2026-03-02",4734.85],["2026-03-03",5195.05],["2026-03-04",4795.8],["2026-03-05",4231.4],["2026-03-06",3975.55],["2026-03-07",3451.3],["2026-03-08",3451.3],["2026-03-09",3451.3],["2026-03-10",4300.55],["2026-03-11",4100.7],["2026-03-12",3752.8],["2026-03-13",3342.55],["2026-03-14",3049.85],["2026-03-15",3049.85],["2026-03-16",3049.85],["2026-03-17",3044.95],["2026-03-18",2994.2],["2026-03-19",2904.45],["2026-03-20",2670.6],["2026-03-21",2110.8],["2026-03-22",2110.8],["2026-03-23",2110.8],["2026-03-24",1811.1],["2026-03-25",1535.8],["2026-03-26",1284.05],["2026-03-27",958.75],["2026-03-28",740.95],["2026-03-29",740.95],["2026-03-30",740.95],["2026-03-31",854.25],["2026-04-01",1851.9],["2026-04-02",2343.1],["2026-04-03",2331.9],["2026-04-04",2066.65],["2026-04-05",2066.65],["2026-04-06",2066.65],["2026-04-07",2086.3],["2026-04-08",1577.45],["2026-04-09",1470.6],["2026-04-10",1212.85],["2026-04-11",1412.0],["2026-04-12",1412.0],["2026-04-13",1412.0],["2026-04-14",1837.15],["2026-04-15",2174.45],["2026-04-16",2252.65],["2026-04-17",2221.5],["2026-04-18",2095.25],["2026-04-19",2095.25],["2026-04-20",2095.25],["2026-04-21",2191.05],["2026-04-22",1772.75],["2026-04-23",2106.85],["2026-04-24",2082.15],["2026-04-25",2886.9],["2026-04-26",2886.9],["2026-04-27",2886.9],["2026-04-28",3028.7],["2026-04-29",2954.8],["2026-04-30",2993.65]],"2.50":[["2026-02-01",7270.5],["2026-02-02",7270.5],["2026-02-03",7211.2],["2026-02-04",7002.45],["2026-02-05",6879.7],["2026-02-06",5950.95],["2026-02-07",6745.2],["2026-02-08",6745.2],["2026-02-09",6745.2],["2026-02-10",6859.95],["2026-02-11",6629.6],["2026-02-12",6912.25],["2026-02-13",6565.4],["2026-02-14",5493.1],["2026-02-15",5493.1],["2026-02-16",5493.1],["2026-02-17",5243.4],["2026-02-18",5003.7],["2026-02-19",4915.25],["2026-02-20",4677.0],["2026-02-21",5560.75],["2026-02-22",5560.75],["2026-02-23",5560.75],["2026-02-24",5761.6],["2026-02-25",5837.95],["2026-02-26",6037.65],["2026-02-27",6360.45],["2026-02-28",5832.65],["2026-03-01",5832.65],["2026-03-02",5832.65],["2026-03-03",6320.0],["2026-03-04",5920.75],["2026-03-05",5654.35],["2026-03-06",5398.5],["2026-03-07",4973.25],["2026-03-08",4973.25],["2026-03-09",4973.25],["2026-03-10",6291.05],["2026-03-11",5886.75],["2026-03-12",6114.45],["2026-03-13",5871.2],["2026-03-14",5760.5],["2026-03-15",5760.5],["2026-03-16",5760.5],["2026-03-17",5461.65],["2026-03-18",5483.9],["2026-03-19",5549.15],["2026-03-20",5133.85],["2026-03-21",4574.05],["2026-03-22",4574.05],["2026-03-23",4574.05],["2026-03-24",4070.85],["2026-03-25",3615.55],["2026-03-26",3363.8],["2026-03-27",2840.5],["2026-03-28",2416.3],["2026-03-29",2416.3],["2026-03-30",2416.3],["2026-03-31",2826.1],["2026-04-01",4060.95],["2026-04-02",4865.35],["2026-04-03",4693.15],["2026-04-04",4427.9],["2026-04-05",4427.9],["2026-04-06",4427.9],["2026-04-07",4517.15],["2026-04-08",4005.8],["2026-04-09",3830.2],["2026-04-10",3983.5],["2026-04-11",4165.35],["2026-04-12",4165.35],["2026-04-13",4165.35],["2026-04-14",5166.1],["2026-04-15",5491.95],["2026-04-16",5604.75],["2026-04-17",5452.15],["2026-04-18",5385.9],["2026-04-19",5385.9],["2026-04-20",5385.9],["2026-04-21",5493.75],["2026-04-22",4943.45],["2026-04-23",5525.8],["2026-04-24",5613.65],["2026-04-25",6517.0],["2026-04-26",6517.0],["2026-04-27",6517.0],["2026-04-28",6449.8],["2026-04-29",6333.05],["2026-04-30",6217.9]]},"deathsAt6800":0};
+const ARM_ORDER = ["wide4","grid5","edge4","extremes2","grid10","grid20","center4","without050",
+                   "grid20_reverse","rr_1.00","ladder4","ladder20","ladder20_reverse",
+                   "uniform_high","uniform_low"];
+const FIRSTS = ["0.50","1.50","2.50","3.50"];
+const tip = document.getElementById("tip");
+function showTip(e, html){
+  tip.innerHTML = html; tip.style.opacity = "1";
+  const r = tip.getBoundingClientRect();
+  let x = e.clientX + 14, y = e.clientY - 10;
+  if (x + r.width > window.innerWidth - 8) x = e.clientX - r.width - 14;
+  if (y + r.height > window.innerHeight - 8) y = window.innerHeight - r.height - 8;
+  tip.style.left = Math.max(8, x) + "px"; tip.style.top = Math.max(8, y) + "px";
+}
+const hideTip = () => { tip.style.opacity = "0"; };
+function bind(node, html){
+  node.addEventListener("mousemove", e => showTip(e, html));
+  node.addEventListener("mouseleave", hideTip);
+  node.setAttribute("tabindex","0");
+  node.addEventListener("focus", () => { const b = node.getBoundingClientRect();
+    showTip({clientX:b.right, clientY:b.top}, html); });
+  node.addEventListener("blur", hideTip);
+}
+const SVGNS = "http://www.w3.org/2000/svg";
+function svg(w,h){
+  const s = document.createElementNS(SVGNS,"svg");
+  s.setAttribute("viewBox", `0 0 ${w} ${h}`); s.setAttribute("role","img");
+  s.style.maxWidth = w+"px"; s.style.marginInline = "auto";
+  return s;
+}
+function el(tag, attrs, parent){
+  const n = document.createElementNS(SVGNS, tag);
+  for (const k in attrs) n.setAttribute(k, attrs[k]);
+  if (parent) parent.appendChild(n);
+  return n;
+}
+function legend(host, items){
+  host.innerHTML = items.map(i =>
+    `<span class="k"><span class="sw ${i.cls||""}" style="background:${i.c}"></span>${i.t}</span>`).join("");
+}
+const usd = n => (n<0?"\u2212$":"$") + Math.abs(n).toLocaleString("en-US");
+/* ---------- 01 establishment bands ---------- */
+(function(){
+  const rr = ARM_ORDER.filter(a => D.arms[a].kind === "rr");
+  const flat = ARM_ORDER.filter(a => D.arms[a].kind !== "rr");
+  const BANDS = [["b1","1\u20134 PAs","var(--rr-1)"],["b2","5\u20139 PAs","var(--rr-3)"],["b3","10+ PAs","var(--rr-4)"]];
+  const LW = 136, RW = 178, ROWH = 25, TOP = 30, GAP = 26, BARW = 280;
+  const maxV = Math.max(...ARM_ORDER.map(a => D.arms[a].b1 + D.arms[a].b2 + D.arms[a].b3));
+  const W = LW + BARW + RW, H = TOP + (rr.length+flat.length)*ROWH + GAP + 44;
+  const s = svg(W,H);
+  s.setAttribute("aria-label","Empty-book episodes by the largest book size reached before emptying");
+  const x = v => LW + (v/maxV)*BARW;
+  const bottom = TOP + (rr.length+flat.length)*ROWH + GAP;
+  for (let v=0; v<=maxV; v++){
+    el("line",{x1:x(v),y1:TOP-8,x2:x(v),y2:bottom-4,stroke:"var(--grid)","stroke-width":1}, s);
+    el("text",{x:x(v),y:bottom+12,class:"tick","text-anchor":"middle"},s).textContent = v;
+  }
+  el("text",{x:LW+BARW/2,y:H-6,class:"tick","text-anchor":"middle"},s)
+    .textContent = "empty-book episodes across six starts";
+  let y = TOP;
+  [["RR-GROUPED",rr],["RR 1.00: UNIFORM AND LADDERED RESERVES",flat]].forEach(([label, list], gi) => {
+    if (gi) y += GAP;
+    el("text",{x:0,y:y-10,class:"grp"},s).textContent = label;
+    list.forEach(a => {
+      const d = D.arms[a];
+      el("text",{x:0,y:y+15,class:"rowlab"},s).textContent = a;
+      let at = 0;
+      BANDS.forEach(([k, lab, col]) => {
+        const v = d[k]; if (!v) return;
+        const w = (v/maxV)*BARW;
+        const b = el("rect",{x:LW + (at/maxV)*BARW + (at?1:0), y:y+5, width:Math.max(1,w-(at?1:0)),
+          height:ROWH-11, rx:3, fill:col, class:"bar"}, s);
+        bind(b, `<b>${a}</b><br><span class="m">${v} episode${v===1?"":"s"} in books whose peak was ${lab}</span>`);
+        at += v;
+      });
+      const tot = d.b1 + d.b2 + d.b3;
+      el("text",{x:LW + (tot/maxV)*BARW + 9, y:y+15, class:"dlab"},s).textContent =
+        tot === 0 ? "none" : `1\u20134: ${d.b1}  5\u20139: ${d.b2}  10+: ${d.b3}`;
+      y += ROWH;
+    });
+  });
+  document.getElementById("c-band").appendChild(s);
+  legend(document.getElementById("lg-band"), BANDS.map(([,lab,col]) => ({c:col, t:`book peaked at ${lab}`})));
+})();
+
+/* ---------- 02 quarter strip ---------- */
+(function(){
+  const Q = D.pairQ.quarters, both = new Set(D.pairQ.both), a = new Set(D.pairQ.onlyA), b = new Set(D.pairQ.onlyB);
+  const qlab = q => { const [y,m] = q.split("-"); return `Q${(+m+2)/3} ${y}`; };
+  const LW = 150, CW = 22, CH = 26, TOP = 30, RW = 8;
+  const rows = [
+    ["RR 0.50 alone", q => both.has(q) || a.has(q), "var(--s1)"],
+    ["RR 2.50 alone", q => both.has(q) || b.has(q), "var(--s2)"],
+    ["pair: both lost", q => both.has(q), "var(--dead)"]];
+  const W = LW + Q.length*CW + RW, H = TOP + rows.length*CH + 34;
+  const s = svg(W,H);
+  s.setAttribute("aria-label","Quarters in which RR 0.50, RR 2.50 and the pair lost every account");
+  Q.forEach((q,i) => {
+    if (q.endsWith("-01")) {
+      const x = LW + i*CW;
+      el("line",{x1:x,y1:TOP-6,x2:x,y2:TOP+rows.length*CH,stroke:"var(--grid)","stroke-width":1}, s);
+      el("text",{x:x+2,y:TOP-12,class:"tick"},s).textContent = q.slice(0,4);
+    }
+  });
+  rows.forEach(([lab, failed, col], ri) => {
+    const y = TOP + ri*CH;
+    el("text",{x:0,y:y+17,class:"rowlab"},s).textContent = lab;
+    let n = 0;
+    Q.forEach((q,i) => {
+      const f = failed(q); n += f;
+      const c = el("rect",{x:LW+i*CW+2,y:y+4,width:CW-4,height:CH-8,rx:3,
+        fill: f ? col : "var(--alive)", class:"cell"}, s);
+      const who = both.has(q) ? "both settings lost every account"
+        : a.has(q) ? "RR 0.50 lost every account; RR 2.50 survived"
+        : b.has(q) ? "RR 2.50 lost every account; RR 0.50 survived" : "both survived";
+      bind(c, `<b>${qlab(q)}</b><br><span class="m">${who}</span>`);
+    });
+    el("text",{x:LW-8,y:y+17,class:"dlab","text-anchor":"end"},s).textContent = `${n}/26`;
+  });
+  el("text",{x:LW,y:H-6,class:"tick"},s).textContent = "fresh-start quarter, January 2020 to June 2026";
+  document.getElementById("c-q").appendChild(s);
+  legend(document.getElementById("lg-q"), [
+    {c:"var(--s1)",t:"RR 0.50 lost every account"},{c:"var(--s2)",t:"RR 2.50 lost every account"},
+    {c:"var(--dead)",t:"complete loss \u2014 both lost"},{c:"var(--alive)",cls:"ring",t:"survived"}]);
+})();
+
+/* ---------- 03 family table ---------- */
+document.getElementById("t-fam").innerHTML =
+  `<caption>Quarterly windows, $1,500 fixed headroom. The 13 RR1000 pairs, with only 24 eligible quarters, are excluded.</caption>
+   <thead><tr><th>Family</th><th>Pairs</th><th>Below benchmark</th><th>Fewest shared failed quarters</th>
+   <th>Median observed / benchmark</th><th>Median phi</th><th>Median P(both | rarer fails)</th></tr></thead><tbody>` +
+  D.families.map(f => `<tr><td>${f.name}</td><td class="num">${f.pairs}</td>
+    <td class="num">${f.below} of ${f.pairs}</td><td class="num">${f.minjoint}</td>
+    <td class="num">${f.ratio.toFixed(2)}</td><td class="num">${f.phi.toFixed(3)}</td>
+    <td class="num">${f.cond.toFixed(2)}</td></tr>`).join("") + "</tbody>";
+
+/* ---------- 04 shortlist table ---------- */
+(function(){
+  const NAMES = {rr_pair:"RR 0.50 + RR 2.50", cross_pair:"RR 0.50 + GG 1.25",
+                 rr_triple:"RR 0.50 + RR 2.50 + RR 1.00", cross_triple:"RR 0.50 + GG 1.25 + RR 1.00"};
+  document.getElementById("t-short").innerHTML =
+    `<caption>Complete-loss quarters come from the fixed-headroom quarters; everything else from 120 operating cases.</caption>
+     <thead><tr><th>Mixture</th><th>Complete-loss quarters</th><th>Mean accounts lost / quarter</th>
+     <th>Uniform-order mean wipeouts</th><th>RR 0.50 first: wipeouts / cases</th>
+     <th>RR 0.50 first: mean empty days</th><th>Other first: wipeouts / cases</th></tr></thead><tbody>` +
+    ["rr_pair","cross_pair","rr_triple","cross_triple"].map(k => { const r = D.shortlist[k], q = D.shortlistQuarter[k];
+      return `<tr class="${k==="rr_pair"?"hi":""}"><td>${NAMES[k]}</td>
+        <td class="num">${q[0]}/26</td><td class="num">${q[1].toFixed(1)}%</td>
+        <td class="num">${r.mean.toFixed(3)}</td>
+        <td class="num">${r.fw}/${r.fn}</td><td class="num">${r.fe.toFixed(2)}</td>
+        <td class="num">${r.ow}/${r.on}</td></tr>`; }).join("") + "</tbody>";
+})();
+
+/* ---------- 05 permutation strip ---------- */
+(function(){
+  const LW = 108, RW = 20, ROWH = 64, TOP = 20, PW = 480;
+  const W = LW + PW + RW, H = TOP + FIRSTS.length*ROWH + 40;
+  const s = svg(W,H);
+  s.setAttribute("aria-label","Clean starts for all 24 assignment orders, grouped by first seat");
+  const x = v => LW + 16 + (v/6)*(PW-32);
+  const bottom = TOP + FIRSTS.length*ROWH;
+  for (let v=0; v<=6; v++){
+    el("line",{x1:x(v),y1:TOP-6,x2:x(v),y2:bottom,stroke:"var(--grid)","stroke-width":1}, s);
+    el("text",{x:x(v),y:bottom+14,class:"tick","text-anchor":"middle"},s).textContent = v+"/6";
+  }
+  el("text",{x:LW+PW/2,y:H-6,class:"tick","text-anchor":"middle"},s)
+    .textContent = "clean starts of six, one mark per assignment order";
+  FIRSTS.forEach((f, ri) => {
+    const cy = TOP + ri*ROWH + ROWH/2;
+    el("text",{x:0,y:cy-2,class:"rowlab"},s).textContent = `RR ${f} first`;
+    const group = D.perms.filter(p => p.first === f);
+    el("text",{x:0,y:cy+11,class:"rowsub"},s).textContent = `${group.reduce((t,p)=>t+p.clean,0)} of 36 clean`;
+    const stacks = {};
+    group.forEach(p => {
+      const k = p.clean, i = (stacks[k] = (stacks[k]||0) + 1) - 1;
+      const n = group.filter(q => q.clean === k).length;
+      const hi = p.name === "perm01";
+      const c = el("circle",{cx:x(k), cy:cy+(i-(n-1)/2)*12, r:5.2,
+        fill: hi ? "var(--surface)" : (f === "0.50" ? "var(--s1)" : "var(--axis)"),
+        stroke: hi ? "var(--s1)" : "var(--surface)", "stroke-width": hi ? 2.4 : 2, class:"cell"}, s);
+      bind(c, `<b>${p.order}</b>${hi ? " &middot; the order rr_followup ran" : ""}<br><span class="m">`
+        + `${p.clean}/6 clean &middot; ${p.startup} startup, ${p.mature} later`
+        + `<br>${p.empty.toFixed(1)} empty days &middot; ${p.deaths} deaths</span>`);
+    });
+  });
+  document.getElementById("c-perm").appendChild(s);
+  legend(document.getElementById("lg-perm"), [
+    {c:"var(--s1)",cls:"dot",t:"RR 0.50 in the first seat"},
+    {c:"var(--axis)",cls:"dot",t:"another value first"},
+    {c:"var(--surface)",cls:"dot ring",t:"0.50/1.50/2.50/3.50, the order rr_followup ran"}]);
+})();
+
+/* ---------- 06 isolation calendar ---------- */
+(function(){
+  const rrs = D.rrs, years = D.years;
+  const LW = 58, CW = 96, CH = 17, TOP = 34, RW = 8;
+  const W = LW + years.length*CW + RW, H = TOP + rrs.length*CH + 14;
+  const s = svg(W,H);
+  s.setAttribute("aria-label","When each single-RR book died, by start year, isolation phase");
+  years.forEach((y,i) =>
+    el("text",{x:LW+i*CW+CW/2,y:TOP-12,class:"tick","text-anchor":"middle"},s).textContent = y+" start");
+  el("text",{x:0,y:TOP-12,class:"tick"},s).textContent = "RR";
+  const ranks = {};
+  years.forEach(y => {
+    const ds = rrs.map(r => D.calendar[r][y]).filter(Boolean).sort();
+    ranks[y] = d => ds.length < 2 ? 1 : Math.min(3, Math.floor(ds.indexOf(d) * 4 / ds.length));
+  });
+  rrs.forEach((rr, ri) => {
+    const y = TOP + ri*CH;
+    el("text",{x:0,y:y+12,class:"rowsub"},s).textContent = rr;
+    years.forEach((yr, ci) => {
+      const d = D.calendar[rr][yr], q = d ? 4 - ranks[yr](d) : null;
+      const c = el("rect",{x:LW+ci*CW+1,y:y+1,width:CW-3,height:CH-2,rx:2,
+        fill: d ? `var(--rr-${q})` : "var(--alive)", class:"cell"}, s);
+      bind(c, `<b>RR ${rr}</b> &middot; ${yr} start<br><span class="m">`
+        + (d ? `book lost ${d}` : "book survived to the horizon") + `</span>`);
+      if (!d) el("text",{x:LW+ci*CW+CW/2,y:y+12,class:"tick","text-anchor":"middle"},s).textContent = "survived";
+    });
+  });
+  document.getElementById("c-cal").appendChild(s);
+  legend(document.getElementById("lg-cal"), [
+    {c:"var(--rr-4)",t:"died earliest in that column"},
+    {c:"var(--rr-3)",t:"\u00b7"},{c:"var(--rr-2)",t:"\u00b7"},
+    {c:"var(--rr-1)",t:"died latest"},{c:"var(--alive)",cls:"ring",t:"book survived"}]);
+})();
+
+/* ---------- 07 march strip ---------- */
+(function(){
+  const arms = ARM_ORDER.filter(a => D.march[a] && D.march[a].deaths > 0);
+  const DAYS = []; for (let d=18; d<=28; d++) DAYS.push(d);
+  const LW = 136, RW = 108, ROWH = 34, TOP = 32, CW = 30;
+  const W = LW + DAYS.length*CW + RW, H = TOP + arms.length*ROWH + 26;
+  const s = svg(W,H);
+  s.setAttribute("aria-label","March 2026 recorded death dates by portfolio");
+  DAYS.forEach((d,i) => {
+    const x = LW + i*CW + CW/2;
+    el("line",{x1:x,y1:TOP-8,x2:x,y2:TOP+arms.length*ROWH-10,stroke:"var(--grid)","stroke-width":1}, s);
+    el("text",{x:x,y:TOP-14,class:"tick","text-anchor":"middle"},s).textContent = d;
+  });
+  el("text",{x:LW,y:H-4,class:"tick"},s).textContent = "day of March 2026";
+  arms.forEach((a, ri) => {
+    const y = TOP + ri*ROWH, m = D.march[a];
+    el("text",{x:0,y:y+14,class:"rowlab"},s).textContent = a;
+    m.dates.forEach(([iso, n]) => {
+      const i = DAYS.indexOf(parseInt(iso.slice(8),10)); if (i < 0) return;
+      const x = LW + i*CW + CW/2;
+      const c = el("circle",{cx:x,cy:y+10,r:Math.max(4.5, 3+Math.sqrt(n)*2.2),
+        fill: D.arms[a].kind === "rr" ? "var(--s1)" : "var(--s3)", class:"cell"}, s);
+      bind(c, `<b>${a}</b><br><span class="m">${n} account${n===1?"":"s"} lost on ${iso}</span>`);
+      el("text",{x:x,y:y+28,class:"tick","text-anchor":"middle"},s).textContent = n;
+    });
+    el("text",{x:LW+DAYS.length*CW+8,y:y+14,class:"dlab"},s).textContent =
+      `${m.deaths} lost \u00b7 ${m.ndates} date${m.ndates===1?"":"s"}`;
+  });
+  document.getElementById("c-march").appendChild(s);
+  legend(document.getElementById("lg-march"), [
+    {c:"var(--s1)",cls:"dot",t:"RR-grouped"},{c:"var(--s3)",cls:"dot",t:"RR 1.00, uniform or laddered"}]);
+})();
+
+/* ---------- 11 grids ---------- */
+(function(){
+  const years = D.years;
+  document.getElementById("t-arms").innerHTML =
+    `<caption>rr_followup, primary operating: empty-book episodes per start, and all episodes by the book's peak size.</caption>
+     <thead><tr><th>Arm</th><th>First RR</th><th>Groups</th>` + years.map(y=>`<th>${y}</th>`).join("") +
+    `<th>Clean</th><th>Peak 1&ndash;4</th><th>Peak 5&ndash;9</th><th>Peak 10+</th><th>Empty days</th><th>Mean cash</th></tr></thead><tbody>` +
+    ARM_ORDER.map(a => { const d = D.arms[a];
+      return `<tr class="${d.kind==="rr"?"rr":""}"><td>${a}</td><td class="num">${d.first}</td><td class="num">${d.groups}</td>` +
+        d.wipes.map(v => `<td class="num ${v?"":"zero"}">${v}</td>`).join("") +
+        `<td class="num">${d.clean}/6</td><td class="num">${d.b1}</td><td class="num">${d.b2}</td>` +
+        `<td class="num ${d.b3?"":"zero"}">${d.b3}</td><td class="num">${d.empty.toFixed(2)}</td><td class="num">${usd(d.cash)}</td></tr>`;
+    }).join("") + "</tbody>";
+  document.getElementById("t-perms").innerHTML =
+    `<caption>wide4_permutations: empty-book episodes per start for each of the 24 assignment orders.</caption>
+     <thead><tr><th>Order</th>` + years.map(y=>`<th>${y}</th>`).join("") +
+    `<th>Clean</th><th>Startup</th><th>Later</th><th>Empty days</th><th>Deaths</th></tr></thead><tbody>` +
+    D.perms.map(p => `<tr class="${p.first==="0.50"?"hi":""}"><td>${p.order}${p.name==="perm01"?" &middot; ran in rr_followup":""}</td>` +
+      p.wipes.map(v => `<td class="num ${v?"":"zero"}">${v}</td>`).join("") +
+      `<td class="num">${p.clean}/6</td><td class="num">${p.startup}</td><td class="num">${p.mature}</td>` +
+      `<td class="num">${p.empty.toFixed(2)}</td><td class="num">${p.deaths}</td></tr>`).join("") + "</tbody>";
+})();
+
+/* ---------- 02 mature book: table ---------- */
+(function(){
+  const A = [["pair","10 / 0 / 10"],["middle10","9 / 2 / 9"],["middle20","8 / 4 / 8"]];
+  const rows = [];
+  ["6800","1500"].forEach(h => A.forEach(([k,lab]) => {
+    const hd = D.mature.hold[k+"|"+h], rc = D.mature.recovery[k+"|"+h];
+    rows.push(`<tr class="${k==="pair"?"hi":""}"><td>$${Number(h).toLocaleString("en-US")}</td><td class="num">${lab}</td>
+      <td class="num ${hd.complete?"":"zero"}">${hd.complete}/26</td><td class="num">${hd.survivors.toFixed(2)}</td>
+      <td class="num ${rc.wipe?"":"zero"}">${rc.wipe}/${rc.n}</td><td class="num">${rc.b5.toFixed(1)}</td>
+      <td class="num">${rc.b10.toFixed(1)}</td><td class="num">${rc.b20.toFixed(1)}</td>
+      <td class="num">${usd(rc.cash)}</td></tr>`);
+  }));
+  document.getElementById("t-mature").innerHTML =
+    `<caption>Allocations read RR 0.50 / RR 1.00 / RR 2.50 seats out of twenty. Hold: all 26 quarters. Recovery: the 23 complete twelve-month follow-ups.</caption>
+     <thead><tr><th>Starting headroom</th><th>Allocation</th><th>Hold: complete-loss quarters</th>
+     <th>Hold: survivors of 20</th><th>Recovery: runs with a wipeout</th><th>Days below 5 PAs</th>
+     <th>Below 10</th><th>Below 20</th><th>Mean forward net cash</th></tr></thead><tbody>` + rows.join("") + "</tbody>";
+})();
+
+/* ---------- 02 mature book: the March 2026 slide ---------- */
+(function(){
+  const S = [["0.50","var(--s1)"],["2.50","var(--s2)"],["1.00","var(--s3)"]];
+  const dates = D.slide["1.00"].map(p => p[0]);
+  const L = 62, R = 84, TOP = 14, PH = 220, PW = 520;
+  const W = L + PW + R, H = TOP + PH + 38;
+  const hi = Math.ceil(Math.max(...S.flatMap(([rr]) => D.slide[rr].map(p => p[1]))) / 1000) * 1000;
+  const xS = i => L + (i/(dates.length-1))*PW, yS = v => TOP + PH - (v/hi)*PH;
+  const s = svg(W,H);
+  s.setAttribute("aria-label","Per-account headroom of each single-setting book, February to April 2026");
+  for (let v=0; v<=hi; v+=1000){
+    el("line",{x1:L,y1:yS(v),x2:L+PW,y2:yS(v),stroke: v===0 ? "var(--axis)" : "var(--grid)","stroke-width":1}, s);
+    el("text",{x:L-6,y:yS(v)+3,class:"tick","text-anchor":"end"},s).textContent = "$" + v.toLocaleString("en-US");
+  }
+  el("text",{x:L+4,y:yS(0)-5,class:"tick"},s).textContent = "floor: the account dies here";
+  const MONTH = ["","Jan","Feb","Mar","Apr","May"];
+  dates.forEach((d,i) => { if (d.endsWith("-01")) {
+    el("line",{x1:xS(i),y1:TOP+PH,x2:xS(i),y2:TOP+PH+4,stroke:"var(--axis)","stroke-width":1}, s);
+    el("text",{x:xS(i),y:TOP+PH+16,class:"tick","text-anchor":"middle"},s).textContent = MONTH[+d.slice(5,7)] + " 2026";
+  }});
+  S.forEach(([rr,col]) => {
+    el("path",{d: D.slide[rr].map((p,i) => `${i?"L":"M"}${xS(i).toFixed(1)},${yS(p[1]).toFixed(1)}`).join(""),
+      fill:"none", stroke:col, "stroke-width":2, "stroke-linejoin":"round", "stroke-linecap":"round"}, s);
+  });
+  // end labels, pushed apart where lines finish close together
+  const ends = S.map(([rr]) => ({rr, y: yS(D.slide[rr][dates.length-1][1])})).sort((a,b) => a.y - b.y);
+  for (let i=1; i<ends.length; i++) if (ends[i].y - ends[i-1].y < 13) ends[i].y = ends[i-1].y + 13;
+  ends.forEach(e => el("text",{x:L+PW+8, y:e.y+4, class:"dlab"},s).textContent = "RR " + e.rr);
+  const low = D.slide["1.00"].reduce((m,p,i) => p[1] < m.v ? {v:p[1], i} : m, {v:Infinity, i:0});
+  el("circle",{cx:xS(low.i), cy:yS(low.v), r:4.5, fill:"var(--s3)", stroke:"var(--surface)", "stroke-width":2}, s);
+  el("text",{x:xS(low.i)+9, y:yS(low.v)+4, class:"dlab"},s).textContent =
+    "$" + Math.round(low.v).toLocaleString("en-US") + " on " + dates[low.i];
+  const guide = el("line",{x1:0,y1:TOP,x2:0,y2:TOP+PH,stroke:"var(--axis)","stroke-width":1,opacity:0}, s);
+  const hit = el("rect",{x:L,y:TOP,width:PW,height:PH,fill:"transparent"}, s);
+  hit.addEventListener("mousemove", e => {
+    const r = s.getBoundingClientRect(), px = (e.clientX - r.left) * (W / r.width);
+    const i = Math.max(0, Math.min(dates.length-1, Math.round((px - L) / PW * (dates.length-1))));
+    guide.setAttribute("x1", xS(i)); guide.setAttribute("x2", xS(i)); guide.setAttribute("opacity", 1);
+    showTip(e, `<b>${dates[i]}</b><br><span class="m">` + S.map(([rr]) =>
+      `RR ${rr}: $${Math.round(D.slide[rr][i][1]).toLocaleString("en-US")}`).join("<br>") + `</span>`);
+  });
+  hit.addEventListener("mouseleave", () => { guide.setAttribute("opacity", 0); hideTip(); });
+  document.getElementById("c-slide").appendChild(s);
+  legend(document.getElementById("lg-slide"), S.map(([rr,col]) => ({c:col, t:"RR " + rr})));
+})();
+
+/* ---------- 02 mature book: lowest headroom by setting ---------- */
+(function(){
+  const SETS = [["0.50","var(--s1)"],["2.50","var(--s2)"],["1.00","var(--s3)"]];
+  const PH = [["hold","hold, no withdrawals"],["recovery","with withdrawals"]];
+  const LW = 196, RW = 150, ROWH = 24, GAP = 10, TOP = 26, BARW = 300, MAX = 6800;
+  const n = SETS.length * PH.length;
+  const bottom = TOP + n*ROWH + GAP*(SETS.length-1);
+  const W = LW + BARW + RW, H = bottom + 36;
+  const s = svg(W,H);
+  s.setAttribute("aria-label","Lowest per-account headroom reached from a $6,800 start");
+  const x = v => LW + (v/MAX)*BARW;
+  [0,2000,4000,6000].forEach(v => {
+    el("line",{x1:x(v),y1:TOP-8,x2:x(v),y2:bottom,stroke: v ? "var(--grid)" : "var(--axis)","stroke-width":1}, s);
+    el("text",{x:x(v),y:bottom+13,class:"tick","text-anchor":"middle"},s).textContent = "$" + v.toLocaleString("en-US");
+  });
+  el("line",{x1:x(MAX),y1:TOP-8,x2:x(MAX),y2:bottom,stroke:"var(--axis)","stroke-width":1}, s);
+  el("text",{x:x(MAX),y:TOP-12,class:"tick","text-anchor":"middle"},s).textContent = "start $6,800";
+  el("text",{x:x(0),y:TOP-12,class:"tick","text-anchor":"middle"},s).textContent = "floor";
+  el("text",{x:LW+BARW/2,y:H-4,class:"tick","text-anchor":"middle"},s).textContent = "lowest per-account headroom, daily snapshots";
+  let y = TOP;
+  SETS.forEach(([rr,col], si) => {
+    if (si) y += GAP;
+    PH.forEach(([k,lab]) => {
+      const m = D.margins[rr+"|"+k];
+      el("text",{x:0,y:y+15,class:"rowlab"},s).textContent = `RR ${rr} \u00b7 ${lab}`;
+      const b = el("rect",{x:x(0),y:y+5,width:Math.max(2, x(m[0])-x(0)),height:ROWH-11,rx:3,
+        fill:col, "fill-opacity": k==="hold" ? 0.5 : 1, class:"bar"}, s);
+      bind(b, `<b>RR ${rr}</b> &middot; ${lab}<br><span class="m">lowest $${Math.round(m[0]).toLocaleString("en-US")}`
+        + ` on ${m[1]}<br>from the ${m[2]} start</span>`);
+      el("text",{x:x(m[0])+8,y:y+15,class:"dlab"},s).textContent =
+        "$" + Math.round(m[0]).toLocaleString("en-US") + "  " + m[1];
+      y += ROWH;
+    });
+  });
+  document.getElementById("c-marg").appendChild(s);
+  legend(document.getElementById("lg-marg"),
+    [...SETS.map(([rr,col]) => ({c:col, t:"RR " + rr})), {c:"var(--axis)", t:"paler bar: hold, no withdrawals"}]);
+})();
+
+</script>

@@ -5,6 +5,7 @@ paths; there is no need to browse the full results tree to follow the research.
 
 | Question | Evidence | Scope |
 |---|---|---|
+| Which monthly withdrawal amount and reserve works for RR 0.50 / 2.50? | [Mixed-pair report](../../results/legacy_25k/rr_pair_monthly_amount_x_cushion/rr_pair_monthly_amount_x_cushion__REPORT.md) and [design](RR_PAIR_WITHDRAWAL_AMOUNT.md) | Eight policy families; uncapped monthly purchases alternating 0.50/2.50; all-signals while flat; ongoing and terminal cash objectives |
 | Does a 10% or 20% RR 1.00 component protect an already populated book? | [20-seat book findings](../../results/legacy_25k/mature_rr_book/FINDINGS.md) and [design](MATURE_RR_BOOK.md) | 624 matched-state cases; full inventory, $6,800/$1,500 starting headroom, quarter hold and twelve-month recovery with censoring |
 | Is adding RR 1.00 worth its cost in either candidate pair? | [Shortlist findings](../../results/legacy_25k/rr_gg_shortlist/FINDINGS.md) and [design](RR_GG_SHORTLIST.md) | Four fixed mixtures plus four homogeneous controls; all 26 quarters and 120 operating cases across every assignment order |
 | Can any RR or GG setting survive the three common failed quarters? | [Full-grid survivor findings](../../results/legacy_25k/common_quarter_survivors/FINDINGS.md) and [design](COMMON_QUARTER_SURVIVORS.md) | 602 settings at 0.01 steps; Q2 2022, Q3 2024 and Q2 2025; all-quarter context for survivors |
