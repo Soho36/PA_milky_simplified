@@ -8,6 +8,7 @@ historical trade tapes; it does not establish future returns or a universal opti
 | Read / do | Entry point |
 |---|---|
 | Understand the current conclusions | [Legacy 25K overview](research/legacy_25k/OVERVIEW.md) |
+| Separate full-book protection from startup survival | [20-seat RR book findings](results/legacy_25k/mature_rr_book/FINDINGS.md), [design](research/legacy_25k/MATURE_RR_BOOK.md) |
 | Compare the fixed RR/GG pairs and triples | [Shortlist findings](results/legacy_25k/rr_gg_shortlist/FINDINGS.md), [design](research/legacy_25k/RR_GG_SHORTLIST.md) |
 | Find settings surviving the three shared failure quarters | [Full-grid survivor findings](results/legacy_25k/common_quarter_survivors/FINDINGS.md), [design](research/legacy_25k/COMMON_QUARTER_SURVIVORS.md) |
 | Find diversification within GG independently | [GG episode study guide](research/legacy_25k/GG_EPISODES.md), [full pair report](results/legacy_25k/gg_pairs/gg_pairs__REPORT.md) |

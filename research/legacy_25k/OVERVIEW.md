@@ -1,5 +1,16 @@
 # Legacy 25K: current findings
 
+**Already-populated RR books:** the [624-case study](../../results/legacy_25k/mature_rr_book/FINDINGS.md)
+starts all books with 20 matched accounts. At $6,800 initial headroom per
+account, no tested allocation or homogeneous control loses any accounts in
+the available quarter or up-to-twelve-month runs. At $1,500, the 10% and 20%
+RR 1.00 components reduce complete-loss quarters from three to two, but do
+not consistently accelerate rebuilding. In the 23 complete recovery years,
+they reduce time below five accounts while increasing time below ten and
+twenty. A large account count and a substantial retained cushion are distinct
+conditions; these initialized states do not prove future safety or that the
+endowed equity is easy to earn during deployment.
+
 **Fixed RR/GG shortlist:** the [pair/triple comparison](../../results/legacy_25k/rr_gg_shortlist/FINDINGS.md)
 uses all 26 quarters and 120 operating cases across every assignment order.
 Adding RR 1.00 reduces complete-loss quarters from 3/26 to 2/26, but increases
