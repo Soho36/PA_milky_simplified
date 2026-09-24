@@ -5,6 +5,7 @@ paths; there is no need to browse the full results tree to follow the research.
 
 | Question | Evidence | Scope |
 |---|---|---|
+| How does overlap change the RR 0.50 / 2.50 withdrawal study? | [Overlap comparison](../../results/legacy_25k/rr_pair_overlap_monthly_amount_x_cushion/FINDINGS.md) and [design](RR_PAIR_OVERLAP_WITHDRAWAL_AMOUNT.md) | Same monthly purchases and policy grid; legacy unlimited settlement model; compared with mixed while-flat and original RR1 results |
 | Which monthly withdrawal amount and reserve works for RR 0.50 / 2.50? | [Mixed-pair report](../../results/legacy_25k/rr_pair_monthly_amount_x_cushion/rr_pair_monthly_amount_x_cushion__REPORT.md) and [design](RR_PAIR_WITHDRAWAL_AMOUNT.md) | Eight policy families; uncapped monthly purchases alternating 0.50/2.50; all-signals while flat; ongoing and terminal cash objectives |
 | Does a 10% or 20% RR 1.00 component protect an already populated book? | [20-seat book findings](../../results/legacy_25k/mature_rr_book/FINDINGS.md) and [design](MATURE_RR_BOOK.md) | 624 matched-state cases; full inventory, $6,800/$1,500 starting headroom, quarter hold and twelve-month recovery with censoring |
 | Is adding RR 1.00 worth its cost in either candidate pair? | [Shortlist findings](../../results/legacy_25k/rr_gg_shortlist/FINDINGS.md) and [design](RR_GG_SHORTLIST.md) | Four fixed mixtures plus four homogeneous controls; all 26 quarters and 120 operating cases across every assignment order |
