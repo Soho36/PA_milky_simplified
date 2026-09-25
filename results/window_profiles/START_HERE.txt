@@ -1,0 +1,21 @@
+START HERE — How does each hourly window of the raw strategy perform on its own?
+
+Question answered
+How does each hourly window of the raw strategy perform on its own?
+
+What we learned
+Each subfolder profiles one sweep tape window by window: every one-hour entry window traded
+alone on a notional account with one MNQ, no firm rules and no withdrawals. Written by
+scripts/profile_sweep_windows.py; the folder name gives strategy, risk/reward and starting
+balance.
+
+How to interpret it
+This is the strategy before any account management. Dollar figures, profit factor, recovery
+factor and t-stat do not depend on the notional balance; percentages do.
+
+Subfolders
+- RR__rr_1.00__balance_10k (has its own START_HERE.txt)
+
+For the surrounding study, open ../START_HERE.txt.
+
+Reading note: ongoing cash is received during trading, after costs. Total cash also includes any closing withdrawal. These are historical simulations, not forecasts.

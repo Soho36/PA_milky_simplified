@@ -164,6 +164,12 @@ Retained balance = $25,100 frozen floor + headroom. Initial accounts still start
 
 ## What the pair experiment says
 
+**Interpretation for choosing an operating policy:** the mixture may change which accounts fail together, but this comparison has not established a general advantage in profitability, cash extraction or reserve requirements. The two cash-optimal books preserve their own hold paths; the pair books slightly more net trading earnings, while RR1 extracts more total cash after the terminal request. Trading earnings and accessible cash are different outcomes.
+
+The comparison also cannot isolate the benefit of mixing from the merits of the constituents themselves. Homogeneous RR 0.50 and RR 2.50 controls under the same operating setup are needed for that. Account equity is separate: a surviving component cannot transfer its headroom to rescue a failing account, so diversification does not automatically reduce the reserve needed in each account.
+
+For withdrawal-policy selection, give more weight to **ongoing cash, preservation of trading capacity, and performance across a reserve range** than to one winning total-cash figure that includes a large endpoint payout. Terminal receipts depend on eligibility at the chosen endpoint. Exact winning reserves are in-sample thresholds, not established safe minimums. The uncapped monthly-purchase results do not by themselves settle the policy choice for a capped, growing live book.
+
 The ongoing-cash leader is fixed_1500_backlog at $31,200, with $367,282.17 and 21 survivors. The closing-cash leader is fixed_1500_backlog at $31,200, with $443,581.78, including $76,299.61 at exit.
 
 The ongoing-cash leader is trading-neutral: its withdrawals cost no trade. The closing-cash leader is trading-neutral: its withdrawals cost no trade.

@@ -94,6 +94,12 @@ GUIDES = {
     'sweeps': ('What did the early retained-balance sweeps find?',
         'These are historical reserve searches for fixed monthly withdrawals, with different trading tapes and grid resolutions. They show that the preferred balance depends on the tape and withdrawal rule; they are not the later evaluation-aware reserve frontier.',
         'File names identify RR or GG data, minimum/fixed or maximum withdrawals, and a coarse or fine grid. cushion_usd in these old files is the nominal retained balance; headroom_usd is the amount above the failure floor. No closing withdrawal is counted.'),
+    'window_profiles': ('How does each hourly window of the raw strategy perform on its own?',
+        'Each subfolder profiles one sweep tape window by window: every one-hour entry window traded alone on a notional account with one MNQ, no firm rules and no withdrawals. Written by scripts/profile_sweep_windows.py; the folder name gives strategy, risk/reward and starting balance.',
+        'This is the strategy before any account management. Dollar figures, profit factor, recovery factor and t-stat do not depend on the notional balance; percentages do.'),
+    'window_profiles/RR__rr_1.00__balance_10k': ('Which RR windows make money at risk/reward 1.00, and how rough is the ride?',
+        '17 of 23 windows end profitable and the 23 together net $34,427 after commission (t-stat 2.98 over 12,658 trades). Only 7-8, 14-15 and 17-18 Tallinn pass the edge test (t-stat of at least 2, at most one losing calendar year); 17-18 nets the most, $8,581 with a $2,209 worst drawdown. First-half and second-half window rankings correlate at only 0.18, so the ranking is a weak selector. Open RR__rr_1.00__balance_10k__REPORT.html.',
+        'Each window runs on its own $10,000 account, 1 MNQ per trade, $1.05 per round turn, 2020-01-02 to 2026-07-13. Hours are Tallinn entry hours. Trade counts, net profit, balance drawdown and profit factor reconcile exactly with the MT5 stats files (see __CHECKS.json).'),
 }
 
 SINGLE = {

@@ -1,0 +1,1291 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>__TITLE__</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500&family=IBM+Plex+Sans:wght@400;500;600&display=swap">
+<style>
+:root {
+  color-scheme: light;
+  --page: #f4f5f7;
+  --surface: #ffffff;
+  --ink: #111418;
+  --ink-2: #48505a;
+  --muted: #7a828c;
+  --grid: #e7e9ec;
+  --axis: #c3c8ce;
+  --border: rgba(17, 20, 24, 0.10);
+  --pos: #2a78d6;
+  --neg: #e34948;
+  --pos-text: #1f5fae;
+  --neg-text: #bf2f2e;
+  --ctx: #d5d9de;
+  --band: rgba(17, 20, 24, 0.035);
+  --wash-pos: rgba(42, 120, 214, 0.10);
+  --wash-neg: rgba(227, 73, 72, 0.10);
+  --unproven: #858d97;
+  --div-neg: #b3262a;
+  --div-mid: #eef0f2;
+  --div-pos: #1c5cab;
+  --row-hover: #f1f4f8;
+  --row-selected: #e5eefa;
+  --shadow: 0 6px 24px rgba(17, 20, 24, 0.12);
+  --sans: "IBM Plex Sans", system-ui, -apple-system, "Segoe UI", sans-serif;
+  --mono: "IBM Plex Mono", ui-monospace, "Cascadia Mono", Consolas, monospace;
+}
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    color-scheme: dark;
+    --page: #0e1012;
+    --surface: #16191c;
+    --ink: #f1f3f5;
+    --ink-2: #b9c1c9;
+    --muted: #8a929c;
+    --grid: #252a2f;
+    --axis: #3b4249;
+    --border: rgba(255, 255, 255, 0.10);
+    --pos: #3987e5;
+    --neg: #e66767;
+    --pos-text: #86b6ef;
+    --neg-text: #f29190;
+    --ctx: #353b42;
+    --band: rgba(255, 255, 255, 0.035);
+    --wash-pos: rgba(57, 135, 229, 0.16);
+    --wash-neg: rgba(230, 103, 103, 0.16);
+    --unproven: #8f98a2;
+    --div-neg: #d6524e;
+    --div-mid: #2a2f35;
+    --div-pos: #3f86dc;
+    --row-hover: #1c2024;
+    --row-selected: #1b2a3c;
+    --shadow: 0 6px 24px rgba(0, 0, 0, 0.5);
+  }
+}
+:root[data-theme="dark"] {
+  color-scheme: dark;
+  --page: #0e1012;
+  --surface: #16191c;
+  --ink: #f1f3f5;
+  --ink-2: #b9c1c9;
+  --muted: #8a929c;
+  --grid: #252a2f;
+  --axis: #3b4249;
+  --border: rgba(255, 255, 255, 0.10);
+  --pos: #3987e5;
+  --neg: #e66767;
+  --pos-text: #86b6ef;
+  --neg-text: #f29190;
+  --ctx: #353b42;
+  --band: rgba(255, 255, 255, 0.035);
+  --wash-pos: rgba(57, 135, 229, 0.16);
+  --wash-neg: rgba(230, 103, 103, 0.16);
+  --unproven: #8f98a2;
+  --div-neg: #d6524e;
+  --div-mid: #2a2f35;
+  --div-pos: #3f86dc;
+  --row-hover: #1c2024;
+  --row-selected: #1b2a3c;
+  --shadow: 0 6px 24px rgba(0, 0, 0, 0.5);
+}
+
+* { box-sizing: border-box; }
+[hidden] { display: none !important; }
+html { -webkit-text-size-adjust: 100%; }
+body {
+  margin: 0;
+  background: var(--page);
+  color: var(--ink);
+  font: 400 15px/1.55 var(--sans);
+}
+.page {
+  max-width: 1180px;
+  margin: 0 auto;
+  padding-inline: clamp(16px, 4vw, 40px);
+  padding-block: 36px 72px;
+  display: grid;
+  gap: 44px;
+}
+h1, h2, h3 { text-wrap: balance; margin: 0; }
+h1 { font-size: clamp(26px, 3.4vw, 34px); line-height: 1.15; font-weight: 600; letter-spacing: -0.01em; }
+h2 { font-size: 20px; line-height: 1.3; font-weight: 600; }
+h3 { font-size: 15px; font-weight: 600; }
+p { margin: 0; }
+.mono { font-family: var(--mono); }
+.num { font-variant-numeric: tabular-nums; }
+.eyebrow {
+  font-size: 12px; font-weight: 500; letter-spacing: 0.08em; text-transform: uppercase; color: var(--muted);
+}
+.sub { color: var(--ink-2); max-width: 72ch; }
+.section { display: grid; gap: 14px; min-width: 0; }
+.section-head { display: grid; gap: 4px; }
+.panel {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  padding: 16px;
+  min-width: 0;
+}
+.scroll { overflow-x: auto; }
+.pos { color: var(--pos-text); }
+.neg { color: var(--neg-text); }
+
+/* Masthead */
+.masthead { display: grid; gap: 12px; }
+.lede { color: var(--ink-2); max-width: 70ch; font-size: 16px; }
+.facts { display: flex; flex-wrap: wrap; gap: 6px 8px; padding: 0; margin: 4px 0 0; list-style: none; }
+.facts li {
+  font-size: 13px; color: var(--ink-2);
+  border: 1px solid var(--border); border-radius: 999px; padding: 2px 10px;
+  background: var(--surface);
+}
+
+/* KPI row */
+.kpis { display: grid; grid-template-columns: repeat(auto-fit, minmax(210px, 1fr)); gap: 12px; }
+.kpi { background: var(--surface); border: 1px solid var(--border); border-radius: 6px; padding: 14px 16px; display: grid; gap: 2px; align-content: start; }
+.kpi-label { font-size: 13px; color: var(--ink-2); }
+.kpi-value { font-size: 28px; font-weight: 600; line-height: 1.2; }
+.kpi-note { font-size: 13px; color: var(--muted); }
+
+/* Findings */
+.findings { display: grid; gap: 12px; padding: 0; margin: 0; list-style: none; max-width: 78ch; }
+.findings li { padding-left: 16px; border-left: 2px solid var(--axis); color: var(--ink-2); }
+.findings strong { color: var(--ink); font-weight: 600; }
+
+/* Charts */
+svg { display: block; overflow: visible; }
+svg text { font-family: var(--sans); fill: var(--muted); font-size: 11px; }
+svg .t-mono { font-family: var(--mono); }
+svg .t-ink { fill: var(--ink-2); }
+svg .t-strong { fill: var(--ink); font-weight: 500; }
+.gridline { stroke: var(--grid); stroke-width: 1; shape-rendering: crispEdges; }
+.baseline { stroke: var(--axis); stroke-width: 1; shape-rendering: crispEdges; }
+.bar-pos { fill: var(--pos); }
+.bar-neg { fill: var(--neg); }
+.hit { fill: transparent; cursor: pointer; }
+.hit:focus { outline: none; }
+.hit:focus-visible { stroke: var(--pos); stroke-width: 2; }
+.is-dim { opacity: 0.45; }
+.line-pos { fill: none; stroke: var(--pos); stroke-width: 2; stroke-linejoin: round; stroke-linecap: round; }
+.line-neg { fill: none; stroke: var(--neg); stroke-width: 2; stroke-linejoin: round; stroke-linecap: round; }
+.line-thin { stroke-width: 1.5; }
+.line-ctx { fill: none; stroke: var(--ctx); stroke-width: 1; }
+.dd-area { fill: var(--wash-neg); }
+.dd-line { fill: none; stroke: var(--neg); stroke-width: 1.5; stroke-linejoin: round; }
+.dd-band { fill: var(--wash-neg); }
+.session-band { fill: var(--band); }
+.rf-line { stroke: var(--axis); stroke-width: 1; fill: none; }
+.cross { stroke: var(--ink-2); stroke-width: 1; shape-rendering: crispEdges; pointer-events: none; }
+.dot-pos { fill: var(--pos); stroke: var(--surface); stroke-width: 2; }
+.dot-neg { fill: var(--neg); stroke: var(--surface); stroke-width: 2; }
+.pt-edge { fill: var(--pos); stroke: var(--surface); stroke-width: 2; }
+.pt-unproven { fill: var(--surface); stroke: var(--unproven); stroke-width: 2; }
+.pt-flat { stroke: var(--neg); stroke-width: 2.5; stroke-linecap: round; fill: none; }
+.overlay { fill: transparent; cursor: crosshair; }
+.overlay:focus { outline: none; }
+.overlay:focus-visible { stroke: var(--pos); stroke-width: 1; }
+
+.legend { display: flex; flex-wrap: wrap; gap: 6px 18px; font-size: 13px; color: var(--ink-2); padding: 0; margin: 0; list-style: none; }
+.legend li { display: inline-flex; align-items: center; gap: 6px; }
+
+/* Verdict chips: shape + label, never color alone */
+.chip { display: inline-flex; align-items: center; gap: 6px; font-size: 12px; white-space: nowrap; color: var(--ink-2); }
+.chip svg { flex: none; }
+
+/* Table */
+.table-wrap { overflow-x: auto; border: 1px solid var(--border); border-radius: 6px; background: var(--surface); }
+table { border-collapse: collapse; width: 100%; font-size: 13px; }
+th, td { padding: 7px 10px; text-align: right; white-space: nowrap; font-variant-numeric: tabular-nums; }
+thead th { font-weight: 500; color: var(--ink-2); border-bottom: 1px solid var(--border); vertical-align: bottom; background: var(--surface); }
+thead tr.groups th { font-size: 11px; letter-spacing: 0.06em; text-transform: uppercase; color: var(--muted); border-bottom: 0; padding-bottom: 0; text-align: center; }
+thead tr.groups th + th { border-left: 1px solid var(--border); }
+th.sortable { cursor: pointer; user-select: none; }
+th.sortable:hover { color: var(--ink); }
+th.sortable:focus-visible { outline: 2px solid var(--pos); outline-offset: -2px; }
+th .arrow { display: inline-block; width: 10px; color: var(--ink); }
+th.grp-start, td.grp-start { border-left: 1px solid var(--border); }
+tbody tr { border-top: 1px solid var(--grid); cursor: pointer; }
+tbody tr:hover { background: var(--row-hover); }
+tbody tr.is-selected { background: var(--row-selected); }
+tbody tr:focus-visible { outline: 2px solid var(--pos); outline-offset: -2px; }
+td.left, th.left { text-align: left; }
+.sticky { position: sticky; left: 0; z-index: 1; background: inherit; }
+thead .sticky { background: var(--surface); }
+tbody tr { background: var(--surface); }
+tbody tr:hover { background: var(--row-hover); }
+tbody tr.is-selected { background: var(--row-selected); }
+.win-cell { display: grid; line-height: 1.25; }
+.win-cell .mono { color: var(--ink); font-weight: 500; }
+.win-cell small { color: var(--muted); font-size: 11px; }
+
+/* Heat tables */
+.heat { font-size: 12px; }
+.heat th, .heat td { padding: 0; }
+.heat thead th { padding: 6px 8px; text-align: center; }
+.heat td.cell { padding: 6px 8px; text-align: right; min-width: 64px; border: 2px solid var(--surface); }
+.heat td.cell.empty { background: transparent; }
+.heat th.rowhead { text-align: left; padding: 4px 12px 4px 10px; font-weight: 400; }
+.heat tbody tr { cursor: default; }
+.heat tbody tr.clickable { cursor: pointer; }
+.heat tbody tr:hover { background: var(--surface); }
+.heat tbody tr.clickable:hover th.rowhead .mono { text-decoration: underline; }
+.heat td.total { font-weight: 600; }
+.scale { display: flex; align-items: center; gap: 8px; font-size: 12px; color: var(--muted); flex-wrap: wrap; }
+.scale .ramp { width: 180px; height: 10px; border-radius: 2px; }
+
+/* Small multiples */
+.multiples { display: grid; grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); gap: 10px; }
+.mini {
+  background: var(--surface); border: 1px solid var(--border); border-radius: 6px;
+  padding: 10px 10px 6px; display: grid; gap: 4px; cursor: pointer; text-align: left;
+  font: inherit; color: inherit; width: 100%;
+}
+.mini:hover { border-color: var(--axis); }
+.mini:focus-visible { outline: 2px solid var(--pos); outline-offset: 1px; }
+.mini.is-selected { border-color: var(--pos); box-shadow: inset 0 0 0 1px var(--pos); }
+.mini-head { display: flex; justify-content: space-between; align-items: baseline; gap: 8px; font-size: 13px; }
+.mini-head .mono { font-weight: 500; }
+.mini-head small { color: var(--muted); font-size: 11px; margin-left: 4px; font-family: var(--sans); }
+.mini.key { cursor: default; background: transparent; border-style: dashed; color: var(--ink-2); font-size: 13px; align-content: center; }
+
+/* Detail */
+.detail-head { display: flex; flex-wrap: wrap; align-items: end; justify-content: space-between; gap: 12px 24px; }
+.detail-title { display: grid; gap: 4px; }
+.detail-title .name { font-family: var(--mono); font-size: 30px; font-weight: 500; line-height: 1.1; }
+.detail-title .where { color: var(--ink-2); font-size: 14px; }
+.picker { display: flex; gap: 6px; align-items: center; }
+.picker label { font-size: 13px; color: var(--ink-2); margin-right: 4px; }
+select, button.step {
+  font: inherit; font-size: 14px; color: var(--ink); background: var(--surface);
+  border: 1px solid var(--axis); border-radius: 6px; padding: 6px 10px;
+}
+button.step { cursor: pointer; min-width: 36px; }
+button.step:hover, select:hover { border-color: var(--ink-2); }
+select:focus-visible, button.step:focus-visible { outline: 2px solid var(--pos); outline-offset: 1px; }
+.detail-summary { color: var(--ink-2); max-width: 80ch; }
+.metric-groups { display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 12px; }
+.metric-groups section { background: var(--surface); border: 1px solid var(--border); border-radius: 6px; padding: 12px 14px; }
+.metric-groups h3 { font-size: 12px; letter-spacing: 0.06em; text-transform: uppercase; color: var(--muted); font-weight: 500; margin-bottom: 6px; }
+dl.metrics { margin: 0; display: grid; grid-template-columns: 1fr auto; gap: 4px 12px; font-size: 13px; }
+dl.metrics dt { color: var(--ink-2); }
+dl.metrics dd { margin: 0; text-align: right; font-variant-numeric: tabular-nums; color: var(--ink); }
+dl.metrics dd small { color: var(--muted); font-size: 11px; display: block; }
+
+/* Method */
+.method { display: grid; gap: 18px; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); }
+.method > div { display: grid; gap: 8px; align-content: start; }
+.method ul { margin: 0; padding-left: 18px; color: var(--ink-2); display: grid; gap: 6px; }
+dl.glossary { margin: 0; display: grid; gap: 8px; font-size: 14px; }
+dl.glossary dt { font-weight: 600; }
+dl.glossary dd { margin: 0; color: var(--ink-2); }
+.foot { color: var(--muted); font-size: 13px; }
+
+/* Tooltip */
+.tooltip {
+  position: fixed; z-index: 10; pointer-events: none;
+  background: var(--surface); color: var(--ink);
+  border: 1px solid var(--border); border-radius: 6px; box-shadow: var(--shadow);
+  padding: 8px 10px; font-size: 12px; min-width: 150px; max-width: 280px;
+  display: grid; gap: 3px;
+}
+.tt-title { color: var(--muted); font-size: 11px; }
+.tt-row { display: flex; align-items: center; gap: 8px; }
+.tt-row b { font-weight: 600; font-variant-numeric: tabular-nums; }
+.tt-row span { color: var(--ink-2); }
+.tt-key { width: 12px; height: 2px; border-radius: 1px; flex: none; }
+
+@media (max-width: 560px) {
+  .page { gap: 36px; }
+  .kpi-value { font-size: 24px; }
+  .detail-title .name { font-size: 24px; }
+}
+@media (prefers-reduced-motion: no-preference) {
+  .mini, tbody tr { transition: background-color 120ms ease, border-color 120ms ease; }
+}
+</style>
+</head>
+<body>
+<main class="page">
+  <header class="masthead">
+    <p class="eyebrow" id="eyebrow">Sweep tape window profile</p>
+    <h1 id="headline">__TITLE__</h1>
+    <p class="lede" id="lede"></p>
+    <ul class="facts" id="facts"></ul>
+  </header>
+
+  <section class="kpis" id="kpis" aria-label="Headline figures"></section>
+
+  <section class="section" aria-labelledby="findings-h">
+    <div class="section-head"><h2 id="findings-h">What the numbers say</h2></div>
+    <ul class="findings" id="findings"></ul>
+  </section>
+
+  <section class="section" aria-labelledby="hours-h">
+    <div class="section-head">
+      <h2 id="hours-h">Net profit by entry hour</h2>
+      <p class="sub">Each bar is one window traded on its own $10,000 account for the whole tape, after commission. Hours are Tallinn wall-clock; the second label is the approximate New York hour. Click a bar to open that window below.</p>
+    </div>
+    <div class="panel scroll"><div id="net-chart" style="min-width: 680px"></div></div>
+  </section>
+
+  <section class="section" aria-labelledby="risk-h">
+    <div class="section-head">
+      <h2 id="risk-h">Reward against risk</h2>
+      <p class="sub">Net profit against each window's worst closed-trade drawdown. The diagonals mark recovery factor 1, 2 and 4: a window on the RF 2 line earned twice its worst drawdown.</p>
+    </div>
+    <div class="panel scroll">
+      <div id="scatter" style="min-width: 560px"></div>
+    </div>
+    <ul class="legend" id="verdict-legend"></ul>
+  </section>
+
+  <section class="section" aria-labelledby="score-h">
+    <div class="section-head">
+      <h2 id="score-h">Scorecard</h2>
+      <p class="sub">Every gauge for every window. Click a column heading to sort and a row to open the window. The curve column shows each window's own shape on its own scale.</p>
+    </div>
+    <div class="table-wrap"><table id="score"></table></div>
+  </section>
+
+  <section class="section" aria-labelledby="years-h">
+    <div class="section-head">
+      <h2 id="years-h">Net profit by calendar year</h2>
+      <p class="sub" id="years-sub"></p>
+    </div>
+    <div class="table-wrap"><table class="heat" id="year-heat"></table></div>
+    <div class="scale" id="year-scale"></div>
+  </section>
+
+  <section class="section" aria-labelledby="curves-h">
+    <div class="section-head">
+      <h2 id="curves-h">Equity curves on one scale</h2>
+      <p class="sub">End-of-day balance for every window, all drawn against the same dollar axis so their size and shape compare directly. The hairline is the $10,000 start. Click a curve to open it.</p>
+    </div>
+    <div class="multiples" id="multiples"></div>
+  </section>
+
+  <section class="section" id="detail" aria-labelledby="detail-name">
+    <div class="detail-head">
+      <div class="detail-title">
+        <p class="eyebrow">Window detail</p>
+        <div class="name" id="detail-name"></div>
+        <div class="where" id="detail-where"></div>
+      </div>
+      <div class="picker">
+        <label for="window-select">Window</label>
+        <button class="step" id="prev-window" type="button" aria-label="Previous window">&larr;</button>
+        <select id="window-select"></select>
+        <button class="step" id="next-window" type="button" aria-label="Next window">&rarr;</button>
+      </div>
+    </div>
+    <p class="detail-summary" id="detail-summary"></p>
+    <div class="panel">
+      <div id="detail-chart"></div>
+      <ul class="legend" id="detail-legend" style="margin-top: 8px"></ul>
+    </div>
+    <div class="metric-groups" id="metric-groups"></div>
+    <div class="section-head" style="margin-top: 6px">
+      <h3>Monthly net profit</h3>
+      <p class="sub" id="month-sub"></p>
+    </div>
+    <div class="table-wrap"><table class="heat" id="month-heat"></table></div>
+    <div class="scale" id="month-scale"></div>
+  </section>
+
+  <section class="section" aria-labelledby="method-h">
+    <div class="section-head"><h2 id="method-h">Method and definitions</h2></div>
+    <div class="method">
+      <div>
+        <h3>How each window is traded</h3>
+        <ul id="method-list"></ul>
+        <h3 style="margin-top: 10px">Checks against the tester</h3>
+        <ul id="checks-list"></ul>
+        <h3 style="margin-top: 10px">Files next to this report</h3>
+        <ul id="files-list"></ul>
+      </div>
+      <div>
+        <h3>Gauges</h3>
+        <dl class="glossary" id="glossary"></dl>
+      </div>
+    </div>
+    <p class="foot" id="foot"></p>
+  </section>
+</main>
+<div class="tooltip" id="tip" role="tooltip" hidden></div>
+
+<script>const DATA = /*__DATA__*/null;</script>
+<script>
+(() => {
+"use strict";
+const D = DATA, M = D.meta, S = D.summary, WS = D.windows, N = WS.length;
+const BAL = M.balance;
+const DAY = 86400000;
+const T0 = Date.parse(D.day0 + "T00:00:00Z");
+const T = D.day_offsets.map(o => T0 + o * DAY);
+const NS = "http://www.w3.org/2000/svg";
+const MINUS = "−";
+const $ = id => document.getElementById(id);
+
+/* ---------- formatting ---------- */
+function groupNum(a, dec) {
+  return a.toLocaleString("en-US", { minimumFractionDigits: dec, maximumFractionDigits: dec });
+}
+function usd(v, { sign = false, dec = 0 } = {}) {
+  const r = Number(v.toFixed(dec));
+  const body = "$" + groupNum(Math.abs(r), dec);
+  if (r < 0) return MINUS + body;
+  return (sign && r > 0 ? "+" : "") + body;
+}
+function num(v, dec = 2, { sign = false } = {}) {
+  if (!isFinite(v)) return v > 0 ? "∞" : "—";
+  const r = Number(v.toFixed(dec));
+  const body = groupNum(Math.abs(r), dec);
+  if (r < 0) return MINUS + body;
+  return (sign && r > 0 ? "+" : "") + body;
+}
+const pct = (v, dec = 1, opts) => num(v, dec, opts) + "%";
+function usdAxis(v) {
+  const a = Math.abs(v);
+  const body = a >= 1000 ? "$" + (a / 1000).toLocaleString("en-US", { maximumFractionDigits: 1 }) + "k" : "$" + a;
+  return (v < 0 ? MINUS : "") + body;
+}
+const dateFmt = new Intl.DateTimeFormat("en-GB", { day: "numeric", month: "short", year: "numeric", timeZone: "UTC" });
+const fmtDate = ms => dateFmt.format(new Date(ms));
+const fmtIso = iso => fmtDate(Date.parse(iso + "T00:00:00Z"));
+const signClass = v => (v < 0 ? "neg" : v > 0 ? "pos" : "");
+function median(arr) {
+  const s = [...arr].sort((a, b) => a - b), m = s.length >> 1;
+  return s.length % 2 ? s[m] : (s[m - 1] + s[m]) / 2;
+}
+function quantile(arr, q) {
+  const s = [...arr].sort((a, b) => a - b);
+  const i = (s.length - 1) * q, lo = Math.floor(i), hi = Math.ceil(i);
+  return s[lo] + (s[hi] - s[lo]) * (i - lo);
+}
+function hold(minutes) {
+  if (minutes < 60) return Math.round(minutes) + " min";
+  const h = Math.floor(minutes / 60), m = Math.round(minutes % 60);
+  return h + " h " + String(m).padStart(2, "0") + " min";
+}
+
+/* ---------- DOM helpers ---------- */
+function h(tag, props = {}, ...children) {
+  const e = document.createElement(tag);
+  for (const [k, v] of Object.entries(props)) {
+    if (k === "class") e.className = v;
+    else if (k === "text") e.textContent = v;
+    else if (k.startsWith("on")) e.addEventListener(k.slice(2), v);
+    else e.setAttribute(k, v);
+  }
+  for (const c of children) if (c != null) e.append(c);
+  return e;
+}
+function s(tag, attrs = {}, parent) {
+  const e = document.createElementNS(NS, tag);
+  for (const [k, v] of Object.entries(attrs)) {
+    if (k === "text") e.textContent = v;
+    else e.setAttribute(k, v);
+  }
+  if (parent) parent.appendChild(e);
+  return e;
+}
+function svgRoot(parent, width, height, label) {
+  const root = s("svg", { width, height, viewBox: `0 0 ${width} ${height}`, role: "img", "aria-label": label });
+  parent.appendChild(root);
+  return root;
+}
+function linePath(xs, ys) {
+  let d = "";
+  for (let i = 0; i < xs.length; i++) d += (i ? "L" : "M") + xs[i].toFixed(1) + " " + ys[i].toFixed(1);
+  return d;
+}
+function niceTicks(min, max, count = 5) {
+  if (min === max) { min -= 1; max += 1; }
+  const raw = (max - min) / count;
+  const p = Math.pow(10, Math.floor(Math.log10(raw)));
+  const f = raw / p;
+  const step = (f <= 1 ? 1 : f <= 2 ? 2 : f <= 2.5 ? 2.5 : f <= 5 ? 5 : 10) * p;
+  const lo = Math.floor(min / step) * step, hi = Math.ceil(max / step) * step;
+  const ticks = [];
+  for (let v = lo; v <= hi + step * 1e-9; v += step) ticks.push(Number(v.toFixed(8)));
+  return { lo, hi, ticks, step };
+}
+const scale = (d0, d1, r0, r1) => v => r0 + (v - d0) / (d1 - d0) * (r1 - r0);
+function nearestIndex(arr, v) {
+  let lo = 0, hi = arr.length - 1;
+  while (hi - lo > 1) { const mid = (lo + hi) >> 1; if (arr[mid] <= v) lo = mid; else hi = mid; }
+  return v - arr[lo] <= arr[hi] - v ? lo : hi;
+}
+
+/* ---------- tooltip ---------- */
+const tip = $("tip");
+function showTip(title, rows, x, y) {
+  tip.textContent = "";
+  if (title) tip.append(h("div", { class: "tt-title", text: title }));
+  for (const r of rows) {
+    const row = h("div", { class: "tt-row" });
+    if (r.key) row.append(h("i", { class: "tt-key", style: `background: var(${r.key})` }));
+    row.append(h("b", { text: r.value }));
+    if (r.label) row.append(h("span", { text: r.label }));
+    tip.append(row);
+  }
+  tip.hidden = false;
+  const pad = 14, w = tip.offsetWidth, ht = tip.offsetHeight;
+  let left = x + pad, top = y + pad;
+  if (left + w > window.innerWidth - 8) left = x - w - pad;
+  if (top + ht > window.innerHeight - 8) top = y - ht - pad;
+  tip.style.left = Math.max(8, left) + "px";
+  tip.style.top = Math.max(8, top) + "px";
+}
+const hideTip = () => { tip.hidden = true; };
+function anchorOf(node) {
+  const r = node.getBoundingClientRect();
+  return [r.left + r.width / 2, r.top + r.height / 2];
+}
+
+/* ---------- colour for heat cells (OKLab interpolation) ---------- */
+function cssVar(name) { return getComputedStyle(document.documentElement).getPropertyValue(name).trim(); }
+const toLin = c => (c <= 0.04045 ? c / 12.92 : Math.pow((c + 0.055) / 1.055, 2.4));
+const toGam = c => (c <= 0.0031308 ? 12.92 * c : 1.055 * Math.pow(c, 1 / 2.4) - 0.055);
+function hexRgb(hex) { hex = hex.replace("#", ""); return [0, 2, 4].map(i => parseInt(hex.slice(i, i + 2), 16) / 255); }
+function rgbHex(rgb) { return "#" + rgb.map(c => Math.round(Math.min(1, Math.max(0, c)) * 255).toString(16).padStart(2, "0")).join(""); }
+function toLab(hex) {
+  const [r, g, b] = hexRgb(hex).map(toLin);
+  const l = Math.cbrt(0.4122214708 * r + 0.5363325363 * g + 0.0514459929 * b);
+  const m = Math.cbrt(0.2119034982 * r + 0.6806995451 * g + 0.1073969566 * b);
+  const q = Math.cbrt(0.0883024619 * r + 0.2817188376 * g + 0.6299787005 * b);
+  return [0.2104542553 * l + 0.793617785 * m - 0.0040720468 * q,
+          1.9779984951 * l - 2.428592205 * m + 0.4505937099 * q,
+          0.0259040371 * l + 0.7827717662 * m - 0.808675766 * q];
+}
+function fromLab([L, a, b]) {
+  const l = Math.pow(L + 0.3963377774 * a + 0.2158037573 * b, 3);
+  const m = Math.pow(L - 0.1055613458 * a - 0.0638541728 * b, 3);
+  const q = Math.pow(L - 0.0894841775 * a - 1.291485548 * b, 3);
+  return rgbHex([4.0767416621 * l - 3.3077115913 * m + 0.2309699292 * q,
+                 -1.2684380046 * l + 2.6097574011 * m - 0.3413193965 * q,
+                 -0.0041960863 * l - 0.7034186147 * m + 1.707614701 * q].map(toGam));
+}
+function diverging() {
+  const neg = toLab(cssVar("--div-neg")), mid = toLab(cssVar("--div-mid")), pos = toLab(cssVar("--div-pos"));
+  const mix = (a, b, t) => fromLab(a.map((v, i) => v + (b[i] - v) * t));
+  return (v, domain) => {
+    const t = Math.max(-1, Math.min(1, v / domain));
+    return t >= 0 ? mix(mid, pos, t) : mix(mid, neg, -t);
+  };
+}
+function inkFor(hex) {
+  const [r, g, b] = hexRgb(hex).map(toLin);
+  const lum = 0.2126 * r + 0.7152 * g + 0.0722 * b;
+  return lum > 0.23 ? "#111418" : "#ffffff";
+}
+
+/* ---------- shared facts ---------- */
+const byWindow = Object.fromEntries(WS.map((w, i) => [w.window, i]));
+const m = w => w.metrics;
+const VERDICT = {
+  edge_holds: { label: "Edge holds", shape: "dot" },
+  positive_unproven: { label: "Positive, unproven", shape: "ring" },
+  flat_or_losing: { label: "Flat or losing", shape: "cross" },
+};
+function shape(parent, kind, cx, cy, r) {
+  if (kind === "dot") return s("circle", { cx, cy, r, class: "pt-edge" }, parent);
+  if (kind === "ring") return s("circle", { cx, cy, r: r - 0.5, class: "pt-unproven" }, parent);
+  const g = s("g", {}, parent);
+  const k = r * 0.8;
+  s("path", { d: `M${cx - k} ${cy - k}L${cx + k} ${cy + k}M${cx + k} ${cy - k}L${cx - k} ${cy + k}`, class: "pt-flat" }, g);
+  return g;
+}
+function chip(verdict) {
+  const v = VERDICT[verdict];
+  const icon = s("svg", { width: 12, height: 12, viewBox: "0 0 12 12", "aria-hidden": "true" });
+  shape(icon, v.shape, 6, 6, 4.5);
+  return h("span", { class: "chip" }, icon, v.label);
+}
+const nyText = w => `≈ ${w.new_york} New York`;
+const eqAll = WS.flatMap(w => [Math.min(...w.equity), Math.max(...w.equity)]);
+const EQ_MIN = Math.min(BAL, ...eqAll), EQ_MAX = Math.max(BAL, ...eqAll);
+function eodDrawdown(eq) {
+  let peak = BAL;
+  return eq.map(v => { peak = Math.max(peak, v); return peak - v; });
+}
+const DD_ALL = WS.map(w => eodDrawdown(w.equity));
+const DD_MAX = Math.max(...DD_ALL.map(a => Math.max(...a)));
+const YEARS = Object.keys(WS[0].yearly);
+const lastMonth = D.months[D.months.length - 1];
+
+let selected = (() => {
+  const fromHash = (location.hash || "").replace(/^#w-/, "");
+  if (fromHash in byWindow) return byWindow[fromHash];
+  const edge = WS.filter(w => m(w).verdict === "edge_holds");
+  const pool = edge.length ? edge : WS;
+  return byWindow[pool.reduce((a, b) => (m(b).net_profit_usd > m(a).net_profit_usd ? b : a)).window];
+})();
+
+/* ---------- masthead, KPIs, findings ---------- */
+function renderIntro() {
+  $("eyebrow").textContent = `Sweep tape window profile · ${M.strategy} strategy`;
+  $("lede").textContent =
+    `Each of the ${N} one-hour entry windows of the ${M.strategy} sweep at risk/reward ${M.risk_reward}, ` +
+    `traded alone on a ${usd(BAL)} account with one MNQ contract per trade. ` +
+    `No firm rules, no withdrawals, no compounding.`;
+  const facts = [
+    `${fmtIso(M.first_day)} to ${fmtIso(M.last_day)} (${num(M.years, 1)} years)`,
+    `${num(M.trades, 0)} trades`,
+    `${usd(BAL)} start per window`,
+    `1 MNQ fixed`,
+    `${usd(M.commission, { dec: 2 })} commission per round turn`,
+    `Hours in Tallinn time`,
+  ];
+  $("facts").replaceChildren(...facts.map(f => h("li", { text: f })));
+
+  const pos = WS.filter(w => m(w).net_profit_usd > 0);
+  const edge = WS.filter(w => m(w).verdict === "edge_holds");
+  const best = WS.reduce((a, b) => (m(b).net_profit_usd > m(a).net_profit_usd ? b : a));
+  const deep = WS.reduce((a, b) => (m(b).max_dd_usd > m(a).max_dd_usd ? b : a));
+  const tiles = [
+    ["Profitable windows", `${pos.length} of ${N}`, `${edge.length} pass the edge test`],
+    [`Combined net, ${N} accounts`, usd(S.combined_net_usd), `${usd(S.combined_net_usd / M.trades, { dec: 2 })} per trade after commission`],
+    ["Best window", `${best.window}  ${usd(m(best).net_profit_usd, { sign: true })}`, `${nyText(best)} · ${pct(m(best).cagr_pct, 1)} a year`],
+    ["Deepest drawdown", usd(-m(deep).max_dd_usd), `${deep.window} · ${pct(m(deep).max_dd_pct, 1)} from its peak`],
+  ];
+  $("kpis").replaceChildren(...tiles.map(([label, value, note]) =>
+    h("div", { class: "kpi" }, h("div", { class: "kpi-label", text: label }), h("div", { class: "kpi-value", text: value }), h("div", { class: "kpi-note", text: note }))));
+
+  const t = S.combined_t_stat;
+  const avg = S.combined_net_usd / M.trades;
+  const aggLead = t >= 2 ? "The strategy has an edge in aggregate, but it is thin." : t > 0 ? "The aggregate edge is positive but not clearly above noise." : "The strategy loses money in aggregate.";
+  const bestT = WS.reduce((a, b) => (m(b).t_stat > m(a).t_stat ? b : a));
+  const rho = S.halves_rank_correlation;
+  const rhoLead = rho < 0.3 ? "Past rank says little about future rank." : rho < 0.6 ? "Window rank carries over only partly." : "Window rank carries over well.";
+  const mid = new Date((T[0] + T[T.length - 1]) / 2);
+  const medDD = median(WS.map(w => m(w).max_dd_usd));
+  const medRF = median(WS.map(w => m(w).recovery_factor));
+  const medUW = median(WS.map(w => m(w).time_underwater_pct));
+  const longest = WS.reduce((a, b) => (m(b).longest_dd_days > m(a).longest_dd_days ? b : a));
+  const edgeNames = edge.map(w => `${w.window} (${nyText(w)})`);
+  const lines = [
+    [aggLead, ` Across all ${num(M.trades, 0)} trades the average trade nets ${usd(avg, { dec: 2 })} after commission, a t-stat of ${num(t, 2)}. ` +
+      `${pos.length} of ${N} windows finished positive. If every window were a coin flip, ${pos.length} or more winners would turn up ${pct(S.positive_windows_p * 100, 1)} of the time.`],
+    [edge.length ? `${edge.length} ${edge.length === 1 ? "window passes" : "windows pass"} the edge test:` : "No window passes the edge test.",
+      (edge.length ? ` ${edgeNames.join(", ")}.` : "") +
+      ` Among ${N} windows with no edge at all, the luckiest would still show a t-stat near ${num(S.expected_best_t_null, 2)}. The best here is ${num(m(bestT).t_stat, 2)} (${bestT.window}), so even the leaders carry some selection luck.`],
+    [rhoLead, ` Ranking windows by profit before ${fmtDate(mid.getTime())} and again after it gives a rank correlation of ${num(rho, 2)}.` +
+      (rho < 0.3 ? " Choosing hours from this table alone is a weak selection method." : "")],
+    [`The typical worst drawdown is ${usd(medDD)}.`, ` Median recovery factor is ${num(medRF, 2)}, meaning the median window earned about ${num(medRF, 1)} times its worst drawdown over ${num(M.years, 1)} years. ` +
+      `The deepest drawdown is ${deep.window} (${nyText(deep)}) at ${usd(-m(deep).max_dd_usd)}, ${pct(m(deep).max_dd_pct, 1)} from its peak.`],
+    ["Every curve spends most days below an earlier high.", ` The median window is under water on ${pct(medUW, 0)} of days. ` +
+      `The longest spell is ${longest.window}: ${num(m(longest).longest_dd_days, 0)} days from ${fmtIso(m(longest).longest_dd_from)}` +
+      (m(longest).longest_dd_recovered ? ` until it recovered on ${fmtIso(m(longest).longest_dd_to)}.` : `, and it had not recovered when the tape ends.`)],
+  ];
+  $("findings").replaceChildren(...lines.map(([lead, rest]) => h("li", {}, h("strong", { text: lead }), rest)));
+
+  $("verdict-legend").replaceChildren(...Object.entries(VERDICT).map(([k]) => h("li", {}, chip(k))),
+    h("li", { text: S.verdict_rule }));
+}
+
+/* ---------- net by hour ---------- */
+function renderNetChart() {
+  const box = $("net-chart");
+  box.textContent = "";
+  const width = Math.max(680, box.clientWidth), height = 320;
+  const mg = { l: 56, r: 12, t: 30, b: 50 };
+  const svg = svgRoot(box, width, height, "Net profit per window, in hour order");
+  const nets = WS.map(w => m(w).net_profit_usd);
+  const tk = niceTicks(Math.min(0, ...nets), Math.max(0, ...nets), 6);
+  const y = scale(tk.lo, tk.hi, height - mg.b, mg.t);
+  const band = (width - mg.l - mg.r) / N;
+  const bw = Math.min(24, band * 0.62);
+  const xHour = hr => mg.l + (hr - 1) * band;   // hour 1 = left edge of first window
+
+  // US cash session, 09:30-16:00 New York = 16:30-23:00 Tallinn (most of the year).
+  const bx0 = xHour(16.5), bx1 = xHour(23);
+  s("rect", { x: bx0, y: mg.t - 18, width: bx1 - bx0, height: height - mg.b - mg.t + 18, class: "session-band" }, svg);
+  s("text", { x: bx0 + 6, y: mg.t - 6, text: "US cash session, 09:30–16:00 New York" }, svg);
+
+  for (const v of tk.ticks) {
+    s("line", { x1: mg.l, x2: width - mg.r, y1: y(v), y2: y(v), class: v === 0 ? "baseline" : "gridline" }, svg);
+    s("text", { x: mg.l - 8, y: y(v) + 4, "text-anchor": "end", class: "num", text: usdAxis(v) }, svg);
+  }
+  const bars = [];
+  WS.forEach((w, i) => {
+    const v = nets[i], cx = mg.l + band * (i + 0.5);
+    const y0 = y(0), y1 = y(v), r = Math.min(4, Math.abs(y1 - y0), bw / 2);
+    const x0 = cx - bw / 2, x1 = cx + bw / 2;
+    let d;
+    if (v >= 0) d = `M${x0} ${y0}V${y1 + r}Q${x0} ${y1} ${x0 + r} ${y1}H${x1 - r}Q${x1} ${y1} ${x1} ${y1 + r}V${y0}Z`;
+    else d = `M${x0} ${y0}V${y1 - r}Q${x0} ${y1} ${x0 + r} ${y1}H${x1 - r}Q${x1} ${y1} ${x1} ${y1 - r}V${y0}Z`;
+    bars.push(s("path", { d, class: v >= 0 ? "bar-pos" : "bar-neg" }, svg));
+    s("text", { x: cx, y: height - mg.b + 16, "text-anchor": "middle", class: "t-mono t-ink", text: w.window }, svg);
+    s("text", { x: cx, y: height - mg.b + 30, "text-anchor": "middle", text: w.new_york }, svg);
+  });
+  s("text", { x: mg.l - 8, y: height - mg.b + 16, "text-anchor": "end", text: "Tallinn" }, svg);
+  s("text", { x: mg.l - 8, y: height - mg.b + 30, "text-anchor": "end", text: "New York" }, svg);
+  // Label the extremes only; the tooltip and table carry the rest.
+  const iMax = nets.indexOf(Math.max(...nets)), iMin = nets.indexOf(Math.min(...nets));
+  for (const i of new Set([iMax, iMin])) {
+    const v = nets[i], cx = mg.l + band * (i + 0.5);
+    s("text", { x: cx, y: v >= 0 ? y(v) - 6 : y(v) + 14, "text-anchor": "middle", class: "t-strong num", text: usd(v, { sign: true }) }, svg);
+  }
+  WS.forEach((w, i) => {
+    const hit = s("rect", { x: mg.l + band * i, y: mg.t, width: band, height: height - mg.t - mg.b + 36, class: "hit", tabindex: 0, role: "button", "aria-label": `${w.window}: net ${usd(nets[i])}` }, svg);
+    const show = (x, yy) => {
+      bars.forEach((b, j) => b.classList.toggle("is-dim", j !== i));
+      showTip(`${w.window} Tallinn · ${nyText(w)}`, [
+        { value: usd(nets[i], { sign: true }), label: "net profit", key: nets[i] >= 0 ? "--pos" : "--neg" },
+        { value: num(m(w).profit_factor, 2), label: "profit factor" },
+        { value: usd(-m(w).max_dd_usd), label: "worst drawdown" },
+        { value: num(m(w).trades, 0), label: "trades" },
+      ], x, yy);
+    };
+    const clear = () => { bars.forEach(b => b.classList.remove("is-dim")); hideTip(); };
+    hit.addEventListener("pointermove", e => show(e.clientX, e.clientY));
+    hit.addEventListener("pointerleave", clear);
+    hit.addEventListener("focus", () => show(...anchorOf(hit)));
+    hit.addEventListener("blur", clear);
+    hit.addEventListener("click", () => select(i, true));
+    hit.addEventListener("keydown", e => { if (e.key === "Enter" || e.key === " ") { e.preventDefault(); select(i, true); } });
+  });
+}
+
+/* ---------- reward vs risk ---------- */
+function renderScatter() {
+  const box = $("scatter");
+  box.textContent = "";
+  const width = Math.max(560, box.clientWidth), height = 440;
+  const mg = { l: 60, r: 20, t: 16, b: 46 };
+  const svg = svgRoot(box, width, height, "Net profit against worst drawdown, one point per window");
+  const dds = WS.map(w => m(w).max_dd_usd), nets = WS.map(w => m(w).net_profit_usd);
+  const xt = niceTicks(0, Math.max(...dds) * 1.04, 6);
+  const yt = niceTicks(Math.min(0, ...nets), Math.max(...nets) * 1.04, 6);
+  const x = scale(xt.lo, xt.hi, mg.l, width - mg.r);
+  const y = scale(yt.lo, yt.hi, height - mg.b, mg.t);
+  for (const v of yt.ticks) {
+    s("line", { x1: mg.l, x2: width - mg.r, y1: y(v), y2: y(v), class: v === 0 ? "baseline" : "gridline" }, svg);
+    s("text", { x: mg.l - 8, y: y(v) + 4, "text-anchor": "end", text: usdAxis(v) }, svg);
+  }
+  for (const v of xt.ticks) {
+    s("line", { x1: x(v), x2: x(v), y1: mg.t, y2: height - mg.b, class: v === 0 ? "baseline" : "gridline" }, svg);
+    s("text", { x: x(v), y: height - mg.b + 16, "text-anchor": "middle", text: usdAxis(v) }, svg);
+  }
+  s("text", { x: (mg.l + width - mg.r) / 2, y: height - 6, "text-anchor": "middle", class: "t-ink", text: "Worst closed-trade drawdown" }, svg);
+  s("text", { x: 14, y: (mg.t + height - mg.b) / 2, "text-anchor": "middle", class: "t-ink", transform: `rotate(-90 14 ${(mg.t + height - mg.b) / 2})`, text: "Net profit" }, svg);
+
+  const occupied = [];
+  for (const k of [1, 2, 4]) {
+    const xEnd = Math.min(xt.hi, yt.hi / k);
+    s("line", { x1: x(0), y1: y(0), x2: x(xEnd), y2: y(xEnd * k), class: "rf-line" }, svg);
+    const lx = x(xEnd) + (xEnd === xt.hi ? -30 : 4), ly = y(xEnd * k) + (xEnd === xt.hi ? -6 : 12);
+    s("text", { x: lx, y: ly, text: `RF ${k}` }, svg);
+    occupied.push([lx - 2, ly - 11, lx + 32, ly + 3]);
+  }
+  const pts = WS.map((w, i) => ({ w, i, px: x(dds[i]), py: y(nets[i]) }));
+  for (const p of pts) occupied.push([p.px - 6, p.py - 6, p.px + 6, p.py + 6]);
+  const overlaps = b => occupied.some(o => b[0] < o[2] && b[2] > o[0] && b[1] < o[3] && b[3] > o[1]);
+  const labelLayer = s("g", {}, svg);
+  const pointLayer = s("g", {}, svg);
+  // Greedy placement, extremes first; a label that fits nowhere is left to the tooltip.
+  const order = [...pts].sort((a, b) => Math.abs(nets[b.i]) + dds[b.i] - (Math.abs(nets[a.i]) + dds[a.i]));
+  for (const p of order) {
+    const tw = p.w.window.length * 6.8 + 2;
+    const spots = [[9, 4], [-9 - tw, 4], [-tw / 2, -10], [-tw / 2, 16], [9, -8], [9, 14], [-9 - tw, -8], [-9 - tw, 14]];
+    for (const [dx, dy] of spots) {
+      const bx = p.px + dx, by = p.py + dy;
+      const b = [bx, by - 10, bx + tw, by + 2];
+      if (b[0] < mg.l || b[2] > width - mg.r || b[1] < mg.t - 4 || b[3] > height - mg.b) continue;
+      if (overlaps(b)) continue;
+      occupied.push(b);
+      s("text", { x: bx, y: by, class: "t-mono t-ink", text: p.w.window }, labelLayer);
+      break;
+    }
+  }
+  for (const p of pts) {
+    const verdict = VERDICT[m(p.w).verdict];
+    shape(pointLayer, verdict.shape, p.px, p.py, 5);
+    const hit = s("circle", { cx: p.px, cy: p.py, r: 12, class: "hit", tabindex: 0, role: "button", "aria-label": `${p.w.window}: net ${usd(nets[p.i])}, drawdown ${usd(dds[p.i])}` }, pointLayer);
+    const show = (cx, cy) => showTip(`${p.w.window} Tallinn · ${nyText(p.w)}`, [
+      { value: usd(nets[p.i], { sign: true }), label: "net profit" },
+      { value: usd(-dds[p.i]), label: `worst drawdown (${pct(m(p.w).max_dd_pct, 1)})` },
+      { value: num(m(p.w).recovery_factor, 2), label: "recovery factor" },
+      { value: verdict.label, label: "" },
+    ], cx, cy);
+    hit.addEventListener("pointermove", e => show(e.clientX, e.clientY));
+    hit.addEventListener("pointerleave", hideTip);
+    hit.addEventListener("focus", () => show(...anchorOf(hit)));
+    hit.addEventListener("blur", hideTip);
+    hit.addEventListener("click", () => select(p.i, true));
+    hit.addEventListener("keydown", e => { if (e.key === "Enter" || e.key === " ") { e.preventDefault(); select(p.i, true); } });
+  }
+}
+
+/* ---------- scorecard ---------- */
+const COLS = [
+  { group: "Trades", key: "trades", label: "Trades", fmt: v => num(v, 0) },
+  { group: "Trades", key: "win_rate_pct", label: "Win %", fmt: v => pct(v, 1) },
+  { group: "Trades", key: "payoff_ratio", label: "Payoff", fmt: v => num(v, 2) },
+  { group: "Trades", key: "expectancy_usd", label: "Exp. $", fmt: v => usd(v, { dec: 2 }), signed: true },
+  { group: "Returns", key: "net_profit_usd", label: "Net", fmt: v => usd(v, { sign: true }), signed: true },
+  { group: "Returns", key: "cagr_pct", label: "CAGR", fmt: v => pct(v, 1), signed: true },
+  { group: "Returns", key: "last_12m_usd", label: "Last 12 mo", fmt: v => usd(v, { sign: true }), signed: true },
+  { group: "Risk", key: "max_dd_usd", label: "Max DD", fmt: v => usd(-v), low: true },
+  { group: "Risk", key: "max_dd_pct", label: "Max DD %", fmt: v => pct(v, 1), low: true },
+  { group: "Risk", key: "longest_dd_days", label: "Longest DD", fmt: v => num(v, 0) + " d", low: true },
+  { group: "Risk", key: "time_underwater_pct", label: "Under water", fmt: v => pct(v, 0), low: true },
+  { group: "Risk", key: "ulcer_index", label: "Ulcer", fmt: v => num(v, 1), low: true },
+  { group: "Ratios", key: "profit_factor", label: "PF", fmt: v => num(v, 2) },
+  { group: "Ratios", key: "recovery_factor", label: "Recovery", fmt: v => num(v, 2) },
+  { group: "Ratios", key: "sharpe", label: "Sharpe", fmt: v => num(v, 2) },
+  { group: "Ratios", key: "sortino", label: "Sortino", fmt: v => num(v, 2) },
+  { group: "Ratios", key: "calmar", label: "Calmar", fmt: v => num(v, 2) },
+  { group: "Consistency", key: "r_squared", label: "R²", fmt: v => num(v, 2) },
+  { group: "Consistency", key: "t_stat", label: "t-stat", fmt: v => num(v, 2) },
+  { group: "Consistency", key: "profitable_years", label: "Years +", fmt: (v, w) => `${v} of ${m(w).years}` },
+  { group: "Consistency", key: "profitable_months_pct", label: "Months +", fmt: v => pct(v, 0) },
+];
+const VERDICT_RANK = { edge_holds: 0, positive_unproven: 1, flat_or_losing: 2 };
+let sortState = { key: "window", dir: 1 };
+
+function sparkline(w) {
+  const width = 112, height = 30;
+  const svg = s("svg", { width, height, viewBox: `0 0 ${width} ${height}`, "aria-hidden": "true" });
+  const eq = w.equity, step = Math.max(1, Math.floor(eq.length / 110));
+  const vals = eq.filter((_, i) => i % step === 0 || i === eq.length - 1);
+  const lo = Math.min(BAL, ...vals), hi = Math.max(BAL, ...vals);
+  const x = scale(0, vals.length - 1, 1, width - 3), y = scale(lo, hi, height - 3, 3);
+  s("line", { x1: 1, x2: width - 3, y1: y(BAL), y2: y(BAL), class: "baseline" }, svg);
+  const up = eq[eq.length - 1] >= BAL;
+  s("path", { d: linePath(vals.map((_, i) => x(i)), vals.map(y)), class: (up ? "line-pos" : "line-neg") + " line-thin" }, svg);
+  s("circle", { cx: x(vals.length - 1), cy: y(vals[vals.length - 1]), r: 2.5, class: up ? "dot-pos" : "dot-neg", "stroke-width": 1 }, svg);
+  return svg;
+}
+
+function renderScore() {
+  const table = $("score");
+  table.textContent = "";
+  const thead = h("thead");
+  const groups = h("tr", { class: "groups" }, h("th", { class: "sticky", colspan: 1 }), h("th", { colspan: 2 }));
+  let prev = null, span = 0, cells = [];
+  for (const c of COLS) {
+    if (c.group !== prev) { if (prev) cells.push([prev, span]); prev = c.group; span = 0; }
+    span++;
+  }
+  cells.push([prev, span]);
+  for (const [g, n] of cells) groups.append(h("th", { colspan: n, text: g }));
+  const head = h("tr");
+  const sortable = (key, label, cls = "") => {
+    const th = h("th", { class: `sortable ${cls}`.trim(), tabindex: 0, scope: "col", "aria-sort": sortState.key === key ? (sortState.dir > 0 ? "ascending" : "descending") : "none" });
+    th.append(label, h("span", { class: "arrow", text: sortState.key === key ? (sortState.dir > 0 ? "↑" : "↓") : "" }));
+    const act = () => {
+      if (sortState.key === key) sortState.dir = -sortState.dir;
+      else sortState = { key, dir: key === "window" || key === "verdict" ? 1 : -1 };
+      renderScore();
+    };
+    th.addEventListener("click", act);
+    th.addEventListener("keydown", e => { if (e.key === "Enter" || e.key === " ") { e.preventDefault(); act(); } });
+    return th;
+  };
+  head.append(sortable("window", "Window", "left sticky"), sortable("verdict", "Verdict", "left"), h("th", { class: "left", text: "Curve" }));
+  let lastGroup = null;
+  for (const c of COLS) {
+    head.append(sortable(c.key, c.label, c.group !== lastGroup ? "grp-start" : ""));
+    lastGroup = c.group;
+  }
+  thead.append(groups, head);
+
+  const rows = WS.map((w, i) => ({ w, i }));
+  rows.sort((a, b) => {
+    let d;
+    if (sortState.key === "window") d = a.i - b.i;
+    else if (sortState.key === "verdict") d = VERDICT_RANK[m(a.w).verdict] - VERDICT_RANK[m(b.w).verdict] || m(b.w).net_profit_usd - m(a.w).net_profit_usd;
+    else d = m(a.w)[sortState.key] - m(b.w)[sortState.key];
+    return d * sortState.dir || a.i - b.i;
+  });
+  const tbody = h("tbody");
+  for (const { w, i } of rows) {
+    const tr = h("tr", { tabindex: 0, "data-i": i, class: i === selected ? "is-selected" : "" });
+    tr.append(
+      h("td", { class: "left sticky" }, h("div", { class: "win-cell" }, h("span", { class: "mono", text: w.window }), h("small", { text: `NY ${w.new_york}` }))),
+      h("td", { class: "left" }, chip(m(w).verdict)),
+      h("td", { class: "left" }, sparkline(w)),
+    );
+    let g = null;
+    for (const c of COLS) {
+      const v = m(w)[c.key];
+      const cls = [c.group !== g ? "grp-start" : "", c.signed ? signClass(v) : ""].join(" ").trim();
+      tr.append(h("td", { class: cls, text: c.fmt(v, w) }));
+      g = c.group;
+    }
+    tr.addEventListener("click", () => select(i, true));
+    tr.addEventListener("keydown", e => { if (e.key === "Enter") select(i, true); });
+    tbody.append(tr);
+  }
+  table.append(thead, tbody);
+}
+
+/* ---------- heat tables ---------- */
+function scaleKey(el, domain, color) {
+  const stops = [-1, -0.5, 0, 0.5, 1].map(t => color(t * domain, domain));
+  el.replaceChildren(
+    h("span", { text: usd(-domain) + " or worse" }),
+    h("span", { class: "ramp", style: `background: linear-gradient(90deg, ${stops.join(", ")})` }),
+    h("span", { text: usd(domain, { sign: true }) + " or better" }),
+  );
+}
+function heatCell(v, domain, color, extra = "") {
+  const bg = color(v, domain);
+  return h("td", { class: `cell num ${extra}`.trim(), style: `background: ${bg}; color: ${inkFor(bg)}`, text: num(v, 0, { sign: true }) });
+}
+function renderYearHeat() {
+  const color = diverging();
+  const all = WS.flatMap(w => YEARS.map(y => Math.abs(w.yearly[y])));
+  const domain = Math.max(500, Math.ceil(quantile(all, 0.95) / 250) * 250);
+  const partial = lastMonth.slice(5) !== "12";
+  $("years-sub").textContent = `Net dollars per window per year${partial ? `; ${YEARS[YEARS.length - 1]} runs only to ${fmtIso(M.last_day)}` : ""}. Colour is capped at ${usd(domain)} either way, so extreme years stand out without washing out the rest. Click a row to open the window.`;
+  const table = $("year-heat");
+  table.textContent = "";
+  const head = h("tr", {}, h("th", { class: "rowhead", text: "Window" }), ...YEARS.map((y, k) => h("th", { text: k === YEARS.length - 1 && partial ? `${y}*` : y })), h("th", { text: "Total" }));
+  const tbody = h("tbody");
+  WS.forEach((w, i) => {
+    const tr = h("tr", { class: "clickable" },
+      h("th", { class: "rowhead", scope: "row" }, h("span", { class: "mono", text: w.window }), h("span", { style: "color: var(--muted); font-size: 11px; margin-left: 8px", text: `NY ${w.new_york}` })),
+      ...YEARS.map(y => heatCell(w.yearly[y], domain, color)));
+    const net = m(w).net_profit_usd;
+    tr.append(h("td", { class: `cell num total ${signClass(net)}`, style: "background: transparent", text: num(net, 0, { sign: true }) }));
+    tr.addEventListener("click", () => select(i, true));
+    tbody.append(tr);
+  });
+  table.append(h("thead", {}, head), tbody);
+  scaleKey($("year-scale"), domain, color);
+}
+
+/* ---------- small multiples ---------- */
+function renderMultiples() {
+  const grid = $("multiples");
+  grid.textContent = "";
+  const yt = niceTicks(EQ_MIN, EQ_MAX, 4);
+  WS.forEach((w, i) => {
+    const card = h("button", { class: "mini" + (i === selected ? " is-selected" : ""), type: "button", "aria-label": `Open ${w.window}` });
+    const net = m(w).net_profit_usd;
+    card.append(h("span", { class: "mini-head" },
+      h("span", { class: "mono" }, w.window, h("small", { text: `NY ${w.new_york}` })),
+      h("span", { class: `num ${signClass(net)}`, text: usd(net, { sign: true }) })));
+    grid.append(card);
+    const width = Math.max(160, card.clientWidth - 20), height = 84;
+    const svg = svgRoot(card, width, height, `${w.window} equity curve`);
+    const x = scale(T[0], T[T.length - 1], 0, width);
+    const y = scale(yt.lo, yt.hi, height - 2, 2);
+    s("line", { x1: 0, x2: width, y1: y(BAL), y2: y(BAL), class: "baseline" }, svg);
+    const step = Math.max(1, Math.floor(T.length / width));
+    const idx = T.map((_, k) => k).filter(k => k % step === 0 || k === T.length - 1);
+    const up = net >= 0;
+    s("path", { d: linePath(idx.map(k => x(T[k])), idx.map(k => y(w.equity[k]))), class: (up ? "line-pos" : "line-neg") + " line-thin" }, svg);
+    const cross = s("line", { y1: 0, y2: height, class: "cross", visibility: "hidden" }, svg);
+    const dot = s("circle", { r: 3.5, class: up ? "dot-pos" : "dot-neg", visibility: "hidden" }, svg);
+    svg.addEventListener("pointermove", e => {
+      const r = svg.getBoundingClientRect();
+      const t = T[0] + (e.clientX - r.left) / r.width * (T[T.length - 1] - T[0]);
+      const k = nearestIndex(T, t);
+      cross.setAttribute("x1", x(T[k])); cross.setAttribute("x2", x(T[k])); cross.setAttribute("visibility", "visible");
+      dot.setAttribute("cx", x(T[k])); dot.setAttribute("cy", y(w.equity[k])); dot.setAttribute("visibility", "visible");
+      showTip(`${w.window} · ${fmtDate(T[k])}`, [
+        { value: usd(w.equity[k]), label: "balance", key: up ? "--pos" : "--neg" },
+        { value: usd(-DD_ALL[i][k]), label: "below high" },
+      ], e.clientX, e.clientY);
+    });
+    svg.addEventListener("pointerleave", () => { cross.setAttribute("visibility", "hidden"); dot.setAttribute("visibility", "hidden"); hideTip(); });
+    card.addEventListener("click", () => select(i, true));
+  });
+  const key = h("div", { class: "mini key" });
+  key.append(h("div", { text: `Shared scale: ${usd(yt.lo)} to ${usd(yt.hi)}.` }),
+    h("div", { text: `Blue ends above the ${usd(BAL)} start, red below. Hover a curve to read a day.` }));
+  grid.append(key);
+}
+
+/* ---------- detail ---------- */
+function renderDetail() {
+  const w = WS[selected], mt = m(w);
+  $("detail-name").textContent = w.window;
+  $("detail-where").replaceChildren(`Tallinn entry hour · ${nyText(w)} · `, chip(mt.verdict));
+  $("window-select").value = String(selected);
+  $("detail-summary").textContent =
+    `Net ${usd(mt.net_profit_usd, { sign: true })} over ${num(M.years, 1)} years on ${usd(BAL)} ` +
+    `(${pct(mt.cagr_pct, 2, { sign: true })} a year), from ${num(mt.trades, 0)} trades at a ${pct(mt.win_rate_pct, 1)} win rate. ` +
+    `Worst drawdown ${usd(-mt.max_dd_usd)} (${pct(mt.max_dd_pct, 1)}), from ${fmtIso(mt.max_dd_peak_date)} to ${fmtIso(mt.max_dd_trough_date)}. ` +
+    `Profitable in ${mt.profitable_years} of ${mt.years} calendar years.`;
+
+  const box = $("detail-chart");
+  box.textContent = "";
+  const width = Math.max(300, box.clientWidth);
+  const narrow = width < 560;
+  const mg = { l: narrow ? 46 : 60, r: 12, t: 22, b: 24 };
+  const hTop = narrow ? 220 : 300, gap = 30, hBot = narrow ? 100 : 130;
+  const height = mg.t + hTop + gap + hBot + mg.b;
+  const svg = svgRoot(box, width, height, `${w.window} equity and drawdown`);
+  const x = scale(T[0], T[T.length - 1], mg.l, width - mg.r);
+  const yt = niceTicks(EQ_MIN, EQ_MAX, narrow ? 4 : 6);
+  const y = scale(yt.lo, yt.hi, mg.t + hTop, mg.t);
+  const bTop = mg.t + hTop + gap, bBot = bTop + hBot;
+  const dt = niceTicks(0, DD_MAX, 3);
+  const yd = scale(0, dt.hi, bTop, bBot);
+
+  for (const v of yt.ticks) {
+    s("line", { x1: mg.l, x2: width - mg.r, y1: y(v), y2: y(v), class: v === BAL ? "baseline" : "gridline" }, svg);
+    s("text", { x: mg.l - 8, y: y(v) + 4, "text-anchor": "end", text: usdAxis(v) }, svg);
+  }
+  for (const v of dt.ticks) {
+    s("line", { x1: mg.l, x2: width - mg.r, y1: yd(v), y2: yd(v), class: v === 0 ? "baseline" : "gridline" }, svg);
+    s("text", { x: mg.l - 8, y: yd(v) + 4, "text-anchor": "end", text: usdAxis(-v) }, svg);
+  }
+  s("text", { x: mg.l, y: mg.t - 8, class: "t-ink", text: "End-of-day balance" }, svg);
+  s("text", { x: mg.l, y: bTop - 10, class: "t-ink", text: "Below previous high" }, svg);
+  const firstYear = new Date(T[0]).getUTCFullYear(), lastYear = new Date(T[T.length - 1]).getUTCFullYear();
+  for (let yr = firstYear + 1; yr <= lastYear; yr++) {
+    const xv = x(Date.UTC(yr, 0, 1));
+    s("line", { x1: xv, x2: xv, y1: mg.t, y2: bBot, class: "gridline" }, svg);
+    s("text", { x: xv, y: bBot + 16, "text-anchor": "middle", text: String(yr) }, svg);
+  }
+
+  // Worst drawdown, peak to trough.
+  const p0 = x(Date.parse(mt.max_dd_peak_date + "T00:00:00Z")), p1 = x(Date.parse(mt.max_dd_trough_date + "T00:00:00Z"));
+  s("rect", { x: p0, y: mg.t, width: Math.max(2, p1 - p0), height: hTop, class: "dd-band" }, svg);
+  const labelRight = p1 + 6 + 150 < width - mg.r;
+  s("text", { x: labelRight ? p1 + 6 : p0 - 6, y: mg.t + 14, "text-anchor": labelRight ? "start" : "end", class: "t-ink", text: `Worst drawdown ${usd(-mt.max_dd_usd)}` }, svg);
+
+  const step = Math.max(1, Math.floor(T.length / (width - mg.l - mg.r)));
+  const idx = T.map((_, k) => k).filter(k => k % step === 0 || k === T.length - 1);
+  const xs = idx.map(k => x(T[k]));
+  WS.forEach((o, j) => { if (j !== selected) s("path", { d: linePath(xs, idx.map(k => y(o.equity[k]))), class: "line-ctx" }, svg); });
+  const up = mt.net_profit_usd >= 0;
+  s("path", { d: linePath(xs, idx.map(k => y(w.equity[k]))), class: up ? "line-pos" : "line-neg" }, svg);
+  const dd = DD_ALL[selected];
+  // Keep every local maximum of the drawdown so no trough is lost to sampling.
+  const ddPts = [];
+  for (let a = 0; a < T.length; a += step) {
+    let best = a;
+    for (let k = a; k < Math.min(T.length, a + step); k++) if (dd[k] > dd[best]) best = k;
+    ddPts.push(best);
+  }
+  const dxs = ddPts.map(k => x(T[k])), dys = ddPts.map(k => yd(dd[k]));
+  s("path", { d: linePath(dxs, dys) + `L${dxs[dxs.length - 1].toFixed(1)} ${bTop}L${dxs[0].toFixed(1)} ${bTop}Z`, class: "dd-area" }, svg);
+  s("path", { d: linePath(dxs, dys), class: "dd-line" }, svg);
+  const endY = y(w.equity[T.length - 1]);
+  s("circle", { cx: x(T[T.length - 1]), cy: endY, r: 4, class: up ? "dot-pos" : "dot-neg" }, svg);
+
+  const cross = s("line", { y1: mg.t, y2: bBot, class: "cross", visibility: "hidden" }, svg);
+  const dotTop = s("circle", { r: 4, class: up ? "dot-pos" : "dot-neg", visibility: "hidden" }, svg);
+  const dotBot = s("circle", { r: 3.5, class: "dot-neg", visibility: "hidden" }, svg);
+  const overlay = s("rect", { x: mg.l, y: mg.t, width: width - mg.l - mg.r, height: bBot - mg.t, class: "overlay", tabindex: 0, "aria-label": "Equity chart; use arrow keys to step through days" }, svg);
+  let cursor = T.length - 1;
+  const place = (k, cx, cy) => {
+    cursor = k;
+    const xv = x(T[k]);
+    for (const [node, attrs] of [[cross, { x1: xv, x2: xv }], [dotTop, { cx: xv, cy: y(w.equity[k]) }], [dotBot, { cx: xv, cy: yd(dd[k]) }]]) {
+      for (const [a, v] of Object.entries(attrs)) node.setAttribute(a, v);
+      node.setAttribute("visibility", "visible");
+    }
+    let peak = BAL; for (let q = 0; q <= k; q++) peak = Math.max(peak, w.equity[q]);
+    showTip(`${w.window} · ${fmtDate(T[k])}`, [
+      { value: usd(w.equity[k]), label: "balance", key: up ? "--pos" : "--neg" },
+      { value: usd(w.equity[k] - BAL, { sign: true }), label: "net to date" },
+      { value: dd[k] > 0 ? `${usd(-dd[k])} (${pct(dd[k] / peak * 100, 1)})` : "at a high", label: dd[k] > 0 ? "below high" : "", key: "--neg" },
+    ], cx, cy);
+  };
+  const clear = () => { for (const n of [cross, dotTop, dotBot]) n.setAttribute("visibility", "hidden"); hideTip(); };
+  overlay.addEventListener("pointermove", e => {
+    const r = svg.getBoundingClientRect();
+    const px = (e.clientX - r.left) * (width / r.width);
+    const t = T[0] + (px - mg.l) / (width - mg.l - mg.r) * (T[T.length - 1] - T[0]);
+    place(nearestIndex(T, t), e.clientX, e.clientY);
+  });
+  overlay.addEventListener("pointerleave", clear);
+  overlay.addEventListener("blur", clear);
+  overlay.addEventListener("keydown", e => {
+    const jump = e.shiftKey ? 21 : 1;
+    if (e.key === "ArrowRight" || e.key === "ArrowLeft") {
+      e.preventDefault();
+      const k = Math.max(0, Math.min(T.length - 1, cursor + (e.key === "ArrowRight" ? jump : -jump)));
+      const r = svg.getBoundingClientRect();
+      place(k, r.left + x(T[k]) * (r.width / width), r.top + y(w.equity[k]));
+    }
+  });
+
+  $("detail-legend").replaceChildren(
+    h("li", {}, h("i", { class: "tt-key", style: `background: var(${up ? "--pos" : "--neg"}); height: 2px; width: 16px` }), `${w.window} balance`),
+    h("li", {}, h("i", { class: "tt-key", style: "background: var(--ctx); height: 2px; width: 16px" }), "Other windows, for context"),
+    h("li", {}, h("i", { style: "display:inline-block; width: 12px; height: 12px; background: var(--wash-neg); border-radius: 2px" }), "Worst drawdown, peak to trough"),
+    h("li", { text: "Both panels use the same scale for every window. Arrow keys step through days." }));
+
+  renderMetricGroups(w);
+  renderMonthHeat(w);
+  document.querySelectorAll("#score tbody tr").forEach(tr => tr.classList.toggle("is-selected", Number(tr.dataset.i) === selected));
+  document.querySelectorAll("#multiples .mini:not(.key)").forEach((c, j) => c.classList.toggle("is-selected", j === selected));
+}
+
+function renderMetricGroups(w) {
+  const mt = m(w);
+  const vUsd = (v, o) => ({ text: usd(v, o), cls: signClass(v) });
+  const groups = [
+    ["Returns", [
+      ["Net profit", vUsd(mt.net_profit_usd, { sign: true })],
+      ["Final balance", usd(mt.final_balance_usd)],
+      ["Total return", pct(mt.total_return_pct, 1, { sign: true })],
+      ["CAGR", pct(mt.cagr_pct, 2, { sign: true })],
+      ["Net per year", vUsd(mt.net_per_year_usd, { sign: true })],
+      ["Last 12 months", vUsd(mt.last_12m_usd, { sign: true })],
+      ["First half / second half", `${usd(mt.first_half_usd, { sign: true })} / ${usd(mt.second_half_usd, { sign: true })}`],
+      ["Gross profit / gross loss", `${usd(mt.gross_profit_usd)} / ${usd(mt.gross_loss_usd)}`],
+      ["Commission paid", usd(mt.commission_usd)],
+    ]],
+    ["Risk", [
+      ["Worst drawdown, closed trades", `${usd(-mt.max_dd_usd)} (${pct(mt.max_dd_pct, 1)})`],
+      ["Worst drawdown, intratrade", usd(-mt.max_equity_dd_usd)],
+      ["Lowest balance", usd(mt.lowest_balance_usd)],
+      ["Longest time below a high", { text: `${num(mt.longest_dd_days, 0)} days`, note: `${fmtIso(mt.longest_dd_from)} to ${mt.longest_dd_recovered ? fmtIso(mt.longest_dd_to) : "tape end, not recovered"}` }],
+      ["Days under water", pct(mt.time_underwater_pct, 0)],
+      ["Ulcer index", num(mt.ulcer_index, 2)],
+      ["Worst trade / day / month", `${usd(mt.worst_trade_usd)} / ${usd(mt.worst_day_usd)} / ${usd(mt.worst_month_usd)}`],
+      ["Worst losing streak", `${mt.max_consecutive_losses} trades, ${usd(mt.worst_losing_streak_usd)}`],
+    ]],
+    ["Ratios", [
+      ["Profit factor", num(mt.profit_factor, 2)],
+      ["Recovery factor", num(mt.recovery_factor, 2)],
+      ["Sharpe (daily, annualised)", num(mt.sharpe, 2)],
+      ["Sortino", num(mt.sortino, 2)],
+      ["Calmar", num(mt.calmar, 2)],
+      ["Martin (return / ulcer)", num(mt.martin_ratio, 2)],
+      ["R² of equity line", num(mt.r_squared, 2)],
+      ["t-stat of mean trade", num(mt.t_stat, 2)],
+    ]],
+    ["Trades", [
+      ["Trades", `${num(mt.trades, 0)} (${num(mt.trades_per_year, 0)} a year)`],
+      ["Win rate", pct(mt.win_rate_pct, 1)],
+      ["Average win / loss", `${usd(mt.avg_win_usd, { dec: 2 })} / ${usd(mt.avg_loss_usd, { dec: 2 })}`],
+      ["Payoff ratio", num(mt.payoff_ratio, 2)],
+      ["Expectancy per trade", vUsd(mt.expectancy_usd, { dec: 2, sign: true })],
+      ["Best trade / day / month", `${usd(mt.best_trade_usd)} / ${usd(mt.best_day_usd)} / ${usd(mt.best_month_usd)}`],
+      ["Most wins / losses in a row", `${mt.max_consecutive_wins} / ${mt.max_consecutive_losses}`],
+      ["Average hold", hold(mt.avg_hold_minutes)],
+      ["Months / years profitable", `${pct(mt.profitable_months_pct, 0)} / ${mt.profitable_years} of ${mt.years}`],
+    ]],
+  ];
+  $("metric-groups").replaceChildren(...groups.map(([title, items]) => {
+    const dl = h("dl", { class: "metrics" });
+    for (const [label, val] of items) {
+      const v = typeof val === "string" ? { text: val } : val;
+      const dd = h("dd", { class: v.cls || "" }, v.text);
+      if (v.note) dd.append(h("small", { text: v.note }));
+      dl.append(h("dt", { text: label }), dd);
+    }
+    return h("section", {}, h("h3", { text: title }), dl);
+  }));
+}
+
+function renderMonthHeat(w) {
+  const color = diverging();
+  const all = WS.flatMap(o => o.monthly.map(Math.abs));
+  const domain = Math.max(250, Math.ceil(quantile(all, 0.95) / 50) * 50);
+  $("month-sub").textContent = `Net dollars per calendar month for ${w.window}. The colour scale is shared by all windows and capped at ${usd(domain)} either way.`;
+  const byMonth = Object.fromEntries(D.months.map((k, i) => [k, w.monthly[i]]));
+  const names = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
+  const table = $("month-heat");
+  table.textContent = "";
+  const tbody = h("tbody");
+  for (const y of YEARS) {
+    const tr = h("tr", {}, h("th", { class: "rowhead mono", scope: "row", text: y }));
+    names.forEach((_, k) => {
+      const key = `${y}-${String(k + 1).padStart(2, "0")}`;
+      tr.append(key in byMonth ? heatCell(byMonth[key], domain, color) : h("td", { class: "cell empty" }));
+    });
+    const tot = w.yearly[y];
+    tr.append(h("td", { class: `cell num total ${signClass(tot)}`, style: "background: transparent", text: num(tot, 0, { sign: true }) }));
+    tbody.append(tr);
+  }
+  table.append(h("thead", {}, h("tr", {}, h("th", { class: "rowhead", text: "Year" }), ...names.map(n => h("th", { text: n })), h("th", { text: "Year" }))), tbody);
+  scaleKey($("month-scale"), domain, color);
+}
+
+/* ---------- method ---------- */
+function renderMethod() {
+  const c = D.checks;
+  const exact = key => c.every(r => Math.abs(r[key][0] - r[key][1]) < 1e-6);
+  const ratios = c.map(r => r.equity_dd[1] / r.equity_dd[0] - 1);
+  const worst = c[ratios.indexOf(Math.max(...ratios))];
+  const method = [
+    `Source: the ${M.strategy} sweep export at risk/reward ${M.risk_reward}, one MT5 test per entry hour. A window is the hour in which a trade opens, in Tallinn wall-clock time. New York is 7 hours behind for most of the year and 6 or 8 hours for a few weeks around each daylight-saving change.`,
+    `Each window is its own account: ${usd(BAL)} start, one MNQ contract on every trade, no compounding, no withdrawals, no evaluation or prop-firm rules.`,
+    `Each trade pays ${usd(M.commission, { dec: 2 })} round-turn commission. Profit and loss land on the exit date.`,
+    `Daily figures use end-of-day balance on every weekday of the tape (${num(T.length, 0)} days). Sharpe and Sortino use daily returns on the running balance, 252 days a year, zero risk-free rate.`,
+    `Percentage figures (return, CAGR, drawdown %, Calmar, ulcer) depend on the ${usd(BAL)} base. Dollar figures, profit factor, recovery factor, R² and t-stat do not. Sharpe and Sortino change only slightly with the base.`,
+  ];
+  $("method-list").replaceChildren(...method.map(t => h("li", { text: t })));
+  const checks = [
+    `Trade count, net profit, balance drawdown and profit factor match MT5's own stats file exactly for ${["trades", "net", "balance_dd", "profit_factor"].every(exact) ? `all ${c.length}` : "not all"} windows (compared before commission, since the tester charges none).`,
+    `Intratrade drawdown is measured from closed-balance highs to each trade's worst excursion. MT5's equity drawdown also counts open-profit highs, so it runs up to ${pct(Math.max(...ratios) * 100, 0)} higher (largest gap: ${worst.window}, ${usd(worst.equity_dd[0])} here against ${usd(worst.equity_dd[1])} in MT5).`,
+    `No window holds two trades at once (${c.reduce((a, r) => a + r.overlapping_trades, 0)} overlaps found).`,
+    `The loader refuses exports that stop early; every window reaches the end of the tape.`,
+  ];
+  $("checks-list").replaceChildren(...checks.map(t => h("li", { text: t })));
+  const files = ["REPORT.html", "METRICS.csv", "YEARLY.csv", "MONTHLY.csv", "DAILY_EQUITY.csv", "CHECKS.json"].map(f => `${M.name}__${f}`);
+  $("files-list").replaceChildren(...files.map(f => h("li", {}, h("span", { class: "mono", style: "font-size: 13px", text: f }))));
+
+  const gloss = [
+    ["Profit factor", "Gross profit divided by gross loss, after commission. Above 1 makes money; 1.3 or more is a solid intraday edge."],
+    ["Payoff ratio and expectancy", "Average win divided by average loss, and the average net dollars per trade."],
+    ["Worst drawdown", "The largest fall from a closed-balance high to a later low. The percentage is taken from that high."],
+    ["Recovery factor", "Net profit divided by worst drawdown. How many worst drawdowns the window earned back."],
+    ["CAGR and Calmar", "Compound annual growth of the balance, and CAGR divided by worst drawdown %."],
+    ["Sharpe and Sortino", "Annualised mean daily return over its standard deviation; Sortino counts only downside deviation."],
+    ["Ulcer index and Martin ratio", "Root-mean-square of the daily percentage below the previous high, which penalises deep and long drawdowns. Martin is CAGR divided by ulcer."],
+    ["Days under water and longest DD", "Share of days below a previous high, and the longest stretch from a high to recovering it."],
+    ["R² of equity line", "How closely the balance follows a straight line through time. Near 1 is a steady climb or fall; near 0 is erratic or flat."],
+    ["t-stat of mean trade", "Mean trade divided by its standard error. About 2 is the usual bar for an edge distinguishable from zero; with 23 windows to choose from, even that is easy to reach by luck."],
+    ["Verdict", S.verdict_rule],
+  ];
+  $("glossary").replaceChildren(...gloss.flatMap(([t, d]) => [h("dt", { text: t }), h("dd", { text: d })]));
+  $("foot").textContent = `Generated ${M.generated} by scripts/profile_sweep_windows.py. Historical backtest, not a forecast.`;
+}
+
+/* ---------- selection + wiring ---------- */
+function select(i, scroll) {
+  selected = i;
+  try { history.replaceState(null, "", "#w-" + WS[i].window); } catch (e) { /* sandboxed frame */ }
+  renderDetail();
+  if (scroll) $("detail").scrollIntoView({ behavior: matchMedia("(prefers-reduced-motion: reduce)").matches ? "auto" : "smooth", block: "start" });
+}
+const picker = $("window-select");
+WS.forEach((w, i) => picker.append(h("option", { value: String(i), text: `${w.window}  (NY ${w.new_york})` })));
+picker.addEventListener("change", () => select(Number(picker.value), false));
+$("prev-window").addEventListener("click", () => select((selected - 1 + N) % N, false));
+$("next-window").addEventListener("click", () => select((selected + 1) % N, false));
+
+function renderAll() {
+  hideTip();
+  renderNetChart();
+  renderScatter();
+  renderScore();
+  renderYearHeat();
+  renderMultiples();
+  renderDetail();
+}
+renderIntro();
+renderMethod();
+renderAll();
+
+let lastWidth = document.documentElement.clientWidth, frame = 0;
+new ResizeObserver(() => {
+  const wdt = document.documentElement.clientWidth;
+  if (wdt === lastWidth) return;
+  lastWidth = wdt;
+  cancelAnimationFrame(frame);
+  frame = requestAnimationFrame(renderAll);
+}).observe(document.documentElement);
+const recolor = () => { renderYearHeat(); renderMonthHeat(WS[selected]); };
+matchMedia("(prefers-color-scheme: dark)").addEventListener("change", recolor);
+new MutationObserver(recolor).observe(document.documentElement, { attributes: true, attributeFilter: ["data-theme"] });
+window.addEventListener("scroll", hideTip, { passive: true });
+})();
+</script>
+</body>
+</html>
