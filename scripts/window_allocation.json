@@ -1,0 +1,23 @@
+{
+  "strategy": "RR",
+  "risk_reward": "1.00",
+  "commission_usd": 1.05,
+  "evaluation_start": "2022-01-01",
+  "primary": "evidence_24m_balanced_quarterly",
+  "lookbacks_months": [24, 36, null],
+  "minimum_history_months": 24,
+  "presets": {
+    "lenient": {"min_trades": 100, "min_profit_factor": 1.05, "min_cluster_score": 0.5, "min_recovery_factor": 0.75, "min_positive_block_fraction": 0.5},
+    "balanced": {"min_trades": 150, "min_profit_factor": 1.10, "min_cluster_score": 1.0, "min_recovery_factor": 1.0, "min_positive_block_fraction": 0.6},
+    "strict": {"min_trades": 200, "min_profit_factor": 1.15, "min_cluster_score": 1.5, "min_recovery_factor": 1.5, "min_positive_block_fraction": 0.6}
+  },
+  "shared_gates": {
+    "min_recent_trades": 20, "min_recent_profit_factor": 0.90,
+    "max_current_dd_fraction": 0.75,
+    "reject_max_profit_factor": 0.95, "reject_max_cluster_score": -1.645,
+    "reject_min_negative_block_fraction": 0.6
+  },
+  "extra_round_trip_cost_usd": [0, 1, 2],
+  "random_subset_runs": 1000, "bootstrap_runs": 5000,
+  "bootstrap_block_months": 3, "seed": 20260926
+}

@@ -1,0 +1,164 @@
+{
+  "spec": {
+    "strategy": "RR",
+    "risk_reward": "1.00",
+    "commission_usd": 1.05,
+    "evaluation_start": "2022-01-01",
+    "primary": "evidence_24m_balanced_quarterly",
+    "lookbacks_months": [
+      24,
+      36,
+      null
+    ],
+    "minimum_history_months": 24,
+    "presets": {
+      "lenient": {
+        "min_trades": 100,
+        "min_profit_factor": 1.05,
+        "min_cluster_score": 0.5,
+        "min_recovery_factor": 0.75,
+        "min_positive_block_fraction": 0.5
+      },
+      "balanced": {
+        "min_trades": 150,
+        "min_profit_factor": 1.1,
+        "min_cluster_score": 1.0,
+        "min_recovery_factor": 1.0,
+        "min_positive_block_fraction": 0.6
+      },
+      "strict": {
+        "min_trades": 200,
+        "min_profit_factor": 1.15,
+        "min_cluster_score": 1.5,
+        "min_recovery_factor": 1.5,
+        "min_positive_block_fraction": 0.6
+      }
+    },
+    "shared_gates": {
+      "min_recent_trades": 20,
+      "min_recent_profit_factor": 0.9,
+      "max_current_dd_fraction": 0.75,
+      "reject_max_profit_factor": 0.95,
+      "reject_max_cluster_score": -1.645,
+      "reject_min_negative_block_fraction": 0.6
+    },
+    "extra_round_trip_cost_usd": [
+      0,
+      1,
+      2
+    ],
+    "random_subset_runs": 1000,
+    "bootstrap_runs": 5000,
+    "bootstrap_block_months": 3,
+    "seed": 20260926
+  },
+  "generated_utc": "2026-09-26T19:44:43.931796+00:00",
+  "start": "2022-01-01T00:00:00",
+  "end_exclusive": "2026-07-13T21:30:40.000001",
+  "tape_trades": 12658,
+  "evaluation_trades": 8845,
+  "sha256": {
+    "1_sweeps\\RR\\1-2\\1-2_1.00.csv": "41633d9fc0c8d1c6b3af629c1f40ae364892d576e290e9ef591f83bfe9271b5f",
+    "1_sweeps\\RR_stats\\1-2\\1-2_1.00_stats.csv": "8e01aa42db675d8feb12b820b35d3dd33806d3c6761a49318b661392c80d2993",
+    "1_sweeps\\RR\\2-3\\2-3_1.00.csv": "393a7930a0d2eec4038850daf34d01a619e0328001f0df5c88c1e15d3ee76a49",
+    "1_sweeps\\RR_stats\\2-3\\2-3_1.00_stats.csv": "2258ca13c3450b9e070b3d0b731ec0c0016c843526531712ca74e3e22f072912",
+    "1_sweeps\\RR\\3-4\\3-4_1.00.csv": "f248f2d8f72c5fc1c28b3eaef918c6f08e19269122df853dcd414339ecc46aa0",
+    "1_sweeps\\RR_stats\\3-4\\3-4_1.00_stats.csv": "96c5cebc42ccac519bf367daf716b8a708c560dd25c18dadd2e650ea9c7b1ab7",
+    "1_sweeps\\RR\\4-5\\4-5_1.00.csv": "4c74cf1ca20737b3b22022e0e0a5b13fb0daa37a58dd610dffa3b4f8a854ad74",
+    "1_sweeps\\RR_stats\\4-5\\4-5_1.00_stats.csv": "14d02993ec9929c308115c0cef11b1a3315fe7f7d31199a4cdc37408ac6ab5ed",
+    "1_sweeps\\RR\\5-6\\5-6_1.00.csv": "6fb6ba95f3015305087d325e2e22a4e947a3ce291628155eb5f82fa0a8a79631",
+    "1_sweeps\\RR_stats\\5-6\\5-6_1.00_stats.csv": "14da92cbc51c5f51fa75f05f0d896825cb072a817496fd4b507c68c19d2f3893",
+    "1_sweeps\\RR\\6-7\\6-7_1.00.csv": "c5b88fbbc6b004f8019fe025db21dbda32eb28263072d855e17a9d8a0a618b08",
+    "1_sweeps\\RR_stats\\6-7\\6-7_1.00_stats.csv": "cd68ebba92516a6edefd7f6dad8765fb7db5f97cb938821098e570a7a56220d6",
+    "1_sweeps\\RR\\7-8\\7-8_1.00.csv": "d5e97c976371b8c89f9d762e76970663e32270e02d05badfa3c7fd001bd0e152",
+    "1_sweeps\\RR_stats\\7-8\\7-8_1.00_stats.csv": "ae09227a6bc6fc2b75325f770f2599f0e8888bac6d8cf5fd6dc26e5624267932",
+    "1_sweeps\\RR\\8-9\\8-9_1.00.csv": "f138bb453cd2be8e303d621b63f303b11c1ff76dd50974c6eb97db0b3de26eab",
+    "1_sweeps\\RR_stats\\8-9\\8-9_1.00_stats.csv": "a822ef4284466dd8ea4c3245a375f42eb18b44f127153c54b28690cd82b384ee",
+    "1_sweeps\\RR\\9-10\\9-10_1.00.csv": "22239e14a762a209a8dfb3744ec90d57fae2421f867a989dcfd9d40652324cf8",
+    "1_sweeps\\RR_stats\\9-10\\9-10_1.00_stats.csv": "0bc3e50966f2d869b92227c93ba392cee117d52418a2f0660e80eb21ee5cdbea",
+    "1_sweeps\\RR\\10-11\\10-11_1.00.csv": "806df46a9d4a6140441805d266f2b91131ee469af7c4a2d7c42c721bbc97ff12",
+    "1_sweeps\\RR_stats\\10-11\\10-11_1.00_stats.csv": "6c0be088c9eb1b3a456f850dd4e942028e518af0af36304eddd38adee16801b8",
+    "1_sweeps\\RR\\11-12\\11-12_1.00.csv": "ca048710779a3862840f2c5d43492bf2c6fb31487ee46845150dd3ef24d2002e",
+    "1_sweeps\\RR_stats\\11-12\\11-12_1.00_stats.csv": "170f45bdf78ff7318d1582f04cdb5de8e6351b558072d54888eb1d3320a4eb02",
+    "1_sweeps\\RR\\12-13\\12-13_1.00.csv": "f485ce347458732e9c391de3b268147864c2e10b4b6b7fb51d6587c40867cef4",
+    "1_sweeps\\RR_stats\\12-13\\12-13_1.00_stats.csv": "859e453be64ce084bfa05bc0bb0eef9dc39131a9c2cc8ba3d1301b12d06bd446",
+    "1_sweeps\\RR\\13-14\\13-14_1.00.csv": "22efb7b02000f7aafffcfb05e5ba6b4a86b7489dbc57c815107fdf3b1abded12",
+    "1_sweeps\\RR_stats\\13-14\\13-14_1.00_stats.csv": "113e05afc6a5b2ea2c62ba02a7dba3105cfa8224a7faeebd6f5fab66c87144ee",
+    "1_sweeps\\RR\\14-15\\14-15_1.00.csv": "dc2fff2b3a9c4b814c4785f98e26c9da5a4e2d6ee3e073c61e45181dd10cfb0a",
+    "1_sweeps\\RR_stats\\14-15\\14-15_1.00_stats.csv": "a3640134b50bcf1de44200b7576f7fd8f5141b3ed9e63809effd262f094228d5",
+    "1_sweeps\\RR\\15-16\\15-16_1.00.csv": "584ef37a815ad06d73127117ecad3c24016fe46e766a3af14d17b6e7678a3e4a",
+    "1_sweeps\\RR_stats\\15-16\\15-16_1.00_stats.csv": "74215e67ca8dce4f5e0352389d3e2aaaf63a12390760d97f72226386f4fb090f",
+    "1_sweeps\\RR\\16-17\\16-17_1.00.csv": "4af26c2753bb3bbae98d0d81584611c97db72f5b08d6af1afdd9914db8a1cc13",
+    "1_sweeps\\RR_stats\\16-17\\16-17_1.00_stats.csv": "aa94d8afb32421fea1a8192859cdf4c4e311be8d0605bc4cd137102485850178",
+    "1_sweeps\\RR\\17-18\\17-18_1.00.csv": "59a063ac8650dfdf2f3698f62cbb12cba5301c7bbf92db1ca0c5bb896b368b49",
+    "1_sweeps\\RR_stats\\17-18\\17-18_1.00_stats.csv": "59c2f124006a50521d6fee1aefcbd3971db8d50a4ee9f3e632ecd2a3a4ab6380",
+    "1_sweeps\\RR\\18-19\\18-19_1.00.csv": "d8ef1874840cce38d08de2c7a01eb0cf5a992556ca60136a02e82433eb068aaf",
+    "1_sweeps\\RR_stats\\18-19\\18-19_1.00_stats.csv": "dc68aefdab6390385f181f7979febf742e592012640c1b027e2505aa10ffa2cc",
+    "1_sweeps\\RR\\19-20\\19-20_1.00.csv": "fab4ddecad65cdb5f4a63a9b10bb4a37e3cdca7e1c3ffc9637bcb30debf2ac93",
+    "1_sweeps\\RR_stats\\19-20\\19-20_1.00_stats.csv": "fba381474e8b68da5959bdffb3030489040844470bd77896b2d749867c6aa2d2",
+    "1_sweeps\\RR\\20-21\\20-21_1.00.csv": "12afe56ccac6e78d766534f65b81cc981824582d462546bfc0818830efbf6b46",
+    "1_sweeps\\RR_stats\\20-21\\20-21_1.00_stats.csv": "67538b23c601aea2e3b07c1af0c68bc40aee4f5cb9dfab25ecbb5b269af60dc3",
+    "1_sweeps\\RR\\21-22\\21-22_1.00.csv": "96227ec738fd119ed92fcb9c683bfae1674740fddebdfa8b08794302fd33d274",
+    "1_sweeps\\RR_stats\\21-22\\21-22_1.00_stats.csv": "5f46561ea4c81e4b04d8a78e809f0c12924c737a598fe09485227aefbd5e9dcd",
+    "1_sweeps\\RR\\22-23\\22-23_1.00.csv": "193fd4af0b9a56ddb6e47c266c3345e3c2e23559fdf54aa20f2167a3ca3cce83",
+    "1_sweeps\\RR_stats\\22-23\\22-23_1.00_stats.csv": "4d0dc1e10a7d6228a387810c3f4100d6005dc6aeb34ea1ecb3edca578723536c",
+    "1_sweeps\\RR\\23-24\\23-24_1.00.csv": "732eacc917979ec3f85187df3dbc831cc4f67994035d9987b0e549c27b432553",
+    "1_sweeps\\RR_stats\\23-24\\23-24_1.00_stats.csv": "eb82880563b6d4e4eece4a63ab76954bb2e9f40385583f941c8b829db0a10065",
+    "config\\tape_coverage.json": "696d199c8a48c4910738ef2219b0c3d713dfc41aff77b6a5c3b9b23c5ba949dc",
+    "src\\pa_milky\\loader.py": "caa9a3025006b9ef5be60c2d68e77f04564713c19c69a14f0d8fefffc2618279",
+    "scripts\\study_window_allocation.py": "891b9f7c6fb5d902f4d2cb0a53e85e74d1ea6a3362c45e29c0c0644cec228e9f",
+    "scripts\\window_allocation_support.py": "fe9bfa62e107307771a307c5763c65a1ec64ca453ff2b3423166c399ca353b4f",
+    "scripts\\window_allocation_report.py": "3a3550c7ed0ff823412117170936ec6c2fe85ebdc394f6239c5fe1be38eff1b7"
+  },
+  "random_summary": {
+    "net_usd": {
+      "primary": 4224.950000000017,
+      "p05": -2293.9349999999954,
+      "median": 3516.174999999972,
+      "p95": 8756.897499999946,
+      "fraction_random_below_primary": 0.591
+    },
+    "recovery_factor": {
+      "primary": 1.5434734957805272,
+      "p05": -0.49204008634956903,
+      "median": 1.0584150226862672,
+      "p95": 4.146207781350403,
+      "fraction_random_below_primary": 0.626
+    },
+    "daily_dollar_sharpe": {
+      "primary": 0.4985063867246309,
+      "p05": -0.2674174496874009,
+      "median": 0.39841133303357823,
+      "p95": 0.9523765182882018,
+      "fraction_random_below_primary": 0.613
+    },
+    "max_eod_dd_usd": {
+      "primary": 2737.299999999987,
+      "p05": 1871.9150000000009,
+      "median": 3208.275000000018,
+      "p95": 5877.657500000004,
+      "fraction_random_below_primary": 0.326
+    }
+  },
+  "assertions": "Past-only exits; disjoint exhaustive state attribution; validated source tape",
+  "outputs_sha256": {
+    "bootstrap.csv": "cdeaa93df0a6fbd7372036ca6b1c2a35fd4063a068fde7cdfdfa25c0f1719dda",
+    "CHECKS.json": "62cb3b6778be4a0c8c5ac6fbd15b9a1872ddb359990c80b630e48e4cadacb95c",
+    "cost_stress.csv": "58056948297a668c4374eaf6c71afe0120b477c832147ae46974d28764cc68a5",
+    "daily_equity.csv": "a9d6c6e51b893d15bb12c08370bcb1dc215dcad1bd8ae626292673e4adf05b62",
+    "decisions.csv": "c112c7f91218802c36455c3ee4548a48bd170c8393e34346ab7afad5b9bcdcd4",
+    "exposure_matched.csv": "76987c65d673ac43d372a0f27f01ba24ae24e79af205262dfa9e74449d72c5c7",
+    "gate_failures.csv": "bf2997ab3865c2bdcd282243ae7ac2274de065593277ae7036cbdbcc033f1377",
+    "metrics.csv": "46ddc8c7a8496a723e8b58fdf53f51b0da06b49cd4aeadb1c47f04579a0cc0d6",
+    "monthly.csv": "a62af73d9089c7c6431dbf939f183acb51ee3582ab074408ee10ac19d084abc6",
+    "primary_reviews.csv": "187a14730d0b4f31a3fa42fbe6770ddd15605bb340f23b1e20add025f6260c3d",
+    "random_subsets.csv": "b49334dab0e64944f284a2f3cafdbefd1eb385f0f0aa691f3db7db45a2de3f42",
+    "REPORT.html": "b2e67cfcc3f52fb807a9cf7e2480cf4beb94ab5054b0635ec47db41575ea891f",
+    "REPORT.md": "d08009a615e9b91da4b56c9c4cdac899b61cfe272ae73c83aceab02319672244",
+    "START_HERE.txt": "529504efb8cde65bc86bccbbbfb466862d02383d656e9f1f545b389cae8c1059",
+    "state_outcomes.csv": "da386437431da604e69a6ed04293d8e29bf9ec49e74855b4a0303dcab68eaae2",
+    "trade_assignments.csv": "c160c5d7264dc6860b09253f2ce3326096f0318302fdcdd3594d378f5b91954a",
+    "window_outcomes.csv": "ec93a63ef28b67cb2e6a09d1d44655ee4b255b7753c8fdd504b33437b2457c68",
+    "yearly.csv": "65ad45a6e18e02bada4f32b1dc627ca5277f9bcc4639a8724ba5a97df3c6ba00"
+  }
+}

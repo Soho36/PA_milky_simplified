@@ -1,0 +1,17 @@
+START HERE — Can past evidence select better subsequent window performance?
+
+Open RR__rr_1.00/REPORT.html for the chronological three-state study.
+The same folder contains REPORT.md and every decision, accepted trade,
+portfolio curve, sensitivity result and input hash needed to audit the study.
+
+The main comparison starts in January 2022 after two years of history.
+All windows continue in shadow; only Active windows receive allocation.
+There are no withdrawals, account starts, resets or firm rules.
+
+Reproduce with:
+venv\Scripts\python.exe scripts\study_window_allocation.py
+
+The specification lives in scripts/window_allocation.json. The primary rule
+was selected before running this experiment, but the historical tape had
+already been inspected. This is exploratory chronological research, not
+untouched validation or a live allocation recommendation.
