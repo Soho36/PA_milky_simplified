@@ -1,0 +1,39 @@
+{
+  "generated_utc": "2026-09-26T20:24:16.255499+00:00",
+  "inputs_sha256": {
+    "trade_assignments.csv": "c160c5d7264dc6860b09253f2ce3326096f0318302fdcdd3594d378f5b91954a",
+    "daily_equity.csv": "a9d6c6e51b893d15bb12c08370bcb1dc215dcad1bd8ae626292673e4adf05b62",
+    "decisions.csv": "c112c7f91218802c36455c3ee4548a48bd170c8393e34346ab7afad5b9bcdcd4",
+    "metrics.csv": "46ddc8c7a8496a723e8b58fdf53f51b0da06b49cd4aeadb1c47f04579a0cc0d6",
+    "manifest.json": "3c6e1e61b8a86ed800cf94795f12e26cf3babb7ea373fb2590050878c99e3eed"
+  },
+  "code_sha256": {
+    "study_window_allocation_attribution.py": "b25dd94d57b04c50f0ea8ba0de5b00ce2ad8630e0fe813e81187eaecc08c5c5a",
+    "window_allocation_support.py": "fe9bfa62e107307771a307c5763c65a1ec64ca453ff2b3423166c399ca353b4f",
+    "window_allocation_report.py": "3a3550c7ed0ff823412117170936ec6c2fe85ebdc394f6239c5fe1be38eff1b7"
+  },
+  "outputs_sha256": {
+    "drawdown_episodes.csv": "1e1742f9496f356fc4c855677d33eb71db3039af8b774a3ef39e821fc02f1c24",
+    "quarters.csv": "01999be10061bb48188ab0d86e05f1471d528796f20ed2c2f22f17544db4521c",
+    "REPORT.html": "fa92c12556132a6a29c55193ee4515b5044641e8ff642cc2ddae86b19ee92df2",
+    "REPORT.md": "87332094420d3e23c0420bf6b9fa3d2abaa3a6fcc2157ba3785ee0b05d06dcc0",
+    "restore_quarters.csv": "93d1792f96c9f0c77dbde8fc2f3f76b9806ec00ec4b23979625c4f110dc1baa7",
+    "restore_quarter_pairs.csv": "014ff19c65c51e6226d9c0edef632be975f84e52fa49b94e69e755fd01658788",
+    "restore_windows.csv": "e46ed8aef8581bd0f2f9c4c3a2ae35fee4585912e27340f22ec0446c01b758f4",
+    "restore_window_quarters.csv": "f329fa6f48508dcf5f3191ecaa274dc51ad4992a04c0359e4384ab56e33bc4b5",
+    "restore_window_quarter_pairs.csv": "eba35091308e6a9151ef68e827be65eebf5afe0c77e201c5841dcae639d20eea",
+    "sample_endpoints.csv": "ded8b4b187f1d2738dc9d54e0e6bb1543d605edbcf14f43cffa6f0e58e6c059f",
+    "START_HERE.txt": "b93af5928eea7274c0f1c39f3c36c63c2dab18e90e559230c382642f2214b01b",
+    "summary.json": "2d0b61a593e41acf2661e29aa10c6d2a968e762d0f6505cab8323897ca5cb1f5",
+    "window_quarters.csv": "954fdac3218407915e294a6ce92873396a7b5a80edb6e8b6469b2b4b95ae8467",
+    "worst_episode_contributions.csv": "9803d784e7a7d22e8a8421ccaca0f9962f5042f437408e1d6ed1dda21d3586f3"
+  },
+  "checks": [
+    "Upstream artifact hashes match",
+    "Saved masks agree with quarterly positive-P/L decisions",
+    "No decision uses an exit at or after review",
+    "Rebuilt daily paths match original study",
+    "Excluded group paths reconcile to all minus filtered",
+    "Worst-episode attribution reconciles"
+  ]
+}
